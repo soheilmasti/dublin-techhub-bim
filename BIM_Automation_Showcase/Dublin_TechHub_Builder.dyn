@@ -1,0 +1,102 @@
+{
+  "Uuid": "4a71d839-813c-4e89-8d82-84918e950821",
+  "IsCustomNode": false,
+  "Description": "Pure Native DesignScript Generator for Dublin Tech Hub 7-Story Tower (Zero Python Dependencies)",
+  "Name": "Dublin_TechHub_Builder",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Point": {
+        "Key": "Autodesk.DesignScript.Geometry.Point",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Cuboid": {
+        "Key": "Autodesk.DesignScript.Geometry.Cuboid",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Category": {
+        "Key": "Revit.Elements.Category",
+        "Value": "RevitNodes.dll"
+      },
+      "DirectShape": {
+        "Key": "Revit.Elements.DirectShape",
+        "Value": "RevitNodes.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "CodeText": "// 1. 7-STORY STRUCTURE & SLABS (in mm)\nlevels_z = [0.0, 3800.0, 7600.0, 11400.0, 15200.0, 19000.0, 22800.0];\n\n// Slabs (34m x 24m x 350mm)\nslab_pts = Point.ByCoordinates(0, 0, levels_z + 175.0);\nslabs = Cuboid.ByLengths(slab_pts, 34000, 24000, 350);\n\n// 24 Columns per Floor (600x600x3450mm)\ncol_x = [-15000.0, -9000.0, -3000.0, 3000.0, 9000.0, 15000.0];\ncol_y = [-10000.0, -3500.0, 3500.0, 10000.0];\ncol_pts = Point.ByCoordinates(col_x<1>, col_y<2>, levels_z<3> + 1900.0);\ncols = Cuboid.ByLengths(col_pts, 600, 600, 3450);\n\n// Central Shear Cores\ncore_pts = Point.ByCoordinates(0, [-3000.0, 3000.0]<1>, levels_z<2> + 1900.0);\ncore_walls = Cuboid.ByLengths(core_pts, 6000, 250, 3450);\n\n// 2. LEVEL 3 & 4 ARCHITECTURE & FIT-OUT\nl3_z = 11400.0;\nl4_z = 15200.0;\nfitout_z = [l3_z, l4_z];\n\n// Comms Room Drywalls\ncomms_w1 = Cuboid.ByLengths(Point.ByCoordinates(-9000, -9000, fitout_z + 1750.0), 8000, 150, 3200);\ncomms_w2 = Cuboid.ByLengths(Point.ByCoordinates(-5000, -6000, fitout_z + 1750.0), 150, 6000, 3200);\nboardroom_w = Cuboid.ByLengths(Point.ByCoordinates(8000, 6000, fitout_z + 1650.0), 10000, 100, 3000);\n\n// Workstations\ndesk_x = [-12000.0, -8000.0, 6000.0, 10000.0];\ndesk_y = [-6000.0, -2000.0, 2000.0, 6000.0];\ndesks = Cuboid.ByLengths(Point.ByCoordinates(desk_x<1>, desk_y<2>, fitout_z<3> + 550.0), 1600, 1200, 750);\n\n// 3. MEP - DUCTS & CABLE TRAYS\nducts = Cuboid.ByLengths(Point.ByCoordinates(0, 0, fitout_z + 2950.0), 30000, 500, 300);\ntrays = Cuboid.ByLengths(Point.ByCoordinates(0, -4000, fitout_z + 2630.0), 32000, 350, 60);\n\n// 4. LEVEL 3 DATA CENTER (42U Racks, InRow CRAC & FM-200)\nracks = Cuboid.ByLengths(Point.ByCoordinates([-10000.0, -8800.0], -10000, l3_z + 1175.0), 800, 1200, 2000);\ncrac = Cuboid.ByLengths(Point.ByCoordinates(-7600, -10000, l3_z + 1175.0), 400, 1200, 2000);\nfm200 = Cuboid.ByLengths(Point.ByCoordinates(-12000, -10000, l3_z + 975.0), 800, 400, 1600);\n\n// 5. NATIVE REVIT DIRECTSHAPE CREATION\nDirectShape.ByGeometry(slabs, Category.ByName(\"Floors\"));\nDirectShape.ByGeometry(cols, Category.ByName(\"Structural Columns\"));\nDirectShape.ByGeometry(core_walls, Category.ByName(\"Walls\"));\nDirectShape.ByGeometry(comms_w1, Category.ByName(\"Walls\"));\nDirectShape.ByGeometry(comms_w2, Category.ByName(\"Walls\"));\nDirectShape.ByGeometry(boardroom_w, Category.ByName(\"Walls\"));\nDirectShape.ByGeometry(desks, Category.ByName(\"Furniture\"));\nDirectShape.ByGeometry(ducts, Category.ByName(\"Ducts\"));\nDirectShape.ByGeometry(trays, Category.ByName(\"Cable Trays\"));\nDirectShape.ByGeometry(racks, Category.ByName(\"Electrical Equipment\"));\nDirectShape.ByGeometry(crac, Category.ByName(\"Mechanical Equipment\"));\nDirectShape.ByGeometry(fm200, Category.ByName(\"Specialty Equipment\"));",
+      "Id": "a1b2c3d4e5f6478980123456789abcde",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "00000000000000000000000000000002",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    }
+  ],
+  "Connectors": [],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [],
+  "Author": "AegisBIM Lead Engineer",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "00000000-0000-0000-0000-000000000000",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "3.4.0.0",
+      "RunType": "Automatic",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": -25.0,
+      "EyeY": 35.0,
+      "EyeZ": 50.0,
+      "LookX": 15.0,
+      "LookY": -20.0,
+      "LookZ": -40.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "Id": "a1b2c3d4e5f6478980123456789abcde",
+        "Name": "Code Block - Pure DesignScript",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 100.0,
+        "Y": 100.0
+      }
+    ],
+    "Annotations": [],
+    "X": 0.0,
+    "Y": 0.0,
+    "Zoom": 1.0
+  }
+}

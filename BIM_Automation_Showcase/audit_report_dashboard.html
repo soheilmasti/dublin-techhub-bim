@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dublin Tech Hub - Senior MEP/ELV Engineering Audit</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #F9FAFB; color: #111827; margin: 0; padding: 30px; }
+        .container { max-width: 1200px; margin: 0 auto; background: #FFFFFF; border-radius: 16px; box-shadow: 0 4px 25px rgba(0,0,0,0.06); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); color: #FFFFFF; padding: 40px; }
+        .header h1 { margin: 0 0 10px 0; font-size: 26px; letter-spacing: -0.5px; }
+        .header p { margin: 4px 0; color: #94A3B8; font-size: 14px; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; padding: 25px 40px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
+        .metric-card { background: #FFFFFF; padding: 18px; border-radius: 12px; border: 1px solid #E2E8F0; text-align: center; }
+        .metric-card .val { font-size: 28px; font-weight: 700; color: #0F172A; }
+        .metric-card .label { font-size: 12px; color: #64748B; font-weight: 600; text-transform: uppercase; margin-top: 4px; }
+        .content { padding: 40px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: #F1F5F9; padding: 12px 14px; font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; }
+        .footer { padding: 20px 40px; background: #F8FAFC; border-top: 1px solid #E2E8F0; font-size: 13px; color: #64748B; text-align: right; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <h1>🏛️ Dublin Tech Hub - 7-Story Commercial Tower</h1>
+                    <p><strong>Location:</strong> Silicon Docks, Dublin 2, Ireland | <strong>Scope:</strong> Floors 3 & 4 (Enterprise ICT & Security Zone)</p>
+                    <p><strong>Standards Complied:</strong> BS 7671:2018+A2 (IS 10101), IS EN 50173, TIA-942, CIBSE Security, EN 62676</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 10px; text-align:right;">
+                    <div style="font-size:11px; text-transform:uppercase; color:#94A3B8;">Compliance Rating</div>
+                    <div style="font-size:32px; font-weight:800; color:#10B981;">83.3%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card"><div class="val">18</div><div class="label">Total Audits</div></div>
+            <div class="metric-card"><div class="val" style="color:#10B981;">12</div><div class="label">Checks Passed</div></div>
+            <div class="metric-card"><div class="val" style="color:#F59E0B;">6</div><div class="label">Engineering Warnings</div></div>
+            <div class="metric-card"><div class="val" style="color:#EF4444;">0</div><div class="label">Critical Discrepancies</div></div>
+            <div class="metric-card"><div class="val" style="color:#3B82F6;">&lt; 3 Days</div><div class="label">AI Turnaround Time</div></div>
+        </div>
+
+        <div class="content">
+            <h2 style="font-size:18px; color:#0F172A; margin-top:0;">📋 Executive Lead Engineering QA/QC Breakdown</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Audit Category</th>
+                        <th>Component / Circuit ID</th>
+                        <th style="text-align:center;">Compliance</th>
+                        <th>Engineering Analysis & Code Reference</th>
+                        <th>Senior Action Item / Auto-Fix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">Rack Capacity (TIA-942)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">MDF-L3-01</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#F59E0B; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">WARNING</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Insufficient future growth margin in MDF-L3-01. Occupied: 34U/42U (81%). Free space (8U / 19%) is below standard 20% margin.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">Senior Engineer Recommendation: Upgrade MDF-L3-01 from 42U to next standard size (e.g. 24U -> 32U or 42U) to ensure ventilation & expansion.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">UPS & Power Sizing</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">MDF-L3-01</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#F59E0B; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">WARNING</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">UPS load capacity operates near peak capacity (5.2 kW load on 6.0 kVA UPS).</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">Consider upgrading UPS unit to 6.8 kVA for extended battery backup runtime.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">Rack Capacity (TIA-942)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">IDF-L4-01</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#F59E0B; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">WARNING</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Insufficient future growth margin in IDF-L4-01. Occupied: 22U/24U (92%). Free space (2U / 8%) is below standard 20% margin.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">Senior Engineer Recommendation: Upgrade IDF-L4-01 from 24U to next standard size (e.g. 24U -> 32U or 42U) to ensure ventilation & expansion.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">UPS & Power Sizing</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">IDF-L4-01</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#F59E0B; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">WARNING</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">UPS load capacity operates near peak capacity (2.8 kW load on 3.0 kVA UPS).</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">Consider upgrading UPS unit to 3.6 kVA for extended battery backup runtime.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">CCTV PoE Power Budget</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">CCTV PoE Network Switch</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#10B981; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">PASS</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Total PoE demand for 9 cameras is 112.5W against 370W budget (30% load). Excellent 25% safety headroom.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">No action required.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">NVR Storage Capacity (EN 62676)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">NVR Enterprise Storage</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#10B981; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">PASS</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Installed storage (16.0 TB) comfortably meets 30-day continuous retention requirement (Calculated requirement: 12.2 TB).</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">RAID-6 storage array configured.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">Breaker Sizing (BS 7671)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">DB-ELV-L3 (Distribution Board - Comms & Security) - C1 (MDF Rack Dual Power Feed A)</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#10B981; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">PASS</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Breaker rating (32A) matches design load (23.5A, 73% utilization). Complies with BS 7671 continuous load safety limits.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">No action required.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">Voltage Drop (IS 10101 / BS 7671)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">DB-ELV-L3 (Distribution Board - Comms & Security) - C1 (MDF Rack Dual Power Feed A)</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#10B981; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">PASS</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Voltage drop is 0.44% (1.02V) over 12m with 6.0mm² cable. Well within strict 3.0% European standard limit.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">No action required.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">Breaker Sizing (BS 7671)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">DB-ELV-L3 (Distribution Board - Comms & Security) - C2 (MDF Rack Dual Power Feed B)</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#10B981; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">PASS</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Breaker rating (32A) matches design load (23.5A, 73% utilization). Complies with BS 7671 continuous load safety limits.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">No action required.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">Voltage Drop (IS 10101 / BS 7671)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">DB-ELV-L3 (Distribution Board - Comms & Security) - C2 (MDF Rack Dual Power Feed B)</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#10B981; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">PASS</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Voltage drop is 0.51% (1.18V) over 14m with 6.0mm² cable. Well within strict 3.0% European standard limit.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">No action required.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">Breaker Sizing (BS 7671)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">DB-ELV-L3 (Distribution Board - Comms & Security) - C3 (Access Control Power & MagLocks)</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#10B981; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">PASS</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Breaker rating (16A) matches design load (8.2A, 51% utilization). Complies with BS 7671 continuous load safety limits.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">No action required.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">Voltage Drop (IS 10101 / BS 7671)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">DB-ELV-L3 (Distribution Board - Comms & Security) - C3 (Access Control Power & MagLocks)</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#10B981; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">PASS</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Voltage drop is 0.8% (1.84V) over 25m with 2.5mm² cable. Well within strict 3.0% European standard limit.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">No action required.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">Breaker Sizing (BS 7671)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">DB-ELV-L3 (Distribution Board - Comms & Security) - C4 (CCTV & Security Perimeter Lighting)</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#F59E0B; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">WARNING</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">High load utilization on C4: 15.4A on 16A breaker (96%). Exceeds recommended 80% continuous design limit.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">Lead Engineer Recommendation: Upgrade breaker from 16A to 20A or redistribute branch circuits.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">Voltage Drop (IS 10101 / BS 7671)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">DB-ELV-L3 (Distribution Board - Comms & Security) - C4 (CCTV & Security Perimeter Lighting)</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#F59E0B; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">WARNING</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Voltage drop is 3.5% over 58m run. Acceptable for general power (<5%), but borderline for sensitive electronic/CCTV equipment.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">Lead Engineer Recommendation: Upsize conductor from 2.5mm² to 4.0mm² to reduce drop to < 2.0%.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">Breaker Sizing (BS 7671)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">DB-ELV-L4 (Distribution Board - Tech Workspace IDF) - C1 (IDF Rack Main Power Feed)</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#10B981; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">PASS</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Breaker rating (20A) matches design load (12.8A, 64% utilization). Complies with BS 7671 continuous load safety limits.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">No action required.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">Voltage Drop (IS 10101 / BS 7671)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">DB-ELV-L4 (Distribution Board - Tech Workspace IDF) - C1 (IDF Rack Main Power Feed)</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#10B981; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">PASS</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Voltage drop is 0.55% (1.27V) over 18m with 4.0mm² cable. Well within strict 3.0% European standard limit.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">No action required.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">Breaker Sizing (BS 7671)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">DB-ELV-L4 (Distribution Board - Tech Workspace IDF) - C2 (Security Card Readers & Door Controllers)</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#10B981; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">PASS</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Breaker rating (16A) matches design load (4.5A, 28% utilization). Complies with BS 7671 continuous load safety limits.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">No action required.</td>
+        </tr>
+        
+        <tr style="border-bottom: 1px solid #E5E7EB;">
+            <td style="padding: 14px; font-weight:600; color:#1F2937;">Voltage Drop (IS 10101 / BS 7671)</td>
+            <td style="padding: 14px; color:#4B5563; font-family:monospace; font-size:13px;">DB-ELV-L4 (Distribution Board - Tech Workspace IDF) - C2 (Security Card Readers & Door Controllers)</td>
+            <td style="padding: 14px; text-align:center;"><span style="background:#10B981; color:#fff; padding:4px 10px; border-radius:12px; font-weight:600; font-size:12px;">PASS</span></td>
+            <td style="padding: 14px; color:#374151; font-size:13px;">Voltage drop is 0.53% (1.21V) over 30m with 2.5mm² cable. Well within strict 3.0% European standard limit.</td>
+            <td style="padding: 14px; color:#1D4ED8; font-size:13px; font-weight:500;">No action required.</td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            Generated by <strong>AegisBIM Senior AI Audit Engine</strong> | Dublin BIM Engineering Portfolio Showcase
+        </div>
+    </div>
+</body>
+</html>

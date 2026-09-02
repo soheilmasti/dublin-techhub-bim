@@ -1,0 +1,81 @@
+# Dublin Tech Hub High-Definition Materials
+newmtl Concrete_Slab
+Kd 0.85 0.86 0.90
+Ks 0.2 0.2 0.2
+Ns 20
+
+newmtl Concrete_Column
+Kd 0.48 0.50 0.54
+Ks 0.3 0.3 0.3
+Ns 30
+
+newmtl Glass_Facade
+Kd 0.15 0.55 0.85
+Ks 0.9 0.9 0.9
+Ns 100
+d 0.35
+
+newmtl Aluminum_Mullion
+Kd 0.18 0.20 0.24
+Ks 0.6 0.6 0.6
+Ns 60
+
+newmtl Interior_Drywall
+Kd 0.92 0.92 0.94
+Ks 0.1 0.1 0.1
+Ns 10
+
+newmtl Furniture_Wood
+Kd 0.58 0.38 0.22
+Ks 0.3 0.3 0.3
+Ns 25
+
+newmtl Monitor_Screen
+Kd 0.02 0.03 0.05
+Ke 0.1 0.3 0.6
+Ns 80
+
+newmtl Mesh_Chair
+Kd 0.12 0.14 0.18
+Ks 0.2 0.2 0.2
+Ns 15
+
+newmtl Server_Rack_42U
+Kd 0.08 0.10 0.14
+Ke 0.02 0.05 0.1
+Ks 0.5 0.5 0.5
+Ns 50
+
+newmtl InRow_CRAC
+Kd 0.05 0.45 0.75
+Ks 0.6 0.6 0.6
+Ns 50
+
+newmtl FM200_Gas_Tank
+Kd 0.88 0.12 0.12
+Ks 0.5 0.5 0.5
+Ns 40
+
+newmtl HVAC_Galvanized_Duct
+Kd 0.20 0.60 0.85
+Ks 0.7 0.7 0.7
+Ns 70
+
+newmtl Air_Diffuser
+Kd 0.95 0.95 0.98
+Ns 10
+
+newmtl Cable_Tray_Steel
+Kd 0.70 0.72 0.76
+Ks 0.6 0.6 0.6
+Ns 60
+
+newmtl Electrical_Panel_DB
+Kd 0.92 0.55 0.08
+Ks 0.5 0.5 0.5
+Ns 40
+
+newmtl Fire_Sprinkler_Pipe
+Kd 0.90 0.15 0.15
+Ks 0.7 0.7 0.7
+Ns 50
