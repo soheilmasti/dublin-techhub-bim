@@ -21,54 +21,66 @@ interface TacomaNeighborhoodModelProps {
   lightingMode: 'day' | 'sunset' | 'night' | 'wireframe';
 }
 
-// 5 Interactive Hotspot Positions in Tacoma Neighborhood Model Space
-const BUILDING_HOTSPOTS: {
+// 5 Interactive Building Complexes in Tacoma Model (Exact Coordinates & Bounding Envelopes)
+const BUILDING_ZONES: {
   categoryId: string;
-  position: [number, number, number];
+  center: [number, number, number];
+  size: [number, number, number];
+  roof: [number, number, number];
   label: string;
   badge: string;
   color: string;
   icon: any;
 }[] = [
   {
+    categoryId: 'dublin-techhub',
+    center: [6.57, 4.69, 6.23],
+    size: [4.2, 7.98, 12.8],
+    roof: [6.57, 8.85, 6.23],
+    label: '🇮🇪 برج ۷ طبقه دوبلین (BIM Audit)',
+    badge: 'ZONE 05',
+    color: '#059669',
+    icon: Sparkles
+  },
+  {
     categoryId: 'urban-design',
-    position: [-8.5, 3.5, -6.5],
+    center: [-6.95, 4.17, -6.17],
+    size: [3.2, 4.74, 12.5],
+    roof: [-6.95, 6.75, -6.17],
     label: 'طراحی شهری و بنادر',
     badge: 'ZONE 01',
     color: '#0284c7',
     icon: Compass
   },
   {
-    categoryId: 'residential-villas',
-    position: [7.2, 4.2, -4.5],
-    label: 'مسکونی و ویلاهای لوکس',
-    badge: 'ZONE 02',
-    color: '#10b981',
-    icon: Home
-  },
-  {
     categoryId: 'commercial-retail',
-    position: [-4.2, 5.0, 5.2],
+    center: [-0.87, 2.67, -1.03],
+    size: [6.5, 3.44, 18.0],
+    roof: [-0.87, 4.65, -1.03],
     label: 'مجتمع‌های تجاری و اداری',
     badge: 'ZONE 03',
     color: '#f59e0b',
     icon: Briefcase
   },
   {
+    categoryId: 'residential-villas',
+    center: [-6.19, 2.66, 11.89],
+    size: [4.8, 2.43, 5.5],
+    roof: [-6.19, 4.05, 11.89],
+    label: 'مسکونی و ویلاهای لوکس',
+    badge: 'ZONE 02',
+    color: '#10b981',
+    icon: Home
+  },
+  {
     categoryId: 'cultural-public',
-    position: [6.8, 3.8, 6.0],
+    center: [7.31, 1.60, 16.02],
+    size: [2.8, 1.94, 3.6],
+    roof: [7.31, 2.75, 16.02],
     label: 'فرهنگی و مسابقات معماری',
     badge: 'ZONE 04',
     color: '#8b5cf6',
     icon: Building2
-  },
-  {
-    categoryId: 'dublin-techhub',
-    position: [0.0, 6.5, 0.0],
-    label: '🇮🇪 برج ۷ طبقه دوبلین (BIM Audit)',
-    badge: 'ZONE 05',
-    color: '#059669',
-    icon: Sparkles
   }
 ];
 
@@ -120,7 +132,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
           // Bright, pristine Architectural White Clay (Daylight)
           child.material = new THREE.MeshStandardMaterial({
             color: '#ffffff',
-            roughness: 0.3,
+            roughness: 0.28,
             metalness: 0.02,
             side: THREE.DoubleSide,
           });
@@ -136,96 +148,140 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
       {/* Real SketchUp Neighborhood Site Model */}
       <primitive object={sceneClone} />
 
-      {/* 5 Interactive Clickable Building Hotspots */}
-      {BUILDING_HOTSPOTS.map((hotspot) => {
-        const category = categories.find(c => c.id === hotspot.categoryId) || categories[0];
-        const isHovered = hoveredId === hotspot.categoryId;
-        const isSelected = selectedCategory?.id === hotspot.categoryId;
-        const Icon = hotspot.icon;
+      {/* 5 Interactive Building Keys (Direct Building Mesh Selection & Rooftop Badges) */}
+      {BUILDING_ZONES.map((zone) => {
+        const category = categories.find(c => c.id === zone.categoryId) || categories[0];
+        const isHovered = hoveredId === zone.categoryId;
+        const isSelected = selectedCategory?.id === zone.categoryId;
+        const Icon = zone.icon;
 
         return (
-          <group 
-            key={hotspot.categoryId} 
-            position={hotspot.position}
-            onPointerOver={(e) => { e.stopPropagation(); setHoveredId(hotspot.categoryId); sound.playClick(); }}
-            onPointerOut={() => setHoveredId(null)}
-            onClick={(e) => { e.stopPropagation(); onSelectCategory(category); sound.playDrawerOpen(); }}
-          >
-            {/* Pulsing Beacon Light Ring */}
-            <mesh position={[0, 0, 0]}>
-              <cylinderGeometry args={[0.9, 0.9, 0.08, 24]} />
-              <meshStandardMaterial 
-                color={hotspot.color} 
-                emissive={hotspot.color} 
-                emissiveIntensity={isHovered ? 2.5 : (isSelected ? 3.0 : 1.2)} 
-                transparent 
-                opacity={0.8} 
+          <group key={zone.categoryId}>
+            {/* 1. Direct Building Hitbox: Clicking anywhere on the building activates it! */}
+            <mesh
+              position={zone.center}
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelectCategory(category);
+                sound.playDrawerOpen();
+              }}
+              onPointerOver={(e) => {
+                e.stopPropagation();
+                setHoveredId(zone.categoryId);
+                document.body.style.cursor = 'pointer';
+                sound.playClick();
+              }}
+              onPointerOut={() => {
+                setHoveredId(null);
+                document.body.style.cursor = 'auto';
+              }}
+            >
+              <boxGeometry args={zone.size} />
+              <meshStandardMaterial
+                color={zone.color}
+                transparent
+                opacity={isSelected ? 0.35 : isHovered ? 0.25 : 0.0}
+                emissive={zone.color}
+                emissiveIntensity={isSelected ? 1.5 : isHovered ? 0.9 : 0.0}
+                roughness={0.2}
+                depthWrite={false}
               />
             </mesh>
 
-            {/* Glowing Vertical Light Pillar */}
-            <mesh position={[0, 1.2, 0]}>
-              <cylinderGeometry args={[0.04, 0.04, 2.4, 12]} />
-              <meshStandardMaterial 
-                color={hotspot.color} 
-                emissive={hotspot.color} 
-                emissiveIntensity={isHovered ? 3.0 : 1.5} 
-              />
-            </mesh>
-
-            {/* Floating 3D Target Marker / Icon */}
-            <Float speed={3} rotationIntensity={0.2} floatIntensity={0.6}>
-              <mesh position={[0, 2.5, 0]} castShadow>
-                <sphereGeometry args={[0.45, 24, 24]} />
-                <meshStandardMaterial 
-                  color={hotspot.color} 
-                  emissive={hotspot.color} 
-                  emissiveIntensity={isHovered ? 1.8 : 0.8}
-                  roughness={0.2}
-                  metalness={0.6}
+            {/* 2. Sleek Rooftop Architectural Beacon (Directly Flush On Building Roof) */}
+            <group position={zone.roof}>
+              {/* Subtle Rooftop Glowing Base Halo */}
+              <mesh 
+                position={[0, 0.08, 0]}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSelectCategory(category);
+                  sound.playDrawerOpen();
+                }}
+                onPointerOver={(e) => {
+                  e.stopPropagation();
+                  setHoveredId(zone.categoryId);
+                  document.body.style.cursor = 'pointer';
+                }}
+              >
+                <cylinderGeometry args={[0.75, 0.75, 0.06, 32]} />
+                <meshStandardMaterial
+                  color={zone.color}
+                  emissive={zone.color}
+                  emissiveIntensity={isHovered ? 3.0 : isSelected ? 3.5 : 1.4}
+                  transparent
+                  opacity={0.85}
                 />
               </mesh>
-            </Float>
 
-            {/* Interactive HTML Card Tag */}
-            <Html position={[0, 3.4, 0]} center distanceFactor={18}>
-              <div 
-                onClick={(e) => { e.stopPropagation(); onSelectCategory(category); sound.playDrawerOpen(); }}
-                className={`transition-all duration-300 transform cursor-pointer ${
-                  isHovered || isSelected ? 'scale-110 -translate-y-2' : 'scale-95'
-                }`}
-              >
-                <div className={`px-4 py-2 rounded-2xl backdrop-blur-xl border shadow-2xl flex items-center gap-3 whitespace-nowrap ${
-                  isSelected 
-                    ? 'bg-blue-600 text-white border-white ring-4 ring-blue-400/50' 
-                    : isHovered 
-                    ? 'bg-slate-900/95 text-white border-sky-400 ring-2 ring-sky-400/30' 
-                    : 'bg-white/95 text-gray-900 border-gray-200'
-                }`}>
-                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs ${
-                    isSelected ? 'bg-white text-blue-600' : 'bg-black text-white'
-                  }`}>
-                    <Icon className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">
-                        {hotspot.badge}
-                      </span>
-                      <span className="text-[10px] text-gray-500 font-bold">
-                        {category.projects.length} پروژه
-                      </span>
+              {/* Minimalist Floating Glass Pill Badge (Anchored on Roof) */}
+              <Html position={[0, 0.5, 0]} center distanceFactor={16}>
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSelectCategory(category);
+                    sound.playDrawerOpen();
+                  }}
+                  onPointerOver={() => {
+                    setHoveredId(zone.categoryId);
+                    document.body.style.cursor = 'pointer';
+                  }}
+                  onPointerOut={() => {
+                    setHoveredId(null);
+                    document.body.style.cursor = 'auto';
+                  }}
+                  className={`transition-all duration-300 transform cursor-pointer select-none ${
+                    isHovered || isSelected ? 'scale-110 -translate-y-1' : 'scale-95 hover:scale-105'
+                  }`}
+                >
+                  <div
+                    className={`px-3.5 py-1.5 rounded-full backdrop-blur-xl border shadow-xl flex items-center gap-2.5 whitespace-nowrap transition-all duration-300 ${
+                      isSelected
+                        ? 'bg-blue-600 text-white border-white ring-4 ring-blue-400/50 shadow-blue-500/40'
+                        : isHovered
+                        ? 'bg-slate-900/95 text-white border-sky-400 ring-2 ring-sky-400/40 shadow-sky-500/20'
+                        : 'bg-white/95 text-slate-900 border-slate-200/90 shadow-slate-900/10'
+                    }`}
+                  >
+                    <div
+                      className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs ${
+                        isSelected
+                          ? 'bg-white text-blue-600'
+                          : isHovered
+                          ? 'bg-sky-500 text-white'
+                          : 'bg-slate-900 text-white'
+                      }`}
+                    >
+                      <Icon className="w-3.5 h-3.5" />
                     </div>
-                    <div className="text-xs font-black tracking-tight mt-0.5">
-                      {hotspot.label}
+
+                    <div className="text-right">
+                      <div className="flex items-center gap-1.5">
+                        <span className={`text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded ${
+                          isSelected ? 'bg-blue-800 text-white' : 'bg-slate-100 text-slate-700'
+                        }`}>
+                          {zone.badge}
+                        </span>
+                        <span className={`text-[9.5px] font-bold ${
+                          isSelected ? 'text-blue-100' : isHovered ? 'text-sky-300' : 'text-slate-500'
+                        }`}>
+                          {category.projects.length} پروژه
+                        </span>
+                      </div>
+                      <div className="text-[11.5px] font-black tracking-tight leading-none mt-0.5">
+                        {zone.label}
+                      </div>
                     </div>
-                  </div>
-                  <div className="p-1 rounded-lg bg-gray-100/50 text-gray-400 hover:text-black">
-                    <ArrowUpRight className="w-3.5 h-3.5" />
+
+                    <div className={`p-1 rounded-full ${
+                      isSelected ? 'bg-blue-700 text-white' : 'bg-slate-100 text-slate-400'
+                    }`}>
+                      <ArrowUpRight className="w-3 h-3" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Html>
+              </Html>
+            </group>
           </group>
         );
       })}
