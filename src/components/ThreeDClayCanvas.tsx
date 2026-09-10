@@ -58,30 +58,58 @@ const OVERVIEW_CAMERA = {
   position: [15, 14, 18] as [number, number, number]
 };
 
-// Smooth Camera Flight Controller
+// Smooth Camera Flight Controller (Free Orbit by default, flies ONLY on click, yields immediately on user mouse interaction)
 const CameraController: React.FC<{
   targetFocus: { target: [number, number, number]; position: [number, number, number] } | null;
   autoRotate: boolean;
 }> = ({ targetFocus, autoRotate }) => {
   const controlsRef = useRef<OrbitControlsType>(null);
-  const desiredTarget = useRef(new THREE.Vector3(...OVERVIEW_CAMERA.target));
-  const desiredPos = useRef(new THREE.Vector3(...OVERVIEW_CAMERA.position));
+  const isFlying = useRef<boolean>(false);
+  const targetVec = useRef(new THREE.Vector3());
+  const posVec = useRef(new THREE.Vector3());
 
+  // Trigger flight ONLY when targetFocus is explicitly updated by a click
   useEffect(() => {
     if (targetFocus) {
-      desiredTarget.current.set(...targetFocus.target);
-      desiredPos.current.set(...targetFocus.position);
-    } else {
-      desiredTarget.current.set(...OVERVIEW_CAMERA.target);
-      desiredPos.current.set(...OVERVIEW_CAMERA.position);
+      targetVec.current.set(...targetFocus.target);
+      posVec.current.set(...targetFocus.position);
+      isFlying.current = true;
     }
   }, [targetFocus]);
 
+  // Immediately yield camera control to user if they touch/drag/scroll with mouse
+  useEffect(() => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+
+    const handleUserStart = () => {
+      // User began interacting with mouse -> stop any programmatic flight immediately!
+      isFlying.current = false;
+    };
+
+    controls.addEventListener('start', handleUserStart);
+    return () => {
+      controls.removeEventListener('start', handleUserStart);
+    };
+  }, []);
+
   useFrame(({ camera }, delta) => {
-    if (controlsRef.current) {
-      controlsRef.current.target.lerp(desiredTarget.current, delta * 3.5);
-      camera.position.lerp(desiredPos.current, delta * 2.8);
-      controlsRef.current.update();
+    const controls = controlsRef.current;
+    if (!controls) return;
+
+    // Only interpolate when actively flying from an explicit click
+    if (isFlying.current) {
+      controls.target.lerp(targetVec.current, delta * 3.5);
+      camera.position.lerp(posVec.current, delta * 3.0);
+      controls.update();
+
+      // Once destination is reached, release camera control for complete freedom
+      if (
+        controls.target.distanceTo(targetVec.current) < 0.08 &&
+        camera.position.distanceTo(posVec.current) < 0.12
+      ) {
+        isFlying.current = false;
+      }
     }
   });
 
@@ -91,12 +119,14 @@ const CameraController: React.FC<{
       enablePan={true}
       enableZoom={true}
       enableRotate={true}
+      enableDamping={true}
+      dampingFactor={0.06}
+      screenSpacePanning={true}
       autoRotate={autoRotate}
       autoRotateSpeed={0.8}
-      maxPolarAngle={Math.PI / 2.1}
-      minDistance={6}
-      maxDistance={45}
-      dampingFactor={0.05}
+      maxPolarAngle={Math.PI / 2.03}
+      minDistance={3}
+      maxDistance={70}
     />
   );
 };
@@ -150,7 +180,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
 
   const handleResetCamera = () => {
     sound.playClick();
-    setCameraFocus(null);
+    setCameraFocus({ ...OVERVIEW_CAMERA });
   };
 
   const handleFocusZone = (cat: CategoryBuilding) => {
