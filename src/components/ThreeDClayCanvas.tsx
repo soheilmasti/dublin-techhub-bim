@@ -21,8 +21,10 @@ import {
   ZoomIn, 
   MousePointerClick,
   Sparkles,
-  Layers
+  Layers,
+  Building
 } from 'lucide-react';
+import { TacomaNeighborhoodModel } from './TacomaNeighborhoodModel';
 
 interface ThreeDClayCanvasProps {
   categories: CategoryBuilding[];
@@ -466,19 +468,13 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
             </>
           )}
 
-          {/* Ground & Scene */}
-          <ArchitecturalGround lightingMode={lightingMode} />
-
-          {/* 3D Buildings */}
-          {categories.map((cat) => (
-            <Building3DNode
-              key={cat.id}
-              category={cat}
-              isSelected={selectedCategory?.id === cat.id}
-              onSelect={() => onSelectCategory(cat)}
-              lightingMode={lightingMode}
-            />
-          ))}
+          {/* Real SketchUp Tacoma Site Model with 5 Interactive Clickable Hotspots */}
+          <TacomaNeighborhoodModel
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onSelectCategory={onSelectCategory}
+            lightingMode={lightingMode}
+          />
 
           {/* Soft Shadows */}
           <ContactShadows
