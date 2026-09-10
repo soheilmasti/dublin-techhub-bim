@@ -573,6 +573,6 @@ export const INITIAL_SETTINGS: SiteSettings = {
   studioTagline: 'SENIOR ARCHITECT & BIM SPECIALIST // BARCELONA & TEHRAN',
   backgroundImageUrl: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1920&q=80',
   maquetteStyle: 'clay-white',
-  activeView: 'maquette',
+  activeView: '3d',
   soundEnabled: true
 };
