@@ -279,17 +279,30 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
 
           {lightingMode === 'night' && (
             <>
-              <ambientLight intensity={0.45} color="#1e1b4b" />
-              <directionalLight position={[14, 24, 14]} intensity={1.1} color="#38bdf8" />
-              <pointLight position={[6.57, 10, 6.23]} intensity={4.5} color="#fbbf24" distance={35} />
-              <pointLight position={[-0.87, 8, -1.03]} intensity={3.5} color="#38bdf8" distance={30} />
-            </>
-          )}
+              {/* Rich Urban Night Sky & Moon Bounce */}
+              <ambientLight intensity={0.75} color="#1e293b" />
+              <directionalLight position={[18, 30, 18]} intensity={1.8} color="#60a5fa" />
+              <directionalLight position={[-16, 20, -14]} intensity={1.0} color="#38bdf8" />
 
-          {lightingMode === 'wireframe' && (
-            <>
-              <ambientLight intensity={0.8} color="#00ffff" />
-              <directionalLight position={[15, 20, 15]} intensity={1.4} />
+              {/* 1. Dublin Tech Hub 7-Story Tower Facade & Roof Uplights */}
+              <pointLight position={[6.57, 9.5, 6.23]} intensity={7.5} color="#fbbf24" distance={38} />
+              <pointLight position={[6.57, 2.5, 6.23]} intensity={5.5} color="#38bdf8" distance={25} />
+
+              {/* 2. Commercial Mall Entrance & Cafe Terrace Lighting */}
+              <pointLight position={[-0.87, 4.8, -1.03]} intensity={6.5} color="#f59e0b" distance={32} />
+
+              {/* 3. Urban Port & Promenade Waterfront Lights */}
+              <pointLight position={[-6.95, 4.5, -6.17]} intensity={5.5} color="#0284c7" distance={32} />
+
+              {/* 4. Residential Villas Pathway & Garden Illumination */}
+              <pointLight position={[-6.19, 3.8, 11.89]} intensity={4.8} color="#10b981" distance={28} />
+
+              {/* 5. Cultural Pavilion Landmark Jewel Glow */}
+              <pointLight position={[7.31, 3.2, 16.02]} intensity={5.2} color="#c084fc" distance={28} />
+
+              {/* Central Avenue Streetlight Core Glow */}
+              <pointLight position={[3.2, 2.0, 3.0]} intensity={4.5} color="#fbbf24" distance={25} />
+              <pointLight position={[0.5, 2.0, 0.5]} intensity={4.5} color="#fbbf24" distance={25} />
             </>
           )}
 
@@ -344,11 +357,11 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
         </button>
       </div>
 
-      {/* TOP-RIGHT: Lighting Mood Switcher Toolbar */}
+      {/* TOP-RIGHT: Lighting Mood Switcher Toolbar (Clean Architectural Modes - No Code/Wireframe) */}
       <div className="absolute top-20 right-6 z-20 glass-panel p-1.5 rounded-2xl shadow-clay-md flex items-center gap-1 border border-white/80">
         <button
           onClick={() => { setLightingMode('day'); sound.playSwitch(); }}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
             lightingMode === 'day' ? 'bg-black text-white shadow-xs' : 'text-gray-600 hover:text-black'
           }`}
           title="رندر متریال و بافت‌های واقعی اسکچ‌آپ با نور طبیعی روز"
@@ -359,7 +372,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
 
         <button
           onClick={() => { setLightingMode('sunset'); sound.playSwitch(); }}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
             lightingMode === 'sunset' ? 'bg-orange-600 text-white shadow-xs' : 'text-gray-600 hover:text-black'
           }`}
           title="نور غروب خورشید با سایه‌روشن‌های طلایی"
@@ -370,24 +383,13 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
 
         <button
           onClick={() => { setLightingMode('night'); sound.playSwitch(); }}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
             lightingMode === 'night' ? 'bg-indigo-950 text-white shadow-xs' : 'text-gray-600 hover:text-black'
           }`}
-          title="نورپردازی شبانه معماری با نورهای اختصاصی نما"
+          title="نورپردازی شبانه معماری با نورهای اختصاصی نما و چراغ‌های شهری"
         >
           <Moon className="w-3.5 h-3.5" />
           <span>شب معماری</span>
-        </button>
-
-        <button
-          onClick={() => { setLightingMode('wireframe'); sound.playSwitch(); }}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-            lightingMode === 'wireframe' ? 'bg-cyan-900 text-cyan-200 shadow-xs' : 'text-gray-600 hover:text-black'
-          }`}
-          title="حالت وایرفریم CAD و دیاگرام سه‌بعدی"
-        >
-          <Code2 className="w-3.5 h-3.5" />
-          <span>CAD Wireframe</span>
         </button>
       </div>
 

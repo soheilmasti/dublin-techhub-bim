@@ -84,50 +84,7 @@ const BUILDING_ZONES: {
   }
 ];
 
-// Holographic Ground Radar Ring for Active/Hovered Building
-const HolographicRadar: React.FC<{ 
-  position: [number, number, number]; 
-  radius: number; 
-  color: string;
-  isActive: boolean;
-}> = ({ position, radius, color, isActive }) => {
-  const ringRef = useRef<THREE.Group>(null);
-
-  useFrame((_, delta) => {
-    if (ringRef.current) {
-      ringRef.current.rotation.z += delta * (isActive ? 0.8 : 0.3);
-    }
-  });
-
-  return (
-    <group position={[position[0], 0.04, position[2]]} rotation={[-Math.PI / 2, 0, 0]}>
-      <group ref={ringRef}>
-        {/* Outer Circular Boundary */}
-        <mesh>
-          <ringGeometry args={[radius * 0.96, radius, 48]} />
-          <meshBasicMaterial color={color} transparent opacity={isActive ? 0.8 : 0.45} side={THREE.DoubleSide} />
-        </mesh>
-        {/* Inner Concentric Pulse */}
-        <mesh>
-          <ringGeometry args={[radius * 0.65, radius * 0.68, 36]} />
-          <meshBasicMaterial color={color} transparent opacity={isActive ? 0.6 : 0.3} side={THREE.DoubleSide} />
-        </mesh>
-        {/* 4 Cardinal CAD Ticks */}
-        {[0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2].map((angle, idx) => (
-          <mesh key={idx} rotation={[0, 0, angle]} position={[Math.cos(angle) * radius * 0.82, Math.sin(angle) * radius * 0.82, 0]}>
-            <planeGeometry args={[radius * 0.15, radius * 0.03]} />
-            <meshBasicMaterial color={color} transparent opacity={0.7} side={THREE.DoubleSide} />
-          </mesh>
-        ))}
-      </group>
-      {/* Ground Soft Glow Disk */}
-      <mesh>
-        <circleGeometry args={[radius * 0.95, 32]} />
-        <meshBasicMaterial color={color} transparent opacity={isActive ? 0.15 : 0.06} side={THREE.DoubleSide} />
-      </mesh>
-    </group>
-  );
-};
+import { ArchitecturalEntourage } from './ArchitecturalEntourage';
 
 export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = ({
   categories,
@@ -150,40 +107,52 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
 
     // Preserve Authentic SketchUp Textures, Materials & Colors
     clone.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
+      if (child instanceof THREE.Mesh && child.material) {
         child.castShadow = true;
         child.receiveShadow = true;
 
-        if (lightingMode === 'wireframe') {
-          child.material = new THREE.MeshBasicMaterial({ 
-            color: '#00ffff', 
-            wireframe: true 
-          });
-        } else if (child.material) {
-          // Enhance authentic SketchUp PBR textures & materials
-          const materials = Array.isArray(child.material) ? child.material : [child.material];
-          materials.forEach((mat) => {
-            mat.side = THREE.DoubleSide;
-            mat.needsUpdate = true;
+        const materials = Array.isArray(child.material) ? child.material : [child.material];
+        materials.forEach((mat) => {
+          mat.side = THREE.DoubleSide;
+          mat.needsUpdate = true;
 
-            if (mat.map) {
-              mat.map.anisotropy = 16;
-              mat.map.needsUpdate = true;
-            }
+          if (mat.map) {
+            mat.map.anisotropy = 16;
+            mat.map.needsUpdate = true;
+          }
 
-            if (mat instanceof THREE.MeshStandardMaterial) {
+          if (mat instanceof THREE.MeshStandardMaterial) {
+            const matName = (mat.name || '').toLowerCase();
+            const isGlass = matName.includes('glass') || matName.includes('translucent') || matName.includes('window');
+
+            if (isGlass) {
+              mat.transparent = true;
+              mat.opacity = lightingMode === 'night' ? 0.95 : 0.68;
+              mat.roughness = 0.1;
+              mat.metalness = 0.85;
+              mat.envMapIntensity = 2.0;
+            } else {
               mat.roughness = THREE.MathUtils.clamp(mat.roughness || 0.45, 0.25, 0.7);
               mat.metalness = THREE.MathUtils.clamp(mat.metalness || 0.05, 0.02, 0.3);
               mat.envMapIntensity = 1.35;
-
-              if (lightingMode === 'sunset') {
-                mat.color.multiply(new THREE.Color('#fed7aa'));
-              } else if (lightingMode === 'night') {
-                mat.color.multiply(new THREE.Color('#94a3b8'));
-              }
             }
-          });
-        }
+
+            // Enhanced Night Illumination on Windows & Facades
+            if (lightingMode === 'night') {
+              if (isGlass) {
+                // Glowing warm interior architectural light from inside the buildings
+                mat.emissive = new THREE.Color('#f59e0b');
+                mat.emissiveIntensity = 2.2;
+              } else {
+                // Subtle architectural facade night tint
+                mat.roughness = 0.3;
+                mat.metalness = 0.15;
+              }
+            } else if (lightingMode === 'sunset') {
+              mat.roughness = 0.35;
+            }
+          }
+        });
       }
     });
 
@@ -195,26 +164,20 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
       {/* Real SketchUp Neighborhood Site Model */}
       <primitive object={sceneClone} />
 
-      {/* 5 Interactive Building Keys (Direct Building Mesh Selection & Rooftop Badges) */}
+      {/* 3D Proportional Scale Figures & Modern Street Lighting */}
+      <ArchitecturalEntourage lightingMode={lightingMode as any} />
+
+      {/* 5 Interactive Building Keys (Direct Building Selection & Clean Rooftop Badges - NO CIRCLES) */}
       {BUILDING_ZONES.map((zone) => {
         const category = categories.find(c => c.id === zone.categoryId) || categories[0];
         const isHovered = hoveredId === zone.categoryId;
         const isSelected = selectedCategory?.id === zone.categoryId;
         const Icon = zone.icon;
         const leadProject = category.projects[0];
-        const radius = Math.max(zone.size[0], zone.size[2]) * 0.65;
 
         return (
           <group key={zone.categoryId}>
-            {/* 1. Holographic Ground Radar (Pulses under active/hovered building) */}
-            <HolographicRadar
-              position={zone.center}
-              radius={radius}
-              color={zone.color}
-              isActive={isHovered || isSelected}
-            />
-
-            {/* 2. Direct Building Hitbox: Clicking anywhere on the building activates it! */}
+            {/* 1. Direct Building Hitbox: Clicking anywhere on the building activates it! */}
             <mesh
               position={zone.center}
               onClick={(e) => {
@@ -237,42 +200,18 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
               <meshStandardMaterial
                 color={zone.color}
                 transparent
-                opacity={isSelected ? 0.32 : isHovered ? 0.22 : 0.0}
+                opacity={isSelected ? 0.30 : isHovered ? 0.20 : 0.0}
                 emissive={zone.color}
-                emissiveIntensity={isSelected ? 1.6 : isHovered ? 1.0 : 0.0}
+                emissiveIntensity={isSelected ? 1.5 : isHovered ? 0.9 : 0.0}
                 roughness={0.2}
                 depthWrite={false}
               />
             </mesh>
 
-            {/* 3. Sleek Rooftop Architectural Beacon (Directly Flush On Building Roof) */}
+            {/* 2. Sleek Floating Architectural Tag (Clean, No Circles Below or Above) */}
             <group position={zone.roof}>
-              {/* Subtle Rooftop Glowing Base Halo */}
-              <mesh 
-                position={[0, 0.08, 0]}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onSelectCategory(category);
-                  sound.playDrawerOpen();
-                }}
-                onPointerOver={(e) => {
-                  e.stopPropagation();
-                  setHoveredId(zone.categoryId);
-                  document.body.style.cursor = 'pointer';
-                }}
-              >
-                <cylinderGeometry args={[0.75, 0.75, 0.06, 32]} />
-                <meshStandardMaterial
-                  color={zone.color}
-                  emissive={zone.color}
-                  emissiveIntensity={isHovered ? 3.2 : isSelected ? 3.8 : 1.5}
-                  transparent
-                  opacity={0.88}
-                />
-              </mesh>
-
               {/* Minimalist Floating Glass Pill Badge & Rich Project Card */}
-              <Html position={[0, 0.5, 0]} center distanceFactor={15}>
+              <Html position={[0, 0.4, 0]} center distanceFactor={15}>
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
