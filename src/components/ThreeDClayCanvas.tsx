@@ -31,23 +31,23 @@ interface ThreeDClayCanvasProps {
 
 // 5 Zone Centroid & Camera Targets for Smooth Focus
 const ZONE_CAMERA_TARGETS: Record<string, { target: [number, number, number]; position: [number, number, number] }> = {
-  'dublin-techhub': {
-    target: [6.57, 5.2, 6.23],
-    position: [14.0, 10.5, 14.0]
-  },
   'urban-design': {
     target: [-6.95, 4.0, -6.17],
     position: [-1.5, 8.5, 0.5]
   },
-  'commercial-retail': {
-    target: [-0.87, 3.2, -1.03],
-    position: [6.5, 8.0, 6.5]
-  },
-  'residential-villas': {
+  'residential-luxury': {
     target: [-6.19, 3.0, 11.89],
     position: [-1.0, 7.5, 18.5]
   },
-  'cultural-public': {
+  'commercial-complexes': {
+    target: [6.57, 5.2, 6.23],
+    position: [14.0, 10.5, 14.0]
+  },
+  'retail-stores': {
+    target: [-0.87, 3.2, -1.03],
+    position: [6.5, 8.0, 6.5]
+  },
+  'institutional-competitions': {
     target: [7.31, 2.2, 16.02],
     position: [13.5, 6.5, 22.0]
   }

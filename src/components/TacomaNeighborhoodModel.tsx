@@ -11,7 +11,9 @@ import {
   Compass, 
   Sparkles,
   Layers,
-  ArrowUpRight
+  ArrowUpRight,
+  ShoppingBag,
+  Award
 } from 'lucide-react';
 
 interface TacomaNeighborhoodModelProps {
@@ -21,7 +23,7 @@ interface TacomaNeighborhoodModelProps {
   lightingMode: 'day' | 'sunset' | 'night' | 'wireframe';
 }
 
-// 5 Interactive Building Complexes in Tacoma Model (Exact Coordinates & Bounding Envelopes)
+// 5 Interactive Building Complexes in Tacoma Model (Exact Coordinates & Bounding Envelopes mapped to Categories)
 const BUILDING_ZONES: {
   categoryId: string;
   center: [number, number, number];
@@ -33,54 +35,54 @@ const BUILDING_ZONES: {
   icon: any;
 }[] = [
   {
-    categoryId: 'dublin-techhub',
-    center: [6.57, 4.69, 6.23],
-    size: [4.2, 7.98, 12.8],
-    roof: [6.57, 8.85, 6.23],
-    label: '🇮🇪 برج ۷ طبقه دوبلین (BIM Audit)',
-    badge: 'ZONE 05',
-    color: '#059669',
-    icon: Sparkles
-  },
-  {
     categoryId: 'urban-design',
     center: [-6.95, 4.17, -6.17],
     size: [3.2, 4.74, 12.5],
     roof: [-6.95, 6.75, -6.17],
-    label: 'طراحی شهری و بنادر',
+    label: 'طراحی شهری، بنادر و زیرساخت کلان',
     badge: 'ZONE 01',
     color: '#0284c7',
     icon: Compass
   },
   {
-    categoryId: 'commercial-retail',
-    center: [-0.87, 2.67, -1.03],
-    size: [6.5, 3.44, 18.0],
-    roof: [-0.87, 4.65, -1.03],
-    label: 'مجتمع‌های تجاری و اداری',
-    badge: 'ZONE 03',
-    color: '#f59e0b',
-    icon: Briefcase
-  },
-  {
-    categoryId: 'residential-villas',
+    categoryId: 'residential-luxury',
     center: [-6.19, 2.66, 11.89],
     size: [4.8, 2.43, 5.5],
     roof: [-6.19, 4.05, 11.89],
-    label: 'مسکونی و ویلاهای لوکس',
+    label: 'پروژه‌های مسکونی و ویلاهای لوکس',
     badge: 'ZONE 02',
     color: '#10b981',
     icon: Home
   },
   {
-    categoryId: 'cultural-public',
+    categoryId: 'commercial-complexes',
+    center: [6.57, 4.69, 6.23],
+    size: [4.2, 7.98, 12.8],
+    roof: [6.57, 8.85, 6.23],
+    label: 'مجتمع‌های تجاری، اداری و برج‌ها',
+    badge: 'ZONE 03',
+    color: '#6366f1',
+    icon: Briefcase
+  },
+  {
+    categoryId: 'retail-stores',
+    center: [-0.87, 2.67, -1.03],
+    size: [6.5, 3.44, 18.0],
+    roof: [-0.87, 4.65, -1.03],
+    label: 'فروشگاه‌های کانسپت و فضاهای تجاری مدرن',
+    badge: 'ZONE 04',
+    color: '#ec4899',
+    icon: ShoppingBag
+  },
+  {
+    categoryId: 'institutional-competitions',
     center: [7.31, 1.60, 16.02],
     size: [2.8, 1.94, 3.6],
     roof: [7.31, 2.75, 16.02],
-    label: 'فرهنگی و مسابقات معماری',
-    badge: 'ZONE 04',
-    color: '#8b5cf6',
-    icon: Building2
+    label: 'مسابقات معماری و پروژه‌های عمومی',
+    badge: 'ZONE 05',
+    color: '#f59e0b',
+    icon: Award
   }
 ];
 
@@ -169,7 +171,8 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
 
       {/* 5 Interactive Building Keys (Direct Building Selection & Clean Rooftop Badges - NO CIRCLES) */}
       {BUILDING_ZONES.map((zone) => {
-        const category = categories.find(c => c.id === zone.categoryId) || categories[0];
+        const category = categories.find(c => c.id === zone.categoryId);
+        if (!category) return null;
         const isHovered = hoveredId === zone.categoryId;
         const isSelected = selectedCategory?.id === zone.categoryId;
         const Icon = zone.icon;

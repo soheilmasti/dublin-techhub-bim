@@ -15,7 +15,7 @@ export const BottomToolbar: React.FC<BottomToolbarProps> = ({
   onSelectCategory,
   activeView
 }) => {
-  if (activeView === 'grid') return null;
+  if (activeView !== 'maquette') return null;
 
   const getIcon = (iconName: string) => {
     switch (iconName) {

@@ -458,6 +458,33 @@ export const INITIAL_CATEGORIES: CategoryBuilding[] = [
         ],
         concept: 'ساماندهی دفاتر اداری دولتی و واحدهای تجاری در دو بلوک متصل با حیاط میانی اقلیمی و تهویه طبیعی بادگیرها.',
         features: ['پلان ماژولار اداری با قابلیت تغییر ابعاد واحدها', 'دسترسی مجزا برای ارباب‌رجوع و کارکنان']
+      },
+      {
+        id: 'dublin-techhub-bim',
+        title: 'برج اداری و فناوری ۷ طبقه دوبلین (BIM Audit LOD 350)',
+        englishTitle: 'Dublin Tech Hub 7-Story Tower & BIM Audit',
+        location: 'دوبلین، ایرلند (Dublin, Ireland)',
+        year: '2023 – 2024',
+        area: '۱۲,۴۰۰ متر مربع',
+        typology: 'Commercial',
+        status: 'طراحی و کانسپت',
+        role: 'Senior Architect & Lead BIM Specialist',
+        coverImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1400&q=80',
+        gallery: [
+          'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1400&q=80',
+          'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1400&q=80'
+        ],
+        concept: 'برج مدرن تجاری-اداری ۷ طبقه در دوبلین با رویکرد معماری پایدار و استانداردهای پیشرفته مدلسازی اطلاعات ساختمان (LOD 350)، دیتاسنتر اختصاصی، فضاهای کار اشتراکی و سیستم تهویه هوشمند.',
+        features: [
+          'طراحی ۷ طبقه اداری با کرتین‌وال آکوستیک دوجداره و هسته بتنی',
+          'مدلسازی جامع سازه و تاسیسات (MEP/Structure) جهت رفع تداخلات Clash Detection',
+          'دیتاسنتر هوشمند زیرساختی و ایستگاه‌های کاری ارگونومیک مانیتور دوگانه',
+          'بهینه‌سازی انرژی با استاندارد BREEAM Excellent'
+        ],
+        bimSpecs: {
+          lodLevel: 'LOD 350 / 400 Parametric Families',
+          softwareUsed: ['Autodesk Revit', 'Navisworks', 'Rhino', 'V-Ray', 'Enscape']
+        }
       }
     ]
   },
