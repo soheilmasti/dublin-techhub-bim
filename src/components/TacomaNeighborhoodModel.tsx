@@ -15,12 +15,14 @@ import {
   ShoppingBag,
   Award
 } from 'lucide-react';
+import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 
 interface TacomaNeighborhoodModelProps {
   categories: CategoryBuilding[];
   onSelectCategory: (category: CategoryBuilding) => void;
   selectedCategory: CategoryBuilding | null;
   lightingMode: 'day' | 'sunset' | 'night' | 'wireframe';
+  currentLanguage?: LanguageCode;
 }
 
 // 5 Interactive Building Complexes in Tacoma Model (Exact Coordinates & Bounding Envelopes mapped to Categories)
@@ -92,10 +94,14 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
   categories,
   onSelectCategory,
   selectedCategory,
-  lightingMode
+  lightingMode,
+  currentLanguage = 'en'
 }) => {
   const gltf = useGLTF('/models/tacoma/Tacoma_Neighborhood.glb');
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
+  const isRTL = currentLanguage === 'fa';
 
   // Clone & configure bright architectural materials for SketchUp model
   const sceneClone = useMemo(() => {
@@ -257,21 +263,21 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
                     </div>
 
                     {/* Typography */}
-                    <div className="text-right">
+                    <div className={isRTL ? 'text-right' : 'text-left'} dir={isRTL ? 'rtl' : 'ltr'}>
                       <div className="flex items-center gap-1.5">
                         <span className={`text-[8.5px] font-mono font-bold px-1.5 py-0.5 rounded ${
                           isSelected ? 'bg-blue-800 text-white' : isHovered ? 'bg-sky-950 text-sky-200 border border-sky-700' : 'bg-slate-100 text-slate-700'
                         }`}>
-                          {zone.badge}
+                          {t.zones[zone.categoryId as keyof typeof t.zones]?.badge || zone.badge}
                         </span>
                         <span className={`text-[9.5px] font-bold ${
                           isSelected ? 'text-blue-100' : isHovered ? 'text-sky-300' : 'text-slate-500'
                         }`}>
-                          {category.projects.length} پروژه
+                          {category.projects.length} {t.projectsCount}
                         </span>
                       </div>
                       <div className="text-[12px] font-black tracking-tight leading-none mt-1">
-                        {zone.label}
+                        {t.zones[zone.categoryId as keyof typeof t.zones]?.label || zone.label}
                       </div>
                     </div>
 
@@ -284,7 +290,12 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
 
                   {/* Expanded Hover HUD Card: Lead Project Preview */}
                   {(isHovered || isSelected) && leadProject && (
-                    <div className="mt-2 w-64 p-3 rounded-2xl bg-slate-950/95 backdrop-blur-2xl border border-sky-400/40 shadow-2xl text-white text-right animate-in fade-in slide-in-from-bottom-2 duration-200">
+                    <div 
+                      className={`mt-2 w-64 p-3 rounded-2xl bg-slate-950/95 backdrop-blur-2xl border border-sky-400/40 shadow-2xl text-white animate-in fade-in slide-in-from-bottom-2 duration-200 ${
+                        isRTL ? 'text-right' : 'text-left'
+                      }`}
+                      dir={isRTL ? 'rtl' : 'ltr'}
+                    >
                       {leadProject.coverImage && (
                         <div className="relative w-full h-24 rounded-xl overflow-hidden mb-2.5 border border-white/10">
                           <img 
@@ -293,13 +304,13 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
                             className="w-full h-full object-cover"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                          <span className="absolute bottom-1.5 right-2 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white">
+                          <span className={`absolute bottom-1.5 ${isRTL ? 'right-2' : 'left-2'} text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white`}>
                             {leadProject.year}
                           </span>
                         </div>
                       )}
                       <div className="text-xs font-bold line-clamp-1 text-slate-100">
-                        {leadProject.title}
+                        {isRTL ? leadProject.title : (leadProject.englishTitle || leadProject.title)}
                       </div>
                       <div className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">
                         {leadProject.location} • {leadProject.typology}
@@ -307,9 +318,9 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
                       <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[10px] font-bold text-sky-400">
                         <span className="flex items-center gap-1">
                           <Sparkles className="w-3 h-3 text-amber-400" />
-                          کلیک برای ورود به پروژه‌ها
+                          {t.clickToEnter}
                         </span>
-                        <span>{category.projects.length} پروژه ↗</span>
+                        <span>{category.projects.length} {t.projectsCount} ↗</span>
                       </div>
                     </div>
                   )}

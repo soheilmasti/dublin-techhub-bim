@@ -3,63 +3,68 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
   MapPin, 
-  Calendar, 
   Maximize2, 
   CheckCircle2, 
   FileText, 
   Image as ImageIcon,
   ChevronRight,
   ChevronLeft,
-  Share2,
   Cpu,
-  UserCheck,
-  Building2
+  UserCheck
 } from 'lucide-react';
 import { Project } from '../types';
 import { sound } from '../utils/audio';
+import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 
 interface ProjectDetailModalProps {
   project: Project | null;
   onClose: () => void;
+  currentLanguage?: LanguageCode;
 }
 
 export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
   project,
-  onClose
+  onClose,
+  currentLanguage = 'en'
 }) => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [viewTab, setViewTab] = useState<'gallery' | 'plans'>('gallery');
 
   if (!project) return null;
 
+  const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
+  const isRTL = currentLanguage === 'fa';
   const currentGallery = viewTab === 'gallery' ? project.gallery : (project.plans || project.gallery);
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-md flex items-center justify-center p-2 sm:p-6 md:p-10">
+      <div 
+        className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-8"
+        dir={isRTL ? 'rtl' : 'ltr'}
+      >
         <motion.div
           initial={{ opacity: 0, scale: 0.96, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 20 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 280 }}
+          transition={{ type: 'spring', damping: 26, stiffness: 280 }}
           className="relative w-full max-w-5xl bg-white rounded-3xl overflow-hidden shadow-2xl border border-white/90 my-auto"
         >
           {/* Close & Return Button */}
           <button
             onClick={() => { sound.playClick(); onClose(); }}
-            className="absolute top-4 left-4 z-20 px-3.5 py-2 rounded-2xl bg-white/95 hover:bg-black hover:text-white backdrop-blur-md flex items-center gap-2 text-gray-900 font-bold text-xs shadow-lg transition-all duration-200 border border-gray-200 hover:scale-105 active:scale-95 cursor-pointer"
-            title="بستن و بازگشت به صفحه اصلی"
+            className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'} z-20 px-3.5 py-2 rounded-2xl bg-white/95 hover:bg-black hover:text-white backdrop-blur-md flex items-center gap-2 text-gray-900 font-bold text-xs shadow-lg transition-all duration-200 border border-gray-200 hover:scale-105 active:scale-95 cursor-pointer`}
+            title={t.close}
           >
             <X className="w-4 h-4" />
-            <span>بستن و بازگشت (Close)</span>
+            <span>{t.close}</span>
           </button>
 
           {/* Grid Layout: Visual Media & Specs */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 max-h-[90vh] overflow-y-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 max-h-[88vh] overflow-y-auto">
             {/* Left Media Viewer (7 cols) */}
-            <div className="lg:col-span-7 bg-gray-950 flex flex-col justify-between relative min-h-[380px] lg:min-h-[600px]">
+            <div className="lg:col-span-7 bg-gray-950 flex flex-col justify-between relative min-h-[320px] sm:min-h-[420px] lg:min-h-[600px]">
               {/* Media Mode Tabs */}
-              <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 glass-panel-dark p-1 rounded-2xl">
+              <div className={`absolute top-4 ${isRTL ? 'right-4' : 'left-4'} z-10 flex items-center gap-1.5 glass-panel-dark p-1 rounded-2xl`}>
                 <button
                   onClick={() => { sound.playClick(); setViewTab('gallery'); setActiveImageIndex(0); }}
                   className={`flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
@@ -69,16 +74,16 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                   }`}
                 >
                   <ImageIcon className="w-3.5 h-3.5" />
-                  تصاویر و رندرهای پروژه
+                  <span>Gallery</span>
                 </button>
               </div>
 
               {/* Main Image Display */}
-              <div className="relative w-full h-full flex items-center justify-center p-4">
+              <div className="relative w-full h-full flex items-center justify-center p-3 sm:p-6">
                 <img
                   src={currentGallery[activeImageIndex] || project.coverImage}
                   alt={project.title}
-                  className="max-h-[500px] w-full object-contain rounded-2xl"
+                  className="max-h-[300px] sm:max-h-[420px] lg:max-h-[500px] w-full object-contain rounded-2xl"
                 />
 
                 {/* Prev / Next Controls */}
@@ -86,13 +91,13 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                   <>
                     <button
                       onClick={() => { sound.playClick(); setActiveImageIndex((prev) => (prev > 0 ? prev - 1 : currentGallery.length - 1)); }}
-                      className="absolute right-6 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/50 text-white hover:bg-black flex items-center justify-center transition-colors"
+                      className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/60 text-white hover:bg-black flex items-center justify-center transition-colors cursor-pointer"
                     >
                       <ChevronRight className="w-5 h-5" />
                     </button>
                     <button
                       onClick={() => { sound.playClick(); setActiveImageIndex((prev) => (prev < currentGallery.length - 1 ? prev + 1 : 0)); }}
-                      className="absolute left-6 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/50 text-white hover:bg-black flex items-center justify-center transition-colors"
+                      className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/60 text-white hover:bg-black flex items-center justify-center transition-colors cursor-pointer"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
@@ -101,12 +106,12 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
               </div>
 
               {/* Thumbnails Row */}
-              <div className="p-4 bg-black/50 backdrop-blur-md flex items-center justify-center gap-2 overflow-x-auto">
+              <div className="p-3 sm:p-4 bg-black/50 backdrop-blur-md flex items-center justify-center gap-2 overflow-x-auto">
                 {currentGallery.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => { sound.playClick(); setActiveImageIndex(idx); }}
-                    className={`w-14 h-10 rounded-lg overflow-hidden border-2 transition-all shrink-0 ${
+                    className={`w-12 h-9 sm:w-14 sm:h-10 rounded-lg overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
                       activeImageIndex === idx ? 'border-white scale-105' : 'border-transparent opacity-40 hover:opacity-100'
                     }`}
                   >
@@ -117,7 +122,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
             </div>
 
             {/* Right Architectural Info Sidebar (5 cols) */}
-            <div className="lg:col-span-5 p-6 md:p-8 flex flex-col justify-between bg-white text-right">
+            <div className={`lg:col-span-5 p-5 sm:p-7 md:p-8 flex flex-col justify-between bg-white ${isRTL ? 'text-right' : 'text-left'}`}>
               <div>
                 <div className="flex flex-wrap items-center gap-2 mb-2">
                   <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-black text-white">
@@ -131,35 +136,35 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                   )}
                 </div>
 
-                <h2 className="text-2xl font-bold text-gray-900 mt-1">
-                  {project.title}
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1 leading-tight">
+                  {isRTL ? project.title : (project.englishTitle || project.title)}
                 </h2>
                 <p className="text-xs font-mono text-gray-400 mt-0.5 font-medium">
-                  {project.englishTitle}
+                  {isRTL ? project.englishTitle : project.title}
                 </p>
 
                 {/* Specs Matrix */}
-                <div className="grid grid-cols-2 gap-3 my-5 bg-gray-50 p-4 rounded-2xl border border-gray-100 text-xs">
+                <div className="grid grid-cols-2 gap-3 my-4 sm:my-5 bg-gray-50 p-3.5 sm:p-4 rounded-2xl border border-gray-100 text-xs">
                   <div>
-                    <span className="text-gray-400 block text-[10px] font-medium">موقعیت مکانی</span>
+                    <span className="text-gray-400 block text-[10px] font-medium">{t.location}</span>
                     <span className="font-semibold text-gray-800 flex items-center gap-1 mt-0.5">
-                      <MapPin className="w-3.5 h-3.5 text-gray-500" />
-                      {project.location}
+                      <MapPin className="w-3.5 h-3.5 text-gray-500 shrink-0" />
+                      <span className="line-clamp-1">{project.location}</span>
                     </span>
                   </div>
                   <div>
-                    <span className="text-gray-400 block text-[10px] font-medium">مساحت / زیربنا</span>
+                    <span className="text-gray-400 block text-[10px] font-medium">{t.area}</span>
                     <span className="font-semibold text-gray-800 flex items-center gap-1 mt-0.5">
-                      <Maximize2 className="w-3.5 h-3.5 text-gray-500" />
-                      {project.area}
+                      <Maximize2 className="w-3.5 h-3.5 text-gray-500 shrink-0" />
+                      <span>{project.area}</span>
                     </span>
                   </div>
                   {project.client && (
                     <div className="col-span-2 pt-2 border-t border-gray-200/60">
-                      <span className="text-gray-400 block text-[10px] font-medium">کارفرما</span>
+                      <span className="text-gray-400 block text-[10px] font-medium">{t.client}</span>
                       <span className="font-semibold text-gray-800 flex items-center gap-1 mt-0.5">
-                        <UserCheck className="w-3.5 h-3.5 text-gray-500" />
-                        {project.client}
+                        <UserCheck className="w-3.5 h-3.5 text-gray-500 shrink-0" />
+                        <span>{project.client}</span>
                       </span>
                     </div>
                   )}
@@ -167,10 +172,10 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
 
                 {/* BIM Specs if available */}
                 {project.bimSpecs && (
-                  <div className="mb-5 bg-blue-50/70 p-3.5 rounded-2xl border border-blue-100 text-xs">
+                  <div className="mb-4 sm:mb-5 bg-blue-50/70 p-3.5 rounded-2xl border border-blue-100 text-xs">
                     <div className="flex items-center gap-1.5 text-blue-900 font-bold mb-1.5">
                       <Cpu className="w-4 h-4 text-blue-600" />
-                      <span>مشخصات فنی و استانداردهای BIM</span>
+                      <span>{t.bimSpecifications}</span>
                     </div>
                     {project.bimSpecs.lodLevel && (
                       <p className="text-[11px] text-blue-800 font-mono">
@@ -190,21 +195,21 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                 )}
 
                 {/* Concept Narrative */}
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <h4 className="text-xs font-bold text-gray-900 flex items-center gap-1.5">
                     <FileText className="w-4 h-4 text-blue-600" />
-                    ایده و کانسپت معماری
+                    <span>{t.concept}</span>
                   </h4>
-                  <p className="text-xs text-gray-600 leading-relaxed text-justify">
+                  <p className="text-xs text-gray-600 leading-relaxed">
                     {project.concept}
                   </p>
                 </div>
 
                 {/* Key Architectural Features */}
-                {project.features && (
-                  <div className="mt-5 space-y-2">
+                {project.features && project.features.length > 0 && (
+                  <div className="mt-4 space-y-1.5">
                     <h4 className="text-xs font-bold text-gray-900">
-                      ویژگی‌های شاخص پروژه
+                      {t.features}
                     </h4>
                     <div className="space-y-1.5">
                       {project.features.map((feat, i) => (
@@ -219,12 +224,12 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
               </div>
 
               {/* Action Buttons */}
-              <div className="mt-6 pt-4 border-t border-gray-100 flex items-center gap-3">
+              <div className="mt-5 pt-3.5 border-t border-gray-100 flex items-center gap-3">
                 <button
                   onClick={() => { sound.playClick(); onClose(); }}
-                  className="flex-1 py-2.5 rounded-2xl bg-black text-white font-bold text-xs hover:bg-gray-800 transition-colors text-center shadow-clay-sm"
+                  className="flex-1 py-2.5 rounded-2xl bg-black text-white font-bold text-xs hover:bg-gray-800 transition-colors text-center shadow-clay-sm cursor-pointer"
                 >
-                  بازگشت به پورتفولیو
+                  {t.backToOverview}
                 </button>
               </div>
             </div>

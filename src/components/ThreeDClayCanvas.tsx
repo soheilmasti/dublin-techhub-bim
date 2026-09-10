@@ -22,11 +22,13 @@ import {
   Pause
 } from 'lucide-react';
 import { TacomaNeighborhoodModel } from './TacomaNeighborhoodModel';
+import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 
 interface ThreeDClayCanvasProps {
   categories: CategoryBuilding[];
   onSelectCategory: (category: CategoryBuilding) => void;
   selectedCategory: CategoryBuilding | null;
+  currentLanguage?: LanguageCode;
 }
 
 // 5 Zone Centroid & Camera Targets for Smooth Focus
@@ -165,11 +167,14 @@ const ArchitecturalPlinth: React.FC<{ lightingMode: string }> = ({ lightingMode 
 export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
   categories,
   onSelectCategory,
-  selectedCategory
+  selectedCategory,
+  currentLanguage = 'en'
 }) => {
   const [lightingMode, setLightingMode] = useState<'day' | 'sunset' | 'night' | 'wireframe'>('day');
   const [autoRotate, setAutoRotate] = useState<boolean>(false);
   const [cameraFocus, setCameraFocus] = useState<{ target: [number, number, number]; position: [number, number, number] } | null>(null);
+
+  const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
 
   // Sync camera focus when selectedCategory changes
   useEffect(() => {
@@ -192,7 +197,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
   };
 
   return (
-    <div className="relative w-full h-screen bg-[#0f141c] overflow-hidden select-none">
+    <div className="relative w-full h-screen bg-[#0f141c] overflow-hidden select-none touch-none">
       {/* 3D WebGL Canvas with PBR Tone Mapping */}
       <Canvas
         shadows
@@ -315,6 +320,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
             selectedCategory={selectedCategory}
             onSelectCategory={onSelectCategory}
             lightingMode={lightingMode}
+            currentLanguage={currentLanguage}
           />
 
           {/* Soft Ground Contact Shadows */}
@@ -331,15 +337,15 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
         </Suspense>
       </Canvas>
 
-      {/* TOP-LEFT: Camera Preset & View Control Toolbar */}
-      <div className="absolute top-20 left-6 z-20 glass-panel p-1.5 rounded-2xl shadow-clay-md flex items-center gap-1.5 border border-white/80">
+      {/* TOP-LEFT: Camera Preset & View Control Toolbar (Mobile-Optimized) */}
+      <div className="absolute top-16 sm:top-20 left-3 sm:left-6 z-20 glass-panel p-1 sm:p-1.5 rounded-2xl shadow-clay-md flex items-center gap-1 sm:gap-1.5 border border-white/80">
         <button
           onClick={handleResetCamera}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-gray-700 hover:text-black hover:bg-white/80 transition-all"
-          title="بازگشت به زاویه دید کلی شهرک (Overview)"
+          className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold text-gray-700 hover:text-black hover:bg-white/80 transition-all cursor-pointer"
+          title={t.overviewView}
         >
-          <Camera className="w-3.5 h-3.5 text-blue-600" />
-          <span>دید کلی</span>
+          <Camera className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+          <span className="hidden sm:inline">{t.overviewView}</span>
         </button>
 
         <button
@@ -347,91 +353,95 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
             sound.playSwitch();
             setAutoRotate(!autoRotate);
           }}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
             autoRotate ? 'bg-blue-600 text-white shadow-xs' : 'text-gray-700 hover:text-black hover:bg-white/80'
           }`}
-          title="چرخش سینمایی اتوماتیک دور شهرک"
+          title={autoRotate ? t.autoRotateStop : t.autoRotateStart}
         >
-          {autoRotate ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-          <span>{autoRotate ? 'توقف چرخش' : 'چرخش خودکار'}</span>
+          {autoRotate ? <Pause className="w-3.5 h-3.5 text-white shrink-0" /> : <Play className="w-3.5 h-3.5 text-blue-600 shrink-0" />}
+          <span className="hidden sm:inline">{autoRotate ? t.autoRotateStop : t.autoRotateStart}</span>
         </button>
       </div>
 
-      {/* TOP-RIGHT: Lighting Mood Switcher Toolbar (Clean Architectural Modes - No Code/Wireframe) */}
-      <div className="absolute top-20 right-6 z-20 glass-panel p-1.5 rounded-2xl shadow-clay-md flex items-center gap-1 border border-white/80">
+      {/* TOP-RIGHT: Lighting Mood Switcher Toolbar (Mobile-Optimized) */}
+      <div className="absolute top-16 sm:top-20 right-3 sm:right-6 z-20 glass-panel p-1 sm:p-1.5 rounded-2xl shadow-clay-md flex items-center gap-1 border border-white/80">
         <button
           onClick={() => { setLightingMode('day'); sound.playSwitch(); }}
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
             lightingMode === 'day' ? 'bg-black text-white shadow-xs' : 'text-gray-600 hover:text-black'
           }`}
-          title="رندر متریال و بافت‌های واقعی اسکچ‌آپ با نور طبیعی روز"
+          title={t.dayMode}
         >
-          <Sun className="w-3.5 h-3.5" />
-          <span>روز اسکچ‌آپ</span>
+          <Sun className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+          <span className="hidden md:inline">{t.dayMode}</span>
         </button>
 
         <button
           onClick={() => { setLightingMode('sunset'); sound.playSwitch(); }}
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
             lightingMode === 'sunset' ? 'bg-orange-600 text-white shadow-xs' : 'text-gray-600 hover:text-black'
           }`}
-          title="نور غروب خورشید با سایه‌روشن‌های طلایی"
+          title={t.sunsetMode}
         >
-          <Sunset className="w-3.5 h-3.5" />
-          <span>غروب طلایی</span>
+          <Sunset className="w-3.5 h-3.5 text-orange-400 shrink-0" />
+          <span className="hidden md:inline">{t.sunsetMode}</span>
         </button>
 
         <button
           onClick={() => { setLightingMode('night'); sound.playSwitch(); }}
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-            lightingMode === 'night' ? 'bg-indigo-950 text-white shadow-xs' : 'text-gray-600 hover:text-black'
+          className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            lightingMode === 'night' ? 'bg-indigo-950 text-white shadow-xs ring-1 ring-sky-400' : 'text-gray-600 hover:text-black'
           }`}
-          title="نورپردازی شبانه معماری با نورهای اختصاصی نما و چراغ‌های شهری"
+          title={t.nightMode}
         >
-          <Moon className="w-3.5 h-3.5" />
-          <span>شب معماری</span>
+          <Moon className="w-3.5 h-3.5 text-indigo-300 shrink-0" />
+          <span className="hidden md:inline">{t.nightMode}</span>
         </button>
       </div>
 
-      {/* BOTTOM: Zone Quick-Jump Pills & Interactive HUD */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
-        {/* 5 Building Quick Jump Bar */}
-        <div className="glass-panel p-1.5 rounded-2xl shadow-clay-lg flex items-center gap-1 border border-white/90">
+      {/* BOTTOM: Zone Quick-Jump Pills & Interactive HUD (Mobile-Touch-Optimized) */}
+      <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 sm:gap-2 max-w-[96vw]">
+        {/* 5 Building Quick Jump Bar (Horizontally scrollable on mobile) */}
+        <div className="glass-panel p-1 sm:p-1.5 rounded-2xl shadow-clay-lg flex items-center gap-1 border border-white/90 max-w-[96vw] overflow-x-auto scrollbar-none">
           {categories.map((cat, idx) => {
             const isSelected = selectedCategory?.id === cat.id;
+            const zoneInfo = t.zones[cat.id as keyof typeof t.zones];
+            const zoneLabel = zoneInfo?.label || cat.title;
+
             return (
               <button
                 key={cat.id}
                 onClick={() => handleFocusZone(cat)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 shrink-0 cursor-pointer ${
                   isSelected 
-                    ? 'bg-blue-600 text-white shadow-md scale-102' 
+                    ? 'bg-blue-600 text-white shadow-md scale-102 ring-2 ring-blue-400/50' 
                     : 'text-slate-700 hover:text-black hover:bg-white/80'
                 }`}
-                title={`فوکوس دوربین و بررسی ${cat.title}`}
+                title={zoneLabel}
               >
                 <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded ${
                   isSelected ? 'bg-blue-800 text-white' : 'bg-slate-200 text-slate-700'
                 }`}>
                   0{idx + 1}
                 </span>
-                <span className="hidden md:inline">{cat.title}</span>
+                <span className="hidden sm:inline">{zoneLabel}</span>
+                <span className="inline sm:hidden">{zoneLabel.split(' ')[0]}</span>
                 <span className="text-[10px] opacity-75 font-normal">({cat.projects.length})</span>
               </button>
             );
           })}
         </div>
 
-        {/* Minimal Navigation Hint */}
-        <div className="text-[11px] font-medium text-slate-400 bg-slate-900/60 backdrop-blur-md px-3.5 py-1 rounded-full border border-white/10 flex items-center gap-3">
+        {/* Minimal Navigation Hint (Hidden on very small screens to save vertical space) */}
+        <div className="hidden sm:flex text-[11px] font-medium text-slate-300 bg-slate-950/70 backdrop-blur-md px-3.5 py-1 rounded-full border border-white/10 items-center gap-3">
           <span className="flex items-center gap-1">
-            <MousePointerClick className="w-3 h-3 text-sky-400" />
-            کلیک روی هر ساختمان = پرواز دوربین و باز شدن پروژه‌ها
+            <MousePointerClick className="w-3 h-3 text-sky-400 shrink-0" />
+            <span>{t.clickBuildingHint}</span>
           </span>
           <span>•</span>
           <span className="flex items-center gap-1">
-            <RotateCw className="w-3 h-3 text-emerald-400" />
-            چرخش ۳۶۰ درجه: کلیک چپ و درگ ماوس
+            <RotateCw className="w-3 h-3 text-emerald-400 shrink-0" />
+            <span>{t.rotateHint}</span>
           </span>
         </div>
       </div>

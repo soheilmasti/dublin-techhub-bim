@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Home } from 'lucide-react';
 import { Header } from './components/Header';
 import { MaquetteIsometricCanvas } from './components/MaquetteIsometricCanvas';
@@ -14,6 +14,7 @@ import { BottomToolbar } from './components/BottomToolbar';
 import { INITIAL_CATEGORIES, INITIAL_SETTINGS } from './data/initialData';
 import { CategoryBuilding, Project, SiteSettings } from './types';
 import { sound } from './utils/audio';
+import { LanguageCode, detectVisitorLanguage, TRANSLATIONS } from './utils/i18n';
 
 export const App: React.FC = () => {
   const [categories, setCategories] = useState<CategoryBuilding[]>(INITIAL_CATEGORIES);
@@ -22,6 +23,28 @@ export const App: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+
+  // 7-Language State with Smart IP Detection
+  const [language, setLanguage] = useState<LanguageCode>('en');
+
+  // Detect Visitor Language on first load
+  useEffect(() => {
+    detectVisitorLanguage().then((detected) => {
+      setLanguage(detected);
+    });
+  }, []);
+
+  // Update HTML document attributes on language change
+  useEffect(() => {
+    const isRTL = language === 'fa';
+    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+    document.documentElement.lang = language;
+    localStorage.setItem('preferred_language', language);
+  }, [language]);
+
+  const handleLanguageChange = (newLang: LanguageCode) => {
+    setLanguage(newLang);
+  };
 
   const handleUpdateSettings = (newSettings: Partial<SiteSettings>) => {
     setSettings(prev => ({ ...prev, ...newSettings }));
@@ -40,12 +63,17 @@ export const App: React.FC = () => {
     handleUpdateSettings({ activeView: '3d' });
   };
 
+  const t = TRANSLATIONS[language] || TRANSLATIONS.en;
+  const isRTL = language === 'fa';
   const totalProjectsCount = categories.reduce((acc, cat) => acc + cat.projects.length, 0);
   const isOutsideHome = settings.activeView !== '3d';
 
   return (
-    <div className="relative min-h-screen bg-[#f5f6f8] text-gray-900 font-sans select-none overflow-x-hidden">
-      {/* Top Header */}
+    <div 
+      className="relative min-h-screen bg-[#f5f6f8] text-gray-900 font-sans select-none overflow-x-hidden"
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
+      {/* Top Header with Language Selector & Mobile View Navigation */}
       <Header
         settings={settings}
         onUpdateSettings={handleUpdateSettings}
@@ -53,6 +81,8 @@ export const App: React.FC = () => {
         onOpenAbout={() => setIsAboutOpen(true)}
         totalProjectsCount={totalProjectsCount}
         categoriesCount={categories.length}
+        currentLanguage={language}
+        onLanguageChange={handleLanguageChange}
       />
 
       {/* Main Content by Active View */}
@@ -71,6 +101,7 @@ export const App: React.FC = () => {
             categories={categories}
             onSelectCategory={(cat) => setSelectedCategory(cat)}
             selectedCategory={selectedCategory}
+            currentLanguage={language}
           />
         )}
 
@@ -96,19 +127,20 @@ export const App: React.FC = () => {
         )}
       </main>
 
-      {/* Universal Floating Home Button (Always available when outside Maquette) */}
+      {/* Universal Floating Home Button (Always available when outside 3D Cityscape) */}
       {isOutsideHome && (
         <button
           onClick={handleResetToHome}
-          className="fixed bottom-6 right-6 z-50 glass-panel px-4 py-3 rounded-2xl shadow-clay-lg flex items-center gap-2.5 text-xs font-black text-gray-900 bg-white/95 hover:bg-black hover:text-white transition-all duration-300 hover:scale-105 active:scale-95 border-2 border-blue-500/40 pointer-events-auto cursor-pointer"
-          title="بازگشت فوری به صفحه اصلی ماکت شهرک"
+          className={`fixed bottom-5 ${isRTL ? 'left-5' : 'right-5'} z-50 glass-panel px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl shadow-clay-lg flex items-center gap-2 text-xs font-black text-gray-900 bg-white/95 hover:bg-black hover:text-white transition-all duration-300 hover:scale-105 active:scale-95 border-2 border-blue-500/40 pointer-events-auto cursor-pointer`}
+          title={t.returnToHome}
         >
-          <Home className="w-4 h-4 text-blue-600 group-hover:text-white" />
-          <span>🏠 بازگشت به صفحه اصلی (ماکت)</span>
+          <Home className="w-4 h-4 text-blue-600 group-hover:text-white shrink-0" />
+          <span className="hidden sm:inline">{t.returnToHome}</span>
+          <span className="inline sm:hidden">Home</span>
         </button>
       )}
 
-      {/* Bottom Floating Toolbar (for Maquette & 3D Views) */}
+      {/* Bottom Floating Toolbar (for Maquette View only) */}
       <BottomToolbar
         categories={categories}
         selectedCategory={selectedCategory}
@@ -121,12 +153,14 @@ export const App: React.FC = () => {
         category={selectedCategory}
         onClose={() => setSelectedCategory(null)}
         onSelectProject={(proj) => setSelectedProject(proj)}
+        currentLanguage={language}
       />
 
       {/* Project Fullscreen Detail & Gallery Lightbox */}
       <ProjectDetailModal
         project={selectedProject}
         onClose={() => setSelectedProject(null)}
+        currentLanguage={language}
       />
 
       {/* Live Customizer & JSON Manager */}
