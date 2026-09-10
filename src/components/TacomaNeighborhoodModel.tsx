@@ -91,32 +91,38 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     clone.position.set(-3948.0 * scale, -836.0 * scale, 8985.0 * scale);
     clone.rotation.set(0, 0, 0);
 
-    // Architectural Clay & Material Polish
+    // Architectural Clay & Material Polish (Solid, Double-Sided, Bright Illumination)
     clone.traverse((child) => {
       if (child instanceof THREE.Mesh) {
         child.castShadow = true;
         child.receiveShadow = true;
 
         if (lightingMode === 'wireframe') {
-          child.material = new THREE.MeshBasicMaterial({ color: '#00ffff', wireframe: true });
+          child.material = new THREE.MeshBasicMaterial({ 
+            color: '#00ffff', 
+            wireframe: true 
+          });
         } else if (lightingMode === 'night') {
           child.material = new THREE.MeshStandardMaterial({
             color: '#1e293b',
             roughness: 0.4,
             metalness: 0.2,
+            side: THREE.DoubleSide,
           });
         } else if (lightingMode === 'sunset') {
           child.material = new THREE.MeshStandardMaterial({
             color: '#fed7aa',
             roughness: 0.35,
             metalness: 0.05,
+            side: THREE.DoubleSide,
           });
         } else {
           // Bright, pristine Architectural White Clay (Daylight)
           child.material = new THREE.MeshStandardMaterial({
-            color: '#f8fafc',
-            roughness: 0.28,
-            metalness: 0.05,
+            color: '#ffffff',
+            roughness: 0.3,
+            metalness: 0.02,
+            side: THREE.DoubleSide,
           });
         }
       }
