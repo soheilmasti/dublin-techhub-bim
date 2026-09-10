@@ -10,6 +10,7 @@ import {
 import { CategoryBuilding, Project } from '../types';
 import { sound } from '../utils/audio';
 import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
+import { getLocalizedStatus } from '../utils/localizedData';
 
 interface ProjectDrawerProps {
   category: CategoryBuilding | null;
@@ -113,7 +114,7 @@ export const ProjectDrawer: React.FC<ProjectDrawerProps> = ({
                     {/* Status Badge */}
                     <div className={`absolute top-3 ${isRTL ? 'left-3' : 'right-3'} z-10`}>
                       <span className="text-[10px] font-bold px-2.5 py-1 rounded-full glass-panel shadow-sm text-gray-900">
-                        {project.status}
+                        {getLocalizedStatus(project.status, currentLanguage)}
                       </span>
                     </div>
 

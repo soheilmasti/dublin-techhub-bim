@@ -5,43 +5,42 @@ import {
   Briefcase, 
   GraduationCap, 
   Award, 
-  CheckCircle2, 
   Mail, 
   Phone, 
   MapPin, 
   Linkedin, 
-  Instagram, 
-  ArrowRight, 
-  Layers, 
-  FileText, 
-  Quote, 
+  Cpu, 
   Sparkles,
-  Download,
-  Building2,
-  Cpu,
-  Compass
+  Quote
 } from 'lucide-react';
-import { RESUME_DATA } from '../data/initialData';
 import { sound } from '../utils/audio';
+import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
+import { getLocalizedResume } from '../utils/localizedData';
 
 interface ResumeProfileViewProps {
   onBackToMaquette: () => void;
+  currentLanguage?: LanguageCode;
 }
 
 export const ResumeProfileView: React.FC<ResumeProfileViewProps> = ({
-  onBackToMaquette
+  onBackToMaquette,
+  currentLanguage = 'en'
 }) => {
+  const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
+  const isRTL = currentLanguage === 'fa';
+  const resume = getLocalizedResume(currentLanguage);
+
   return (
-    <div className="min-h-screen bg-[#f5f6f8] pt-24 pb-20 px-4 sm:px-8 max-w-7xl mx-auto">
-      {/* Back to Home Button */}
+    <div className="min-h-screen bg-[#f5f6f8] pt-24 pb-20 px-4 sm:px-8 max-w-7xl mx-auto" dir={isRTL ? 'rtl' : 'ltr'}>
+      {/* Back to Portfolio Button */}
       <div className="mb-6">
         <button
           onClick={() => { sound.playClick(); onBackToMaquette(); }}
           className="text-xs font-bold text-gray-800 hover:text-white hover:bg-black flex items-center gap-2 transition-all glass-panel px-4 py-2.5 rounded-2xl shadow-clay-sm w-fit border border-white hover:scale-105 active:scale-95 cursor-pointer"
-          title="بازگشت به صفحه اصلی ماکت شهرک"
+          title={t.resumeView.backToPortfolio}
         >
           <Home className="w-4 h-4 text-blue-600" />
-          <span>🏠 بازگشت به صفحه اصلی (ماکت شهرک)</span>
+          <span>{t.resumeView.backToPortfolio}</span>
         </button>
       </div>
 
@@ -67,18 +66,18 @@ export const ResumeProfileView: React.FC<ResumeProfileViewProps> = ({
                   GAAM STUDIO // BARCELONA & TEHRAN
                 </span>
                 <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  15+ YEARS EXPERIENCE
+                  {t.resumeView.experienceBadge}
                 </span>
               </div>
               <h1 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
-                {RESUME_DATA.name}
+                {resume.name}
               </h1>
               <p className="text-xs sm:text-sm font-mono text-gray-500 mt-1 font-semibold">
-                {RESUME_DATA.englishTitle}
+                {resume.title}
               </p>
               <p className="text-xs text-gray-600 flex items-center gap-1.5 mt-2">
                 <MapPin className="w-3.5 h-3.5 text-rose-500" />
-                {RESUME_DATA.location}
+                {resume.location}
               </p>
             </div>
           </div>
@@ -86,11 +85,11 @@ export const ResumeProfileView: React.FC<ResumeProfileViewProps> = ({
           {/* Direct Contact Buttons */}
           <div className="flex flex-wrap lg:flex-col gap-2.5 shrink-0">
             <a
-              href={`mailto:${RESUME_DATA.email}`}
+              href={`mailto:${resume.email}`}
               className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-black text-white text-xs font-bold hover:bg-gray-800 transition-colors shadow-clay-sm"
             >
               <Mail className="w-4 h-4" />
-              <span>ارسال ایمیل به سهیل مستی</span>
+              <span>{t.resumeView.sendEmail}</span>
             </a>
             <a
               href="https://linkedin.com/in/soheil-masti"
@@ -99,18 +98,18 @@ export const ResumeProfileView: React.FC<ResumeProfileViewProps> = ({
               className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#0077b5] text-white text-xs font-bold hover:bg-[#005f93] transition-colors"
             >
               <Linkedin className="w-4 h-4" />
-              <span>پروفایل لینکدین (LinkedIn)</span>
+              <span>LinkedIn Profile</span>
             </a>
             <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-gray-100 text-gray-800 text-xs font-mono font-bold">
               <Phone className="w-4 h-4 text-emerald-600" />
-              <span className="dir-ltr">{RESUME_DATA.phone}</span>
+              <span className="dir-ltr">{resume.phone}</span>
             </div>
           </div>
         </div>
 
         {/* Bio Narrative */}
         <p className="text-xs sm:text-sm text-gray-700 leading-relaxed mt-6 pt-6 border-t border-gray-100 max-w-4xl text-justify">
-          {RESUME_DATA.bio}
+          {resume.bio}
         </p>
       </motion.div>
 
@@ -123,12 +122,12 @@ export const ResumeProfileView: React.FC<ResumeProfileViewProps> = ({
               <Briefcase className="w-4 h-4" />
             </div>
             <h2 className="text-lg font-bold text-gray-900">
-              سوابق حرفه‌ای و رهبری پروژه‌ها (Experience)
+              {t.resumeView.workExperience}
             </h2>
           </div>
 
           <div className="space-y-4">
-            {RESUME_DATA.experience.map((exp, idx) => (
+            {resume.experience.map((exp, idx) => (
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 15 }}
@@ -146,7 +145,7 @@ export const ResumeProfileView: React.FC<ResumeProfileViewProps> = ({
                 </div>
 
                 <div className="flex items-center gap-3 text-xs text-gray-500 font-semibold mb-3">
-                  <span className="text-black">{exp.company}</span>
+                  <span className="text-black font-bold">{exp.company}</span>
                   <span>•</span>
                   <span>{exp.location}</span>
                 </div>
@@ -171,12 +170,12 @@ export const ResumeProfileView: React.FC<ResumeProfileViewProps> = ({
             <div className="flex items-center gap-2 mb-4">
               <Cpu className="w-4 h-4 text-blue-600" />
               <h2 className="text-sm font-bold text-gray-900">
-                تخصص‌های فنی و مهارت‌های نرم‌افزاری
+                {t.resumeView.competencies}
               </h2>
             </div>
 
             <div className="space-y-4">
-              {RESUME_DATA.competencies.map((comp, cIdx) => (
+              {resume.competencies.map((comp, cIdx) => (
                 <div key={cIdx} className="space-y-2">
                   <h4 className="text-xs font-bold text-gray-700">{comp.category}:</h4>
                   <div className="flex flex-wrap gap-1.5">
@@ -199,13 +198,13 @@ export const ResumeProfileView: React.FC<ResumeProfileViewProps> = ({
             <div className="flex items-center gap-2 mb-4">
               <GraduationCap className="w-4 h-4 text-emerald-600" />
               <h2 className="text-sm font-bold text-gray-900">
-                تحصیلات آکادمیک (Education)
+                {t.resumeView.education}
               </h2>
             </div>
 
             <div className="space-y-4">
-              {RESUME_DATA.education.map((edu, eIdx) => (
-                <div key={eIdx} className="border-r-2 border-emerald-500 pr-3.5 space-y-1">
+              {resume.education.map((edu, eIdx) => (
+                <div key={eIdx} className={`${isRTL ? 'border-r-2 pr-3.5' : 'border-l-2 pl-3.5'} border-emerald-500 space-y-1`}>
                   <h4 className="text-xs font-bold text-gray-900">{edu.degree}</h4>
                   <p className="text-xs text-gray-600">{edu.university}</p>
                   <span className="text-[10px] font-mono text-gray-400 block">{edu.year} • {edu.location}</span>
@@ -219,12 +218,12 @@ export const ResumeProfileView: React.FC<ResumeProfileViewProps> = ({
             <div className="flex items-center gap-2 mb-4">
               <Award className="w-4 h-4 text-amber-500" />
               <h2 className="text-sm font-bold text-gray-900">
-                جوایز و مسابقات معماری
+                {t.resumeView.awards}
               </h2>
             </div>
 
             <div className="space-y-3">
-              {RESUME_DATA.awards.map((award, aIdx) => (
+              {resume.awards.map((award, aIdx) => (
                 <div key={aIdx} className="flex items-start gap-2.5 text-xs">
                   <Sparkles className="w-3.5 h-3.5 text-amber-500 mt-0.5 shrink-0" />
                   <div>
@@ -243,12 +242,12 @@ export const ResumeProfileView: React.FC<ResumeProfileViewProps> = ({
         <div className="flex items-center gap-2 mb-6">
           <Quote className="w-5 h-5 text-blue-600" />
           <h2 className="text-base font-bold text-gray-900">
-            توصیه‌نامه‌ها و بازخورد کارفرمایان برجسته (References)
+            {t.resumeView.references}
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {RESUME_DATA.references.map((ref, rIdx) => (
+          {resume.references.map((ref, rIdx) => (
             <div key={rIdx} className="bg-gray-50 p-5 rounded-2xl border border-gray-100 flex flex-col justify-between">
               <p className="text-xs text-gray-700 leading-relaxed italic mb-4">
                 {ref.quote}

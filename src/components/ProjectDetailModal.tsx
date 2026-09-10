@@ -15,6 +15,7 @@ import {
 import { Project } from '../types';
 import { sound } from '../utils/audio';
 import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
+import { getLocalizedStatus } from '../utils/localizedData';
 
 interface ProjectDetailModalProps {
   project: Project | null;
@@ -74,8 +75,21 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                   }`}
                 >
                   <ImageIcon className="w-3.5 h-3.5" />
-                  <span>Gallery</span>
+                  <span>{t.gallery}</span>
                 </button>
+                {project.plans && project.plans.length > 0 && (
+                  <button
+                    onClick={() => { sound.playClick(); setViewTab('plans'); setActiveImageIndex(0); }}
+                    className={`flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
+                      viewTab === 'plans'
+                        ? 'bg-white text-black'
+                        : 'text-gray-300 hover:text-white'
+                    }`}
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>{t.plans}</span>
+                  </button>
+                )}
               </div>
 
               {/* Main Image Display */}
@@ -126,7 +140,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
               <div>
                 <div className="flex flex-wrap items-center gap-2 mb-2">
                   <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-black text-white">
-                    {project.status}
+                    {getLocalizedStatus(project.status, currentLanguage)}
                   </span>
                   <span className="text-xs font-mono text-gray-500 font-bold">{project.year}</span>
                   {project.role && (

@@ -33,6 +33,7 @@ import {
   Home
 } from 'lucide-react';
 import { sound } from '../utils/audio';
+import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 
 // -----------------------------------------------------------------------------
 // PHOTOREALISTIC 3D ARCHITECTURAL & MEP ASSETS (LOD 350 / 400)
@@ -438,8 +439,13 @@ const CCTVCamera3D: React.FC<{
 // MAIN DUBLIN TECH HUB SHOWCASE COMPONENT
 // -----------------------------------------------------------------------------
 
-export const DublinTechHubShowcase: React.FC<{ onBackToPortfolio?: () => void; onBackToMaquette?: () => void }> = ({ onBackToPortfolio, onBackToMaquette }) => {
+export const DublinTechHubShowcase: React.FC<{
+  onBackToPortfolio?: () => void;
+  onBackToMaquette?: () => void;
+  currentLanguage?: LanguageCode;
+}> = ({ onBackToPortfolio, onBackToMaquette, currentLanguage = 'en' }) => {
   const handleBack = onBackToMaquette || onBackToPortfolio;
+  const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
   // Layer Visibility Toggles
   const [layers, setLayers] = useState({
     arch: true,
@@ -521,10 +527,10 @@ export const DublinTechHubShowcase: React.FC<{ onBackToPortfolio?: () => void; o
             <button 
               onClick={() => { sound.playClick(); handleBack(); }}
               className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 text-white font-bold text-xs shadow-lg flex items-center gap-2 transition-all hover:scale-105 active:scale-95 border border-sky-400/30 cursor-pointer"
-              title="بازگشت به صفحه اصلی ماکت شهرک"
+              title={t.dublinAuditView.backToPortfolio}
             >
               <Home className="w-4 h-4" />
-              <span>صفحه اصلی (Home)</span>
+              <span>{t.dublinAuditView.backToPortfolio}</span>
             </button>
           )}
           <div className="flex items-center gap-2">

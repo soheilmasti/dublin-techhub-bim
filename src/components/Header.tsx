@@ -92,18 +92,6 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           <button
-            onClick={() => handleNavClick('maquette')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
-              settings.activeView === 'maquette'
-                ? 'bg-black text-white shadow-xs'
-                : 'text-gray-600 hover:text-black hover:bg-gray-100/70'
-            }`}
-          >
-            <Compass className="w-3.5 h-3.5 text-emerald-500" />
-            <span>{t.planIsometric}</span>
-          </button>
-
-          <button
             onClick={() => handleNavClick('grid')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
               settings.activeView === 'grid'
@@ -215,20 +203,6 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="text-[10px] opacity-75 font-mono">HOME</span>
             </button>
 
-            <button
-              onClick={() => handleNavClick('maquette')}
-              className={`w-full flex items-center justify-between p-3 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
-                settings.activeView === 'maquette'
-                  ? 'bg-black text-white shadow-md'
-                  : 'bg-gray-50 text-gray-800 hover:bg-gray-100'
-              }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <Compass className="w-4 h-4 text-emerald-500" />
-                <span>{t.planIsometric}</span>
-              </div>
-              <span className="text-[10px] opacity-75 font-mono">2.5D</span>
-            </button>
 
             <button
               onClick={() => handleNavClick('grid')}

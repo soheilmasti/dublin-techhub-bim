@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { CategoryBuilding, SiteSettings } from '../types';
 import { sound } from '../utils/audio';
+import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 
 interface AssetCustomizerModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ interface AssetCustomizerModalProps {
   onUpdateCategories: (newCats: CategoryBuilding[]) => void;
   settings: SiteSettings;
   onUpdateSettings: (newSettings: Partial<SiteSettings>) => void;
+  currentLanguage?: LanguageCode;
 }
 
 export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
@@ -30,13 +32,17 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
   categories,
   onUpdateCategories,
   settings,
-  onUpdateSettings
+  onUpdateSettings,
+  currentLanguage = 'fa'
 }) => {
   const [selectedCatId, setSelectedCatId] = useState<string>(categories[0]?.id || 'urban-design');
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<'buildings' | 'background' | 'json'>('buildings');
 
   if (!isOpen) return null;
+
+  const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.fa;
+  const isRTL = currentLanguage === 'fa';
 
   const currentCat = categories.find(c => c.id === selectedCatId) || categories[0];
 
@@ -77,7 +83,8 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-4xl bg-white rounded-3xl overflow-hidden shadow-2xl border border-white/90 my-auto text-right"
+          dir={isRTL ? 'rtl' : 'ltr'}
+          className={`relative w-full max-w-4xl bg-white rounded-3xl overflow-hidden shadow-2xl border border-white/90 my-auto ${isRTL ? 'text-right' : 'text-left'}`}
         >
           {/* Modal Header */}
           <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/70">
@@ -87,10 +94,10 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
               </div>
               <div>
                 <h3 className="text-lg font-bold text-gray-900">
-                  ویرایشگر دکمه‌ها، تصاویر و مدل‌های GLB
+                  {t.customizerModal.title}
                 </h3>
                 <p className="text-xs text-gray-500 font-mono font-semibold">
-                  LIVE ASSET, POSITION & GLB 3D CUSTOMIZER
+                  {t.customizerModal.subtitle}
                 </p>
               </div>
             </div>
@@ -114,7 +121,7 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
               }`}
             >
               <Layers className="w-4 h-4" />
-              تصویر و مدل سه‌بعدی هر ساختمان
+              {t.customizerModal.tabBuildings}
             </button>
             <button
               onClick={() => { sound.playClick(); setActiveTab('background'); }}
@@ -125,7 +132,7 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
               }`}
             >
               <ImageIcon className="w-4 h-4" />
-              تصویر پس‌زمینه رندر کلی
+              {t.customizerModal.tabBackground}
             </button>
             <button
               onClick={() => { sound.playClick(); setActiveTab('json'); }}
@@ -136,7 +143,7 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
               }`}
             >
               <Copy className="w-4 h-4" />
-              خروجی کانفیگ JSON
+              {t.customizerModal.tabJson}
             </button>
           </div>
 
@@ -147,7 +154,7 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
                 {/* Left Categories List */}
                 <div className="md:col-span-4 space-y-2">
                   <span className="text-xs font-bold text-gray-400 block mb-2">
-                    انتخاب ساختمان جهت ویرایش:
+                    {t.customizerModal.selectCategory}
                   </span>
                   {categories.map((c) => (
                     <button
@@ -289,7 +296,7 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <p className="text-xs text-gray-600">
-                    می‌توانید این کانفیگ کامل را کپی کنید یا دانلود کنید تا همیشه در فایل‌های پروژه ذخیره بماند:
+                    {t.customizerModal.downloadJson}:
                   </p>
                   <div className="flex items-center gap-2">
                     <button
@@ -297,14 +304,14 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-black text-white hover:bg-gray-800 transition-colors"
                     >
                       {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                      {copied ? 'کپی شد!' : 'کپی کانفیگ JSON'}
+                      {copied ? t.customizerModal.copied : t.customizerModal.copyJson}
                     </button>
                     <button
                       onClick={handleDownloadJSON}
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-gray-100 text-gray-800 hover:bg-gray-200 transition-colors"
                     >
                       <Download className="w-3.5 h-3.5" />
-                      دانلود فایل
+                      {t.customizerModal.downloadJson}
                     </button>
                   </div>
                 </div>
@@ -319,13 +326,13 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
           {/* Modal Footer */}
           <div className="p-4 border-t border-gray-100 bg-gray-50 flex items-center justify-between">
             <span className="text-xs text-gray-500">
-              تغییرات شما به صورت آنی (Live) روی صفحه اعمال می‌شوند.
+              {t.customizerModal.subtitle}
             </span>
             <button
               onClick={() => { sound.playClick(); onClose(); }}
               className="px-6 py-2 rounded-2xl bg-black text-white text-xs font-bold hover:bg-gray-800 transition-colors shadow-sm"
             >
-              تایید و بازگشت
+              {t.customizerModal.close}
             </button>
           </div>
         </motion.div>

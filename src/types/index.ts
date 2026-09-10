@@ -5,8 +5,8 @@ export interface Project {
   location: string;
   year: string;
   area: string;
-  typology: 'Residential' | 'Commercial' | 'Urban Design' | 'Retail' | 'Public & Cultural';
-  status: 'ساخته شده' | 'در حال ساخت' | 'طراحی و کانسپت' | 'مسابقه و جایزه';
+  typology: string;
+  status: string;
   client?: string;
   role?: string;
   coverImage: string;

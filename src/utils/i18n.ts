@@ -24,7 +24,7 @@ export const LANGUAGES: LanguageInfo[] = [
 export interface TranslationDict {
   // Navigation & Header
   home3d: string;
-  planIsometric: string;
+  planIsometric?: string;
   projectsArchive: string;
   resume: string;
   dublinBim: string;
@@ -36,6 +36,10 @@ export interface TranslationDict {
   soundToggle: string;
   menu: string;
   close: string;
+
+  // Media tabs
+  gallery: string;
+  plans: string;
 
   // 3D Canvas Controls & Lighting
   dayMode: string;
@@ -52,31 +56,11 @@ export interface TranslationDict {
 
   // 5 Architectural Categories & Buildings
   zones: {
-    'urban-design': {
-      label: string;
-      badge: string;
-      desc: string;
-    };
-    'residential-luxury': {
-      label: string;
-      badge: string;
-      desc: string;
-    };
-    'commercial-complexes': {
-      label: string;
-      badge: string;
-      desc: string;
-    };
-    'retail-stores': {
-      label: string;
-      badge: string;
-      desc: string;
-    };
-    'institutional-competitions': {
-      label: string;
-      badge: string;
-      desc: string;
-    };
+    'urban-design': { label: string; badge: string; desc: string; };
+    'residential-luxury': { label: string; badge: string; desc: string; };
+    'commercial-complexes': { label: string; badge: string; desc: string; };
+    'retail-stores': { label: string; badge: string; desc: string; };
+    'institutional-competitions': { label: string; badge: string; desc: string; };
   };
 
   // Drawer & Project Details
@@ -94,23 +78,89 @@ export interface TranslationDict {
   bimSpecifications: string;
   software: string;
   backToOverview: string;
+
+  // Sub-components
+  aboutStudio: {
+    title: string;
+    tagline: string;
+    p1: string;
+    p2: string;
+    emailLabel: string;
+    phoneLabel: string;
+    addressLabel: string;
+    addressValue: string;
+    close: string;
+  };
+
+  customizerModal: {
+    title: string;
+    subtitle: string;
+    tabBuildings: string;
+    tabBackground: string;
+    tabJson: string;
+    copyJson: string;
+    copied: string;
+    downloadJson: string;
+    selectCategory: string;
+    posX: string;
+    posY: string;
+    close: string;
+  };
+
+  archive: {
+    title: string;
+    subtitle: string;
+    searchPlaceholder: string;
+    allFilter: string;
+    noResults: string;
+  };
+
+  resumeView: {
+    backToPortfolio: string;
+    experienceBadge: string;
+    sendEmail: string;
+    downloadCv: string;
+    workExperience: string;
+    education: string;
+    competencies: string;
+    awards: string;
+    references: string;
+  };
+
+  dublinAuditView: {
+    backToPortfolio: string;
+    headerTitle: string;
+    headerBadge: string;
+    tabOverview: string;
+    tabMep: string;
+    tabDataCenter: string;
+    tabCompliance: string;
+    complianceScore: string;
+  };
+
+  bottomToolbar: {
+    zonesLabel: string;
+  };
 }
 
 export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
   ca: {
-    home3d: 'Ciutat 3D',
+    home3d: 'Portafoli de Projectes',
     planIsometric: 'Plànol Isomètric',
     projectsArchive: 'Projectes',
     resume: 'Currículum',
     dublinBim: '🇮🇪 Demo Dublin BIM',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'ARQUITECTE SÈNIOR I ESPECIALISTA BIM // BARCELONA',
-    returnToHome: 'Tornar a la Maqueta 3D',
+    returnToHome: 'Tornar al Portafoli de Treballs',
     contactWhatsapp: 'Contacte WhatsApp (+34 610 855 434)',
-    customizer: 'Canviar Imatge / GLB',
+    customizer: 'Personalitzar 3D / GLB',
     soundToggle: 'Àudio interactiu',
     menu: 'Menú',
     close: 'Tancar',
+
+    gallery: 'Galeria d’Imatges',
+    plans: 'Plànols i Esquemes',
 
     dayMode: 'Dia SketchUp',
     sunsetMode: 'Posta de Sol Daurada',
@@ -165,23 +215,88 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     features: 'Característiques Clau',
     bimSpecifications: 'Especificacions BIM i LOD',
     software: 'Programari Utilitzat',
-    backToOverview: 'Tornar a la Maqueta'
+    backToOverview: 'Tornar al Portafoli',
+
+    aboutStudio: {
+      title: 'Atelier d’Arquitectura i Urbanisme Contemporani',
+      tagline: 'SOHEIL MASTI ARCHITECTURE STUDIO // BARCELONA & TEHERAN',
+      p1: 'Creiem que l’arquitectura és l’art d’organitzar l’espai, la llum i la matèria en la seva forma més pura. Aquest espai interactiu us convida a recórrer el nostre treball, des de viles de muntanya fins a grans torres corporatives.',
+      p2: 'La nostra metodologia es fonamenta en la simplicitat radical, el compromís bioclimàtic, la sostenibilitat i la integració de processos BIM LOD 350/400 d’alta precisió.',
+      emailLabel: 'Correu Electrònic',
+      phoneLabel: 'Telèfon de Contacte',
+      addressLabel: 'Adreça de l’Estudi',
+      addressValue: 'Sant Cugat del Vallès, Barcelona, Catalunya | Teheran',
+      close: 'Tancar'
+    },
+
+    customizerModal: {
+      title: 'Personalitzador d’Actius i Models 3D',
+      subtitle: 'LIVE ASSET, POSITION & GLB 3D CUSTOMIZER',
+      tabBuildings: 'Edificis 3D',
+      tabBackground: 'Fons i Imatges',
+      tabJson: 'Configuració JSON',
+      copyJson: 'Copiar JSON',
+      copied: 'Copiat al portapapers!',
+      downloadJson: 'Descarregar Arxiu JSON',
+      selectCategory: 'Selecciona una zona arquitectònica:',
+      posX: 'Posició Horitzontal X (%)',
+      posY: 'Posició Vertical Y (%)',
+      close: 'Tancar'
+    },
+
+    archive: {
+      title: 'Catàleg i Arxiu Complet de Projectes',
+      subtitle: 'SOHEIL MASTI ARCHITECTURE & BIM PORTFOLIO',
+      searchPlaceholder: 'Cercar projecte, Barcelona, Darbandsara...',
+      allFilter: 'Tots els Projectes',
+      noResults: 'No s’han trobat projectes amb aquests termes.'
+    },
+
+    resumeView: {
+      backToPortfolio: 'Tornar al Portafoli de Treballs',
+      experienceBadge: 'MÉS DE 15 ANYS D’EXPERIÈNCIA INTERNACIONAL',
+      sendEmail: 'Enviar Correu a Soheil Masti',
+      downloadCv: 'Descarregar CV Complet',
+      workExperience: 'Trajectòria Professional',
+      education: 'Formació Acadèmica',
+      competencies: 'Competències Tècniques i BIM',
+      awards: 'Premis i Concursos d’Arquitectura',
+      references: 'Referències Professionals'
+    },
+
+    dublinAuditView: {
+      backToPortfolio: 'Tornar al Portafoli de Treballs',
+      headerTitle: 'Torre Dublin Tech Hub de 7 Plantes & Auditoria BIM LOD 350',
+      headerBadge: 'ESTÀNDARD BREEAM EXCELLENT // DUBLÍN, IRLANDA',
+      tabOverview: 'Visió General',
+      tabMep: 'Sistemes MEP i Estructures',
+      tabDataCenter: 'Centre de Dades Tier-3',
+      tabCompliance: 'Auditoria de Compliment BIM',
+      complianceScore: 'Puntuació de Compliment BIM'
+    },
+
+    bottomToolbar: {
+      zonesLabel: 'ZONES //'
+    }
   },
 
   fa: {
-    home3d: 'شهرک سه‌بعدی',
+    home3d: 'پورتفولیو کارها',
     planIsometric: 'پلان ایزومتریک',
     projectsArchive: 'پروژه‌ها',
     resume: 'رزومه',
     dublinBim: '🇮🇪 دمو دوبلین (BIM)',
     studioName: 'سهیل مستی',
     studioTagline: 'معمار ارشد و متخصص BIM // بارسلون و تهران',
-    returnToHome: 'بازگشت به ماکت سه‌بعدی',
+    returnToHome: 'بازگشت به پورتفولیو کارها',
     contactWhatsapp: 'تماس مستقیم در واتساپ (+34 610 855 434)',
-    customizer: 'تعویض عکس / GLB',
+    customizer: 'ویرایشگر کالبد / GLB',
     soundToggle: 'صدای تعاملی',
     menu: 'منو',
     close: 'بستن',
+
+    gallery: 'گالری تصاویر',
+    plans: 'پلان‌ها و نقشه‌های فنی',
 
     dayMode: 'روز اسکچ‌آپ',
     sunsetMode: 'غروب طلایی',
@@ -190,7 +305,7 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     autoRotateStart: 'چرخش خودکار',
     autoRotateStop: 'توقف چرخش',
     rotateHint: 'چرخش ۳۶۰ درجه: کلیک چپ و درگ ماوس',
-    clickBuildingHint: 'کلیک روی هر ساختمان = پرواز دوربین و باز شدن پروژه‌ها',
+    clickBuildingHint: 'کلیک روی هر ساختمان = پرواز دوربین و نمایش پروژه‌ها',
     projectsCount: 'پروژه',
     exploreCategory: 'مشاهده لیست پروژه‌ها',
     clickToEnter: 'کلیک برای ورود به پروژه‌ها',
@@ -236,23 +351,88 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     features: 'ویژگی‌های شاخص فنی',
     bimSpecifications: 'استانداردها و مشخصات BIM',
     software: 'نرم‌افزارهای تخصصی',
-    backToOverview: 'بازگشت به ماکت شهرک'
+    backToOverview: 'بازگشت به پورتفولیو کارها',
+
+    aboutStudio: {
+      title: 'آتلیه معماری و شهرسازی معاصر',
+      tagline: 'استودیو معماری و مدلسازی BIM // بارسلون و تهران',
+      p1: 'ما بر این باوریم که معماری، هنر سازمان‌دهی فضا، نور و ماده در خالص‌ترین شکل ممکن است. این وب‌سایت به عنوان پورتفولیوی تعاملی کارهای معماری طراحی شده تا بیننده را به سفری در میان تجربیات فضایی مختلف، از ویلاهای لوکس تا برج‌های پایدار، دعوت کند.',
+      p2: 'رویکرد ما در طراحی مبتنی بر سادگی رادیکال، توجه عمیق به بستر اقلیمی و پایداری، اجرای استانداردهای بین‌المللی مدلسازی اطلاعات ساختمان (BIM LOD 350/400) و خلق پیوند معنادار میان انسان و کالبد شهری است.',
+      emailLabel: 'ایمیل ارتباطی',
+      phoneLabel: 'شماره تماس مستقیم',
+      addressLabel: 'آدرس دفاتر طراحی',
+      addressValue: 'بارسلون (Sant Cugat del Vallès)، اسپانیا | تهران، ایران',
+      close: 'بستن'
+    },
+
+    customizerModal: {
+      title: 'ویرایشگر کالبد، تصاویر و مدل‌های 3D',
+      subtitle: 'LIVE ASSET, POSITION & GLB 3D CUSTOMIZER',
+      tabBuildings: 'ساختمان‌ها',
+      tabBackground: 'پس‌زمینه',
+      tabJson: 'خروجی JSON',
+      copyJson: 'کپی JSON',
+      copied: 'کپی شد!',
+      downloadJson: 'دانلود فایل تنظیمات',
+      selectCategory: 'یک پهنه معماری را انتخاب کنید:',
+      posX: 'موقعیت افقی X (%)',
+      posY: 'موقعیت عمودی Y (%)',
+      close: 'بستن'
+    },
+
+    archive: {
+      title: 'کاتالوگ و آرشیو کامل پروژه‌ها',
+      subtitle: 'SOHEIL MASTI ARCHITECTURE & BIM PORTFOLIO',
+      searchPlaceholder: 'جستجوی پروژه، بارسلون، دربندسر...',
+      allFilter: 'همه پروژه‌ها',
+      noResults: 'پروژه‌ای با این مشخصات یافت نشد.'
+    },
+
+    resumeView: {
+      backToPortfolio: 'بازگشت به پورتفولیو کارها',
+      experienceBadge: 'بیش از ۱۵ سال سابقه بین‌المللی',
+      sendEmail: 'ارسال ایمیل به سهیل مستی',
+      downloadCv: 'دانلود رزومه کامل',
+      workExperience: 'سوابق حرفه‌ای و پروژه‌های شاخص',
+      education: 'تحصیلات دانشگاهی',
+      competencies: 'صلاحیت‌های تخصصی و نرم‌افزاری',
+      awards: 'افتخارات، رتبه‌ها و مسابقات',
+      references: 'توصیه‌نامه‌ها و رفرنس‌های بین‌المللی'
+    },
+
+    dublinAuditView: {
+      backToPortfolio: 'بازگشت به پورتفولیو کارها',
+      headerTitle: 'برج فناوری ۷ طبقه دوبلین و ممیزی پیشرفته BIM LOD 350',
+      headerBadge: 'استاندارد BREEAM EXCELLENT // دوبلین، ایرلند',
+      tabOverview: 'نمای کلی',
+      tabMep: 'تاسیسات و سازه MEP',
+      tabDataCenter: 'دیتاسنتر زیرساختی',
+      tabCompliance: 'ممیزی انطباق BIM',
+      complianceScore: 'امتیاز انطباق استاندارد BIM'
+    },
+
+    bottomToolbar: {
+      zonesLabel: 'پهنه //'
+    }
   },
 
   es: {
-    home3d: 'Ciudad 3D',
+    home3d: 'Portafolio de Trabajos',
     planIsometric: 'Plano Isométrico',
     projectsArchive: 'Proyectos',
     resume: 'Currículum',
     dublinBim: '🇮🇪 Demo Dublin BIM',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'ARQUITECTO SENIOR Y ESPECIALISTA BIM // BARCELONA',
-    returnToHome: 'Volver a Maqueta 3D',
+    returnToHome: 'Volver al Portafolio de Trabajos',
     contactWhatsapp: 'Contacto WhatsApp (+34 610 855 434)',
-    customizer: 'Cambiar Imagen / GLB',
+    customizer: 'Personalizar 3D / GLB',
     soundToggle: 'Audio interactivo',
     menu: 'Menú',
     close: 'Cerrar',
+
+    gallery: 'Galería de Imágenes',
+    plans: 'Planos Técnicos',
 
     dayMode: 'Día SketchUp',
     sunsetMode: 'Atardecer Dorado',
@@ -307,23 +487,88 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     features: 'Características Clave',
     bimSpecifications: 'Especificaciones BIM y LOD',
     software: 'Software Utilizado',
-    backToOverview: 'Volver a Maqueta'
+    backToOverview: 'Volver al Portafolio',
+
+    aboutStudio: {
+      title: 'Estudio de Arquitectura y Urbanismo Contemporáneo',
+      tagline: 'SOHEIL MASTI ARCHITECTURE STUDIO // BARCELONA Y TEHERÁN',
+      p1: 'Creemos que la arquitectura es el arte de organizar el espacio, la luz y la materia en su forma más pura. Este portafolio interactivo invita a recorrer nuestra trayectoria, desde villas alpinas hasta rascacielos sostenibles.',
+      p2: 'Nuestra metodología se basa en la simplicidad radical, la sensibilidad bioclimática, la sostenibilidad y el dominio avanzado de metodologías BIM LOD 350/400.',
+      emailLabel: 'Correo Electrónico',
+      phoneLabel: 'Teléfono de Contacto',
+      addressLabel: 'Dirección del Estudio',
+      addressValue: 'Sant Cugat del Vallès, Barcelona, España | Teherán',
+      close: 'Cerrar'
+    },
+
+    customizerModal: {
+      title: 'Personalizador de Activos y Modelos 3D',
+      subtitle: 'LIVE ASSET, POSITION & GLB 3D CUSTOMIZER',
+      tabBuildings: 'Edificios 3D',
+      tabBackground: 'Fondo e Imágenes',
+      tabJson: 'Configuración JSON',
+      copyJson: 'Copiar JSON',
+      copied: '¡Copiado!',
+      downloadJson: 'Descargar Archivo JSON',
+      selectCategory: 'Selecciona una zona arquitectónica:',
+      posX: 'Posición Horizontal X (%)',
+      posY: 'Posición Vertical Y (%)',
+      close: 'Cerrar'
+    },
+
+    archive: {
+      title: 'Catálogo y Archivo Completo de Proyectos',
+      subtitle: 'SOHEIL MASTI ARCHITECTURE & BIM PORTFOLIO',
+      searchPlaceholder: 'Buscar proyectos, Barcelona, Darbandsara...',
+      allFilter: 'Todos los Proyectos',
+      noResults: 'No se encontraron proyectos con esos criterios.'
+    },
+
+    resumeView: {
+      backToPortfolio: 'Volver al Portafolio de Trabajos',
+      experienceBadge: 'MÁS DE 15 AÑOS DE EXPERIENCIA INTERNACIONAL',
+      sendEmail: 'Enviar Correo a Soheil Masti',
+      downloadCv: 'Descargar CV Completo',
+      workExperience: 'Trayectoria Profesional',
+      education: 'Formación Académica',
+      competencies: 'Competencias Técnicas y BIM',
+      awards: 'Premios y Concursos de Arquitectura',
+      references: 'Referencias Profesionales'
+    },
+
+    dublinAuditView: {
+      backToPortfolio: 'Volver al Portafolio de Trabajos',
+      headerTitle: 'Torre Dublin Tech Hub de 7 Plantas y Auditoría BIM LOD 350',
+      headerBadge: 'ESTÁNDAR BREEAM EXCELLENT // DUBLÍN, IRLANDA',
+      tabOverview: 'Visión General',
+      tabMep: 'Instalaciones MEP y Estructuras',
+      tabDataCenter: 'Centro de Datos Tier-3',
+      tabCompliance: 'Auditoría de Conformidad BIM',
+      complianceScore: 'Puntuación de Cumplimiento BIM'
+    },
+
+    bottomToolbar: {
+      zonesLabel: 'ZONAS //'
+    }
   },
 
   en: {
-    home3d: '3D Cityscape',
+    home3d: 'Works Portfolio',
     planIsometric: 'Isometric Plan',
     projectsArchive: 'Projects',
     resume: 'Resume / CV',
     dublinBim: '🇮🇪 Dublin BIM Audit',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'SENIOR ARCHITECT & BIM SPECIALIST // BARCELONA & TEHRAN',
-    returnToHome: 'Back to 3D Masterplan',
+    returnToHome: 'Return to Works Portfolio',
     contactWhatsapp: 'WhatsApp Contact (+34 610 855 434)',
-    customizer: 'Change Image / GLB',
+    customizer: 'Customize 3D / GLB',
     soundToggle: 'Interactive Audio',
     menu: 'Menu',
     close: 'Close',
+
+    gallery: 'Image Gallery',
+    plans: 'Technical Drawings',
 
     dayMode: 'SketchUp Daylight',
     sunsetMode: 'Golden Sunset',
@@ -378,23 +623,88 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     features: 'Technical Highlights',
     bimSpecifications: 'BIM Specs & LOD Level',
     software: 'Software Stack',
-    backToOverview: 'Back to Masterplan'
+    backToOverview: 'Back to Works Portfolio',
+
+    aboutStudio: {
+      title: 'Contemporary Architecture & Urban Studio',
+      tagline: 'SOHEIL MASTI ARCHITECTURAL STUDIO // BARCELONA & TEHRAN',
+      p1: 'We believe architecture is the art of organizing space, light, and material in its purest form. This interactive spatial environment invites visitors to explore our body of work from bespoke luxury villas to major skyline infrastructure.',
+      p2: 'Our methodology centers on radical simplicity, climate-responsive design, environmental sustainability, and precision Building Information Modeling leadership (BIM LOD 350/400).',
+      emailLabel: 'Studio Email',
+      phoneLabel: 'Direct Phone',
+      addressLabel: 'Studio Locations',
+      addressValue: 'Barcelona (Sant Cugat del Vallès), Spain | Tehran, Iran',
+      close: 'Close'
+    },
+
+    customizerModal: {
+      title: '3D Asset & Geometry Customizer',
+      subtitle: 'LIVE ASSET, POSITION & GLB 3D CUSTOMIZER',
+      tabBuildings: '3D Buildings',
+      tabBackground: 'Background',
+      tabJson: 'JSON Config',
+      copyJson: 'Copy JSON',
+      copied: 'Copied to clipboard!',
+      downloadJson: 'Download JSON',
+      selectCategory: 'Select an architectural zone:',
+      posX: 'Horizontal Position X (%)',
+      posY: 'Vertical Position Y (%)',
+      close: 'Close'
+    },
+
+    archive: {
+      title: 'Complete Projects & Architecture Catalog',
+      subtitle: 'SOHEIL MASTI ARCHITECTURE & BIM PORTFOLIO',
+      searchPlaceholder: 'Search projects, Barcelona, Darbandsara...',
+      allFilter: 'All Projects',
+      noResults: 'No projects match your search criteria.'
+    },
+
+    resumeView: {
+      backToPortfolio: 'Return to Works Portfolio',
+      experienceBadge: '15+ YEARS INTERNATIONAL EXPERIENCE',
+      sendEmail: 'Send Email to Soheil Masti',
+      downloadCv: 'Download Full CV',
+      workExperience: 'Professional Experience',
+      education: 'Academic Education',
+      competencies: 'Core Competencies & BIM Skills',
+      awards: 'Awards & Competitions',
+      references: 'Professional Endorsements'
+    },
+
+    dublinAuditView: {
+      backToPortfolio: 'Return to Works Portfolio',
+      headerTitle: 'Dublin Tech Hub 7-Story Tower & BIM LOD 350 Audit',
+      headerBadge: 'BREEAM EXCELLENT COMPLIANCE // DUBLIN, IRELAND',
+      tabOverview: 'Overview',
+      tabMep: 'MEP & Structural Systems',
+      tabDataCenter: 'Tier-3 Edge Data Center',
+      tabCompliance: 'BIM Compliance Audit',
+      complianceScore: 'BIM Compliance Score'
+    },
+
+    bottomToolbar: {
+      zonesLabel: 'ZONES //'
+    }
   },
 
   fr: {
-    home3d: 'Ville 3D',
+    home3d: 'Portfolio de Projets',
     planIsometric: 'Plan Isométrique',
     projectsArchive: 'Projets',
     resume: 'Curriculum Vitae',
     dublinBim: '🇮🇪 Démo Dublin BIM',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'ARCHITECTE SENIOR & SPÉCIALISTE BIM // BARCELONE',
-    returnToHome: 'Retour à la Maquette 3D',
+    returnToHome: 'Retour au Portfolio de Projets',
     contactWhatsapp: 'Contact WhatsApp (+34 610 855 434)',
-    customizer: 'Changer Image / GLB',
+    customizer: 'Personnaliser 3D / GLB',
     soundToggle: 'Audio Interactif',
     menu: 'Menu',
     close: 'Fermer',
+
+    gallery: 'Galerie d’Images',
+    plans: 'Plans Techniques',
 
     dayMode: 'Jour SketchUp',
     sunsetMode: 'Coucher de Soleil',
@@ -449,23 +759,88 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     features: 'Points Forts',
     bimSpecifications: 'Spécifications BIM & LOD',
     software: 'Logiciels Utilisés',
-    backToOverview: 'Retour à la Maquette'
+    backToOverview: 'Retour au Portfolio',
+
+    aboutStudio: {
+      title: 'Atelier d’Architecture et d’Urbanisme Contemporain',
+      tagline: 'SOHEIL MASTI ARCHITECTURE STUDIO // BARCELONE & TÉHÉRAN',
+      p1: 'Nous croyons que l’architecture est l’art d’organiser l’espace, la lumière et la matière sous sa forme la plus pure. Ce portfolio spatial interactif vous invite à explorer notre univers, des villas alpines aux tours tertiaires durables.',
+      p2: 'Notre démarche repose sur une simplicité radicale, la sensibilité au climat, l’éco-conception et l’expertise avancée en BIM LOD 350/400.',
+      emailLabel: 'Courriel',
+      phoneLabel: 'Téléphone',
+      addressLabel: 'Adresse de l’Atelier',
+      addressValue: 'Barcelone (Sant Cugat del Vallès), Espagne | Téhéran',
+      close: 'Fermer'
+    },
+
+    customizerModal: {
+      title: 'Personnalisation des Éléments 3D & GLB',
+      subtitle: 'LIVE ASSET, POSITION & GLB 3D CUSTOMIZER',
+      tabBuildings: 'Bâtiments 3D',
+      tabBackground: 'Arrière-plan',
+      tabJson: 'Configuration JSON',
+      copyJson: 'Copier JSON',
+      copied: 'Copié !',
+      downloadJson: 'Télécharger JSON',
+      selectCategory: 'Sélectionner une zone architecturale :',
+      posX: 'Position Horizontale X (%)',
+      posY: 'Position Verticale Y (%)',
+      close: 'Fermer'
+    },
+
+    archive: {
+      title: 'Catalogue et Archives Complètes des Projets',
+      subtitle: 'SOHEIL MASTI ARCHITECTURE & BIM PORTFOLIO',
+      searchPlaceholder: 'Rechercher un projet, Barcelone, Téhéran...',
+      allFilter: 'Tous les Projets',
+      noResults: 'Aucun projet ne correspond à vos critères.'
+    },
+
+    resumeView: {
+      backToPortfolio: 'Retour au Portfolio de Projets',
+      experienceBadge: 'PLUS DE 15 ANS D’EXPÉRIENCE INTERNATIONALE',
+      sendEmail: 'Contacter Soheil Masti par courriel',
+      downloadCv: 'Télécharger le CV Complet',
+      workExperience: 'Parcours Professionnel',
+      education: 'Formation Académique',
+      competencies: 'Compétences Techniques & BIM',
+      awards: 'Prix & Distinctions de Concours',
+      references: 'Recommandations Professionnelles'
+    },
+
+    dublinAuditView: {
+      backToPortfolio: 'Retour au Portfolio de Projets',
+      headerTitle: 'Tour Dublin Tech Hub de 7 Étages & Audit BIM LOD 350',
+      headerBadge: 'CERTIFICATION BREEAM EXCELLENT // DUBLIN, IRLANDE',
+      tabOverview: 'Vue Générale',
+      tabMep: 'Lots Techniques MEP & Structures',
+      tabDataCenter: 'Data Center Sécurisé Tier-3',
+      tabCompliance: 'Audit de Conformité BIM',
+      complianceScore: 'Score de Conformité BIM'
+    },
+
+    bottomToolbar: {
+      zonesLabel: 'ZONES //'
+    }
   },
 
   de: {
-    home3d: '3D-Stadtmodell',
+    home3d: 'Projekt-Portfolio',
     planIsometric: 'Isometrischer Plan',
     projectsArchive: 'Projekte',
     resume: 'Lebenslauf',
     dublinBim: '🇮🇪 Dublin BIM-Audit',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'SENIOR-ARCHITEKT & BIM-SPEZIALIST // BARCELONA',
-    returnToHome: 'Zurück zum 3D-Modell',
+    returnToHome: 'Zurück zum Projekt-Portfolio',
     contactWhatsapp: 'WhatsApp-Kontakt (+34 610 855 434)',
-    customizer: 'Bild / GLB ändern',
+    customizer: '3D / GLB anpassen',
     soundToggle: 'Interaktiver Ton',
     menu: 'Menü',
     close: 'Schließen',
+
+    gallery: 'Bildergalerie',
+    plans: 'Technische Zeichnungen',
 
     dayMode: 'SketchUp-Tageslicht',
     sunsetMode: 'Goldener Sonnenuntergang',
@@ -520,23 +895,88 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     features: 'Besondere Merkmale',
     bimSpecifications: 'BIM-Spezifikationen & LOD',
     software: 'Verwendete Software',
-    backToOverview: 'Zurück zum Modell'
+    backToOverview: 'Zurück zum Portfolio',
+
+    aboutStudio: {
+      title: 'Studio für zeitgenössische Architektur & Städtebau',
+      tagline: 'SOHEIL MASTI ARCHITEKTURSTUDIO // BARCELONA & TEHERAN',
+      p1: 'Wir verstehen Architektur als Kunst der Organisation von Raum, Licht und Material in reinster Form. Dieses interaktive räumliche Portfolio lädt Sie ein, unsere Werke von alpinen Villen bis zu urbanen Großprojekten zu entdecken.',
+      p2: 'Unsere Entwurfsmethodik basiert auf radikaler Schlichtheit, bioklimatischer Verantwortung, Nachhaltigkeit und führender BIM LOD 350/400-Expertise.',
+      emailLabel: 'E-Mail',
+      phoneLabel: 'Telefon',
+      addressLabel: 'Studio-Standort',
+      addressValue: 'Barcelona (Sant Cugat del Vallès), Spanien | Teheran',
+      close: 'Schließen'
+    },
+
+    customizerModal: {
+      title: '3D-Modell & Asset Customizer',
+      subtitle: 'LIVE ASSET, POSITION & GLB 3D CUSTOMIZER',
+      tabBuildings: '3D-Gebäude',
+      tabBackground: 'Hintergrund',
+      tabJson: 'JSON-Konfiguration',
+      copyJson: 'JSON kopieren',
+      copied: 'Kopiert!',
+      downloadJson: 'JSON herunterladen',
+      selectCategory: 'Architekturzone wählen:',
+      posX: 'Horizontale Position X (%)',
+      posY: 'Vertikale Position Y (%)',
+      close: 'Schließen'
+    },
+
+    archive: {
+      title: 'Vollständiger Projekt- & Architekturkatalog',
+      subtitle: 'SOHEIL MASTI ARCHITECTURE & BIM PORTFOLIO',
+      searchPlaceholder: 'Projekt suchen, Barcelona, Darbandsara...',
+      allFilter: 'Alle Projekte',
+      noResults: 'Keine Projekte entsprechen Ihren Suchkriterien.'
+    },
+
+    resumeView: {
+      backToPortfolio: 'Zurück zum Projekt-Portfolio',
+      experienceBadge: 'ÜBER 15 JAHRE INTERNATIONALE ERFAHRUNG',
+      sendEmail: 'E-Mail an Soheil Masti senden',
+      downloadCv: 'Vollständigen CV herunterladen',
+      workExperience: 'Beruflicher Werdegang',
+      education: 'Akademische Ausbildung',
+      competencies: 'Fachkompetenzen & BIM-Expertise',
+      awards: 'Wettbewerbserfolge & Auszeichnungen',
+      references: 'Berufliche Referenzen'
+    },
+
+    dublinAuditView: {
+      backToPortfolio: 'Zurück zum Projekt-Portfolio',
+      headerTitle: 'Dublin Tech Hub 7-stöckiger Büroturm & BIM LOD 350 Audit',
+      headerBadge: 'BREEAM EXCELLENT STANDARD // DUBLIN, IRLAND',
+      tabOverview: 'Übersicht',
+      tabMep: 'TGA (MEP) & Tragwerksplanung',
+      tabDataCenter: 'Tier-3 Edge-Rechenzentrum',
+      tabCompliance: 'BIM-Konformitätsaudit',
+      complianceScore: 'BIM-Konformitätswert'
+    },
+
+    bottomToolbar: {
+      zonesLabel: 'ZONEN //'
+    }
   },
 
   it: {
-    home3d: 'Città 3D',
+    home3d: 'Portfolio dei Lavori',
     planIsometric: 'Piano Assonometrico',
     projectsArchive: 'Progetti',
     resume: 'Curriculum Vitae',
     dublinBim: '🇮🇪 Demo Dublin BIM',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'ARCHITETTO SENIOR E SPECIALISTA BIM // BARCELLONA',
-    returnToHome: 'Torna al Modello 3D',
+    returnToHome: 'Torna al Portfolio dei Lavori',
     contactWhatsapp: 'Contatto WhatsApp (+34 610 855 434)',
-    customizer: 'Cambia Immagine / GLB',
+    customizer: 'Personalizza 3D / GLB',
     soundToggle: 'Audio Interattivo',
     menu: 'Menu',
     close: 'Chiudi',
+
+    gallery: 'Galleria Immagini',
+    plans: 'Piani Tecnici',
 
     dayMode: 'Giorno SketchUp',
     sunsetMode: 'Tramonto Dorato',
@@ -591,7 +1031,69 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     features: 'Caratteristiche Principali',
     bimSpecifications: 'Specifiche BIM e LOD',
     software: 'Software Utilizzati',
-    backToOverview: 'Torna al Modello'
+    backToOverview: 'Torna al Portfolio',
+
+    aboutStudio: {
+      title: 'Studio di Architettura e Urbanistica Contemporanea',
+      tagline: 'SOHEIL MASTI ARCHITECTURE STUDIO // BARCELLONA & TEHERAN',
+      p1: 'Crediamo che l’architettura sia l’arte di plasmare spazio, luce e materia nella sua forma più pura. Questo portfolio spaziale interattivo vi guida alla scoperta dei nostri progetti, dagli attici alpini ai grattacieli sostenibili.',
+      p2: 'La nostra metodologia coniuga semplicità radicale, sensibilità climatica, sostenibilità e massima padronanza nei processi BIM LOD 350/400.',
+      emailLabel: 'Email dello Studio',
+      phoneLabel: 'Telefono Diretto',
+      addressLabel: 'Sedi dello Studio',
+      addressValue: 'Barcellona (Sant Cugat del Vallès), Spagna | Teheran',
+      close: 'Chiudi'
+    },
+
+    customizerModal: {
+      title: 'Personalizzatore Elementi 3D e File GLB',
+      subtitle: 'LIVE ASSET, POSITION & GLB 3D CUSTOMIZER',
+      tabBuildings: 'Edifici 3D',
+      tabBackground: 'Sfondo',
+      tabJson: 'Configurazione JSON',
+      copyJson: 'Copia JSON',
+      copied: 'Copiato!',
+      downloadJson: 'Scarica JSON',
+      selectCategory: 'Seleziona una zona architettonica:',
+      posX: 'Posizione Orizzontale X (%)',
+      posY: 'Posizione Verticale Y (%)',
+      close: 'Chiudi'
+    },
+
+    archive: {
+      title: 'Catalogo e Archivio Completo dei Progetti',
+      subtitle: 'SOHEIL MASTI ARCHITECTURE & BIM PORTFOLIO',
+      searchPlaceholder: 'Cerca progetto, Barcellona, Darbandsara...',
+      allFilter: 'Tutti i Progetti',
+      noResults: 'Nessun progetto trovato con questi parametri.'
+    },
+
+    resumeView: {
+      backToPortfolio: 'Torna al Portfolio dei Lavori',
+      experienceBadge: 'OLTRE 15 ANNI DI ESPERIENZA INTERNAZIONALE',
+      sendEmail: 'Invia Email a Soheil Masti',
+      downloadCv: 'Scarica CV Completo',
+      workExperience: 'Esperienza Professionale',
+      education: 'Formazione Accademica',
+      competencies: 'Competenze Tecniche & BIM',
+      awards: 'Premi e Concorsi di Architettura',
+      references: 'Referenze Professionali'
+    },
+
+    dublinAuditView: {
+      backToPortfolio: 'Torna al Portfolio dei Lavori',
+      headerTitle: 'Torre Dublin Tech Hub a 7 Piani & Audit BIM LOD 350',
+      headerBadge: 'STANDARD BREEAM EXCELLENT // DUBLINO, IRLANDA',
+      tabOverview: 'Panoramica',
+      tabMep: 'Impianti MEP & Strutture',
+      tabDataCenter: 'Data Center Tier-3',
+      tabCompliance: 'Audit di Conformità BIM',
+      complianceScore: 'Punteggio di Conformità BIM'
+    },
+
+    bottomToolbar: {
+      zonesLabel: 'ZONE //'
+    }
   }
 };
 

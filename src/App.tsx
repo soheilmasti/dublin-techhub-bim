@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Home } from 'lucide-react';
 import { Header } from './components/Header';
-import { MaquetteIsometricCanvas } from './components/MaquetteIsometricCanvas';
 import { ThreeDClayCanvas } from './components/ThreeDClayCanvas';
 import { MasterIndexView } from './components/MasterIndexView';
 import { ResumeProfileView } from './components/ResumeProfileView';
@@ -10,11 +9,11 @@ import { ProjectDrawer } from './components/ProjectDrawer';
 import { ProjectDetailModal } from './components/ProjectDetailModal';
 import { AssetCustomizerModal } from './components/AssetCustomizerModal';
 import { AboutStudioModal } from './components/AboutStudioModal';
-import { BottomToolbar } from './components/BottomToolbar';
 import { INITIAL_CATEGORIES, INITIAL_SETTINGS } from './data/initialData';
 import { CategoryBuilding, Project, SiteSettings } from './types';
 import { sound } from './utils/audio';
 import { LanguageCode, detectVisitorLanguage, saveLanguagePreference, getInitialLanguage, TRANSLATIONS } from './utils/i18n';
+import { getLocalizedCategories, getLocalizedCategory, getLocalizedProject } from './utils/localizedData';
 
 export const App: React.FC = () => {
   const [categories, setCategories] = useState<CategoryBuilding[]>(INITIAL_CATEGORIES);
@@ -64,9 +63,21 @@ export const App: React.FC = () => {
     handleUpdateSettings({ activeView: '3d' });
   };
 
+  const localizedCategories = useMemo(() => {
+    return getLocalizedCategories(categories, language);
+  }, [categories, language]);
+
+  const activeLocalizedCategory = useMemo(() => {
+    return selectedCategory ? getLocalizedCategory(selectedCategory, language) : null;
+  }, [selectedCategory, language]);
+
+  const activeLocalizedProject = useMemo(() => {
+    return selectedProject ? getLocalizedProject(selectedProject, language) : null;
+  }, [selectedProject, language]);
+
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
   const isRTL = language === 'fa';
-  const totalProjectsCount = categories.reduce((acc, cat) => acc + cat.projects.length, 0);
+  const totalProjectsCount = localizedCategories.reduce((acc, cat) => acc + cat.projects.length, 0);
   const isOutsideHome = settings.activeView !== '3d';
 
   return (
@@ -81,42 +92,26 @@ export const App: React.FC = () => {
         onOpenCustomizer={() => setIsCustomizerOpen(true)}
         onOpenAbout={() => setIsAboutOpen(true)}
         totalProjectsCount={totalProjectsCount}
-        categoriesCount={categories.length}
+        categoriesCount={localizedCategories.length}
         currentLanguage={language}
         onLanguageChange={handleLanguageChange}
       />
 
       {/* Main Content by Active View */}
       <main className="w-full h-full">
-        {settings.activeView === 'maquette' && (
-          <MaquetteIsometricCanvas
-            categories={categories}
-            settings={settings}
-            onSelectCategory={(cat) => setSelectedCategory(cat)}
-            selectedCategory={selectedCategory}
-          />
-        )}
-
-        {settings.activeView === '3d' && (
-          <ThreeDClayCanvas
-            categories={categories}
-            onSelectCategory={(cat) => setSelectedCategory(cat)}
-            selectedCategory={selectedCategory}
-            currentLanguage={language}
-          />
-        )}
-
         {settings.activeView === 'grid' && (
           <MasterIndexView
-            categories={categories}
+            categories={localizedCategories}
             onSelectProject={(proj) => setSelectedProject(proj)}
             onBackToMaquette={handleResetToHome}
+            currentLanguage={language}
           />
         )}
 
         {settings.activeView === 'resume' && (
           <ResumeProfileView
             onBackToMaquette={handleResetToHome}
+            currentLanguage={language}
           />
         )}
 
@@ -124,6 +119,16 @@ export const App: React.FC = () => {
           <DublinTechHubShowcase
             onBackToMaquette={handleResetToHome}
             onBackToPortfolio={handleResetToHome}
+            currentLanguage={language}
+          />
+        )}
+
+        {settings.activeView !== 'grid' && settings.activeView !== 'resume' && settings.activeView !== 'dublin-bim-audit' && (
+          <ThreeDClayCanvas
+            categories={localizedCategories}
+            onSelectCategory={(cat) => setSelectedCategory(cat)}
+            selectedCategory={selectedCategory}
+            currentLanguage={language}
           />
         )}
       </main>
@@ -141,17 +146,9 @@ export const App: React.FC = () => {
         </button>
       )}
 
-      {/* Bottom Floating Toolbar (for Maquette View only) */}
-      <BottomToolbar
-        categories={categories}
-        selectedCategory={selectedCategory}
-        onSelectCategory={(cat) => { sound.playDrawerOpen(); setSelectedCategory(cat); }}
-        activeView={settings.activeView}
-      />
-
       {/* Project Category Slide-over Drawer */}
       <ProjectDrawer
-        category={selectedCategory}
+        category={activeLocalizedCategory}
         onClose={() => setSelectedCategory(null)}
         onSelectProject={(proj) => setSelectedProject(proj)}
         currentLanguage={language}
@@ -159,7 +156,7 @@ export const App: React.FC = () => {
 
       {/* Project Fullscreen Detail & Gallery Lightbox */}
       <ProjectDetailModal
-        project={selectedProject}
+        project={activeLocalizedProject}
         onClose={() => setSelectedProject(null)}
         currentLanguage={language}
       />
@@ -172,12 +169,14 @@ export const App: React.FC = () => {
         onUpdateCategories={handleUpdateCategories}
         settings={settings}
         onUpdateSettings={handleUpdateSettings}
+        currentLanguage={language}
       />
 
       {/* About Studio Modal */}
       <AboutStudioModal
         isOpen={isAboutOpen}
         onClose={() => setIsAboutOpen(false)}
+        currentLanguage={language}
       />
     </div>
   );
