@@ -65,24 +65,24 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
         </div>
 
         {/* Search & Category Filter Pills */}
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
           {/* Search Box */}
-          <div className="relative">
+          <div className="relative w-full sm:w-auto">
             <Search className={`w-4 h-4 text-gray-400 absolute ${isRTL ? 'right-3.5' : 'left-3.5'} top-1/2 -translate-y-1/2`} />
             <input
               type="text"
               placeholder={t.archive.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className={`glass-panel ${isRTL ? 'pr-9 pl-4' : 'pl-9 pr-4'} py-2 rounded-2xl text-xs text-gray-800 placeholder-gray-400 border border-white/90 focus:outline-none focus:ring-2 focus:ring-black/20 w-52 sm:w-64 shadow-clay-sm`}
+              className={`glass-panel ${isRTL ? 'pr-9 pl-4' : 'pl-9 pr-4'} py-2 rounded-2xl text-xs text-gray-800 placeholder-gray-400 border border-white/90 focus:outline-none focus:ring-2 focus:ring-black/20 w-full sm:w-64 shadow-clay-sm`}
             />
           </div>
 
           {/* Category Filter Pills */}
-          <div className="flex flex-wrap items-center gap-1.5 glass-panel p-1 rounded-2xl border border-white/90 shadow-clay-sm">
+          <div className="flex items-center gap-1.5 glass-panel p-1 rounded-2xl border border-white/90 shadow-clay-sm overflow-x-auto max-w-full scrollbar-none py-1.5 shrink-0">
             <button
               onClick={() => { sound.playClick(); setSelectedFilter('all'); }}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
                 selectedFilter === 'all' ? 'bg-black text-white shadow-xs' : 'text-gray-600 hover:text-black'
               }`}
             >
@@ -96,7 +96,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
                 <button
                   key={cat.id}
                   onClick={() => { sound.playClick(); setSelectedFilter(cat.id); }}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
                     selectedFilter === cat.id ? 'bg-black text-white shadow-xs' : 'text-gray-600 hover:text-black'
                   }`}
                 >

@@ -133,16 +133,15 @@ export const App: React.FC = () => {
         )}
       </main>
 
-      {/* Universal Floating Home Button (Always available when outside 3D Cityscape) */}
+      {/* Universal Floating Home Button (Desktop & Tablet) */}
       {isOutsideHome && (
         <button
           onClick={handleResetToHome}
-          className={`fixed bottom-5 ${isRTL ? 'left-5' : 'right-5'} z-50 glass-panel px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl shadow-clay-lg flex items-center gap-2 text-xs font-black text-gray-900 bg-white/95 hover:bg-black hover:text-white transition-all duration-300 hover:scale-105 active:scale-95 border-2 border-blue-500/40 pointer-events-auto cursor-pointer`}
+          className={`fixed bottom-5 ${isRTL ? 'left-5' : 'right-5'} z-40 hidden sm:flex glass-panel px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl shadow-clay-lg items-center gap-2 text-xs font-black text-gray-900 bg-white/95 hover:bg-black hover:text-white transition-all duration-300 hover:scale-105 active:scale-95 border-2 border-blue-500/40 pointer-events-auto cursor-pointer`}
           title={t.returnToHome}
         >
           <Home className="w-4 h-4 text-blue-600 group-hover:text-white shrink-0" />
-          <span className="hidden sm:inline">{t.returnToHome}</span>
-          <span className="inline sm:hidden">Home</span>
+          <span>{t.returnToHome}</span>
         </button>
       )}
 

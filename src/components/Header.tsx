@@ -71,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({
                 3D
               </span>
             </h1>
-            <p className="text-[9px] sm:text-[10px] text-gray-500 font-medium tracking-tight line-clamp-1">
+            <p className="hidden sm:block text-[9px] sm:text-[10px] text-gray-500 font-medium tracking-tight line-clamp-1">
               {t.studioTagline}
             </p>
           </div>
@@ -179,13 +179,28 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </header>
 
-      {/* Mobile Drawer Navigation Menu (Touch-Optimized) */}
+      {/* Mobile Drawer Navigation Menu (Touch-Optimized, Solidly over all overlays) */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-35 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="absolute top-16 left-3 right-3 bg-white/95 backdrop-blur-2xl rounded-3xl p-4 shadow-2xl border border-white/80 space-y-2 text-left animate-in slide-in-from-top-4 duration-200">
-            <div className="flex items-center justify-between pb-2 mb-2 border-b border-gray-100 text-xs font-bold text-gray-500 font-mono uppercase">
+        <div 
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="lg:hidden fixed inset-0 z-[60] bg-black/60 backdrop-blur-md animate-in fade-in duration-200 flex flex-col justify-start p-3 sm:p-4 pt-16"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md mx-auto bg-white/95 backdrop-blur-2xl rounded-3xl p-4 sm:p-5 shadow-2xl border border-white/90 space-y-2.5 animate-in slide-in-from-top-4 duration-200"
+            dir={currentLanguage === 'fa' ? 'rtl' : 'ltr'}
+          >
+            <div className="flex items-center justify-between pb-2 mb-1 border-b border-gray-100 text-xs font-bold text-gray-500 font-mono uppercase">
               <span>{t.menu}</span>
-              <span>{t.studioName}</span>
+              <div className="flex items-center gap-2">
+                <span>{t.studioName}</span>
+                <button
+                  onClick={() => { sound.playClick(); setIsMobileMenuOpen(false); }}
+                  className="p-1.5 rounded-xl text-gray-400 hover:text-black hover:bg-gray-100 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
             <button

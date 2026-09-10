@@ -242,9 +242,27 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
                       isHovered ? 'scale-105 -translate-y-2' : 'scale-95 hover:scale-100'
                     }`}
                   >
-                    {/* Primary Glass Badge */}
+                    {/* MOBILE-ONLY COMPACT PIN (32px circular icon - never overlaps or blocks screen) */}
+                    <div className="md:hidden flex flex-col items-center pointer-events-auto">
+                      <div
+                        className={`w-9 h-9 rounded-2xl flex items-center justify-center shadow-clay-md border-2 transition-all duration-200 active:scale-90 ${
+                          isSelected
+                            ? 'bg-blue-600 text-white border-white ring-4 ring-blue-400/50 scale-110'
+                            : 'bg-white/95 text-slate-900 border-white/90 shadow-md'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4 shrink-0" />
+                      </div>
+                      <div className="mt-1">
+                        <span className="text-[8px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-slate-950/90 text-white shadow-md border border-white/20 whitespace-nowrap">
+                          {t.zones[zone.categoryId as keyof typeof t.zones]?.badge?.replace('ZONE ', 'Z') || `Z0${categories.findIndex(c => c.id === zone.categoryId) + 1}`}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* DESKTOP-ONLY EXPANDED GLASS BADGE (md:flex) */}
                     <div
-                      className={`px-4 py-2 rounded-2xl backdrop-blur-xl border shadow-2xl flex items-center gap-3 whitespace-nowrap transition-all duration-300 ${
+                      className={`hidden md:flex px-4 py-2 rounded-2xl backdrop-blur-xl border shadow-2xl items-center gap-3 whitespace-nowrap transition-all duration-300 ${
                         isHovered
                           ? 'bg-slate-900/95 text-white border-sky-400 ring-2 ring-sky-400/40 shadow-sky-500/30'
                           : 'bg-white/95 text-slate-900 border-slate-200/90 shadow-slate-900/15'
@@ -287,10 +305,10 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
                       </div>
                     </div>
 
-                    {/* Expanded Hover HUD Card: Lead Project Preview (only when hovering and not selected) */}
+                    {/* Expanded Hover HUD Card: Lead Project Preview (Desktop ONLY - never blocks mobile viewport) */}
                     {isHovered && !selectedCategory && leadProject && (
                       <div 
-                        className={`mt-2 w-64 p-3 rounded-2xl bg-slate-950/95 backdrop-blur-2xl border border-sky-400/40 shadow-2xl text-white animate-in fade-in slide-in-from-bottom-2 duration-200 ${
+                        className={`hidden md:block mt-2 w-64 p-3 rounded-2xl bg-slate-950/95 backdrop-blur-2xl border border-sky-400/40 shadow-2xl text-white animate-in fade-in slide-in-from-bottom-2 duration-200 ${
                           isRTL ? 'text-right' : 'text-left'
                         }`}
                         dir={isRTL ? 'rtl' : 'ltr'}
