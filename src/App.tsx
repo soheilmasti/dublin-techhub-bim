@@ -14,7 +14,7 @@ import { BottomToolbar } from './components/BottomToolbar';
 import { INITIAL_CATEGORIES, INITIAL_SETTINGS } from './data/initialData';
 import { CategoryBuilding, Project, SiteSettings } from './types';
 import { sound } from './utils/audio';
-import { LanguageCode, detectVisitorLanguage, TRANSLATIONS } from './utils/i18n';
+import { LanguageCode, detectVisitorLanguage, saveLanguagePreference, getInitialLanguage, TRANSLATIONS } from './utils/i18n';
 
 export const App: React.FC = () => {
   const [categories, setCategories] = useState<CategoryBuilding[]>(INITIAL_CATEGORIES);
@@ -24,25 +24,26 @@ export const App: React.FC = () => {
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
 
-  // 7-Language State with Smart IP Detection
-  const [language, setLanguage] = useState<LanguageCode>('en');
+  // 7-Language State with Smart IP Detection & Persistent Cookie
+  const [language, setLanguage] = useState<LanguageCode>(getInitialLanguage);
 
-  // Detect Visitor Language on first load
+  // Detect Visitor Language on first load (Cookie -> localStorage -> IP Geolocation)
   useEffect(() => {
     detectVisitorLanguage().then((detected) => {
       setLanguage(detected);
     });
   }, []);
 
-  // Update HTML document attributes on language change
+  // Update HTML document attributes on language change & sync to cookie
   useEffect(() => {
     const isRTL = language === 'fa';
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
     document.documentElement.lang = language;
-    localStorage.setItem('preferred_language', language);
+    saveLanguagePreference(language);
   }, [language]);
 
   const handleLanguageChange = (newLang: LanguageCode) => {
+    saveLanguagePreference(newLang);
     setLanguage(newLang);
   };
 

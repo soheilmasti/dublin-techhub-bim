@@ -47,14 +47,14 @@ export const ProjectDrawer: React.FC<ProjectDrawerProps> = ({
           className="absolute inset-0 bg-black/50 backdrop-blur-xs"
         />
 
-        {/* Slide-over Drawer Panel (Responsive Full Width on Mobile, Max-w-xl on Tablet/Desktop) */}
-        <div className={`absolute inset-y-0 ${isRTL ? 'right-0' : 'left-0'} w-full max-w-full sm:max-w-xl flex`}>
+        {/* Slide-over Drawer Panel Docked on Left (Responsive Full Width on Mobile, Max-w-xl on Desktop) */}
+        <div className="absolute inset-y-0 left-0 w-full max-w-full sm:max-w-xl flex">
           <motion.div
-            initial={{ x: isRTL ? '100%' : '-100%' }}
+            initial={{ x: '-100%' }}
             animate={{ x: 0 }}
-            exit={{ x: isRTL ? '100%' : '-100%' }}
+            exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-            className="w-full bg-white/95 backdrop-blur-2xl shadow-2xl border-x border-white/80 flex flex-col justify-between h-full"
+            className="w-full bg-white/95 backdrop-blur-2xl shadow-2xl border-r border-white/80 flex flex-col justify-between h-full"
           >
             {/* Drawer Header */}
             <div className="p-4 sm:p-7 border-b border-gray-100/90 bg-white/80 shrink-0">

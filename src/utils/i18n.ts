@@ -596,24 +596,80 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
 };
 
 /**
+ * Cookie Helper Functions with 1-Year Longevity
+ */
+export function getCookie(name: string): string | null {
+  if (typeof document === 'undefined') return null;
+  const match = document.cookie.match(new RegExp('(^|;\\s*)' + name + '=([^;]*)'));
+  return match ? decodeURIComponent(match[2]) : null;
+}
+
+export function setCookie(name: string, value: string, days: number = 365) {
+  if (typeof document === 'undefined') return;
+  const maxAge = days * 24 * 60 * 60;
+  document.cookie = `${name}=${encodeURIComponent(value)}; max-age=${maxAge}; path=/; SameSite=Lax`;
+}
+
+/**
+ * Persist language preference to both Cookie and localStorage
+ */
+export function saveLanguagePreference(code: LanguageCode) {
+  setCookie('preferred_language', code, 365);
+  try {
+    localStorage.setItem('preferred_language', code);
+  } catch (e) {
+    console.debug('localStorage write failed', e);
+  }
+}
+
+/**
+ * Synchronous initial language resolution from Cookie or localStorage
+ * Ensures immediate load without waiting for async network IP checks
+ */
+export function getInitialLanguage(): LanguageCode {
+  const cookieLang = getCookie('preferred_language') as LanguageCode | null;
+  if (cookieLang && (cookieLang in TRANSLATIONS)) {
+    return cookieLang;
+  }
+  try {
+    const saved = localStorage.getItem('preferred_language') as LanguageCode | null;
+    if (saved && (saved in TRANSLATIONS)) {
+      return saved;
+    }
+  } catch (e) {
+    console.debug('localStorage read failed', e);
+  }
+  return 'en';
+}
+
+/**
  * Smart IP Geolocation Detection Function
- * Resolves visitor's country & region without blocking:
- * - Catalonia / Barcelona (CT) -> Catalan (ca)
- * - Iran (IR) -> Persian (fa)
- * - Spain outside Catalonia (ES) / LatAm -> Spanish (es)
- * - France (FR) / Belgium (BE) -> French (fr)
- * - Germany (DE) / Austria (AT) / Switzerland (CH) -> German (de)
- * - Italy (IT) -> Italian (it)
- * - All other global countries -> English (en)
+ * Order of priority:
+ * 1. Persistent Browser Cookie (preferred_language)
+ * 2. Browser localStorage (preferred_language)
+ * 3. IP Geolocation (Catalonia -> ca, Iran -> fa, Spain -> es, France -> fr, Germany -> de, Italy -> it, Other -> en)
+ * 4. Browser Navigator Locale
  */
 export async function detectVisitorLanguage(): Promise<LanguageCode> {
-  // 1. Check if user already manually selected a language
-  const saved = localStorage.getItem('preferred_language') as LanguageCode | null;
-  if (saved && (saved in TRANSLATIONS)) {
-    return saved;
+  // 1. Check Cookie first!
+  const cookieLang = getCookie('preferred_language') as LanguageCode | null;
+  if (cookieLang && (cookieLang in TRANSLATIONS)) {
+    saveLanguagePreference(cookieLang);
+    return cookieLang;
   }
 
-  // 2. Fetch IP Geolocation via fast, CORS-enabled service (2.2s timeout)
+  // 2. Check localStorage next!
+  try {
+    const saved = localStorage.getItem('preferred_language') as LanguageCode | null;
+    if (saved && (saved in TRANSLATIONS)) {
+      saveLanguagePreference(saved);
+      return saved;
+    }
+  } catch (e) {
+    console.debug('localStorage read failed', e);
+  }
+
+  // 3. Fetch IP Geolocation via fast, CORS-enabled service (2.2s timeout)
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 2200);
@@ -635,36 +691,43 @@ export async function detectVisitorLanguage(): Promise<LanguageCode> {
           (region === 'CT' || regionName.includes('catal') || cityName.includes('barcelona') || cityName.includes('girona') || cityName.includes('tarragona') || cityName.includes('lleida'));
 
         if (isCatalonia) {
+          saveLanguagePreference('ca');
           return 'ca';
         }
 
         // Persian for Iran
         if (country === 'IR' || country === 'AF') {
+          saveLanguagePreference('fa');
           return 'fa';
         }
 
         // Spanish for Spain (outside Catalonia) & Latin America
         const spanishCountries = ['ES', 'MX', 'AR', 'CO', 'CL', 'PE', 'VE', 'EC', 'GT', 'CU', 'BO', 'DO', 'HN', 'PY', 'SV', 'NI', 'CR', 'PA', 'UY'];
         if (spanishCountries.includes(country)) {
+          saveLanguagePreference('es');
           return 'es';
         }
 
         // French for France, Belgium, etc.
         if (country === 'FR' || country === 'MC') {
+          saveLanguagePreference('fr');
           return 'fr';
         }
 
         // German for Germany, Austria, Switzerland
         if (country === 'DE' || country === 'AT' || (country === 'CH' && !regionName.includes('genev'))) {
+          saveLanguagePreference('de');
           return 'de';
         }
 
         // Italian for Italy
         if (country === 'IT' || country === 'SM' || country === 'VA') {
+          saveLanguagePreference('it');
           return 'it';
         }
 
         // Default to English for all other countries in the world
+        saveLanguagePreference('en');
         return 'en';
       }
     }
@@ -673,15 +736,16 @@ export async function detectVisitorLanguage(): Promise<LanguageCode> {
     console.debug('IP geolocation lookup skipped or timed out, falling back to navigator locale', err);
   }
 
-  // 3. Fallback: Browser navigator language
+  // 4. Fallback: Browser navigator language
   const browserLang = (navigator.language || navigator.languages?.[0] || 'en').toLowerCase();
-  if (browserLang.startsWith('ca')) return 'ca';
-  if (browserLang.startsWith('fa')) return 'fa';
-  if (browserLang.startsWith('es')) return 'es';
-  if (browserLang.startsWith('fr')) return 'fr';
-  if (browserLang.startsWith('de')) return 'de';
-  if (browserLang.startsWith('it')) return 'it';
+  let fallback: LanguageCode = 'en';
+  if (browserLang.startsWith('ca')) fallback = 'ca';
+  else if (browserLang.startsWith('fa')) fallback = 'fa';
+  else if (browserLang.startsWith('es')) fallback = 'es';
+  else if (browserLang.startsWith('fr')) fallback = 'fr';
+  else if (browserLang.startsWith('de')) fallback = 'de';
+  else if (browserLang.startsWith('it')) fallback = 'it';
 
-  // Global default
-  return 'en';
+  saveLanguagePreference(fallback);
+  return fallback;
 }
