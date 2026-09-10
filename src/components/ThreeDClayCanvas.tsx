@@ -517,10 +517,10 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
             lightingMode === 'day' ? 'bg-black text-white shadow-xs' : 'text-gray-600 hover:text-black'
           }`}
-          title="نور روز سفید (White Clay Daylight)"
+          title="رندر متریال و بافت‌های واقعی اسکچ‌آپ (Realistic SketchUp Textures)"
         >
           <Sun className="w-3.5 h-3.5" />
-          <span>روز ماکتی</span>
+          <span>روز واقعی (SketchUp)</span>
         </button>
 
         <button

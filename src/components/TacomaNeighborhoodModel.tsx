@@ -103,7 +103,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     clone.position.set(-3948.0 * scale, -836.0 * scale, 8985.0 * scale);
     clone.rotation.set(0, 0, 0);
 
-    // Architectural Clay & Material Polish (Solid, Double-Sided, Bright Illumination)
+    // Preserve Authentic SketchUp Textures, Materials & Colors
     clone.traverse((child) => {
       if (child instanceof THREE.Mesh) {
         child.castShadow = true;
@@ -114,27 +114,24 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
             color: '#00ffff', 
             wireframe: true 
           });
-        } else if (lightingMode === 'night') {
-          child.material = new THREE.MeshStandardMaterial({
-            color: '#1e293b',
-            roughness: 0.4,
-            metalness: 0.2,
-            side: THREE.DoubleSide,
-          });
-        } else if (lightingMode === 'sunset') {
-          child.material = new THREE.MeshStandardMaterial({
-            color: '#fed7aa',
-            roughness: 0.35,
-            metalness: 0.05,
-            side: THREE.DoubleSide,
-          });
-        } else {
-          // Bright, pristine Architectural White Clay (Daylight)
-          child.material = new THREE.MeshStandardMaterial({
-            color: '#ffffff',
-            roughness: 0.28,
-            metalness: 0.02,
-            side: THREE.DoubleSide,
+        } else if (child.material) {
+          // Enhance authentic SketchUp PBR textures & materials
+          const materials = Array.isArray(child.material) ? child.material : [child.material];
+          materials.forEach((mat) => {
+            mat.side = THREE.DoubleSide;
+            mat.needsUpdate = true;
+
+            if (mat instanceof THREE.MeshStandardMaterial) {
+              mat.roughness = THREE.MathUtils.clamp(mat.roughness || 0.45, 0.25, 0.7);
+              mat.metalness = THREE.MathUtils.clamp(mat.metalness || 0.05, 0.02, 0.3);
+              mat.envMapIntensity = 1.2;
+
+              if (lightingMode === 'sunset') {
+                mat.color.multiply(new THREE.Color('#fed7aa'));
+              } else if (lightingMode === 'night') {
+                mat.color.multiply(new THREE.Color('#94a3b8'));
+              }
+            }
           });
         }
       }
