@@ -47,10 +47,11 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="fixed top-0 left-0 right-0 z-40 px-3 sm:px-8 py-3 flex items-center justify-between pointer-events-none">
       {/* Studio Branding & Architect Title (Click = Return to Home) */}
+      {/* Studio Branding & Architect Title (Click = Return to 3D Home) */}
       <div 
-        onClick={() => handleNavClick('maquette')}
+        onClick={() => handleNavClick('3d')}
         className="glass-panel px-4 py-2 rounded-2xl shadow-clay-sm flex items-center gap-3 pointer-events-auto border border-white/90 cursor-pointer transition-all duration-300 hover:shadow-clay-md hover:scale-102 group"
-        title="صفحه اصلی وبسایت (بازگشت به ماکت)"
+        title="صفحه اصلی وبسایت (شهرک سه‌بعدی)"
       >
         <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center shadow-xs font-mono font-bold text-xs group-hover:bg-blue-600 transition-colors">
           <Home className="w-4 h-4" />
@@ -59,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({
           <h1 className="text-xs sm:text-sm font-black tracking-wider text-black flex items-center gap-1.5">
             <span>SOHEIL MASTI</span>
             <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-100 text-blue-700">
-              HOME
+              3D HOME
             </span>
           </h1>
           <p className="text-[10px] text-gray-500 font-medium tracking-tight">
@@ -68,32 +69,32 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Center: View Switcher (Home Maquette / 3D / Catalog / Resume / Dublin) */}
+      {/* Center: View Switcher (3D Home / 2.5D Plan / Catalog / Resume / Dublin) */}
       <div className="glass-panel p-1 rounded-2xl shadow-clay-sm flex items-center gap-1 pointer-events-auto border border-white/90">
         <button
-          onClick={() => handleNavClick('maquette')}
+          onClick={() => handleNavClick('3d')}
           className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 ${
-            settings.activeView === 'maquette'
+            settings.activeView === '3d'
               ? 'bg-blue-600 text-white shadow-xs'
               : 'text-gray-700 hover:text-black hover:bg-gray-100/70'
           }`}
-          title="صفحه اصلی: ماکت شهرک و سایت‌پلان تعاملی"
+          title="صفحه اصلی: شهرک سه‌بعدی و ماکت تعاملی مسترپلان"
         >
           <Home className="w-3.5 h-3.5" />
-          <span>صفحه اصلی (ماکت)</span>
+          <span>شهرک سه‌بعدی (Home)</span>
         </button>
 
         <button
-          onClick={() => handleNavClick('3d')}
+          onClick={() => handleNavClick('maquette')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
-            settings.activeView === '3d'
+            settings.activeView === 'maquette'
               ? 'bg-black text-white shadow-xs'
               : 'text-gray-600 hover:text-black hover:bg-gray-100/70'
           }`}
-          title="گردش سه‌بعدی آزاد WebGL در شهرک"
+          title="پلان دیاگرامی ایزومتریک ۲.۵ بعدی"
         >
-          <Box className="w-3.5 h-3.5 text-blue-400" />
-          <span className="hidden sm:inline">کاوش ۳ بعدی</span>
+          <Compass className="w-3.5 h-3.5 text-emerald-500" />
+          <span className="hidden sm:inline">پلان ایزومتریک</span>
         </button>
 
         <button

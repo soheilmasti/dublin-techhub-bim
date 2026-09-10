@@ -84,6 +84,51 @@ const BUILDING_ZONES: {
   }
 ];
 
+// Holographic Ground Radar Ring for Active/Hovered Building
+const HolographicRadar: React.FC<{ 
+  position: [number, number, number]; 
+  radius: number; 
+  color: string;
+  isActive: boolean;
+}> = ({ position, radius, color, isActive }) => {
+  const ringRef = useRef<THREE.Group>(null);
+
+  useFrame((_, delta) => {
+    if (ringRef.current) {
+      ringRef.current.rotation.z += delta * (isActive ? 0.8 : 0.3);
+    }
+  });
+
+  return (
+    <group position={[position[0], 0.04, position[2]]} rotation={[-Math.PI / 2, 0, 0]}>
+      <group ref={ringRef}>
+        {/* Outer Circular Boundary */}
+        <mesh>
+          <ringGeometry args={[radius * 0.96, radius, 48]} />
+          <meshBasicMaterial color={color} transparent opacity={isActive ? 0.8 : 0.45} side={THREE.DoubleSide} />
+        </mesh>
+        {/* Inner Concentric Pulse */}
+        <mesh>
+          <ringGeometry args={[radius * 0.65, radius * 0.68, 36]} />
+          <meshBasicMaterial color={color} transparent opacity={isActive ? 0.6 : 0.3} side={THREE.DoubleSide} />
+        </mesh>
+        {/* 4 Cardinal CAD Ticks */}
+        {[0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2].map((angle, idx) => (
+          <mesh key={idx} rotation={[0, 0, angle]} position={[Math.cos(angle) * radius * 0.82, Math.sin(angle) * radius * 0.82, 0]}>
+            <planeGeometry args={[radius * 0.15, radius * 0.03]} />
+            <meshBasicMaterial color={color} transparent opacity={0.7} side={THREE.DoubleSide} />
+          </mesh>
+        ))}
+      </group>
+      {/* Ground Soft Glow Disk */}
+      <mesh>
+        <circleGeometry args={[radius * 0.95, 32]} />
+        <meshBasicMaterial color={color} transparent opacity={isActive ? 0.15 : 0.06} side={THREE.DoubleSide} />
+      </mesh>
+    </group>
+  );
+};
+
 export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = ({
   categories,
   onSelectCategory,
@@ -121,10 +166,15 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
             mat.side = THREE.DoubleSide;
             mat.needsUpdate = true;
 
+            if (mat.map) {
+              mat.map.anisotropy = 16;
+              mat.map.needsUpdate = true;
+            }
+
             if (mat instanceof THREE.MeshStandardMaterial) {
               mat.roughness = THREE.MathUtils.clamp(mat.roughness || 0.45, 0.25, 0.7);
               mat.metalness = THREE.MathUtils.clamp(mat.metalness || 0.05, 0.02, 0.3);
-              mat.envMapIntensity = 1.2;
+              mat.envMapIntensity = 1.35;
 
               if (lightingMode === 'sunset') {
                 mat.color.multiply(new THREE.Color('#fed7aa'));
@@ -151,10 +201,20 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
         const isHovered = hoveredId === zone.categoryId;
         const isSelected = selectedCategory?.id === zone.categoryId;
         const Icon = zone.icon;
+        const leadProject = category.projects[0];
+        const radius = Math.max(zone.size[0], zone.size[2]) * 0.65;
 
         return (
           <group key={zone.categoryId}>
-            {/* 1. Direct Building Hitbox: Clicking anywhere on the building activates it! */}
+            {/* 1. Holographic Ground Radar (Pulses under active/hovered building) */}
+            <HolographicRadar
+              position={zone.center}
+              radius={radius}
+              color={zone.color}
+              isActive={isHovered || isSelected}
+            />
+
+            {/* 2. Direct Building Hitbox: Clicking anywhere on the building activates it! */}
             <mesh
               position={zone.center}
               onClick={(e) => {
@@ -177,15 +237,15 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
               <meshStandardMaterial
                 color={zone.color}
                 transparent
-                opacity={isSelected ? 0.35 : isHovered ? 0.25 : 0.0}
+                opacity={isSelected ? 0.32 : isHovered ? 0.22 : 0.0}
                 emissive={zone.color}
-                emissiveIntensity={isSelected ? 1.5 : isHovered ? 0.9 : 0.0}
+                emissiveIntensity={isSelected ? 1.6 : isHovered ? 1.0 : 0.0}
                 roughness={0.2}
                 depthWrite={false}
               />
             </mesh>
 
-            {/* 2. Sleek Rooftop Architectural Beacon (Directly Flush On Building Roof) */}
+            {/* 3. Sleek Rooftop Architectural Beacon (Directly Flush On Building Roof) */}
             <group position={zone.roof}>
               {/* Subtle Rooftop Glowing Base Halo */}
               <mesh 
@@ -205,14 +265,14 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
                 <meshStandardMaterial
                   color={zone.color}
                   emissive={zone.color}
-                  emissiveIntensity={isHovered ? 3.0 : isSelected ? 3.5 : 1.4}
+                  emissiveIntensity={isHovered ? 3.2 : isSelected ? 3.8 : 1.5}
                   transparent
-                  opacity={0.85}
+                  opacity={0.88}
                 />
               </mesh>
 
-              {/* Minimalist Floating Glass Pill Badge (Anchored on Roof) */}
-              <Html position={[0, 0.5, 0]} center distanceFactor={16}>
+              {/* Minimalist Floating Glass Pill Badge & Rich Project Card */}
+              <Html position={[0, 0.5, 0]} center distanceFactor={15}>
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
@@ -228,20 +288,22 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
                     document.body.style.cursor = 'auto';
                   }}
                   className={`transition-all duration-300 transform cursor-pointer select-none ${
-                    isHovered || isSelected ? 'scale-110 -translate-y-1' : 'scale-95 hover:scale-105'
+                    isHovered || isSelected ? 'scale-105 -translate-y-2' : 'scale-95 hover:scale-100'
                   }`}
                 >
+                  {/* Primary Glass Badge */}
                   <div
-                    className={`px-3.5 py-1.5 rounded-full backdrop-blur-xl border shadow-xl flex items-center gap-2.5 whitespace-nowrap transition-all duration-300 ${
+                    className={`px-4 py-2 rounded-2xl backdrop-blur-xl border shadow-2xl flex items-center gap-3 whitespace-nowrap transition-all duration-300 ${
                       isSelected
                         ? 'bg-blue-600 text-white border-white ring-4 ring-blue-400/50 shadow-blue-500/40'
                         : isHovered
-                        ? 'bg-slate-900/95 text-white border-sky-400 ring-2 ring-sky-400/40 shadow-sky-500/20'
-                        : 'bg-white/95 text-slate-900 border-slate-200/90 shadow-slate-900/10'
+                        ? 'bg-slate-900/95 text-white border-sky-400 ring-2 ring-sky-400/40 shadow-sky-500/30'
+                        : 'bg-white/95 text-slate-900 border-slate-200/90 shadow-slate-900/15'
                     }`}
                   >
+                    {/* Glowing Icon Container */}
                     <div
-                      className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs ${
+                      className={`w-7 h-7 rounded-xl flex items-center justify-center font-bold text-xs shadow-xs transition-colors ${
                         isSelected
                           ? 'bg-white text-blue-600'
                           : isHovered
@@ -249,13 +311,14 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
                           : 'bg-slate-900 text-white'
                       }`}
                     >
-                      <Icon className="w-3.5 h-3.5" />
+                      <Icon className="w-4 h-4" />
                     </div>
 
+                    {/* Typography */}
                     <div className="text-right">
                       <div className="flex items-center gap-1.5">
-                        <span className={`text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded ${
-                          isSelected ? 'bg-blue-800 text-white' : 'bg-slate-100 text-slate-700'
+                        <span className={`text-[8.5px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                          isSelected ? 'bg-blue-800 text-white' : isHovered ? 'bg-sky-950 text-sky-200 border border-sky-700' : 'bg-slate-100 text-slate-700'
                         }`}>
                           {zone.badge}
                         </span>
@@ -265,17 +328,49 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
                           {category.projects.length} پروژه
                         </span>
                       </div>
-                      <div className="text-[11.5px] font-black tracking-tight leading-none mt-0.5">
+                      <div className="text-[12px] font-black tracking-tight leading-none mt-1">
                         {zone.label}
                       </div>
                     </div>
 
-                    <div className={`p-1 rounded-full ${
-                      isSelected ? 'bg-blue-700 text-white' : 'bg-slate-100 text-slate-400'
+                    <div className={`p-1.5 rounded-xl transition-transform duration-200 ${
+                      isSelected ? 'bg-blue-700 text-white' : isHovered ? 'bg-sky-600 text-white translate-x-[-2px]' : 'bg-slate-100 text-slate-500'
                     }`}>
-                      <ArrowUpRight className="w-3 h-3" />
+                      <ArrowUpRight className="w-3.5 h-3.5" />
                     </div>
                   </div>
+
+                  {/* Expanded Hover HUD Card: Lead Project Preview */}
+                  {(isHovered || isSelected) && leadProject && (
+                    <div className="mt-2 w-64 p-3 rounded-2xl bg-slate-950/95 backdrop-blur-2xl border border-sky-400/40 shadow-2xl text-white text-right animate-in fade-in slide-in-from-bottom-2 duration-200">
+                      {leadProject.coverImage && (
+                        <div className="relative w-full h-24 rounded-xl overflow-hidden mb-2.5 border border-white/10">
+                          <img 
+                            src={leadProject.coverImage} 
+                            alt={leadProject.title} 
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                          <span className="absolute bottom-1.5 right-2 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white">
+                            {leadProject.year}
+                          </span>
+                        </div>
+                      )}
+                      <div className="text-xs font-bold line-clamp-1 text-slate-100">
+                        {leadProject.title}
+                      </div>
+                      <div className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">
+                        {leadProject.location} • {leadProject.typology}
+                      </div>
+                      <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[10px] font-bold text-sky-400">
+                        <span className="flex items-center gap-1">
+                          <Sparkles className="w-3 h-3 text-amber-400" />
+                          کلیک برای ورود به پروژه‌ها
+                        </span>
+                        <span>{category.projects.length} پروژه ↗</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </Html>
             </group>

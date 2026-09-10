@@ -37,11 +37,11 @@ export const App: React.FC = () => {
     setSelectedProject(null);
     setIsCustomizerOpen(false);
     setIsAboutOpen(false);
-    handleUpdateSettings({ activeView: 'maquette' });
+    handleUpdateSettings({ activeView: '3d' });
   };
 
   const totalProjectsCount = categories.reduce((acc, cat) => acc + cat.projects.length, 0);
-  const isOutsideHome = settings.activeView !== 'maquette';
+  const isOutsideHome = settings.activeView !== '3d';
 
   return (
     <div className="relative min-h-screen bg-[#f5f6f8] text-gray-900 font-sans select-none overflow-x-hidden">
