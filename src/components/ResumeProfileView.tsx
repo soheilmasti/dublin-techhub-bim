@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
+  Home,
   Briefcase, 
   GraduationCap, 
   Award, 
@@ -32,14 +33,15 @@ export const ResumeProfileView: React.FC<ResumeProfileViewProps> = ({
 }) => {
   return (
     <div className="min-h-screen bg-[#f5f6f8] pt-24 pb-20 px-4 sm:px-8 max-w-7xl mx-auto">
-      {/* Back Button */}
+      {/* Back to Home Button */}
       <div className="mb-6">
         <button
           onClick={() => { sound.playClick(); onBackToMaquette(); }}
-          className="text-xs font-semibold text-gray-500 hover:text-black flex items-center gap-1.5 transition-colors glass-panel px-3.5 py-2 rounded-xl shadow-clay-sm w-fit"
+          className="text-xs font-bold text-gray-800 hover:text-white hover:bg-black flex items-center gap-2 transition-all glass-panel px-4 py-2.5 rounded-2xl shadow-clay-sm w-fit border border-white hover:scale-105 active:scale-95 cursor-pointer"
+          title="بازگشت به صفحه اصلی ماکت شهرک"
         >
-          <ArrowRight className="w-4 h-4" />
-          بازگشت به ماکت شهرک تعاملی
+          <Home className="w-4 h-4 text-blue-600" />
+          <span>🏠 بازگشت به صفحه اصلی (ماکت شهرک)</span>
         </button>
       </div>
 

@@ -44,12 +44,14 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
           transition={{ type: 'spring', damping: 25, stiffness: 280 }}
           className="relative w-full max-w-5xl bg-white rounded-3xl overflow-hidden shadow-2xl border border-white/90 my-auto"
         >
-          {/* Close Button */}
+          {/* Close & Return Button */}
           <button
             onClick={() => { sound.playClick(); onClose(); }}
-            className="absolute top-4 left-4 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-black hover:text-white backdrop-blur-md flex items-center justify-center text-gray-800 shadow-md transition-all duration-200"
+            className="absolute top-4 left-4 z-20 px-3.5 py-2 rounded-2xl bg-white/95 hover:bg-black hover:text-white backdrop-blur-md flex items-center gap-2 text-gray-900 font-bold text-xs shadow-lg transition-all duration-200 border border-gray-200 hover:scale-105 active:scale-95 cursor-pointer"
+            title="بستن و بازگشت به صفحه اصلی"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
+            <span>بستن و بازگشت (Close)</span>
           </button>
 
           {/* Grid Layout: Visual Media & Specs */}

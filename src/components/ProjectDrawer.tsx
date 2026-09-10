@@ -61,9 +61,11 @@ export const ProjectDrawer: React.FC<ProjectDrawerProps> = ({
 
                 <button
                   onClick={() => { sound.playClick(); onClose(); }}
-                  className="p-2 rounded-xl text-gray-400 hover:text-black hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gray-100 hover:bg-black hover:text-white text-gray-800 text-xs font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-xs border border-gray-200"
+                  title="بستن کشو و بازگشت به صفحه اصلی"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4" />
+                  <span>بستن (Close)</span>
                 </button>
               </div>
 

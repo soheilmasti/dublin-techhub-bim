@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Home } from 'lucide-react';
 import { Header } from './components/Header';
 import { MaquetteIsometricCanvas } from './components/MaquetteIsometricCanvas';
 import { ThreeDClayCanvas } from './components/ThreeDClayCanvas';
@@ -30,7 +31,17 @@ export const App: React.FC = () => {
     setCategories(newCategories);
   };
 
+  const handleResetToHome = () => {
+    sound.playClick();
+    setSelectedCategory(null);
+    setSelectedProject(null);
+    setIsCustomizerOpen(false);
+    setIsAboutOpen(false);
+    handleUpdateSettings({ activeView: 'maquette' });
+  };
+
   const totalProjectsCount = categories.reduce((acc, cat) => acc + cat.projects.length, 0);
+  const isOutsideHome = settings.activeView !== 'maquette';
 
   return (
     <div className="relative min-h-screen bg-[#f5f6f8] text-gray-900 font-sans select-none overflow-x-hidden">
@@ -67,22 +78,35 @@ export const App: React.FC = () => {
           <MasterIndexView
             categories={categories}
             onSelectProject={(proj) => setSelectedProject(proj)}
-            onBackToMaquette={() => handleUpdateSettings({ activeView: 'maquette' })}
+            onBackToMaquette={handleResetToHome}
           />
         )}
 
         {settings.activeView === 'resume' && (
           <ResumeProfileView
-            onBackToMaquette={() => handleUpdateSettings({ activeView: 'maquette' })}
+            onBackToMaquette={handleResetToHome}
           />
         )}
 
         {settings.activeView === 'dublin-bim-audit' && (
           <DublinTechHubShowcase
-            onBackToMaquette={() => handleUpdateSettings({ activeView: 'maquette' })}
+            onBackToMaquette={handleResetToHome}
+            onBackToPortfolio={handleResetToHome}
           />
         )}
       </main>
+
+      {/* Universal Floating Home Button (Always available when outside Maquette) */}
+      {isOutsideHome && (
+        <button
+          onClick={handleResetToHome}
+          className="fixed bottom-6 right-6 z-50 glass-panel px-4 py-3 rounded-2xl shadow-clay-lg flex items-center gap-2.5 text-xs font-black text-gray-900 bg-white/95 hover:bg-black hover:text-white transition-all duration-300 hover:scale-105 active:scale-95 border-2 border-blue-500/40 pointer-events-auto cursor-pointer"
+          title="بازگشت فوری به صفحه اصلی ماکت شهرک"
+        >
+          <Home className="w-4 h-4 text-blue-600 group-hover:text-white" />
+          <span>🏠 بازگشت به صفحه اصلی (ماکت)</span>
+        </button>
+      )}
 
       {/* Bottom Floating Toolbar (for Maquette & 3D Views) */}
       <BottomToolbar

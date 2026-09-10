@@ -29,7 +29,8 @@ import {
   Cpu,
   Monitor,
   Activity,
-  CheckCheck
+  CheckCheck,
+  Home
 } from 'lucide-react';
 import { sound } from '../utils/audio';
 
@@ -516,13 +517,14 @@ export const DublinTechHubShowcase: React.FC<{ onBackToPortfolio?: () => void; o
       {/* Top Header Bar */}
       <header className="bg-slate-900/90 backdrop-blur border-b border-slate-800 sticky top-0 z-50 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          {onBackToPortfolio && (
+          {handleBack && (
             <button 
-              onClick={onBackToPortfolio}
-              className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors flex items-center gap-1 text-xs"
+              onClick={() => { sound.playClick(); handleBack(); }}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 text-white font-bold text-xs shadow-lg flex items-center gap-2 transition-all hover:scale-105 active:scale-95 border border-sky-400/30 cursor-pointer"
+              title="بازگشت به صفحه اصلی ماکت شهرک"
             >
-              <ArrowLeft className="w-4 h-4" />
-              <span>پورتفولیو</span>
+              <Home className="w-4 h-4" />
+              <span>صفحه اصلی (Home)</span>
             </button>
           )}
           <div className="flex items-center gap-2">

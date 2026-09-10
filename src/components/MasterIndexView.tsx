@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
+  Home,
   Building2, 
   MapPin, 
   Maximize2, 
@@ -47,10 +48,11 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
         <div>
           <button
             onClick={() => { sound.playClick(); onBackToMaquette(); }}
-            className="text-xs font-semibold text-gray-500 hover:text-black flex items-center gap-1.5 mb-2.5 transition-colors glass-panel px-3.5 py-1.5 rounded-xl shadow-clay-sm w-fit"
+            className="text-xs font-bold text-gray-800 hover:text-white hover:bg-black flex items-center gap-2 mb-3.5 transition-all glass-panel px-4 py-2.5 rounded-2xl shadow-clay-sm w-fit border border-white hover:scale-105 active:scale-95 cursor-pointer"
+            title="بازگشت به صفحه اصلی ماکت شهرک"
           >
-            <ArrowRight className="w-3.5 h-3.5" />
-            بازگشت به ماکت شهرک تعاملی
+            <Home className="w-4 h-4 text-blue-600" />
+            <span>🏠 بازگشت به صفحه اصلی (ماکت شهرک)</span>
           </button>
           <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
             کاتالوگ و آرشیو کامل پروژه‌ها
