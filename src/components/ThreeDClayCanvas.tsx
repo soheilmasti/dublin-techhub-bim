@@ -7,7 +7,8 @@ import {
   useGLTF, 
   Edges,
   Float,
-  MeshReflectorMaterial
+  MeshReflectorMaterial,
+  Environment
 } from '@react-three/drei';
 import * as THREE from 'three';
 import { CategoryBuilding } from '../types';
@@ -422,49 +423,60 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
         className="w-full h-full"
       >
         <Suspense fallback={null}>
+          {/* Environment Lighting for Rich PBR & Clay Reflections */}
+          <Environment preset={lightingMode === 'sunset' ? 'sunset' : lightingMode === 'night' ? 'night' : 'city'} />
+
+          {/* Hemisphere Light for Realistic Sky/Ground Ambient Bounce */}
+          <hemisphereLight 
+            intensity={lightingMode === 'night' ? 0.4 : 1.2} 
+            color={lightingMode === 'sunset' ? '#fed7aa' : '#ffffff'} 
+            groundColor={lightingMode === 'night' ? '#0f172a' : '#94a3b8'} 
+          />
+
           {/* Lighting based on mood */}
           {lightingMode === 'day' && (
             <>
-              <ambientLight intensity={0.9} />
+              <ambientLight intensity={1.2} />
               <directionalLight
-                position={[18, 28, 16]}
-                intensity={1.5}
+                position={[20, 32, 18]}
+                intensity={2.2}
                 castShadow
                 shadow-mapSize-width={2048}
                 shadow-mapSize-height={2048}
                 shadow-bias={-0.0001}
               />
-              <directionalLight position={[-15, 12, -10]} intensity={0.5} />
+              <directionalLight position={[-18, 16, -14]} intensity={1.0} color="#f1f5f9" />
+              <directionalLight position={[0, -10, 0]} intensity={0.4} color="#e2e8f0" />
             </>
           )}
 
           {lightingMode === 'sunset' && (
             <>
-              <ambientLight intensity={0.6} color="#fed7aa" />
+              <ambientLight intensity={0.9} color="#fed7aa" />
               <directionalLight
-                position={[24, 12, 10]}
-                intensity={2.2}
+                position={[24, 14, 10]}
+                intensity={2.8}
                 color="#f97316"
                 castShadow
                 shadow-mapSize-width={2048}
                 shadow-mapSize-height={2048}
               />
-              <directionalLight position={[-15, 10, -10]} intensity={0.3} color="#60a5fa" />
+              <directionalLight position={[-15, 12, -10]} intensity={0.8} color="#60a5fa" />
             </>
           )}
 
           {lightingMode === 'night' && (
             <>
-              <ambientLight intensity={0.25} color="#1e1b4b" />
-              <directionalLight position={[10, 20, 10]} intensity={0.6} color="#38bdf8" />
-              <pointLight position={[0, 6, 0]} intensity={2.0} color="#fbbf24" distance={20} />
+              <ambientLight intensity={0.5} color="#1e1b4b" />
+              <directionalLight position={[12, 22, 12]} intensity={1.0} color="#38bdf8" />
+              <pointLight position={[0, 8, 0]} intensity={3.5} color="#fbbf24" distance={30} />
             </>
           )}
 
           {lightingMode === 'wireframe' && (
             <>
-              <ambientLight intensity={0.4} color="#00ffff" />
-              <directionalLight position={[15, 20, 15]} intensity={0.8} />
+              <ambientLight intensity={0.8} color="#00ffff" />
+              <directionalLight position={[15, 20, 15]} intensity={1.2} />
             </>
           )}
 

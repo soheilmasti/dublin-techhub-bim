@@ -81,24 +81,43 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
   const gltf = useGLTF('/models/tacoma/Tacoma_Neighborhood.glb');
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-  // Clone & configure materials for SketchUp model
+  // Clone & configure bright architectural materials for SketchUp model
   const sceneClone = useMemo(() => {
     const clone = gltf.scene.clone();
 
     // Center & scale model to world coordinates
-    // Original bounding box: X (1296..6600), Y (836..3548), Z (-14520..-3449)
-    // Scale down by ~0.0035 (approx 1:285)
     const scale = 0.0032;
     clone.scale.set(scale, scale, scale);
     clone.position.set(-3948.0 * scale, -836.0 * scale, 8985.0 * scale);
     clone.rotation.set(0, 0, 0);
 
+    // Architectural Clay & Material Polish
     clone.traverse((child) => {
       if (child instanceof THREE.Mesh) {
         child.castShadow = true;
         child.receiveShadow = true;
+
         if (lightingMode === 'wireframe') {
           child.material = new THREE.MeshBasicMaterial({ color: '#00ffff', wireframe: true });
+        } else if (lightingMode === 'night') {
+          child.material = new THREE.MeshStandardMaterial({
+            color: '#1e293b',
+            roughness: 0.4,
+            metalness: 0.2,
+          });
+        } else if (lightingMode === 'sunset') {
+          child.material = new THREE.MeshStandardMaterial({
+            color: '#fed7aa',
+            roughness: 0.35,
+            metalness: 0.05,
+          });
+        } else {
+          // Bright, pristine Architectural White Clay (Daylight)
+          child.material = new THREE.MeshStandardMaterial({
+            color: '#f8fafc',
+            roughness: 0.28,
+            metalness: 0.05,
+          });
         }
       }
     });
