@@ -73,40 +73,42 @@ const StreetLamp: React.FC<{
     <group position={position} rotation={[0, rotation, 0]}>
       {/* Vertical Sleek Metallic Pole (Height ~ 3.5m = 0.45 Units) */}
       <mesh position={[0, 0.225, 0]} castShadow>
-        <cylinderGeometry args={[0.012, 0.015, 0.45, 8]} />
-        <meshStandardMaterial color="#334155" metalness={0.8} roughness={0.3} />
+        <cylinderGeometry args={[0.012, 0.016, 0.45, 8]} />
+        <meshStandardMaterial color="#1e293b" metalness={0.85} roughness={0.25} />
       </mesh>
 
       {/* Horizontal Luminaire Arm */}
       <mesh position={[0.06, 0.44, 0]} rotation={[0, 0, Math.PI / 2]}>
         <cylinderGeometry args={[0.008, 0.008, 0.12, 8]} />
-        <meshStandardMaterial color="#334155" metalness={0.8} roughness={0.3} />
+        <meshStandardMaterial color="#1e293b" metalness={0.85} roughness={0.25} />
       </mesh>
 
       {/* Modern Fixture Head */}
       <mesh position={[0.11, 0.435, 0]}>
-        <boxGeometry args={[0.04, 0.015, 0.025]} />
+        <boxGeometry args={[0.045, 0.016, 0.028]} />
         <meshStandardMaterial 
-          color={isNight ? '#fbbf24' : '#64748b'} 
-          emissive={isNight ? '#fbbf24' : '#000000'}
-          emissiveIntensity={isNight ? 3.5 : 0}
+          color={isNight ? '#fde047' : '#64748b'} 
+          emissive={isNight ? '#fde047' : '#000000'}
+          emissiveIntensity={isNight ? 6.0 : 0}
+          toneMapped={false}
         />
       </mesh>
 
-      {/* Active Warm Night Illumination Cone & Point Light */}
+      {/* Active Warm Night Illumination: PointLight & Street Floor Glow */}
       {isNight && (
         <>
           <pointLight 
-            position={[0.11, 0.40, 0]} 
-            intensity={2.8} 
+            position={[0.11, 0.38, 0]} 
+            intensity={4.2} 
             color="#fbbf24" 
             distance={5.5} 
-            decay={2} 
+            decay={1.8} 
+            castShadow
           />
-          {/* Subtle Light Pool on Ground */}
-          <mesh position={[0.11, 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-            <circleGeometry args={[0.85, 24]} />
-            <meshBasicMaterial color="#fbbf24" transparent opacity={0.14} />
+          {/* Warm Illumination pool on street asphalt/pavement */}
+          <mesh position={[0.11, 0.008, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <circleGeometry args={[0.75, 24]} />
+            <meshBasicMaterial color="#fbbf24" transparent opacity={0.24} depthWrite={false} />
           </mesh>
         </>
       )}
@@ -114,71 +116,83 @@ const StreetLamp: React.FC<{
   );
 };
 
-// Pedestrian Figures Scattered Across Plazas, Sidewalks, and Entrances
+// Pedestrian Figures Flush on Actual Street, Sidewalk, and Plaza Pavement
 const PEOPLE_COORDINATES: {
   pos: [number, number, number];
   rot: number;
   walking: boolean;
   color: string;
 }[] = [
-  // 1. Dublin Tech Hub 7-Story Tower Plaza & Entrance (Zone 05)
-  { pos: [5.6, 0.04, 5.5], rot: 0.8, walking: true, color: '#f8fafc' },
-  { pos: [5.9, 0.04, 5.8], rot: 0.5, walking: false, color: '#3b82f6' },
-  { pos: [6.1, 0.04, 5.9], rot: 2.2, walking: false, color: '#e2e8f0' },
-  { pos: [6.8, 0.04, 5.2], rot: -0.6, walking: true, color: '#64748b' },
-  { pos: [7.2, 0.04, 5.6], rot: 1.4, walking: true, color: '#f8fafc' },
-  { pos: [6.4, 0.04, 7.2], rot: -1.2, walking: true, color: '#059669' },
-  { pos: [5.2, 0.04, 6.4], rot: 0.3, walking: true, color: '#f1f5f9' },
+  // 1. Central Avenue & Crossings (on Blacktop_New & Polished_Concrete_New sidewalks)
+  { pos: [2.2, 1.111, 1.5], rot: 0.15, walking: true, color: '#f8fafc' },
+  { pos: [2.8, 1.055, 2.8], rot: -1.2, walking: true, color: '#3b82f6' },
+  { pos: [3.4, 1.032, 3.4], rot: 0.4, walking: true, color: '#64748b' },
+  { pos: [4.0, 1.011, 4.0], rot: -1.5, walking: true, color: '#e2e8f0' },
+  { pos: [1.5, 1.189, -0.5], rot: 1.8, walking: true, color: '#f8fafc' },
+  { pos: [2.0, 1.165, -1.8], rot: -0.6, walking: false, color: '#475569' },
 
-  // 2. Commercial Mall & Outdoor Cafe Terrace (Zone 03)
-  { pos: [-0.4, 0.04, -0.6], rot: 1.1, walking: true, color: '#f59e0b' },
-  { pos: [-0.7, 0.04, -0.9], rot: -0.4, walking: false, color: '#f8fafc' },
-  { pos: [-1.2, 0.04, -1.4], rot: 2.5, walking: true, color: '#475569' },
-  { pos: [-1.6, 0.04, -0.8], rot: -1.8, walking: true, color: '#e2e8f0' },
-  { pos: [-0.1, 0.04, 0.4], rot: 0.2, walking: true, color: '#38bdf8' },
-  { pos: [-1.8, 0.04, -2.1], rot: 1.6, walking: false, color: '#f8fafc' },
-  { pos: [-2.2, 0.04, -1.8], rot: -1.4, walking: false, color: '#94a3b8' },
+  // 2. Dublin Tech Hub Tower Plaza & Entrance (Zone 03) (on Blacktop_New & Plaza)
+  { pos: [4.8, 0.973, 5.5], rot: 0.8, walking: true, color: '#f8fafc' },
+  { pos: [5.0, 0.987, 5.0], rot: 0.5, walking: false, color: '#3b82f6' },
+  { pos: [5.2, 0.941, 6.4], rot: -1.2, walking: true, color: '#059669' },
+  { pos: [4.2, 0.938, 6.8], rot: 1.4, walking: true, color: '#f1f5f9' },
+  { pos: [3.8, 0.998, 5.0], rot: 2.2, walking: false, color: '#e2e8f0' },
 
-  // 3. Main Central Street & Sidewalk Crossings
-  { pos: [1.8, 0.04, 1.2], rot: 0.1, walking: true, color: '#f8fafc' },
-  { pos: [2.2, 0.04, 1.6], rot: 0.15, walking: true, color: '#64748b' },
-  { pos: [3.4, 0.04, 2.5], rot: -1.5, walking: true, color: '#f8fafc' },
-  { pos: [3.8, 0.04, 2.8], rot: -1.3, walking: true, color: '#2563eb' },
-  { pos: [4.5, 0.04, 3.8], rot: 0.4, walking: true, color: '#e2e8f0' },
-  { pos: [1.2, 0.04, -0.5], rot: -0.8, walking: true, color: '#f8fafc' },
-  { pos: [2.8, 0.04, -1.2], rot: 2.1, walking: true, color: '#475569' },
+  // 3. Commercial Mall & Outdoor Terraces (Zone 04) (on Polished_Concrete_New)
+  { pos: [-2.5, 1.690, 1.5], rot: 1.1, walking: true, color: '#f59e0b' },
+  { pos: [-2.8, 1.670, 2.0], rot: -0.4, walking: false, color: '#f8fafc' },
+  { pos: [-2.5, 1.706, 1.0], rot: 2.5, walking: true, color: '#475569' },
+  { pos: [-2.5, 1.719, 0.5], rot: -1.8, walking: true, color: '#e2e8f0' },
+  { pos: [-3.0, 1.746, -0.5], rot: 0.2, walking: false, color: '#94a3b8' },
 
-  // 4. Urban Design Port Promenade (Zone 01)
-  { pos: [-6.2, 0.04, -5.2], rot: 0.6, walking: true, color: '#0284c7' },
-  { pos: [-6.8, 0.04, -5.8], rot: -0.9, walking: false, color: '#f8fafc' },
-  { pos: [-7.4, 0.04, -6.5], rot: 1.2, walking: true, color: '#cbd5e1' },
-  { pos: [-7.8, 0.04, -5.2], rot: -1.6, walking: true, color: '#e2e8f0' },
+  // 4. Residential Villas Pathway (Zone 02) (on Concrete_Stamped_Ashlar)
+  { pos: [-4.8, 1.537, 9.8], rot: 1.2, walking: true, color: '#10b981' },
+  { pos: [-5.4, 1.549, 10.8], rot: -0.5, walking: true, color: '#f8fafc' },
+  { pos: [-5.8, 1.598, 11.5], rot: 0.8, walking: false, color: '#475569' },
+  { pos: [-6.2, 1.683, 12.0], rot: 1.6, walking: true, color: '#cbd5e1' },
 
-  // 5. Residential Villas Pathway (Zone 02)
-  { pos: [-5.4, 0.04, 10.8], rot: 1.2, walking: true, color: '#10b981' },
-  { pos: [-5.8, 0.04, 11.5], rot: -0.5, walking: true, color: '#f8fafc' },
-  { pos: [-6.5, 0.04, 12.2], rot: 0.8, walking: false, color: '#475569' },
+  // 5. Urban Design Port Promenade (Zone 01) (on Concrete_Stamped_Ashlar)
+  { pos: [-5.8, 1.875, -4.5], rot: 0.6, walking: true, color: '#0284c7' },
+  { pos: [-6.4, 1.877, -5.2], rot: -0.9, walking: false, color: '#f8fafc' },
+  { pos: [-7.0, 1.909, -5.8], rot: 1.2, walking: true, color: '#cbd5e1' },
+  { pos: [-7.5, 1.957, -6.5], rot: -1.6, walking: true, color: '#e2e8f0' },
 
-  // 6. Cultural Pavilion & Competition Landmark (Zone 04)
-  { pos: [6.6, 0.04, 14.8], rot: 1.5, walking: true, color: '#8b5cf6' },
-  { pos: [7.2, 0.04, 15.6], rot: -0.7, walking: false, color: '#f8fafc' },
-  { pos: [7.6, 0.04, 16.2], rot: 2.1, walking: true, color: '#e2e8f0' }
+  // 6. Cultural Pavilion Landmark Area (Zone 05) (on Blacktop_New)
+  { pos: [5.0, 0.817, 11.8], rot: 1.5, walking: true, color: '#8b5cf6' },
+  { pos: [5.5, 0.791, 12.5], rot: -0.7, walking: false, color: '#f8fafc' },
+  { pos: [6.2, 0.743, 13.5], rot: 2.1, walking: true, color: '#e2e8f0' }
 ];
 
-// Streetlamp Positions Along the Central Avenue & Plazas
+// Streetlamp Positions Flush on Street Level Along Avenues, Sidewalks & Plazas
 const STREETLAMP_POSITIONS: [number, number, number, number][] = [
   // [x, y, z, rotation]
-  [4.8, 0.02, 4.8, Math.PI / 4],
-  [5.2, 0.02, 6.8, Math.PI / 3],
-  [2.2, 0.02, 2.2, Math.PI / 4],
-  [0.5, 0.02, 0.5, Math.PI / 4],
-  [-1.2, 0.02, -1.2, Math.PI / 4],
-  [-3.0, 0.02, -3.0, Math.PI / 4],
-  [3.2, 0.02, -0.8, -Math.PI / 4],
-  [5.0, 0.02, 1.2, -Math.PI / 4],
-  [6.8, 0.02, 13.5, Math.PI / 2],
-  [-4.8, 0.02, 9.8, -Math.PI / 3],
-  [-5.8, 0.02, -4.5, Math.PI / 2]
+  // 1. Central Avenue & Tower Area (on Blacktop_New & Concrete Sidewalks)
+  [4.8, 0.973, 5.5, Math.PI / 4],
+  [4.2, 0.938, 6.8, Math.PI / 3],
+  [2.5, 1.073, 2.5, Math.PI / 4],
+  [3.0, 1.044, 3.0, Math.PI / 4],
+  [2.0, 1.121, 0.0, Math.PI / 4],
+  [1.5, 1.186, -0.5, Math.PI / 4],
+  [2.5, 1.165, -2.0, -Math.PI / 4],
+
+  // 2. West Commercial Plaza (on Polished_Concrete_New & Blacktop_New)
+  [-2.5, 1.674, 2.0, -Math.PI / 4],
+  [-3.0, 1.681, 1.5, -Math.PI / 4],
+  [-2.0, 1.762, -1.5, Math.PI / 4],
+
+  // 3. Residential Villas Pathway (on Concrete_Stamped_Ashlar)
+  [-4.8, 1.537, 9.8, -Math.PI / 3],
+  [-5.8, 1.598, 11.5, -Math.PI / 3],
+  [-6.5, 1.841, 12.5, -Math.PI / 3],
+
+  // 4. Waterfront / Port Promenade (on Polished_Concrete_New & Concrete_Stamped_Ashlar)
+  [-5.8, 1.875, -4.5, Math.PI / 2],
+  [-6.4, 1.877, -5.2, Math.PI / 2],
+  [-7.0, 1.909, -5.8, Math.PI / 2],
+
+  // 5. Cultural Pavilion Street (on Blacktop_New)
+  [5.5, 0.791, 12.5, Math.PI / 2],
+  [6.2, 0.743, 13.5, Math.PI / 2]
 ];
 
 export const ArchitecturalEntourage: React.FC<ArchitecturalEntourageProps> = ({ lightingMode }) => {
@@ -186,7 +200,7 @@ export const ArchitecturalEntourage: React.FC<ArchitecturalEntourageProps> = ({ 
 
   return (
     <group position={[0, 0, 0]}>
-      {/* 1. Scale Human Figures (Pedestrians, Professionals, Visitors) */}
+      {/* 1. Scale Human Figures (Pedestrians, Professionals, Visitors - Flush on Pavement) */}
       {PEOPLE_COORDINATES.map((person, idx) => (
         <ScaleFigure
           key={idx}

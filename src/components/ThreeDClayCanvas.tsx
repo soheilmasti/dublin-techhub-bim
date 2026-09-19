@@ -3,8 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { 
   OrbitControls, 
   ContactShadows, 
-  Environment,
-  Sky
+  Environment
 } from '@react-three/drei';
 import * as THREE from 'three';
 import type { OrbitControls as OrbitControlsType } from 'three-stdlib';
@@ -133,37 +132,6 @@ const CameraController: React.FC<{
   );
 };
 
-// Museum-Grade Architectural Pedestal Base
-const ArchitecturalPlinth: React.FC<{ lightingMode: string }> = ({ lightingMode }) => {
-  const isWireframe = lightingMode === 'wireframe';
-  const isNight = lightingMode === 'night';
-  const isSunset = lightingMode === 'sunset';
-
-  const baseColor = isWireframe ? '#040814' : isNight ? '#090d16' : isSunset ? '#262626' : '#1e232d';
-
-  return (
-    <group position={[0, -0.15, 0]}>
-      {/* Museum Display Beveled Plinth */}
-      <mesh receiveShadow position={[0, -0.2, 0]}>
-        <cylinderGeometry args={[22, 22.5, 0.4, 64]} />
-        <meshStandardMaterial color={baseColor} roughness={0.4} metalness={0.2} />
-      </mesh>
-
-      {/* Outer Polished Metallic Bevel Ring */}
-      <mesh position={[0, 0.02, 0]}>
-        <ringGeometry args={[21.8, 22.0, 64]} />
-        <meshStandardMaterial color={isWireframe ? '#00ffff' : '#64748b'} metalness={0.8} roughness={0.2} side={THREE.DoubleSide} />
-      </mesh>
-
-      {/* Subtle CAD Grid on Pedestal Top */}
-      <gridHelper 
-        args={[36, 36, isWireframe ? '#00ffff' : '#334155', isWireframe ? '#083344' : '#1e293b']} 
-        position={[0, 0.025, 0]} 
-      />
-    </group>
-  );
-};
-
 export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
   categories,
   onSelectCategory,
@@ -210,28 +178,8 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
         className="w-full h-full"
       >
         <Suspense fallback={null}>
-          {/* Natural Atmospheric Sky Horizon */}
-          {lightingMode === 'day' && (
-            <Sky 
-              distance={450000} 
-              sunPosition={[60, 45, 60]} 
-              inclination={0.6} 
-              azimuth={0.25} 
-              turbidity={4} 
-              rayleigh={1.2} 
-            />
-          )}
-
-          {lightingMode === 'sunset' && (
-            <Sky 
-              distance={450000} 
-              sunPosition={[80, 8, 40]} 
-              inclination={0.1} 
-              azimuth={0.15} 
-              turbidity={10} 
-              rayleigh={3.5} 
-            />
-          )}
+          {/* Clean Studio Horizon Background - NO Artificial Sun Disc */}
+          <color attach="background" args={[lightingMode === 'night' ? '#080c14' : lightingMode === 'sunset' ? '#1c1520' : '#eaeff5']} />
 
           {/* Realistic PBR Environment Reflections */}
           <Environment preset={lightingMode === 'sunset' ? 'sunset' : lightingMode === 'night' ? 'night' : 'city'} />
@@ -311,8 +259,6 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
             </>
           )}
 
-          {/* Museum Pedestal Display Base */}
-          <ArchitecturalPlinth lightingMode={lightingMode} />
 
           {/* Real SketchUp Tacoma Site Model with 5 Interactive Clickable Hotspots & Authentic Textures */}
           <TacomaNeighborhoodModel
