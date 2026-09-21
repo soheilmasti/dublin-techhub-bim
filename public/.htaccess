@@ -1,28 +1,5 @@
-﻿<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-
-  # Handle SPA Routing: Send all requests to index.html if file/dir does not exist
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^ index.html [L]
-</IfModule>
-
-# MIME Types for 3D Assets
-<IfModule mod_mime.c>
-  AddType model/gltf-binary .glb
-  AddType model/gltf+json .gltf
-  AddType application/wasm .wasm
-</IfModule>
-
-# Enable Browser Caching
-<IfModule mod_expires.c>
-  ExpiresActive On
-  ExpiresByType model/gltf-binary "access plus 1 month"
-  ExpiresByType text/css "access plus 1 month"
-  ExpiresByType application/javascript "access plus 1 month"
-  ExpiresByType image/webp "access plus 1 month"
-  ExpiresByType image/jpeg "access plus 1 month"
-  ExpiresByType image/png "access plus 1 month"
-  ExpiresByType image/svg+xml "access plus 1 month"
-</IfModule>
+﻿RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
