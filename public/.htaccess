@@ -10,6 +10,7 @@ RewriteRule ^llms\.txt$ - [L]
 RewriteRule ^llms-full\.txt$ - [L]
 RewriteRule ^robots\.txt$ - [L]
 RewriteRule ^sitemap\.xml$ - [L]
+RewriteRule ^google[a-z0-9]+\.html$ - [L]
 
 # SPA fallback
 RewriteCond %{REQUEST_FILENAME} !-f
