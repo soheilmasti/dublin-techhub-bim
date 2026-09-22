@@ -1,0 +1,44 @@
+# Robots.txt for BIMCO (https://bimco.es)
+# Fully optimized for Search Engines & Generative AI Search Engines
+
+User-agent: *
+Allow: /
+Disallow: /tmp/
+Disallow: /.git/
+
+# Google Search & Google AI Overviews / Gemini
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# OpenAI ChatGPT & ChatGPT Search
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Perplexity AI Engine
+User-agent: PerplexityBot
+Allow: /
+
+# Anthropic Claude
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+Allow: /
+
+# Microsoft Bing & Copilot
+User-agent: Bingbot
+Allow: /
+
+# Apple Intelligence & Applebot
+User-agent: Applebot
+Allow: /
+
+# Sitemaps & LLM Context
+Sitemap: https://bimco.es/sitemap.xml
+# LLMs Text Context
+# https://bimco.es/llms.txt
+# https://bimco.es/llms-full.txt

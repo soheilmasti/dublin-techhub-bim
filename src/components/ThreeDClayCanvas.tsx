@@ -18,7 +18,8 @@ import {
   MousePointerClick,
   Camera,
   Play,
-  Pause
+  Pause,
+  Zap
 } from 'lucide-react';
 import { TacomaNeighborhoodModel } from './TacomaNeighborhoodModel';
 import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
@@ -28,6 +29,7 @@ interface ThreeDClayCanvasProps {
   onSelectCategory: (category: CategoryBuilding) => void;
   selectedCategory: CategoryBuilding | null;
   currentLanguage?: LanguageCode;
+  onExit3D?: () => void;
 }
 
 // 5 Zone Centroid & Camera Targets for Smooth Focus
@@ -136,7 +138,8 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
   categories,
   onSelectCategory,
   selectedCategory,
-  currentLanguage = 'en'
+  currentLanguage = 'en',
+  onExit3D
 }) => {
   const [lightingMode, setLightingMode] = useState<'day' | 'sunset' | 'night' | 'wireframe'>('day');
   const [autoRotate, setAutoRotate] = useState<boolean>(false);
@@ -343,6 +346,17 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
           <Moon className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-indigo-300 shrink-0" />
           <span className="hidden md:inline">{t.nightMode}</span>
         </button>
+
+        {onExit3D && (
+          <button
+            onClick={() => { sound.playClick(); onExit3D(); }}
+            className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl text-xs font-bold text-blue-700 hover:bg-blue-50 transition-all cursor-pointer flex items-center gap-1 border-l border-slate-200/80 ml-1 pl-2"
+            title={currentLanguage === 'fa' ? 'بازگشت به نسخه سبک و پرسرعت' : 'Switch to Ultra-Fast 2D Mode'}
+          >
+            <Zap className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+            <span className="hidden md:inline">{currentLanguage === 'fa' ? 'نسخه سبک' : 'Fast Mode'}</span>
+          </button>
+        )}
       </div>
 
       {/* BOTTOM: Zone Quick-Jump Pills & Interactive HUD (Hidden when drawer is open) */}

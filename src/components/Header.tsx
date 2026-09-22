@@ -10,7 +10,9 @@ import {
   Sparkles,
   Sliders,
   Menu,
-  X
+  X,
+  FolderSync,
+  Bot
 } from 'lucide-react';
 import { SiteSettings } from '../types';
 import { sound } from '../utils/audio';
@@ -22,6 +24,8 @@ interface HeaderProps {
   onUpdateSettings: (newSettings: Partial<SiteSettings>) => void;
   onOpenCustomizer: () => void;
   onOpenAbout: () => void;
+  onOpenWhatsApp?: (presetText?: string) => void;
+  onOpenAiBooster?: () => void;
   totalProjectsCount: number;
   categoriesCount: number;
   currentLanguage: LanguageCode;
@@ -34,7 +38,9 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenCustomizer,
   totalProjectsCount,
   currentLanguage,
-  onLanguageChange
+  onLanguageChange,
+  onOpenWhatsApp,
+  onOpenAiBooster
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
@@ -116,20 +122,41 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           <button
-            onClick={() => handleNavClick('dublin-bim-audit')}
+            onClick={() => handleNavClick('bim-outsourcing')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-              settings.activeView === 'dublin-bim-audit'
-                ? 'bg-gradient-to-r from-emerald-600 to-blue-600 text-white shadow-md scale-105 ring-2 ring-emerald-400'
-                : 'bg-emerald-500/10 text-emerald-800 hover:bg-emerald-500/20 border border-emerald-500/30'
+              settings.activeView === 'bim-outsourcing'
+                ? 'bg-blue-600 text-white shadow-md scale-105 ring-2 ring-blue-400'
+                : 'bg-blue-50 text-blue-900 hover:bg-blue-100 border border-blue-200'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600 animate-spin" />
-            <span>{t.dublinBim}</span>
+            <span>{t.bimOutsourcing || 'BIM Outsourcing & Delivery'}</span>
+            {t.bimOutsourcingBadge && (
+              <span className="text-[9px] bg-emerald-500 text-white px-1.5 py-0.5 rounded-full font-mono font-bold">
+                {t.bimOutsourcingBadge}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => handleNavClick('client-portal')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+              settings.activeView === 'client-portal'
+                ? 'bg-indigo-600 text-white shadow-md scale-105 ring-2 ring-indigo-400'
+                : 'bg-indigo-50/90 text-indigo-900 hover:bg-indigo-100 border border-indigo-200'
+            }`}
+          >
+            <FolderSync className="w-3.5 h-3.5 text-indigo-600" />
+            <span>{t.clientPortal || 'Client Portal'}</span>
+            <span className="text-[9px] bg-indigo-500 text-white px-1.5 py-0.5 rounded-full font-mono font-bold flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse"></span>
+              {t.clientPortalBadge || 'Live'}
+            </span>
           </button>
         </div>
 
         {/* Right Controls: Language Selector, Sound, WhatsApp & Mobile Menu */}
         <div className="flex items-center gap-1.5 pointer-events-auto">
+
           {/* 7-Language Switcher */}
           <LanguageSelector
             currentLanguage={currentLanguage}
@@ -146,15 +173,21 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           {/* Direct WhatsApp Contact */}
-          <a
-            href="https://wa.me/34610855434"
-            target="_blank"
-            rel="noreferrer"
-            className="glass-panel p-2 rounded-xl shadow-clay-sm text-emerald-700 hover:bg-emerald-50 transition-colors border border-emerald-100 hidden sm:flex items-center gap-1"
+          <button
+            onClick={() => {
+              sound.playClick();
+              if (onOpenWhatsApp) {
+                onOpenWhatsApp();
+              } else {
+                window.open('https://wa.me/34610855434', '_blank');
+              }
+            }}
+            className="glass-panel p-2 rounded-xl shadow-clay-sm text-emerald-700 hover:bg-emerald-50 transition-colors border border-emerald-200 hidden sm:flex items-center gap-1.5 cursor-pointer"
             title={t.contactWhatsapp}
           >
             <PhoneCall className="w-4 h-4 text-emerald-600" />
-          </a>
+            <span className="hidden xl:inline text-[11px] font-bold text-emerald-900">WhatsApp</span>
+          </button>
 
           {/* Customizer Button (Desktop) */}
           <button
@@ -252,33 +285,56 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             <button
-              onClick={() => handleNavClick('dublin-bim-audit')}
+              onClick={() => handleNavClick('bim-outsourcing')}
               className={`w-full flex items-center justify-between p-3 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
-                settings.activeView === 'dublin-bim-audit'
-                  ? 'bg-gradient-to-r from-emerald-600 to-blue-600 text-white shadow-md'
-                  : 'bg-emerald-50 text-emerald-900 border border-emerald-200'
+                settings.activeView === 'bim-outsourcing'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'bg-blue-50 text-blue-900 border border-blue-200'
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <Sparkles className="w-4 h-4 text-emerald-600 animate-spin" />
-                <span>{t.dublinBim}</span>
+                <Sparkles className="w-4 h-4 text-blue-600" />
+                <span>{t.bimOutsourcing || 'BIM Outsourcing & Delivery'}</span>
               </div>
-              <span className="text-[10px] font-mono bg-emerald-200 text-emerald-800 px-1.5 py-0.5 rounded">
-                LOD 350
+              <span className="text-[10px] font-mono bg-emerald-500 text-white px-2 py-0.5 rounded-full font-bold">
+                50% OFF
+              </span>
+            </button>
+
+            <button
+              onClick={() => handleNavClick('client-portal')}
+              className={`w-full flex items-center justify-between p-3 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
+                settings.activeView === 'client-portal'
+                  ? 'bg-indigo-600 text-white shadow-md'
+                  : 'bg-indigo-50 text-indigo-900 border border-indigo-200'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <FolderSync className="w-4 h-4 text-indigo-600" />
+                <span>{t.clientPortal || 'Client Portal & Tracker'}</span>
+              </div>
+              <span className="text-[10px] font-mono bg-indigo-600 text-white px-2 py-0.5 rounded-full font-bold">
+                LIVE
               </span>
             </button>
 
             {/* Mobile Direct WhatsApp Action */}
             <div className="pt-2 flex items-center gap-2">
-              <a
-                href="https://wa.me/34610855434"
-                target="_blank"
-                rel="noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-2xl bg-emerald-600 text-white text-xs font-bold shadow-md active:scale-95 transition-transform"
+              <button
+                onClick={() => {
+                  sound.playClick();
+                  setIsMobileMenuOpen(false);
+                  if (onOpenWhatsApp) {
+                    onOpenWhatsApp();
+                  } else {
+                    window.open('https://wa.me/34610855434', '_blank');
+                  }
+                }}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-2xl bg-emerald-600 text-white text-xs font-bold shadow-md active:scale-95 transition-transform cursor-pointer"
               >
                 <PhoneCall className="w-3.5 h-3.5" />
                 <span>WhatsApp (+34 610 855 434)</span>
-              </a>
+              </button>
 
               <button
                 onClick={() => { sound.playClick(); onOpenCustomizer(); setIsMobileMenuOpen(false); }}

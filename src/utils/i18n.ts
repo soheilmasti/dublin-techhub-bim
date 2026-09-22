@@ -28,6 +28,11 @@ export interface TranslationDict {
   projectsArchive: string;
   resume: string;
   dublinBim: string;
+  bimOutsourcing?: string;
+  bimOutsourcingBadge?: string;
+  clientPortal?: string;
+  clientPortalBadge?: string;
+  askAiAboutUs?: string;
   studioName: string;
   studioTagline: string;
   returnToHome: string;
@@ -150,6 +155,11 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     projectsArchive: 'Projectes',
     resume: 'Currículum',
     dublinBim: '🇮🇪 Demo Dublin BIM',
+    bimOutsourcing: 'Externalització i Modelat BIM',
+    bimOutsourcingBadge: 'Estalvi 50%',
+    clientPortal: 'Portal de Clients i Comandes',
+    clientPortalBadge: 'Seguiment en Viu',
+    askAiAboutUs: 'Pregunta a la IA sobre BIMCO',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'ARQUITECTE SÈNIOR I ESPECIALISTA BIM // BARCELONA',
     returnToHome: 'Tornar al Portafoli de Treballs',
@@ -286,6 +296,11 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     projectsArchive: 'پروژه‌ها',
     resume: 'رزومه',
     dublinBim: '🇮🇪 دمو دوبلین (BIM)',
+    bimOutsourcing: 'برون‌سپاری و مدل‌سازی BIM',
+    bimOutsourcingBadge: '۵۰٪ کاهش هزینه',
+    clientPortal: 'پورتال سفارشات و رهگیری زنده',
+    clientPortalBadge: 'رهگیری زنده',
+    askAiAboutUs: 'پرسش از هوش مصنوعی درباره BIMCO',
     studioName: 'سهیل مستی',
     studioTagline: 'معمار ارشد و متخصص BIM // بارسلون و تهران',
     returnToHome: 'بازگشت به پورتفولیو کارها',
@@ -422,6 +437,11 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     projectsArchive: 'Proyectos',
     resume: 'Currículum',
     dublinBim: '🇮🇪 Demo Dublin BIM',
+    bimOutsourcing: 'Outsourcing y Modelado BIM',
+    bimOutsourcingBadge: 'Ahorro 50%',
+    clientPortal: 'Portal de Clientes y Pedidos',
+    clientPortalBadge: 'Seguimiento en Vivo',
+    askAiAboutUs: 'Pregunta a la IA sobre BIMCO',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'ARQUITECTO SENIOR Y ESPECIALISTA BIM // BARCELONA',
     returnToHome: 'Volver al Portafolio de Trabajos',
@@ -558,6 +578,11 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     projectsArchive: 'Projects',
     resume: 'Resume / CV',
     dublinBim: '🇮🇪 Dublin BIM Audit',
+    bimOutsourcing: 'BIM Outsourcing & Delivery',
+    bimOutsourcingBadge: 'Save 50%',
+    clientPortal: 'Client Portal & Live Tracker',
+    clientPortalBadge: 'Live Tracker',
+    askAiAboutUs: 'Ask AI About BIMCO',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'SENIOR ARCHITECT & BIM SPECIALIST // BARCELONA & TEHRAN',
     returnToHome: 'Return to Works Portfolio',
@@ -694,6 +719,11 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     projectsArchive: 'Projets',
     resume: 'Curriculum Vitae',
     dublinBim: '🇮🇪 Démo Dublin BIM',
+    bimOutsourcing: 'Sous-traitance et Modélisation BIM',
+    bimOutsourcingBadge: 'Économie 50%',
+    clientPortal: 'Portail Clients & Suivi en Direct',
+    clientPortalBadge: 'Suivi en Direct',
+    askAiAboutUs: 'Demandez à l’IA sur BIMCO',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'ARCHITECTE SENIOR & SPÉCIALISTE BIM // BARCELONE',
     returnToHome: 'Retour au Portfolio de Projets',
@@ -830,6 +860,11 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     projectsArchive: 'Projekte',
     resume: 'Lebenslauf',
     dublinBim: '🇮🇪 Dublin BIM-Audit',
+    bimOutsourcing: 'BIM-Outsourcing & Delivery',
+    bimOutsourcingBadge: '50% Ersparnis',
+    clientPortal: 'Kundenportal & Live-Tracking',
+    clientPortalBadge: 'Live-Tracking',
+    askAiAboutUs: 'KI nach BIMCO fragen',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'SENIOR-ARCHITEKT & BIM-SPEZIALIST // BARCELONA',
     returnToHome: 'Zurück zum Projekt-Portfolio',
@@ -966,6 +1001,11 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     projectsArchive: 'Progetti',
     resume: 'Curriculum Vitae',
     dublinBim: '🇮🇪 Demo Dublin BIM',
+    bimOutsourcing: 'Outsourcing e Modellazione BIM',
+    bimOutsourcingBadge: 'Risparmio 50%',
+    clientPortal: 'Portale Clienti & Tracciamento Live',
+    clientPortalBadge: 'Tracciamento Live',
+    askAiAboutUs: 'Chiedi all’IA su BIMCO',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'ARCHITETTO SENIOR E SPECIALISTA BIM // BARCELLONA',
     returnToHome: 'Torna al Portfolio dei Lavori',

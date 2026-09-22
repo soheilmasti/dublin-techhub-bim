@@ -93,6 +93,50 @@ export interface SiteSettings {
   studioTagline: string;
   backgroundImageUrl: string;
   maquetteStyle: 'clay-white' | 'clay-warm' | 'blueprint-neon' | 'twilight-night';
-  activeView: 'maquette' | 'grid' | '3d' | 'resume' | 'dublin-bim-audit';
+  activeView: 'maquette' | 'grid' | '3d' | 'resume' | 'dublin-bim-audit' | 'bim-outsourcing' | 'client-portal';
   soundEnabled: boolean;
 }
+
+export interface ProjectMilestone {
+  stageNumber: number;
+  stageName: string;
+  description: string;
+  completed: boolean;
+  current: boolean;
+  date: string;
+}
+
+export interface WeeklyBimReport {
+  weekNumber: number;
+  weekRange: string;
+  clashesResolved: number;
+  sheetsDelivered: number;
+  modelHealthScore: string;
+  summary: string;
+  achievements: string[];
+  nextWeekPlan: string[];
+  revitAuditStatus: 'Passed' | 'In Review' | 'Flagged';
+}
+
+export interface ProjectOrder {
+  orderId: string;
+  clientName: string;
+  projectTitle: string;
+  location: string;
+  countryCode: 'IE' | 'GB' | 'ES' | 'EU';
+  lodLevel: string;
+  startDate: string;
+  targetDelivery: string;
+  status: 'In Progress' | 'In Review' | 'Completed';
+  currentStage: string;
+  overallProgress: number; // 0 to 100
+  milestones: ProjectMilestone[];
+  weeklyReports: WeeklyBimReport[];
+  cloudWorkspace: {
+    platform: string;
+    hubName: string;
+    centralModelName: string;
+    lastSyncTime: string;
+  };
+}
+
