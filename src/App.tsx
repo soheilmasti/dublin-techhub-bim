@@ -68,23 +68,25 @@ export const App: React.FC = () => {
     setIsWhatsAppModalOpen(true);
   };
 
-  // Detect Visitor Language on first load (Cookie -> localStorage -> IP Geolocation)
+  // Detect Visitor Language on first load (URL Param -> Cookie -> localStorage -> IP Geolocation)
   useEffect(() => {
-    detectVisitorLanguage().then((detected) => {
-      setLanguage(detected);
-    });
-
-    // Support deep links & search engine indexed URLs (?view=...&lang=...)
     try {
       const urlParams = new URLSearchParams(window.location.search);
+      const langParam = urlParams.get('lang');
       const viewParam = urlParams.get('view');
+
       if (viewParam && ['bim-outsourcing', 'client-portal', 'partners', 'dublin-bim-audit', 'grid', 'resume', '3d'].includes(viewParam)) {
         setSettings(prev => ({ ...prev, activeView: viewParam as SiteSettings['activeView'] }));
       }
-      const langParam = urlParams.get('lang');
+
       if (langParam && ['en', 'es', 'ca', 'de', 'fr', 'it', 'fa'].includes(langParam)) {
         setLanguage(langParam as LanguageCode);
+      } else {
+        detectVisitorLanguage().then((detected) => {
+          setLanguage(detected);
+        });
       }
+
       if (urlParams.get('ai') === 'true' || viewParam === 'ai-booster') {
         setIsAiBoosterModalOpen(true);
       }

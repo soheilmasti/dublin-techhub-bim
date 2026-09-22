@@ -16,7 +16,9 @@ import {
   Layers,
   Copy,
   PhoneCall,
-  UserCheck
+  UserCheck,
+  Code,
+  Brain
 } from 'lucide-react';
 import { LanguageCode } from '../utils/i18n';
 import { PartnerApplication } from '../types';
@@ -331,8 +333,183 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
           </div>
         </div>
 
+        {/* Core Leadership & Specialist Network Showcase */}
+        <section className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-4 border-b border-gray-200">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-mono font-bold mb-2">
+                <Users className="w-3.5 h-3.5" />
+                <span>{isRTL ? 'معرفی تیم و ساختار تخصصی' : 'LEADERSHIP & CORE SPECIALISTS'}</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+                {isRTL ? 'تیم راهبری و شبکه همکاران کلیدی BIMCO' : 'Core Leadership & Specialist Practice'}
+              </h2>
+            </div>
+            <p className="text-xs text-gray-500 font-mono sm:text-right max-w-sm">
+              {isRTL 
+                ? 'ترکیب تفکر خلاق معماری، برنامه‌نویسی اتوماسیون مهندسی و الگوریتم‌های سازمانی هوش مصنوعی'
+                : 'Combining architectural design rigor, engineering automation programming & AI organizational strategy.'}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            {/* Featured Leader Card: Soheil Masti (Spans 2 cols on lg) */}
+            <div className="lg:col-span-2 bg-gradient-to-br from-slate-900 via-slate-950 to-blue-950 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800 flex flex-col justify-between space-y-6 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+
+              <div className="space-y-4 relative z-10">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-md font-mono shrink-0">
+                      SM
+                    </div>
+                    <div>
+                      <h3 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+                        <span>{isRTL ? 'سهیل مستی' : 'Soheil Masti'}</span>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 font-bold">
+                          {isRTL ? 'بیم کوردینیتور ارشد' : 'LEAD BIM COORDINATOR'}
+                        </span>
+                      </h3>
+                      <p className="text-xs text-blue-300 font-mono">
+                        {isRTL ? 'معمار ارشد، موسس و استراتژیست سیستم‌های BIM و هوش مصنوعی' : 'Senior Architect, Founder & BIM/AI Systems Strategist'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Barcelona &amp; International Delivery</span>
+                  </div>
+                </div>
+
+                {/* 3 Core Strengths / نقاط قوت اصلی */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-1.5">
+                    <div className="text-xs font-bold text-cyan-300 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                      <span>{isRTL ? 'خلاقیت کم‌نظیر معماری' : 'Creative Design Rigor'}</span>
+                    </div>
+                    <p className="text-[11px] text-gray-300 leading-relaxed">
+                      {isRTL 
+                        ? 'تلفیق نوآورانه زیبایی‌شناسی فرمی معاصر با دقت فنی اجرای ساختمان و حل چالش‌های فضایی پیچیده.'
+                        : 'Unique ability to balance bold contemporary architectural concepts with millimeter-accurate constructability.'}
+                    </p>
+                  </div>
+
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-1.5">
+                    <div className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                      <Code className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <span>{isRTL ? 'برنامه‌نویسی مهندسی' : 'Engineering Programming'}</span>
+                    </div>
+                    <p className="text-[11px] text-gray-300 leading-relaxed">
+                      {isRTL 
+                        ? 'توسعه اسکریپت‌های اختصاصی پایتون، سی‌شارپ و داینامو برای اتوماسیون جریان‌های کاری، رفع کلش و حذف خطای انسانی.'
+                        : 'Custom Python, C#, and Dynamo scripting for engineering process management, clash QA, and model automation.'}
+                    </p>
+                  </div>
+
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-1.5">
+                    <div className="text-xs font-bold text-indigo-300 flex items-center gap-1.5">
+                      <Brain className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                      <span>{isRTL ? 'الگوریتم‌های هوش مصنوعی' : 'AI & Organizational Structure'}</span>
+                    </div>
+                    <p className="text-[11px] text-gray-300 leading-relaxed">
+                      {isRTL 
+                        ? 'تسلط بر معماری الگوریتم‌های AI و مهندسی مجدد ساختار سازمانی دفاتر معماری جهت حداکثر راندمان و تصمیم‌گیری هوشمند.'
+                        : 'Deep mastery of AI algorithmic pipelines, Reverse-RAG, and restructuring architectural practice workflows for peak efficiency.'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Tech Pills */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-2">
+                  {[
+                    'Revit Architecture (LOD 400)',
+                    'Navisworks Clash Resolution',
+                    'Custom Python / C# Scripts',
+                    'AI Systems Architecture',
+                    'Dynamo & Grasshopper',
+                    'ISO 19650 CDE Lead'
+                  ].map((skill, idx) => (
+                    <span key={idx} className="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-white/10 text-gray-200 border border-white/10">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Direct Quick WhatsApp on Card */}
+              <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 text-xs font-mono text-gray-400 relative z-10">
+                <span>Direct Coordination: WhatsApp (+34 610 855 434)</span>
+                <button
+                  type="button"
+                  onClick={() => onOpenWhatsApp?.('Hi Soheil, I would like to consult with you on architectural BIM coordination and engineering automation...')}
+                  className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <PhoneCall className="w-3 h-3" />
+                  <span>{isRTL ? 'گفتگوی مستقیم با سهیل مستی' : 'Contact Lead'}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Specialist Disciplines Grid (Col 3 on lg) */}
+            <div className="space-y-4">
+              
+              {/* Discipline 1: Architectural Modeler */}
+              <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-gray-900">{isRTL ? 'مدل‌سازی ارشد معماری' : 'Senior Architectural Modeler'}</span>
+                  <span className="text-[10px] font-mono bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-bold">LOD 350-400</span>
+                </div>
+                <p className="text-[11px] text-gray-500 leading-relaxed">
+                  {isRTL ? 'مدل‌سازی دقیق پوسته‌های ساختمانی، کتابخانه‌های فمیلی پارامتریک و انطباق با استاندارد بریتانیا و ایرلند.' : 'High-precision Revit models, complex parametric family libraries, and UK/Irish tender sets.'}
+                </p>
+                <div className="flex flex-wrap gap-1">
+                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Revit</span>
+                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Uniclass 2015</span>
+                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">RIBA 3-5</span>
+                </div>
+              </div>
+
+              {/* Discipline 2: MEP & Clash Specialist */}
+              <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-gray-900">{isRTL ? 'هماهنگی تاسیسات MEP و کلش' : 'MEP & Clash Coordinator'}</span>
+                  <span className="text-[10px] font-mono bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-bold">ZERO CLASH</span>
+                </div>
+                <p className="text-[11px] text-gray-500 leading-relaxed">
+                  {isRTL ? 'مسیریابی هوشمند لوله‌کشی و کانال‌ها در موتورخانه‌ها و ماتریس جامع رفع تداخلات چندرشته‌ای.' : 'Multi-service spatial coordination, plant room routing, and Navisworks clash matrices.'}
+                </p>
+                <div className="flex flex-wrap gap-1">
+                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Navisworks</span>
+                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Solibri</span>
+                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Revit MEP</span>
+                </div>
+              </div>
+
+              {/* Discipline 3: Computational & Visualizer */}
+              <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-gray-900">{isRTL ? 'طراحی الگوریتمیک و رندرینگ' : 'Computational Design & VR'}</span>
+                  <span className="text-[10px] font-mono bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-bold">REAL-TIME</span>
+                </div>
+                <p className="text-[11px] text-gray-500 leading-relaxed">
+                  {isRTL ? 'طراحی نماهای پارامتریک در گرس‌هاپر و تجسم تعاملی و سینمایی در آنریل انجین ۵ و لومیون.' : 'Parametric facade generation in Grasshopper and cinematic real-time tours in Unreal Engine 5.'}
+                </p>
+                <div className="flex flex-wrap gap-1">
+                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Grasshopper</span>
+                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Unreal Engine 5</span>
+                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Rhino 8</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
         {/* Main Content Area: Form & Talent Registry */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div id="partner-registration-form" className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
           {/* Form Container (7 cols) */}
           <div className="lg:col-span-8 bg-white rounded-3xl p-6 sm:p-8 shadow-clay-md border border-gray-200/80 space-y-6">
