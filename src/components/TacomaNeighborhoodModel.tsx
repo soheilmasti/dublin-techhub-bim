@@ -103,7 +103,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
   const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
   const isRTL = currentLanguage === 'fa';
 
-  // Clone & configure bright architectural materials for SketchUp model
+  // 1. Initial Scene Setup (executed once when gltf loads)
   const sceneClone = useMemo(() => {
     const clone = gltf.scene.clone();
 
@@ -113,59 +113,87 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     clone.position.set(-3948.0 * scale, -836.0 * scale, 8985.0 * scale);
     clone.rotation.set(0, 0, 0);
 
-    // Preserve Authentic SketchUp Textures, Materials & Colors
+    // Initial Material Cloning & Configuration
     clone.traverse((child) => {
       if (child instanceof THREE.Mesh && child.material) {
         child.castShadow = true;
         child.receiveShadow = true;
 
-        const materials = Array.isArray(child.material) ? child.material : [child.material];
-        materials.forEach((mat) => {
+        const rawMaterials = Array.isArray(child.material) ? child.material : [child.material];
+        const newMaterials = rawMaterials.map((origMat) => {
+          const mat = origMat.clone();
           mat.side = THREE.DoubleSide;
-          mat.needsUpdate = true;
-
           if (mat.map) {
             mat.map.anisotropy = 16;
-            mat.map.needsUpdate = true;
           }
-
-          if (mat instanceof THREE.MeshStandardMaterial) {
-            const matName = (mat.name || '').toLowerCase();
-            const isGlass = matName.includes('glass') || matName.includes('translucent') || matName.includes('window');
-
-            if (isGlass) {
-              mat.transparent = true;
-              mat.opacity = lightingMode === 'night' ? 0.95 : 0.68;
-              mat.roughness = 0.1;
-              mat.metalness = 0.85;
-              mat.envMapIntensity = 2.0;
-            } else {
-              mat.roughness = THREE.MathUtils.clamp(mat.roughness || 0.45, 0.25, 0.7);
-              mat.metalness = THREE.MathUtils.clamp(mat.metalness || 0.05, 0.02, 0.3);
-              mat.envMapIntensity = 1.35;
-            }
-
-            // Enhanced Night Illumination on Windows & Facades
-            if (lightingMode === 'night') {
-              if (isGlass) {
-                // Glowing warm interior architectural light from inside the buildings
-                mat.emissive = new THREE.Color('#f59e0b');
-                mat.emissiveIntensity = 2.2;
-              } else {
-                // Subtle architectural facade night tint
-                mat.roughness = 0.3;
-                mat.metalness = 0.15;
-              }
-            } else if (lightingMode === 'sunset') {
-              mat.roughness = 0.35;
-            }
-          }
+          return mat;
         });
+
+        child.material = Array.isArray(child.material) ? newMaterials : newMaterials[0];
       }
     });
 
     return clone;
-  }, [gltf, lightingMode]);
+  }, [gltf]);
+
+  // 2. Dynamic Lighting & Window Glow Updates (Reactive without unmounting sceneClone)
+  React.useEffect(() => {
+    if (!sceneClone) return;
+
+    sceneClone.traverse((child) => {
+      if (child instanceof THREE.Mesh && child.material) {
+        const rawMaterials = Array.isArray(child.material) ? child.material : [child.material];
+        rawMaterials.forEach((mat) => {
+          if (mat instanceof THREE.MeshStandardMaterial) {
+            const meshName = (child.name || '').toLowerCase();
+            const matName = (mat.name || '').toLowerCase();
+            const isGlass = meshName.includes('glass') || meshName.includes('translucent') || meshName.includes('window') ||
+                            matName.includes('glass') || matName.includes('translucent') || matName.includes('window');
+
+            if (isGlass) {
+              mat.transparent = true;
+              mat.roughness = 0.05;
+              mat.metalness = 0.1;
+              mat.envMapIntensity = 2.0;
+
+              if (lightingMode === 'night') {
+                // Vibrant architectural warm interior window illumination
+                mat.opacity = 0.98;
+                mat.color.set('#fffbeb');
+                mat.emissive.set('#fbbf24'); // Warm golden amber interior illumination
+                mat.emissiveIntensity = 4.2;
+                mat.toneMapped = false;
+              } else if (lightingMode === 'sunset') {
+                mat.opacity = 0.75;
+                mat.color.set('#fed7aa');
+                mat.emissive.set('#ea580c');
+                mat.emissiveIntensity = 0.6;
+                mat.toneMapped = true;
+              } else {
+                mat.opacity = 0.68;
+                mat.color.set('#ffffff');
+                mat.emissive.set(0, 0, 0);
+                mat.emissiveIntensity = 0;
+                mat.toneMapped = true;
+              }
+            } else {
+              mat.roughness = THREE.MathUtils.clamp(mat.roughness || 0.45, 0.25, 0.7);
+              mat.metalness = THREE.MathUtils.clamp(mat.metalness || 0.05, 0.02, 0.3);
+              mat.envMapIntensity = 1.35;
+
+              if (lightingMode === 'night') {
+                mat.roughness = 0.35;
+                mat.metalness = 0.1;
+              } else if (lightingMode === 'sunset') {
+                mat.roughness = 0.35;
+              }
+            }
+            mat.needsUpdate = true;
+          }
+        });
+      }
+    });
+  }, [sceneClone, lightingMode]);
 
   return (
     <group position={[0, 0, 0]}>

@@ -94,23 +94,12 @@ const StreetLamp: React.FC<{
         />
       </mesh>
 
-      {/* Active Warm Night Illumination: PointLight & Street Floor Glow */}
+      {/* Active Warm Night Illumination: Street Floor Glow pool */}
       {isNight && (
-        <>
-          <pointLight 
-            position={[0.11, 0.38, 0]} 
-            intensity={4.2} 
-            color="#fbbf24" 
-            distance={5.5} 
-            decay={1.8} 
-            castShadow
-          />
-          {/* Warm Illumination pool on street asphalt/pavement */}
-          <mesh position={[0.11, 0.008, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-            <circleGeometry args={[0.75, 24]} />
-            <meshBasicMaterial color="#fbbf24" transparent opacity={0.24} depthWrite={false} />
-          </mesh>
-        </>
+        <mesh position={[0.11, 0.008, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <circleGeometry args={[0.75, 24]} />
+          <meshBasicMaterial color="#fbbf24" transparent opacity={0.24} depthWrite={false} />
+        </mesh>
       )}
     </group>
   );
