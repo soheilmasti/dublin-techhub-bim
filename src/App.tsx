@@ -96,10 +96,22 @@ export const App: React.FC = () => {
       if (urlParams.get('faq') === 'true' || viewParam === 'faq' || urlParams.get('qna') === 'true') {
         setIsKnowledgeHubOpen(true);
       }
+
+      // Deep link direct project view
+      const projectParam = urlParams.get('project') || urlParams.get('p');
+      if (projectParam) {
+        for (const cat of categories) {
+          const found = cat.projects.find(p => p.id === projectParam);
+          if (found) {
+            setSelectedProject(found);
+            break;
+          }
+        }
+      }
     } catch (e) {
       console.warn('URL parsing error:', e);
     }
-  }, []);
+  }, [categories]);
 
   // Update HTML document attributes on language change & sync to cookie
   useEffect(() => {

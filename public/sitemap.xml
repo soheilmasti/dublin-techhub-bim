@@ -2,107 +2,230 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
-  <!-- Homepage & 3D Interactive Maquette -->
+  <!-- 1. Core Section Pages -->
+  <!-- Homepage & 3D Interactive Architecture Canvas -->
   <url>
     <loc>https://bimco.es/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en-GB" href="https://bimco.es/?lang=en&amp;region=gb"/>
-    <xhtml:link rel="alternate" hreflang="en-IE" href="https://bimco.es/?lang=en&amp;region=ie"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://bimco.es/?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://bimco.es/?lang=es"/>
-    <xhtml:link rel="alternate" hreflang="ca" href="https://bimco.es/?lang=ca"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://bimco.es/?lang=de"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://bimco.es/?lang=fr"/>
-    <xhtml:link rel="alternate" hreflang="it" href="https://bimco.es/?lang=it"/>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://bimco.es/?lang=fa"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bimco.es/"/>
+    <priority>1.00</priority>
   </url>
 
-  <!-- Architectural BIM Outsourcing Hub (UK, Ireland, Europe) -->
+  <!-- Architectural BIM Outsourcing & Revit Services -->
   <url>
     <loc>https://bimco.es/?view=bim-outsourcing</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="en-GB" href="https://bimco.es/?view=bim-outsourcing&amp;lang=en&amp;region=gb"/>
-    <xhtml:link rel="alternate" hreflang="en-IE" href="https://bimco.es/?view=bim-outsourcing&amp;lang=en&amp;region=ie"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://bimco.es/?view=bim-outsourcing&amp;lang=en"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://bimco.es/?view=bim-outsourcing&amp;lang=es"/>
-    <xhtml:link rel="alternate" hreflang="ca" href="https://bimco.es/?view=bim-outsourcing&amp;lang=ca"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://bimco.es/?view=bim-outsourcing&amp;lang=de"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://bimco.es/?view=bim-outsourcing&amp;lang=fr"/>
-    <xhtml:link rel="alternate" hreflang="it" href="https://bimco.es/?view=bim-outsourcing&amp;lang=it"/>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://bimco.es/?view=bim-outsourcing&amp;lang=fa"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bimco.es/?view=bim-outsourcing"/>
   </url>
 
-  <!-- Google Knowledge Base & Architectural FAQ Hub (12 Core Q&As) -->
-  <url>
-    <loc>https://bimco.es/?view=faq</loc>
-    <lastmod>2026-09-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://bimco.es/?view=faq&amp;lang=en"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://bimco.es/?view=faq&amp;lang=es"/>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://bimco.es/?view=faq&amp;lang=fa"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bimco.es/?view=faq"/>
-  </url>
-
-  <!-- Client Live Delivery Portal & Progress Tracker -->
-  <url>
-    <loc>https://bimco.es/?view=client-portal</loc>
-    <lastmod>2026-09-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.90</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://bimco.es/?view=client-portal&amp;lang=en"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://bimco.es/?view=client-portal&amp;lang=es"/>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://bimco.es/?view=client-portal&amp;lang=fa"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bimco.es/?view=client-portal"/>
-  </url>
-
-  <!-- BIMCO Leadership & Specialist Partner Network -->
+  <!-- BIMCO Partners & Specialist Network -->
   <url>
     <loc>https://bimco.es/?view=partners</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <!-- Google Knowledge Base & Architectural FAQ -->
+  <url>
+    <loc>https://bimco.es/?view=faq</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <!-- Client Live Delivery Tracker & Portal -->
+  <url>
+    <loc>https://bimco.es/?view=client-portal</loc>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://bimco.es/?view=partners&amp;lang=en"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://bimco.es/?view=partners&amp;lang=es"/>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://bimco.es/?view=partners&amp;lang=fa"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bimco.es/?view=partners"/>
   </url>
 
-  <!-- Dublin TechHub BIM LOD 350/400 Showcase & Audit -->
+  <!-- Dublin TechHub BIM LOD 350 Case Study -->
   <url>
     <loc>https://bimco.es/?view=dublin-bim-audit</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://bimco.es/?view=dublin-bim-audit&amp;lang=en"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://bimco.es/?view=dublin-bim-audit&amp;lang=es"/>
-    <xhtml:link rel="alternate" hreflang="ca" href="https://bimco.es/?view=dublin-bim-audit&amp;lang=ca"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://bimco.es/?view=dublin-bim-audit&amp;lang=de"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://bimco.es/?view=dublin-bim-audit&amp;lang=fr"/>
-    <xhtml:link rel="alternate" hreflang="fa" href="https://bimco.es/?view=dublin-bim-audit&amp;lang=fa"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bimco.es/?view=dublin-bim-audit"/>
+    <priority>0.90</priority>
   </url>
 
-  <!-- Projects Archive (19 Architectural & BIM Projects) -->
+  <!-- Full Architecture Projects Portfolio Archive -->
   <url>
     <loc>https://bimco.es/?view=grid</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.85</priority>
   </url>
 
-  <!-- Professional Resume & Lead Credentials -->
+  <!-- Soheil Masti Professional Architecture & BIM Resume -->
   <url>
     <loc>https://bimco.es/?view=resume</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Full 3D Interactive Masterplan Mode -->
+  <url>
+    <loc>https://bimco.es/?mode=3d</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- 2. Individual Architectural & BIM Projects (19 Deep-Linked Projects) -->
+  <!-- Project: Bandar Abbas Coastal City & Port Masterplan -->
+  <url>
+    <loc>https://bimco.es/?project=bandar-coastal-masterplan</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- Project: New Bandar Abbas Port & Customs Infrastructure -->
+  <url>
+    <loc>https://bimco.es/?project=bandar-port-infrastructure</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Project: Residential Darbandsara Alpine Luxury Penthouse -->
+  <url>
+    <loc>https://bimco.es/?project=residential-darbandsara</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- Project: Residential Ando Luxury Apartment -->
+  <url>
+    <loc>https://bimco.es/?project=residential-ando</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
+  </url>
+
+  <!-- Project: Residential Lumen Luxury Lobby & Apartments -->
+  <url>
+    <loc>https://bimco.es/?project=residential-lumen</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Project: Residential Arghavan Luxury Building -->
+  <url>
+    <loc>https://bimco.es/?project=residential-arghavan</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Project: Residential Royal Luxury Penthouse -->
+  <url>
+    <loc>https://bimco.es/?project=residential-royal</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Project: Residential Noora Contemporary Villa -->
+  <url>
+    <loc>https://bimco.es/?project=residential-noora</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Project: Residential No. 10 Minimal Architecture -->
+  <url>
+    <loc>https://bimco.es/?project=residential-no10</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Project: Residential Aram Architectural Kitchen & Living -->
+  <url>
+    <loc>https://bimco.es/?project=residential-aram</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Project: Residential No. 4 Contemporary House -->
+  <url>
+    <loc>https://bimco.es/?project=residential-no4</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Project: Residential Bandar Abbas Coastal Penthouse -->
+  <url>
+    <loc>https://bimco.es/?project=residential-bandar-abbas</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Project: Bandar Abbas Megamall Commercial Complex 52000m2 -->
+  <url>
+    <loc>https://bimco.es/?project=bandar-commercial-complex</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- Project: Roudan Commercial & Office Complex -->
+  <url>
+    <loc>https://bimco.es/?project=roudan-commercial</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Project: Dublin Tech Hub 7-Story Office Tower BIM LOD 350 -->
+  <url>
+    <loc>https://bimco.es/?project=dublin-techhub-bim</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <!-- Project: Concept Store & High-Tech Showroom -->
+  <url>
+    <loc>https://bimco.es/?project=apple-store-concept</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
+  </url>
+
+  <!-- Project: Hormozgan Engineering Organization Headquarters -->
+  <url>
+    <loc>https://bimco.es/?project=hormozgan-engineering-hq</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
+  </url>
+
+  <!-- Project: Bandar Abbas Lighthouse Architectural Landmark -->
+  <url>
+    <loc>https://bimco.es/?project=bandar-lighthouse</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
+  </url>
+
+  <!-- Project: Sapad Mashhad Iconic Gateway Landmark -->
+  <url>
+    <loc>https://bimco.es/?project=sapad-gateway</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.88</priority>
   </url>
 
 </urlset>
