@@ -32,6 +32,8 @@ export interface TranslationDict {
   bimOutsourcingBadge?: string;
   clientPortal?: string;
   clientPortalBadge?: string;
+  partners?: string;
+  partnersBadge?: string;
   askAiAboutUs?: string;
   studioName: string;
   studioTagline: string;
@@ -159,6 +161,8 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     bimOutsourcingBadge: 'Estalvi 50%',
     clientPortal: 'Portal de Clients i Comandes',
     clientPortalBadge: 'Seguiment en Viu',
+    partners: 'Col·laboradors i Talent',
+    partnersBadge: 'Uneix-te',
     askAiAboutUs: 'Pregunta a la IA sobre BIMCO',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'ARQUITECTE SÈNIOR I ESPECIALISTA BIM // BARCELONA',
@@ -300,6 +304,8 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     bimOutsourcingBadge: '۵۰٪ کاهش هزینه',
     clientPortal: 'پورتال سفارشات و رهگیری زنده',
     clientPortalBadge: 'رهگیری زنده',
+    partners: 'همکاران و شبکه متخصصین',
+    partnersBadge: 'همکاری',
     askAiAboutUs: 'پرسش از هوش مصنوعی درباره BIMCO',
     studioName: 'سهیل مستی',
     studioTagline: 'معمار ارشد و متخصص BIM // بارسلون و تهران',
@@ -441,6 +447,8 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     bimOutsourcingBadge: 'Ahorro 50%',
     clientPortal: 'Portal de Clientes y Pedidos',
     clientPortalBadge: 'Seguimiento en Vivo',
+    partners: 'Colaboradores y Talento',
+    partnersBadge: 'Únete',
     askAiAboutUs: 'Pregunta a la IA sobre BIMCO',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'ARQUITECTO SENIOR Y ESPECIALISTA BIM // BARCELONA',
@@ -582,6 +590,8 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     bimOutsourcingBadge: 'Save 50%',
     clientPortal: 'Client Portal & Live Tracker',
     clientPortalBadge: 'Live Tracker',
+    partners: 'Partners & Talent Network',
+    partnersBadge: 'Join Us',
     askAiAboutUs: 'Ask AI About BIMCO',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'SENIOR ARCHITECT & BIM SPECIALIST // BARCELONA & TEHRAN',
@@ -723,6 +733,8 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     bimOutsourcingBadge: 'Économie 50%',
     clientPortal: 'Portail Clients & Suivi en Direct',
     clientPortalBadge: 'Suivi en Direct',
+    partners: 'Partenaires & Réseau de Talents',
+    partnersBadge: 'Rejoindre',
     askAiAboutUs: 'Demandez à l’IA sur BIMCO',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'ARCHITECTE SENIOR & SPÉCIALISTE BIM // BARCELONE',
@@ -864,6 +876,8 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     bimOutsourcingBadge: '50% Ersparnis',
     clientPortal: 'Kundenportal & Live-Tracking',
     clientPortalBadge: 'Live-Tracking',
+    partners: 'Partner & Talent-Netzwerk',
+    partnersBadge: 'Mitmachen',
     askAiAboutUs: 'KI nach BIMCO fragen',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'SENIOR-ARCHITEKT & BIM-SPEZIALIST // BARCELONA',
@@ -1005,6 +1019,8 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     bimOutsourcingBadge: 'Risparmio 50%',
     clientPortal: 'Portale Clienti & Tracciamento Live',
     clientPortalBadge: 'Tracciamento Live',
+    partners: 'Partner & Rete di Talenti',
+    partnersBadge: 'Unisciti',
     askAiAboutUs: 'Chiedi all’IA su BIMCO',
     studioName: 'SOHEIL MASTI',
     studioTagline: 'ARCHITETTO SENIOR E SPECIALISTA BIM // BARCELLONA',

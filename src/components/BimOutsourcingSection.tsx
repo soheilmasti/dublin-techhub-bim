@@ -28,6 +28,7 @@ interface BimOutsourcingSectionProps {
   language: LanguageCode;
   onNavigateToDublinBim?: () => void;
   onNavigateToClientPortal: () => void;
+  onNavigateToPartners?: () => void;
   onOpenWhatsApp: (presetText?: string) => void;
   onOpenAiBooster?: () => void;
   onBackToHome: () => void;
@@ -37,6 +38,7 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
   language,
   onNavigateToDublinBim,
   onNavigateToClientPortal,
+  onNavigateToPartners,
   onOpenWhatsApp,
   onOpenAiBooster,
   onBackToHome
@@ -608,6 +610,26 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
           </a>
         </div>
       </section>
+
+      {/* Talent Network Invite Callout */}
+      {onNavigateToPartners && (
+        <div className="mt-8 p-6 rounded-2xl bg-white border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left shadow-xs">
+          <div>
+            <h4 className="text-sm font-bold text-slate-900">
+              {isRTL ? 'معمار، مدلر BIM یا متخصص تاسیسات هستید؟' : 'Are you an Architect, BIM Modeler or MEP Specialist?'}
+            </h4>
+            <p className="text-xs text-slate-500">
+              {isRTL ? 'به شبکه همکاران و استعدادهای بین‌المللی ما برای پروژه‌های جاری و آتی بپیوندید.' : 'Join our global talent pool for European project contracts and flexible remote collaborations.'}
+            </p>
+          </div>
+          <button
+            onClick={() => { sound.playClick(); onNavigateToPartners(); }}
+            className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold transition-all cursor-pointer shrink-0 shadow-xs"
+          >
+            {isRTL ? 'ثبت فرم همکاران و رزومه' : 'Join Partner Network'}
+          </button>
+        </div>
+      )}
 
     </div>
   );

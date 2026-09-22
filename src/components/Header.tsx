@@ -12,7 +12,8 @@ import {
   Menu,
   X,
   FolderSync,
-  Bot
+  Bot,
+  Users
 } from 'lucide-react';
 import { SiteSettings } from '../types';
 import { sound } from '../utils/audio';
@@ -151,6 +152,23 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse"></span>
               {t.clientPortalBadge || 'Live'}
             </span>
+          </button>
+
+          <button
+            onClick={() => handleNavClick('partners')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+              settings.activeView === 'partners'
+                ? 'bg-blue-600 text-white shadow-md scale-105 ring-2 ring-blue-400'
+                : 'text-gray-700 hover:text-black hover:bg-gray-100/70 border border-transparent'
+            }`}
+          >
+            <Users className="w-3.5 h-3.5 text-blue-600" />
+            <span>{t.partners || 'Partners'}</span>
+            {t.partnersBadge && (
+              <span className="text-[9px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full font-mono font-bold">
+                {t.partnersBadge}
+              </span>
+            )}
           </button>
         </div>
 
@@ -315,6 +333,23 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
               <span className="text-[10px] font-mono bg-indigo-600 text-white px-2 py-0.5 rounded-full font-bold">
                 LIVE
+              </span>
+            </button>
+
+            <button
+              onClick={() => handleNavClick('partners')}
+              className={`w-full flex items-center justify-between p-3 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
+                settings.activeView === 'partners'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'bg-gray-50 text-gray-800 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <Users className="w-4 h-4 text-blue-600" />
+                <span>{t.partners || 'Partners & Talent Network'}</span>
+              </div>
+              <span className="text-[10px] font-mono bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-bold">
+                JOIN
               </span>
             </button>
 

@@ -93,8 +93,23 @@ export interface SiteSettings {
   studioTagline: string;
   backgroundImageUrl: string;
   maquetteStyle: 'clay-white' | 'clay-warm' | 'blueprint-neon' | 'twilight-night';
-  activeView: 'maquette' | 'grid' | '3d' | 'resume' | 'dublin-bim-audit' | 'bim-outsourcing' | 'client-portal';
+  activeView: 'maquette' | 'grid' | '3d' | 'resume' | 'dublin-bim-audit' | 'bim-outsourcing' | 'client-portal' | 'partners';
   soundEnabled: boolean;
+}
+
+export interface PartnerApplication {
+  id: string;
+  fullName: string;
+  email: string;
+  whatsapp: string;
+  location: string;
+  discipline: string;
+  experienceYears: string;
+  softwareStack: string[];
+  portfolioUrl: string;
+  collaborationType: string;
+  notes?: string;
+  submittedAt: string;
 }
 
 export interface ProjectMilestone {

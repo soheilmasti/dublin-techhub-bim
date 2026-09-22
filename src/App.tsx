@@ -7,6 +7,7 @@ import { ResumeProfileView } from './components/ResumeProfileView';
 import { DublinTechHubShowcase } from './components/DublinTechHubShowcase';
 import { BimOutsourcingSection } from './components/BimOutsourcingSection';
 import { ClientPortalView } from './components/ClientPortalView';
+import { PartnersNetworkView } from './components/PartnersNetworkView';
 import { LightweightIntroDemo } from './components/LightweightIntroDemo';
 import { ContactWhatsAppModal } from './components/ContactWhatsAppModal';
 import { AiSearchBoosterModal } from './components/AiSearchBoosterModal';
@@ -77,7 +78,7 @@ export const App: React.FC = () => {
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const viewParam = urlParams.get('view');
-      if (viewParam && ['bim-outsourcing', 'client-portal', 'dublin-bim-audit', 'grid', 'resume', '3d'].includes(viewParam)) {
+      if (viewParam && ['bim-outsourcing', 'client-portal', 'partners', 'dublin-bim-audit', 'grid', 'resume', '3d'].includes(viewParam)) {
         setSettings(prev => ({ ...prev, activeView: viewParam as SiteSettings['activeView'] }));
       }
       const langParam = urlParams.get('lang');
@@ -197,6 +198,7 @@ export const App: React.FC = () => {
             language={language}
             onNavigateToDublinBim={() => handleUpdateSettings({ activeView: 'dublin-bim-audit' })}
             onNavigateToClientPortal={() => handleUpdateSettings({ activeView: 'client-portal' })}
+            onNavigateToPartners={() => handleUpdateSettings({ activeView: 'partners' })}
             onOpenWhatsApp={handleOpenWhatsApp}
             onOpenAiBooster={() => setIsAiBoosterModalOpen(true)}
             onBackToHome={handleResetToHome}
@@ -205,6 +207,14 @@ export const App: React.FC = () => {
 
         {settings.activeView === 'client-portal' && (
           <ClientPortalView
+            currentLanguage={language}
+            onBackToHome={handleResetToHome}
+            onOpenWhatsApp={handleOpenWhatsApp}
+          />
+        )}
+
+        {settings.activeView === 'partners' && (
+          <PartnersNetworkView
             currentLanguage={language}
             onBackToHome={handleResetToHome}
             onOpenWhatsApp={handleOpenWhatsApp}
