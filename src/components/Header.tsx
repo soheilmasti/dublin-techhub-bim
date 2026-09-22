@@ -13,7 +13,8 @@ import {
   X,
   FolderSync,
   Bot,
-  Users
+  Users,
+  BookOpen
 } from 'lucide-react';
 import { SiteSettings } from '../types';
 import { sound } from '../utils/audio';
@@ -27,6 +28,7 @@ interface HeaderProps {
   onOpenAbout: () => void;
   onOpenWhatsApp?: (presetText?: string) => void;
   onOpenAiBooster?: () => void;
+  onOpenKnowledgeHub?: () => void;
   totalProjectsCount: number;
   categoriesCount: number;
   currentLanguage: LanguageCode;
@@ -41,7 +43,8 @@ export const Header: React.FC<HeaderProps> = ({
   currentLanguage,
   onLanguageChange,
   onOpenWhatsApp,
-  onOpenAiBooster
+  onOpenAiBooster,
+  onOpenKnowledgeHub
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
@@ -170,6 +173,20 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             )}
           </button>
+
+          {onOpenKnowledgeHub && (
+            <button
+              onClick={() => { sound.playClick(); onOpenKnowledgeHub(); }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-gray-700 hover:text-black hover:bg-gray-100/70 border border-transparent transition-all duration-200 cursor-pointer"
+              title="Knowledge Hub & FAQs"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-blue-600" />
+              <span>{currentLanguage === 'fa' ? 'راهنما و سوالات' : 'FAQ & Q&A'}</span>
+              <span className="text-[9px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-full font-mono font-bold">
+                12
+              </span>
+            </button>
+          )}
         </div>
 
         {/* Right Controls: Language Selector, Sound, WhatsApp & Mobile Menu */}
@@ -352,6 +369,25 @@ export const Header: React.FC<HeaderProps> = ({
                 JOIN
               </span>
             </button>
+
+            {onOpenKnowledgeHub && (
+              <button
+                onClick={() => {
+                  sound.playClick();
+                  setIsMobileMenuOpen(false);
+                  onOpenKnowledgeHub();
+                }}
+                className="w-full flex items-center justify-between p-3 rounded-2xl text-xs font-bold bg-amber-50/80 text-amber-950 border border-amber-200/90 hover:bg-amber-100 transition-all cursor-pointer"
+              >
+                <div className="flex items-center gap-2.5">
+                  <BookOpen className="w-4 h-4 text-amber-700" />
+                  <span>{currentLanguage === 'fa' ? 'مرکز دانش و پرسش‌ها (FAQ & Q&A)' : 'BIM Knowledge & FAQ Hub'}</span>
+                </div>
+                <span className="text-[10px] font-mono bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full font-bold">
+                  12 Q&A
+                </span>
+              </button>
+            )}
 
             {/* Mobile Direct WhatsApp Action */}
             <div className="pt-2 flex items-center gap-2">

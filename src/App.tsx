@@ -11,6 +11,7 @@ import { PartnersNetworkView } from './components/PartnersNetworkView';
 import { LightweightIntroDemo } from './components/LightweightIntroDemo';
 import { ContactWhatsAppModal } from './components/ContactWhatsAppModal';
 import { AiSearchBoosterModal } from './components/AiSearchBoosterModal';
+import { BimKnowledgeHubModal } from './components/BimKnowledgeHubModal';
 import { FloatingContactHub } from './components/FloatingContactHub';
 import { ProjectDrawer } from './components/ProjectDrawer';
 import { ProjectDetailModal } from './components/ProjectDetailModal';
@@ -32,6 +33,7 @@ export const App: React.FC = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
   const [isAiBoosterModalOpen, setIsAiBoosterModalOpen] = useState(false);
+  const [isKnowledgeHubOpen, setIsKnowledgeHubOpen] = useState(false);
   const [whatsAppInitialMessage, setWhatsAppInitialMessage] = useState('');
 
   // Lightweight Fast-Preview Mode for Low-Speed Networks
@@ -89,6 +91,10 @@ export const App: React.FC = () => {
 
       if (urlParams.get('ai') === 'true' || viewParam === 'ai-booster') {
         setIsAiBoosterModalOpen(true);
+      }
+
+      if (urlParams.get('faq') === 'true' || viewParam === 'faq' || urlParams.get('qna') === 'true') {
+        setIsKnowledgeHubOpen(true);
       }
     } catch (e) {
       console.warn('URL parsing error:', e);
@@ -163,6 +169,7 @@ export const App: React.FC = () => {
         onOpenAbout={() => setIsAboutOpen(true)}
         onOpenWhatsApp={handleOpenWhatsApp}
         onOpenAiBooster={() => setIsAiBoosterModalOpen(true)}
+        onOpenKnowledgeHub={() => setIsKnowledgeHubOpen(true)}
         totalProjectsCount={totalProjectsCount}
         categoriesCount={localizedCategories.length}
         currentLanguage={language}
@@ -229,6 +236,7 @@ export const App: React.FC = () => {
             onEnter3D={handleEnter3D}
             onNavigateToView={(v) => handleUpdateSettings({ activeView: v })}
             onOpenWhatsApp={handleOpenWhatsApp}
+            onOpenKnowledgeHub={() => setIsKnowledgeHubOpen(true)}
           />
         )}
 
@@ -307,6 +315,14 @@ export const App: React.FC = () => {
         isOpen={isAiBoosterModalOpen}
         onClose={() => setIsAiBoosterModalOpen(false)}
         currentLanguage={language}
+      />
+
+      {/* Google SEO & Knowledge Authority Hub Modal (12 Core Architectural Q&As) */}
+      <BimKnowledgeHubModal
+        isOpen={isKnowledgeHubOpen}
+        onClose={() => setIsKnowledgeHubOpen(false)}
+        currentLanguage={language}
+        onOpenWhatsApp={handleOpenWhatsApp}
       />
     </div>
   );

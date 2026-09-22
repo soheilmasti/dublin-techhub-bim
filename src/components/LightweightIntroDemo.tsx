@@ -17,13 +17,15 @@ interface LightweightIntroDemoProps {
   onEnter3D: () => void;
   onNavigateToView: (view: 'grid' | 'bim-outsourcing' | 'client-portal' | 'resume' | 'partners') => void;
   onOpenWhatsApp: (preset?: string) => void;
+  onOpenKnowledgeHub?: () => void;
 }
 
 export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
   currentLanguage,
   onEnter3D,
   onNavigateToView,
-  onOpenWhatsApp
+  onOpenWhatsApp,
+  onOpenKnowledgeHub
 }) => {
   const isRTL = currentLanguage === 'fa';
 
@@ -37,7 +39,7 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
       className="min-h-screen bg-[#fafbfc] text-neutral-900 pt-24 pb-20 px-4 sm:px-6 lg:px-12 selection:bg-neutral-900 selection:text-white"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
-      <div className="max-w-5xl mx-auto space-y-12">
+      <div className="max-w-5xl mx-auto space-y-10">
         
         {/* Top Minimal Studio Metadata Bar */}
         <div className="flex items-center justify-between pb-4 border-b border-neutral-200/80 text-xs font-mono text-neutral-500">
@@ -78,6 +80,26 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
               <span>{isRTL ? 'ورود به ماکت سه‌بعدی تعاملی' : 'Enter Interactive 3D Canvas'}</span>
               <ArrowRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
             </button>
+          </div>
+        </div>
+
+        {/* Enterprise Trust & Verification Matrix */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="bg-white p-3.5 rounded-xl border border-neutral-200/70 text-center">
+            <p className="text-[10px] font-mono font-bold text-blue-600 uppercase">ISO 19650-1/2</p>
+            <p className="text-xs font-semibold text-neutral-800 mt-0.5">{isRTL ? 'استاندارد بین‌المللی CDE' : 'Full CDE Compliance'}</p>
+          </div>
+          <div className="bg-white p-3.5 rounded-xl border border-neutral-200/70 text-center">
+            <p className="text-[10px] font-mono font-bold text-indigo-600 uppercase">ACC / BIM 360</p>
+            <p className="text-xs font-semibold text-neutral-800 mt-0.5">{isRTL ? 'اشتراک زنده در کلاود' : 'Live Cloud Worksharing'}</p>
+          </div>
+          <div className="bg-white p-3.5 rounded-xl border border-neutral-200/70 text-center">
+            <p className="text-[10px] font-mono font-bold text-emerald-600 uppercase">100% IP & NDA</p>
+            <p className="text-xs font-semibold text-neutral-800 mt-0.5">{isRTL ? 'مالکیت کامل کارفرما' : 'Guaranteed Copyright'}</p>
+          </div>
+          <div className="bg-white p-3.5 rounded-xl border border-neutral-200/70 text-center">
+            <p className="text-[10px] font-mono font-bold text-amber-600 uppercase">48-72h SLA</p>
+            <p className="text-xs font-semibold text-neutral-800 mt-0.5">{isRTL ? 'تحویل سریع هر طبقه' : 'Rapid Floor Delivery'}</p>
           </div>
         </div>
 
@@ -172,33 +194,70 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
           </div>
         </div>
 
-        {/* Minimalist Team & Talent Network Banner */}
-        <div 
-          onClick={() => { sound.playClick(); onNavigateToView('partners'); }}
-          className="bg-white p-5 rounded-2xl border border-neutral-200/80 hover:border-neutral-900 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col sm:flex-row items-center justify-between gap-4"
-        >
-          <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-neutral-100 text-neutral-900 flex items-center justify-center shrink-0">
-              <Users className="w-5 h-5" />
+        {/* 2 Interactive High-Trust Panels: Team & Knowledge Hub */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          {/* Panel 1: Team & Talent Network Banner */}
+          <div 
+            onClick={() => { sound.playClick(); onNavigateToView('partners'); }}
+            className="bg-white p-5 rounded-2xl border border-neutral-200/80 hover:border-neutral-900 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
+          >
+            <div className="flex items-start gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-neutral-100 text-neutral-900 flex items-center justify-center shrink-0">
+                <Users className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-neutral-900 flex items-center gap-2">
+                  <span>{isRTL ? 'تیم و شبکه همکاران BIMCO' : 'BIMCO Team & Talent Network'}</span>
+                  <span className="text-[10px] bg-neutral-100 text-neutral-700 px-2 py-0.5 rounded-full font-mono font-bold">
+                    {isRTL ? 'تیم و فرم' : 'Team'}
+                  </span>
+                </h4>
+                <p className="text-xs text-neutral-500 mt-1">
+                  {isRTL 
+                    ? 'سهیل مستی (BIM Lead و الگوریتم‌های هوش مصنوعی) + تخصص‌های هماهنگی رویت و فرم همکاری.' 
+                    : 'Meet Soheil Masti (Lead Coordinator & AI Architecture) and join our specialist delivery network.'}
+                </p>
+              </div>
             </div>
-            <div>
-              <h4 className="text-sm font-bold text-neutral-900 flex items-center gap-2">
-                <span>{isRTL ? 'معرفی تیم راهبری و شبکه همکاران BIMCO' : 'BIMCO Leadership & Specialist Partner Network'}</span>
-                <span className="text-[10px] bg-neutral-100 text-neutral-700 px-2 py-0.5 rounded-full font-mono font-bold">
-                  {isRTL ? 'تیم و تخصص‌ها' : 'Team & Roles'}
-                </span>
-              </h4>
-              <p className="text-xs text-neutral-500">
-                {isRTL 
-                  ? 'معرفی اعضای کلیدی (سهیل مستی)، تخصص‌های رویت، تاسیسات و هوش مصنوعی + فرم ثبت همکاری' 
-                  : 'Meet core lead Soheil Masti & specialist disciplines, or register for upcoming deliveries.'}
-              </p>
+            <div className="pt-4 flex items-center justify-between text-xs font-bold text-neutral-900">
+              <span>{isRTL ? 'مشاهده تیم و همکاران' : 'Meet Team & Partners'}</span>
+              <ChevronRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
             </div>
           </div>
-          <button className="px-4 py-2 rounded-xl bg-neutral-950 text-white text-xs font-bold hover:bg-neutral-800 transition-colors shrink-0 flex items-center gap-1.5 pointer-events-none">
-            <span>{isRTL ? 'مشاهده تیم و همکاران' : 'Meet Team & Partners'}</span>
-            <ChevronRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
-          </button>
+
+          {/* Panel 2: Google Authority Knowledge & FAQ Hub */}
+          <div 
+            onClick={() => { 
+              sound.playClick(); 
+              if (onOpenKnowledgeHub) onOpenKnowledgeHub(); 
+            }}
+            className="bg-gradient-to-br from-white to-amber-50/50 p-5 rounded-2xl border border-amber-200/80 hover:border-amber-500 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
+          >
+            <div className="flex items-start gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-5 h-5 text-amber-700" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-neutral-900 flex items-center gap-2">
+                  <span>{isRTL ? 'مرکز دانش و پاسخ به سوالات کلیدی' : 'BIM Knowledge & FAQ Hub'}</span>
+                  <span className="text-[10px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full font-mono font-bold">
+                    12 Q&A
+                  </span>
+                </h4>
+                <p className="text-xs text-neutral-600 mt-1">
+                  {isRTL 
+                    ? 'پاسخ مستقیم به هزینه‌ها، سرعت تحویل (۴۸ تا ۷۲ ساعت)، استانداردهای LOD و امنیت ۱۰۰٪ قراردادها.' 
+                    : 'Direct answers on UK/EU rates, turnaround times, ISO 19650 CDE and bilateral NDAs.'}
+                </p>
+              </div>
+            </div>
+            <div className="pt-4 flex items-center justify-between text-xs font-bold text-amber-900">
+              <span>{isRTL ? 'مطالعه پرسش و پاسخ‌های متداول' : 'Browse All 12 Answers'}</span>
+              <ChevronRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
+            </div>
+          </div>
+
         </div>
 
         {/* Minimalist Footer Bar */}
