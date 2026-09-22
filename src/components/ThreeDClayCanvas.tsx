@@ -286,15 +286,15 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
         </Suspense>
       </Canvas>
 
-      {/* TOP-LEFT: Camera Preset & View Control Toolbar (Mobile-Compact) */}
-      <div className={`absolute top-14 sm:top-20 left-2.5 sm:left-6 z-20 glass-panel p-1 sm:p-1.5 rounded-2xl shadow-clay-md flex items-center gap-1 sm:gap-1.5 border border-white/80 transition-opacity duration-300 ${selectedCategory ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      {/* BOTTOM-LEFT: Camera Preset & View Control Toolbar (Rotate & Overview) */}
+      <div className={`absolute bottom-16 sm:bottom-6 left-3 sm:left-6 z-20 glass-panel p-1 sm:p-1.5 rounded-2xl shadow-clay-md flex items-center gap-1 sm:gap-1.5 border border-white/80 transition-opacity duration-300 ${selectedCategory ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <button
           onClick={handleResetCamera}
-          className="p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold text-gray-700 hover:text-black hover:bg-white/80 transition-all cursor-pointer flex items-center gap-1"
+          className="p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold text-gray-700 hover:text-black hover:bg-white/80 transition-all cursor-pointer flex items-center gap-1.5"
           title={t.overviewView}
         >
           <Camera className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-blue-600 shrink-0" />
-          <span className="hidden sm:inline">{t.overviewView}</span>
+          <span className="hidden sm:inline font-medium">{t.overviewView}</span>
         </button>
 
         <button
@@ -302,13 +302,13 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
             sound.playSwitch();
             setAutoRotate(!autoRotate);
           }}
-          className={`p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1 ${
+          className={`p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
             autoRotate ? 'bg-blue-600 text-white shadow-xs' : 'text-gray-700 hover:text-black hover:bg-white/80'
           }`}
           title={autoRotate ? t.autoRotateStop : t.autoRotateStart}
         >
           {autoRotate ? <Pause className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-white shrink-0" /> : <Play className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-blue-600 shrink-0" />}
-          <span className="hidden sm:inline">{autoRotate ? t.autoRotateStop : t.autoRotateStart}</span>
+          <span className="hidden sm:inline font-medium">{autoRotate ? t.autoRotateStop : t.autoRotateStart}</span>
         </button>
       </div>
 

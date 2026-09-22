@@ -12,7 +12,7 @@ export const FloatingContactHub: React.FC<FloatingContactHubProps> = ({
   isRTL
 }) => {
   return (
-    <div className={`fixed bottom-6 ${isRTL ? 'left-6' : 'right-6'} z-40 flex items-center gap-2 pointer-events-auto`}>
+    <div className="fixed bottom-6 right-6 z-40 flex items-center gap-2 pointer-events-auto">
       <button
         onClick={() => {
           sound.playClick();
