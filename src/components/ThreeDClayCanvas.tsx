@@ -2,8 +2,7 @@ import React, { useRef, useState, useEffect, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { 
   OrbitControls, 
-  ContactShadows, 
-  Environment
+  ContactShadows
 } from '@react-three/drei';
 import * as THREE from 'three';
 import type { OrbitControls as OrbitControlsType } from 'three-stdlib';
@@ -29,7 +28,7 @@ const SceneExposure: React.FC<{ mode: 'day' | 'sunset' | 'night' | 'wireframe' }
   const { gl } = useThree();
   useEffect(() => {
     gl.toneMapping = THREE.ACESFilmicToneMapping;
-    gl.toneMappingExposure = mode === 'sunset' ? 1.25 : mode === 'night' ? 1.15 : 1.18;
+    gl.toneMappingExposure = mode === 'sunset' ? 1.25 : mode === 'night' ? 1.22 : 1.18;
   }, [mode, gl]);
   return null;
 };
@@ -66,9 +65,10 @@ const ZONE_CAMERA_TARGETS: Record<string, { target: [number, number, number]; po
   }
 };
 
+// Wide, comfortable panoramic overview of the entire Tacoma neighborhood & masterplan
 const OVERVIEW_CAMERA = {
-  target: [0, 2.0, 0] as [number, number, number],
-  position: [15, 14, 18] as [number, number, number]
+  target: [0, 2.0, 2.5] as [number, number, number],
+  position: [28, 25, 32] as [number, number, number]
 };
 
 // Smooth Camera Flight Controller (Free Orbit by default, flies ONLY on click, yields immediately on user mouse interaction)
@@ -139,7 +139,7 @@ const CameraController: React.FC<{
       autoRotateSpeed={0.8}
       maxPolarAngle={Math.PI / 2.03}
       minDistance={3}
-      maxDistance={70}
+      maxDistance={120}
     />
   );
 };
@@ -179,10 +179,10 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
 
   return (
     <div className="relative w-full h-screen bg-[#0f141c] overflow-hidden select-none touch-none">
-      {/* 3D WebGL Canvas with PBR Tone Mapping */}
+      {/* 3D WebGL Canvas with PBR Tone Mapping & Wide Overview Camera */}
       <Canvas
         shadows
-        camera={{ position: [15, 14, 18], fov: 38 }}
+        camera={{ position: [28, 25, 32], fov: 38 }}
         gl={{ 
           antialias: true,
           preserveDrawingBuffer: true,
@@ -193,45 +193,42 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
         <Suspense fallback={null}>
           <SceneExposure mode={lightingMode} />
 
-          {/* Clean Studio Horizon Background - NO Artificial Sun Disc */}
-          <color attach="background" args={[lightingMode === 'night' ? '#0f172a' : lightingMode === 'sunset' ? '#1c1520' : '#eaeff5']} />
+          {/* Clean Horizon Background */}
+          <color attach="background" args={[lightingMode === 'night' ? '#0a0f1d' : lightingMode === 'sunset' ? '#1c1520' : '#eaeff5']} />
 
-          {/* Realistic PBR Environment Reflections (Fixed preset to avoid 404 HDR network suspend) */}
-          <Environment preset="city" environmentIntensity={lightingMode === 'night' ? 0.4 : lightingMode === 'sunset' ? 0.85 : 1.1} />
-
-          {/* Hemisphere Ambient Sky Bounce */}
+          {/* Hemisphere Ambient Sky Bounce (100% offline, zero external GitHub HDR requests) */}
           <hemisphereLight 
-            intensity={lightingMode === 'night' ? 0.95 : lightingMode === 'sunset' ? 1.0 : 1.3} 
+            intensity={lightingMode === 'night' ? 1.4 : lightingMode === 'sunset' ? 1.1 : 1.3} 
             color={lightingMode === 'sunset' ? '#fed7aa' : lightingMode === 'night' ? '#bae6fd' : '#ffffff'} 
-            groundColor={lightingMode === 'night' ? '#1e293b' : '#64748b'} 
+            groundColor={lightingMode === 'night' ? '#334155' : '#64748b'} 
           />
 
           {/* Lighting based on mood */}
           {lightingMode === 'day' && (
             <>
-              <ambientLight intensity={1.1} />
+              <ambientLight intensity={1.2} />
               <directionalLight
                 position={[24, 38, 20]}
-                intensity={2.6}
+                intensity={2.8}
                 color="#fffcf7"
                 castShadow
                 shadow-mapSize-width={2048}
                 shadow-mapSize-height={2048}
-                shadow-camera-left={-22}
-                shadow-camera-right={22}
-                shadow-camera-top={22}
-                shadow-camera-bottom={-22}
-                shadow-camera-far={80}
+                shadow-camera-left={-30}
+                shadow-camera-right={30}
+                shadow-camera-top={30}
+                shadow-camera-bottom={-30}
+                shadow-camera-far={120}
                 shadow-bias={-0.00015}
               />
-              <directionalLight position={[-20, 18, -16]} intensity={1.0} color="#e0f2fe" />
-              <directionalLight position={[0, -10, 0]} intensity={0.4} color="#f8fafc" />
+              <directionalLight position={[-20, 18, -16]} intensity={1.2} color="#e0f2fe" />
+              <directionalLight position={[0, -10, 0]} intensity={0.5} color="#f8fafc" />
             </>
           )}
 
           {lightingMode === 'sunset' && (
             <>
-              <ambientLight intensity={0.9} color="#fed7aa" />
+              <ambientLight intensity={1.1} color="#fed7aa" />
               <directionalLight
                 position={[30, 14, 12]}
                 intensity={3.4}
@@ -241,46 +238,46 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
                 shadow-mapSize-height={2048}
                 shadow-bias={-0.00015}
               />
-              <directionalLight position={[-18, 12, -12]} intensity={1.0} color="#60a5fa" />
+              <directionalLight position={[-18, 12, -12]} intensity={1.2} color="#60a5fa" />
             </>
           )}
 
           {lightingMode === 'night' && (
             <>
               {/* Rich Urban Architectural Night: Clear Moon Bounce & Soft Blue Sky Fill */}
-              <ambientLight intensity={1.4} color="#93c5fd" />
+              <ambientLight intensity={1.8} color="#93c5fd" />
               <directionalLight 
                 position={[24, 38, 20]} 
-                intensity={2.8} 
+                intensity={3.2} 
                 color="#e0f2fe" 
                 castShadow
                 shadow-mapSize-width={2048}
                 shadow-mapSize-height={2048}
-                shadow-camera-left={-22}
-                shadow-camera-right={22}
-                shadow-camera-top={22}
-                shadow-camera-bottom={-22}
-                shadow-camera-far={80}
+                shadow-camera-left={-30}
+                shadow-camera-right={30}
+                shadow-camera-top={30}
+                shadow-camera-bottom={-30}
+                shadow-camera-far={120}
                 shadow-bias={-0.00015}
               />
-              <directionalLight position={[-20, 20, -16]} intensity={1.6} color="#7dd3fc" />
-              <directionalLight position={[0, -10, 0]} intensity={0.6} color="#334155" />
+              <directionalLight position={[-20, 20, -16]} intensity={1.8} color="#7dd3fc" />
+              <directionalLight position={[0, -10, 0]} intensity={0.8} color="#475569" />
 
               {/* 5 Distinct Architectural Accent Warm Light Sources (Zero shadow overhead) */}
               {/* 1. Dublin Tech Hub 7-Story Tower Facade */}
-              <pointLight position={[6.57, 8.0, 6.23]} intensity={8} color="#fbbf24" distance={35} decay={2} />
+              <pointLight position={[6.57, 8.0, 6.23]} intensity={10} color="#fbbf24" distance={40} decay={2} />
 
               {/* 2. Commercial Mall & Terraces */}
-              <pointLight position={[-0.87, 4.5, -1.03]} intensity={7} color="#fbbf24" distance={30} decay={2} />
+              <pointLight position={[-0.87, 4.5, -1.03]} intensity={8} color="#fbbf24" distance={35} decay={2} />
 
               {/* 3. Urban Port & Promenade Waterfront */}
-              <pointLight position={[-6.95, 4.5, -6.17]} intensity={7} color="#38bdf8" distance={30} decay={2} />
+              <pointLight position={[-6.95, 4.5, -6.17]} intensity={8} color="#38bdf8" distance={35} decay={2} />
 
               {/* 4. Residential Villas Pathway */}
-              <pointLight position={[-6.19, 3.5, 11.89]} intensity={6} color="#fde047" distance={25} decay={2} />
+              <pointLight position={[-6.19, 3.5, 11.89]} intensity={8} color="#fde047" distance={30} decay={2} />
 
               {/* 5. Central Plaza & Boulevard Hub */}
-              <pointLight position={[2.5, 2.5, 2.5]} intensity={6} color="#fbbf24" distance={25} decay={2} />
+              <pointLight position={[2.5, 2.5, 2.5]} intensity={8} color="#fbbf24" distance={30} decay={2} />
             </>
           )}
 
