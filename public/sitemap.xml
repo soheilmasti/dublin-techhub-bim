@@ -27,6 +27,14 @@
     <priority>0.95</priority>
   </url>
 
+  <!-- BIM R&D Lab, Custom Revit Plugins & Computational Tools -->
+  <url>
+    <loc>https://bimco.es/?view=rnd</loc>
+    <lastmod>2026-09-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.92</priority>
+  </url>
+
   <!-- Google Knowledge Base & Architectural FAQ -->
   <url>
     <loc>https://bimco.es/?view=faq</loc>

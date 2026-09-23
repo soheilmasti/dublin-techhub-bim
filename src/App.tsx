@@ -64,6 +64,7 @@ export const App: React.FC = () => {
 
   // 7-Language State with Smart IP Detection & Persistent Cookie
   const [language, setLanguage] = useState<LanguageCode>(getInitialLanguage);
+  const [partnerTab, setPartnerTab] = useState<'talent' | 'rnd'>('talent');
 
   const handleOpenWhatsApp = (presetText?: string) => {
     setWhatsAppInitialMessage(presetText || '');
@@ -77,8 +78,16 @@ export const App: React.FC = () => {
       const langParam = urlParams.get('lang');
       const viewParam = urlParams.get('view');
 
-      if (viewParam && ['bim-outsourcing', 'client-portal', 'partners', 'dublin-bim-audit', 'grid', 'resume', '3d'].includes(viewParam)) {
+      if (viewParam === 'rnd') {
+        setSettings(prev => ({ ...prev, activeView: 'partners' }));
+        setPartnerTab('rnd');
+      } else if (viewParam && ['bim-outsourcing', 'client-portal', 'partners', 'dublin-bim-audit', 'grid', 'resume', '3d'].includes(viewParam)) {
         setSettings(prev => ({ ...prev, activeView: viewParam as SiteSettings['activeView'] }));
+        if (urlParams.get('tab') === 'rnd') {
+          setPartnerTab('rnd');
+        }
+      } else if (urlParams.get('tab') === 'rnd') {
+        setPartnerTab('rnd');
       }
 
       if (langParam && ['en', 'es', 'ca', 'de', 'fr', 'it', 'fa'].includes(langParam)) {
@@ -157,7 +166,7 @@ export const App: React.FC = () => {
 
   // Automated SEO & Generative Engine Meta Updates
   useSEO({
-    view: settings.activeView,
+    view: (settings.activeView === 'partners' && partnerTab === 'rnd') ? 'rnd' : settings.activeView,
     language,
     selectedProjectName: activeLocalizedProject?.title,
     selectedCategoryName: activeLocalizedCategory?.title
@@ -239,6 +248,7 @@ export const App: React.FC = () => {
             currentLanguage={language}
             onBackToHome={handleResetToHome}
             onOpenWhatsApp={handleOpenWhatsApp}
+            initialTab={partnerTab}
           />
         )}
 

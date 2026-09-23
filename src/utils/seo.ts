@@ -8,7 +8,7 @@ interface SEOProps {
   selectedCategoryName?: string;
 }
 
-const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; dublin: string; resume: string; projects: string; clientPortal: string; partners: string }> = {
+const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; dublin: string; resume: string; projects: string; clientPortal: string; partners: string; rnd: string }> = {
   en: {
     default: 'BIMCO | Cost-Effective BIM Outsourcing & Revit Modeling | UK, Ireland & Europe',
     outsourcing: 'BIM Outsourcing for Architecture Studios | Save up to 50% | UK & Ireland',
@@ -16,7 +16,8 @@ const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; d
     resume: 'Architectural Portfolio & Professional BIM Expertise | BIMCO Studio',
     projects: 'Architectural & Technical BIM Projects Archive | BIMCO',
     clientPortal: 'Client Portal & Live Order Tracker | Deliverables & LOD | BIMCO',
-    partners: 'Join Our Architectural & BIM Partner Talent Network | BIMCO'
+    partners: 'Join Our Architectural & BIM Partner Talent Network | BIMCO',
+    rnd: 'BIM R&D Lab & Computational Plugins | Revit API, AI & Automation | BIMCO'
   },
   es: {
     default: 'BIMCO | Outsourcing BIM y Modelado Revit Económico para Estudios | España y Europa',
@@ -25,7 +26,8 @@ const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; d
     resume: 'Perfil Profesional y Experiencia en Arquitectura y BIM | BIMCO',
     projects: 'Archivo de Proyectos de Arquitectura y BIM | BIMCO',
     clientPortal: 'Portal de Clientes y Seguimiento de Proyectos en Vivo | BIMCO',
-    partners: 'Únete a Nuestra Red de Colaboradores y Talento BIM | BIMCO'
+    partners: 'Únete a Nuestra Red de Colaboradores y Talento BIM | BIMCO',
+    rnd: 'Laboratorio I+D BIM y Plugins Computacionales | Revit API e IA | BIMCO'
   },
   ca: {
     default: 'BIMCO | Externalització BIM i Modelat Revit per a Estudis d’Arquitectura',
@@ -34,7 +36,8 @@ const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; d
     resume: 'Perfil Professional i Trajectòria en Arquitectura BIM | BIMCO',
     projects: 'Arxiu de Projectes d’Arquitectura i BIM | BIMCO',
     clientPortal: 'Portal de Clients i Seguiment de Projectes en Viu | BIMCO',
-    partners: 'Uneix-te a la Nostra Xarxa de Col·laboradors BIM | BIMCO'
+    partners: 'Uneix-te a la Nostra Xarxa de Col·laboradors BIM | BIMCO',
+    rnd: 'Laboratori R+D BIM i Plugins Computacionals | Revit API i IA | BIMCO'
   },
   de: {
     default: 'BIMCO | Kostengünstiges BIM-Outsourcing & Revit-Modellierung | Europa',
@@ -43,7 +46,8 @@ const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; d
     resume: 'Architektur-Portfolio & BIM-Expertise | BIMCO',
     projects: 'Archiv für Architektur- und BIM-Projekte | BIMCO',
     clientPortal: 'Kundenportal & Live-Projektverfolgung | BIM-Lieferungen | BIMCO',
-    partners: 'BIM-Talent- und Partnernetzwerk beitreten | BIMCO'
+    partners: 'BIM-Talent- und Partnernetzwerk beitreten | BIMCO',
+    rnd: 'BIM F&E-Labor & Rechen-Plugins | Revit API & KI-Automation | BIMCO'
   },
   fr: {
     default: 'BIMCO | Sous-traitance BIM & Modélisation Revit Économique | Europe',
@@ -52,7 +56,8 @@ const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; d
     resume: 'Profil Professionnel & Expertise Architecture BIM | BIMCO',
     projects: 'Archive des Projets d’Architecture et BIM | BIMCO',
     clientPortal: 'Portail Clients & Suivi de Projet en Direct | BIMCO',
-    partners: 'Rejoignez Notre Réseau de Partenaires et Talents BIM | BIMCO'
+    partners: 'Rejoignez Notre Réseau de Partenaires et Talents BIM | BIMCO',
+    rnd: 'Laboratoire R&D BIM et Plugins Computationnels | API Revit et IA | BIMCO'
   },
   it: {
     default: 'BIMCO | Outsourcing BIM & Modellazione Revit Economica per Studi | Europa',
@@ -61,7 +66,8 @@ const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; d
     resume: 'Profilo Professionale & Competenze BIM e Architettura | BIMCO',
     projects: 'Archivio Progetti di Architettura e BIM | BIMCO',
     clientPortal: 'Portale Clienti & Tracciamento Progetti Live | BIMCO',
-    partners: 'Unisciti alla Nostra Rete di Partner e Talenti BIM | BIMCO'
+    partners: 'Unisciti alla Nostra Rete di Partner e Talenti BIM | BIMCO',
+    rnd: 'Laboratorio R&S BIM e Plugin Computazionali | API Revit e IA | BIMCO'
   },
   fa: {
     default: 'BIMCO | برون‌سپاری تخصصی و اقتصادی مدل‌سازی BIM و رویت برای انگلستان و اروپا',
@@ -70,7 +76,8 @@ const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; d
     resume: 'رزومه، مدارک بین‌المللی و سوابق معماری و BIM | BIMCO',
     projects: 'آرشیو ۱۹ پروژه معماری و مدل‌سازی BIM | BIMCO',
     clientPortal: 'پورتال سفارشات و رهگیری زنده پیشرفت مدل‌سازی BIM | BIMCO',
-    partners: 'پیوستن به شبکه همکاران و متخصصین معماری و بیم | BIMCO'
+    partners: 'پیوستن به شبکه همکاران و متخصصین معماری و بیم | BIMCO',
+    rnd: 'واحد R&D و نوآوری دیجیتال | پلاگین‌های اختصاصی Revit و الگوریتم‌های هوش مصنوعی | BIMCO'
   }
 };
 
@@ -98,6 +105,8 @@ export const updateMetaTags = ({ view, language, selectedProjectName, selectedCa
     title = langTitles.clientPortal;
   } else if (view === 'partners') {
     title = langTitles.partners;
+  } else if (view === 'rnd') {
+    title = langTitles.rnd;
   } else if (view === 'dublin-bim-audit') {
     title = langTitles.dublin;
   } else if (view === 'resume') {

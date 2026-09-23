@@ -23,11 +23,13 @@ import {
 import { LanguageCode } from '../utils/i18n';
 import { PartnerApplication } from '../types';
 import { sound } from '../utils/audio';
+import { RndLabSection } from './RndLabSection';
 
 interface PartnersNetworkViewProps {
   currentLanguage: LanguageCode;
   onBackToHome: () => void;
   onOpenWhatsApp?: (presetText?: string) => void;
+  initialTab?: 'talent' | 'rnd';
 }
 
 const DISCIPLINES = [
@@ -59,9 +61,17 @@ const SOFTWARE_OPTIONS = [
 export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
   currentLanguage,
   onBackToHome,
-  onOpenWhatsApp
+  onOpenWhatsApp,
+  initialTab
 }) => {
   const isRTL = currentLanguage === 'fa';
+  const [activeTab, setActiveTab] = useState<'talent' | 'rnd'>(initialTab || 'talent');
+
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -235,8 +245,61 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
           </button>
         </div>
 
-        {/* Hero Section */}
-        <div className="relative overflow-hidden rounded-3xl bg-slate-900 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-white p-8 sm:p-12 shadow-2xl border border-slate-800">
+        {/* Sub-Navigation Switcher: Talent Network vs Computational R&D */}
+        <div className="flex flex-wrap items-center justify-between gap-4 p-2 rounded-2xl bg-white border border-gray-200/90 shadow-xs">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                sound.playClick();
+                setActiveTab('talent');
+                const url = new URL(window.location.href);
+                url.searchParams.delete('tab');
+                window.history.replaceState({}, '', url.toString());
+              }}
+              className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeTab === 'talent'
+                  ? 'bg-slate-900 text-white shadow-md'
+                  : 'text-gray-600 hover:text-black hover:bg-gray-100'
+              }`}
+            >
+              <Users className="w-4 h-4" />
+              <span>{isRTL ? 'همکاری و جذب استعدادها' : 'Talent & Partner Network'}</span>
+            </button>
+
+            <button
+              onClick={() => {
+                sound.playClick();
+                setActiveTab('rnd');
+                const url = new URL(window.location.href);
+                url.searchParams.set('tab', 'rnd');
+                window.history.replaceState({}, '', url.toString());
+              }}
+              className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeTab === 'rnd'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
+                  : 'text-gray-600 hover:text-black hover:bg-gray-100'
+              }`}
+            >
+              <Code className={`w-4 h-4 ${activeTab === 'rnd' ? 'text-white' : 'text-blue-600'}`} />
+              <span>{isRTL ? 'واحد R&D و نوآوری دیجیتال (پلاگین‌ها)' : 'Computational R&D & Plugins'}</span>
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+                activeTab === 'rnd' ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-700'
+              }`}>
+                5 Labs
+              </span>
+            </button>
+          </div>
+
+          <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-gray-500 pr-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>{isRTL ? 'پروژه‌ها و ابزارهای فعال ۲۰۲۶' : 'Active 2026 Pipeline & Tools'}</span>
+          </div>
+        </div>
+
+        {activeTab === 'talent' ? (
+          <>
+            {/* Hero Section */}
+            <div className="relative overflow-hidden rounded-3xl bg-slate-900 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-white p-8 sm:p-12 shadow-2xl border border-slate-800">
           <div className="relative z-10 max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs font-mono font-bold">
               <Users className="w-3.5 h-3.5 text-blue-400" />
@@ -892,6 +955,13 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
             })}
           </div>
         </div>
+        </>
+      ) : (
+        <RndLabSection
+          currentLanguage={currentLanguage}
+          onOpenWhatsApp={onOpenWhatsApp}
+        />
+      )}
 
       </div>
     </div>
