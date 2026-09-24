@@ -8,7 +8,7 @@ import { DublinTechHubShowcase } from './components/DublinTechHubShowcase';
 import { BimOutsourcingSection } from './components/BimOutsourcingSection';
 import { ClientPortalView } from './components/ClientPortalView';
 import { PartnersNetworkView } from './components/PartnersNetworkView';
-import { LightweightIntroDemo } from './components/LightweightIntroDemo';
+import { CinematicVideoIntro } from './components/CinematicVideoIntro';
 import { ContactWhatsAppModal } from './components/ContactWhatsAppModal';
 import { AiSearchBoosterModal } from './components/AiSearchBoosterModal';
 import { BimKnowledgeHubModal } from './components/BimKnowledgeHubModal';
@@ -252,24 +252,24 @@ export const App: React.FC = () => {
           />
         )}
 
-        {settings.activeView === '3d' && !hasEntered3D && (
-          <LightweightIntroDemo
-            currentLanguage={language}
-            onEnter3D={handleEnter3D}
-            onNavigateToView={(v) => handleUpdateSettings({ activeView: v })}
-            onOpenWhatsApp={handleOpenWhatsApp}
-            onOpenKnowledgeHub={() => setIsKnowledgeHubOpen(true)}
-          />
-        )}
+        {settings.activeView === '3d' && (
+          <>
+            <ThreeDClayCanvas
+              categories={localizedCategories}
+              onSelectCategory={(cat) => setSelectedCategory(cat)}
+              selectedCategory={selectedCategory}
+              currentLanguage={language}
+              onExit3D={handleExit3D}
+            />
 
-        {settings.activeView === '3d' && hasEntered3D && (
-          <ThreeDClayCanvas
-            categories={localizedCategories}
-            onSelectCategory={(cat) => setSelectedCategory(cat)}
-            selectedCategory={selectedCategory}
-            currentLanguage={language}
-            onExit3D={handleExit3D}
-          />
+            {!hasEntered3D && (
+              <CinematicVideoIntro
+                currentLanguage={language}
+                onEnter3D={handleEnter3D}
+                onNavigateToView={(v) => handleUpdateSettings({ activeView: v })}
+              />
+            )}
+          </>
         )}
       </main>
 
