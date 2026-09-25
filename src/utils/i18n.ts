@@ -232,14 +232,14 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     backToOverview: 'Tornar al Portafoli',
 
     aboutStudio: {
-      title: 'Atelier d’Arquitectura i Urbanisme Contemporani',
-      tagline: 'SOHEIL MASTI ARCHITECTURE STUDIO // BARCELONA & TEHERAN',
-      p1: 'Creiem que l’arquitectura és l’art d’organitzar l’espai, la llum i la matèria en la seva forma més pura. Aquest espai interactiu us convida a recórrer el nostre treball, des de viles de muntanya fins a grans torres corporatives.',
-      p2: 'La nostra metodologia es fonamenta en la simplicitat radical, el compromís bioclimàtic, la sostenibilitat i la integració de processos BIM LOD 350/400 d’alta precisió.',
+      title: 'Sobre BIMCO Espanya | Coordinació BIM i Plànols d’Enginyeria',
+      tagline: 'COORDINACIÓ BIM I DISSENY TÈCNIC // BARCELONA I UNIÓ EUROPEA',
+      p1: 'Amb seu al centre de disseny europeu de Barcelona, Catalunya, BIMCO és una plataforma líder de suport arquitectònic i enginyeria especialitzada en Coordinació BIM d’alt nivell i Plànols d’Enginyeria. Connectem els dissenys conceptuals amb l’execució tècnica en obra.',
+      p2: 'Operant a tota la Unió Europea (UE) i el Regne Unit, el nostre estudi ofereix solucions professionals tant per a arquitectura civil com per a instal·lacions industrials complexes. Des de la detecció integral de col·lisions (Clash Detection) fins a plànols estructurals i de fabricació precisos, garantim el compliment dels estàndards europeus, Eurocodis i la norma ISO 19650.',
       emailLabel: 'Correu Electrònic',
       phoneLabel: 'Telèfon de Contacte',
       addressLabel: 'Adreça de l’Estudi',
-      addressValue: 'Sant Cugat del Vallès, Barcelona, Catalunya | Teheran',
+      addressValue: 'Barcelona (Sant Cugat del Vallès), Catalunya, Espanya (UE)',
       close: 'Tancar'
     },
 
@@ -375,14 +375,14 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     backToOverview: 'بازگشت به پورتفولیو کارها',
 
     aboutStudio: {
-      title: 'آتلیه معماری و شهرسازی معاصر',
-      tagline: 'استودیو معماری و مدلسازی BIM // بارسلون و تهران',
-      p1: 'ما بر این باوریم که معماری، هنر سازمان‌دهی فضا، نور و ماده در خالص‌ترین شکل ممکن است. این وب‌سایت به عنوان پورتفولیوی تعاملی کارهای معماری طراحی شده تا بیننده را به سفری در میان تجربیات فضایی مختلف، از ویلاهای لوکس تا برج‌های پایدار، دعوت کند.',
-      p2: 'رویکرد ما در طراحی مبتنی بر سادگی رادیکال، توجه عمیق به بستر اقلیمی و پایداری، اجرای استانداردهای بین‌المللی مدلسازی اطلاعات ساختمان (BIM LOD 350/400) و خلق پیوند معنادار میان انسان و کالبد شهری است.',
-      emailLabel: 'ایمیل ارتباطی',
+      title: 'استودیو مهندسی و هماهنگی BIMCO اسپانیا',
+      tagline: 'هماهنگی بیم (BIM) و نقشه‌کشی مهندسی // بارسلون و اتحادیه اروپا',
+      p1: 'استودیو BIMCO با مرکزیت هاب طراحی بارسلون اسپانیا، یک پلتفرم پیشرو در ارائه خدمات هماهنگی بیم (BIM Coordination) و ترسیم نقشه‌های پیشرفته مهندسی و معماری است. ما فاصله میان کانسپت‌های پیچیده طراحی و اجرای فنی در ساخت را با دقت کامل پر می‌کنیم.',
+      p2: 'با فعالیت عملیاتی در سراسر اتحادیه اروپا و انگلستان، خدمات ما شامل پروژه‌های معماری ساختمانی و کارخانه‌ای/صنعتی پیچیده است. از مدیریت و کشف جامع تعارضات (Clash Detection) تا ترسیم نقشه‌های سازه و تاسیسات، انطباق کامل با استانداردهای بین‌المللی ISO 19650 و Eurocodes تضمین می‌شود.',
+      emailLabel: 'ایمیل استودیو',
       phoneLabel: 'شماره تماس مستقیم',
-      addressLabel: 'آدرس دفاتر طراحی',
-      addressValue: 'بارسلون (Sant Cugat del Vallès)، اسپانیا | تهران، ایران',
+      addressLabel: 'موقعیت استودیو',
+      addressValue: 'بارسلون (کاتالونیا)، اسپانیا (اتحادیه اروپا)',
       close: 'بستن'
     },
 
@@ -518,14 +518,14 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     backToOverview: 'Volver al Portafolio',
 
     aboutStudio: {
-      title: 'Estudio de Arquitectura y Urbanismo Contemporáneo',
-      tagline: 'SOHEIL MASTI ARCHITECTURE STUDIO // BARCELONA Y TEHERÁN',
-      p1: 'Creemos que la arquitectura es el arte de organizar el espacio, la luz y la materia en su forma más pura. Este portafolio interactivo invita a recorrer nuestra trayectoria, desde villas alpinas hasta rascacielos sostenibles.',
-      p2: 'Nuestra metodología se basa en la simplicidad radical, la sensibilidad bioclimática, la sostenibilidad y el dominio avanzado de metodologías BIM LOD 350/400.',
+      title: 'Sobre BIMCO España | Coordinación BIM y Planos de Ingeniería',
+      tagline: 'COORDINACIÓN BIM Y PLANOS TÉCNICOS // BARCELONA Y UNIÓN EUROPEA',
+      p1: 'Con sede en el centro de diseño europeo de Barcelona, España, BIMCO es una plataforma líder de soporte arquitectónico e ingeniería especializada en Coordinación BIM de alto nivel y Planos de Ingeniería. Conectamos los diseños conceptuales con la ejecución técnica en obra.',
+      p2: 'Operando en toda la Unión Europea (UE) y Reino Unido, nuestro estudio ofrece soluciones profesionales tanto para arquitectura civil como para instalaciones industriales complejas. Desde la detección integral de colisiones (Clash Detection) hasta planos estructurales y de fabricación precisos, garantizamos que sus proyectos cumplan con los más estrictos estándares europeos, Eurocódigos y la norma ISO 19650.',
       emailLabel: 'Correo Electrónico',
       phoneLabel: 'Teléfono de Contacto',
       addressLabel: 'Dirección del Estudio',
-      addressValue: 'Sant Cugat del Vallès, Barcelona, España | Teherán',
+      addressValue: 'Barcelona, Cataluña, España (Unión Europea)',
       close: 'Cerrar'
     },
 
@@ -661,14 +661,14 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     backToOverview: 'Back to Works Portfolio',
 
     aboutStudio: {
-      title: 'Contemporary Architecture & Urban Studio',
-      tagline: 'SOHEIL MASTI ARCHITECTURAL STUDIO // BARCELONA & TEHRAN',
-      p1: 'We believe architecture is the art of organizing space, light, and material in its purest form. This interactive spatial environment invites visitors to explore our body of work from bespoke luxury villas to major skyline infrastructure.',
-      p2: 'Our methodology centers on radical simplicity, climate-responsive design, environmental sustainability, and precision Building Information Modeling leadership (BIM LOD 350/400).',
+      title: 'About BIMCO Spain | Architectural & Engineering Studio',
+      tagline: 'BIM COORDINATION & ENGINEERING DRAWINGS // BARCELONA & EUROPE',
+      p1: 'Based in the European design hub of Barcelona, Spain, BIMCO is a premier engineering and architectural support platform specializing in high-level BIM Coordination and advanced Engineering Drawings. We bridge the gap between complex conceptual designs and technical construction execution.',
+      p2: 'Operating across the European Union (EU) and UK/Ireland, our studio delivers professional solutions for civil architecture, residential, commercial, and industrial facilities. From comprehensive clash detection to precise manufacturing and structural layouts, we ensure your projects meet strict Eurocode and ISO 19650 standards.',
       emailLabel: 'Studio Email',
       phoneLabel: 'Direct Phone',
-      addressLabel: 'Studio Locations',
-      addressValue: 'Barcelona (Sant Cugat del Vallès), Spain | Tehran, Iran',
+      addressLabel: 'Studio Location',
+      addressValue: 'Barcelona, Catalonia, Spain (European Union)',
       close: 'Close'
     },
 

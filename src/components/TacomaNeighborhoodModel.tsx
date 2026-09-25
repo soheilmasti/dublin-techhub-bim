@@ -23,6 +23,7 @@ interface TacomaNeighborhoodModelProps {
   selectedCategory: CategoryBuilding | null;
   lightingMode: 'day' | 'sunset' | 'night' | 'wireframe';
   currentLanguage?: LanguageCode;
+  showPins?: boolean;
 }
 
 // 5 Interactive Building Complexes in Tacoma Model (Exact Coordinates & Bounding Envelopes mapped to Categories)
@@ -95,7 +96,8 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
   onSelectCategory,
   selectedCategory,
   lightingMode,
-  currentLanguage = 'en'
+  currentLanguage = 'en',
+  showPins = true
 }) => {
   const gltf = useGLTF('/models/tacoma/Tacoma_Neighborhood.glb');
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -246,8 +248,8 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
               />
             </mesh>
 
-            {/* 2. Sleek Floating Architectural Tag (Hidden when any building is selected so user can freely inspect project details) */}
-            {!selectedCategory && (
+            {/* 2. Sleek Floating Architectural Tag (Hidden when any building is selected or during video intro) */}
+            {!selectedCategory && showPins && (
               <group position={zone.roof}>
                 {/* Minimalist Floating Glass Pill Badge & Rich Project Card */}
                 <Html position={[0, 0.4, 0]} center distanceFactor={15}>

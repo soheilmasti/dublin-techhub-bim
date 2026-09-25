@@ -33,42 +33,55 @@ const SceneExposure: React.FC<{ mode: 'day' | 'sunset' | 'night' | 'wireframe' }
   return null;
 };
 
+// Dynamic Responsive FOV Updater for mobile/tablet/desktop screens
+const ResponsiveCameraUpdater: React.FC<{ fov: number }> = ({ fov }) => {
+  const { camera } = useThree();
+  useEffect(() => {
+    if (camera instanceof THREE.PerspectiveCamera) {
+      camera.fov = fov;
+      camera.updateProjectionMatrix();
+    }
+  }, [camera, fov]);
+  return null;
+};
+
 interface ThreeDClayCanvasProps {
   categories: CategoryBuilding[];
   onSelectCategory: (category: CategoryBuilding) => void;
   selectedCategory: CategoryBuilding | null;
   currentLanguage?: LanguageCode;
   onExit3D?: () => void;
+  isIntroActive?: boolean;
 }
 
-// 5 Zone Centroid & Camera Targets for Smooth Focus
+// 5 Zone Centroid & Camera Targets for Smooth Focus (Rotated 90 deg CCW to match Horizontal Overview perspective)
 const ZONE_CAMERA_TARGETS: Record<string, { target: [number, number, number]; position: [number, number, number] }> = {
   'urban-design': {
     target: [-6.95, 4.0, -6.17],
-    position: [-1.5, 8.5, 0.5]
+    position: [-0.3, 8.5, -11.6]
   },
   'residential-luxury': {
     target: [-6.19, 3.0, 11.89],
-    position: [-1.0, 7.5, 18.5]
+    position: [0.4, 7.5, 6.7]
   },
   'commercial-complexes': {
     target: [6.57, 5.2, 6.23],
-    position: [14.0, 10.5, 14.0]
+    position: [14.3, 10.5, -1.2]
   },
   'retail-stores': {
     target: [-0.87, 3.2, -1.03],
-    position: [6.5, 8.0, 6.5]
+    position: [6.7, 8.0, -8.4]
   },
   'institutional-competitions': {
     target: [7.31, 2.2, 16.02],
-    position: [13.5, 6.5, 22.0]
+    position: [13.3, 6.5, 9.8]
   }
 };
 
-// Wide, comfortable panoramic overview of the entire Tacoma neighborhood & masterplan
+// Wide, comfortable panoramic overview of the entire Tacoma neighborhood & masterplan (Rotated 90 deg counter-clockwise & centered)
 const OVERVIEW_CAMERA = {
-  target: [0, 2.0, 2.5] as [number, number, number],
-  position: [28, 25, 32] as [number, number, number]
+  target: [0, 2.0, 3.5] as [number, number, number],
+  position: [32, 24, -24] as [number, number, number]
 };
 
 // Smooth Camera Flight Controller (Free Orbit by default, flies ONLY on click, yields immediately on user mouse interaction)
@@ -78,14 +91,21 @@ const CameraController: React.FC<{
 }> = ({ targetFocus, autoRotate }) => {
   const controlsRef = useRef<OrbitControlsType>(null);
   const isFlying = useRef<boolean>(false);
+  const flightProgress = useRef<number>(1);
+  const startPos = useRef(new THREE.Vector3());
+  const startTarget = useRef(new THREE.Vector3());
   const targetVec = useRef(new THREE.Vector3());
   const posVec = useRef(new THREE.Vector3());
 
   // Trigger flight ONLY when targetFocus is explicitly updated by a click
   useEffect(() => {
-    if (targetFocus) {
+    if (targetFocus && controlsRef.current) {
+      const controls = controlsRef.current;
+      startPos.current.copy(controls.object.position);
+      startTarget.current.copy(controls.target);
       targetVec.current.set(...targetFocus.target);
       posVec.current.set(...targetFocus.position);
+      flightProgress.current = 0;
       isFlying.current = true;
     }
   }, [targetFocus]);
@@ -110,19 +130,25 @@ const CameraController: React.FC<{
     const controls = controlsRef.current;
     if (!controls) return;
 
-    // Only interpolate when actively flying from an explicit click
+    // Smooth deterministic cubic ease-out camera flight
     if (isFlying.current) {
-      controls.target.lerp(targetVec.current, delta * 3.5);
-      camera.position.lerp(posVec.current, delta * 3.0);
+      flightProgress.current = Math.min(1, flightProgress.current + delta * 1.35);
+      const p = flightProgress.current;
+      // Cubic ease-out: fast start, soft landing
+      const ease = 1 - Math.pow(1 - p, 3);
+
+      camera.position.lerpVectors(startPos.current, posVec.current, ease);
+      controls.target.lerpVectors(startTarget.current, targetVec.current, ease);
       controls.update();
 
-      // Once destination is reached, release camera control for complete freedom
-      if (
-        controls.target.distanceTo(targetVec.current) < 0.08 &&
-        camera.position.distanceTo(posVec.current) < 0.12
-      ) {
+      if (p >= 1) {
         isFlying.current = false;
+        camera.position.copy(posVec.current);
+        controls.target.copy(targetVec.current);
+        controls.update();
       }
+    } else {
+      controls.update();
     }
   });
 
@@ -132,14 +158,20 @@ const CameraController: React.FC<{
       enablePan={true}
       enableZoom={true}
       enableRotate={true}
+      rotateSpeed={0.7}
+      zoomSpeed={1.0}
       enableDamping={true}
       dampingFactor={0.06}
       screenSpacePanning={true}
       autoRotate={autoRotate}
-      autoRotateSpeed={0.8}
+      autoRotateSpeed={0.56}
       maxPolarAngle={Math.PI / 2.03}
       minDistance={3}
       maxDistance={120}
+      touches={{
+        ONE: THREE.TOUCH.ROTATE,
+        TWO: THREE.TOUCH.DOLLY_PAN
+      }}
     />
   );
 };
@@ -149,18 +181,57 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
   onSelectCategory,
   selectedCategory,
   currentLanguage = 'en',
-  onExit3D
+  onExit3D,
+  isIntroActive = false
 }) => {
   const [lightingMode, setLightingMode] = useState<'day' | 'sunset' | 'night' | 'wireframe'>('day');
   const [autoRotate, setAutoRotate] = useState<boolean>(false);
   const [cameraFocus, setCameraFocus] = useState<{ target: [number, number, number]; position: [number, number, number] } | null>(null);
 
-  const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
+  // Responsive FOV based on screen width/aspect ratio (auto-adapts for portrait phones & tablets)
+  const [responsiveFov, setResponsiveFov] = useState<number>(38);
 
-  // Sync camera focus when selectedCategory changes
   useEffect(() => {
+    const updateFov = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const aspect = width / height;
+
+      if (aspect < 0.6) {
+        // Tall portrait mobile (e.g. iPhone, Samsung Galaxy) -> wider FOV to fit full horizontal masterplan
+        setResponsiveFov(55);
+      } else if (aspect < 0.9) {
+        // Tablet portrait (iPad)
+        setResponsiveFov(46);
+      } else if (aspect < 1.3) {
+        // Small laptops / square windows
+        setResponsiveFov(42);
+      } else {
+        // Standard wide desktop
+        setResponsiveFov(38);
+      }
+    };
+
+    updateFov();
+    window.addEventListener('resize', updateFov);
+    return () => window.removeEventListener('resize', updateFov);
+  }, []);
+
+  const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
+  const isInitialMount = useRef(true);
+
+  // Sync camera focus: zoom in on building click, smoothly return to OVERVIEW on deselect!
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
     if (selectedCategory && ZONE_CAMERA_TARGETS[selectedCategory.id]) {
       setCameraFocus(ZONE_CAMERA_TARGETS[selectedCategory.id]);
+    } else if (!selectedCategory) {
+      // Whenever user closes project drawer or returns to 3D space, smoothly fly back to panoramic Overview!
+      setCameraFocus({ ...OVERVIEW_CAMERA });
     }
   }, [selectedCategory]);
 
@@ -178,11 +249,12 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
   };
 
   return (
-    <div className="relative w-full h-screen bg-[#0f141c] overflow-hidden select-none touch-none">
+    <div className="relative w-full h-[100dvh] h-screen bg-[#0f141c] overflow-hidden select-none touch-none">
       {/* 3D WebGL Canvas with PBR Tone Mapping & Wide Overview Camera */}
       <Canvas
         shadows
-        camera={{ position: [28, 25, 32], fov: 38 }}
+        dpr={[1, 2]}
+        camera={{ position: [32, 24, -24], fov: 38 }}
         gl={{ 
           antialias: true,
           preserveDrawingBuffer: true,
@@ -192,6 +264,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
       >
         <Suspense fallback={null}>
           <SceneExposure mode={lightingMode} />
+          <ResponsiveCameraUpdater fov={responsiveFov} />
 
           {/* Clean Horizon Background */}
           <color attach="background" args={[lightingMode === 'night' ? '#0a0f1d' : lightingMode === 'sunset' ? '#1c1520' : '#eaeff5']} />
@@ -289,6 +362,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
             onSelectCategory={onSelectCategory}
             lightingMode={lightingMode}
             currentLanguage={currentLanguage}
+            showPins={!isIntroActive}
           />
 
           {/* Soft Ground Contact Shadows */}
@@ -305,34 +379,36 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
         </Suspense>
       </Canvas>
 
-      {/* BOTTOM-LEFT: Camera Preset & View Control Toolbar (Rotate & Overview) */}
-      <div className={`absolute bottom-4 sm:bottom-6 left-3 sm:left-6 z-20 glass-panel p-1 sm:p-1.5 rounded-2xl shadow-clay-md flex items-center gap-1 sm:gap-1.5 border border-white/80 transition-opacity duration-300 ${selectedCategory ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-        <button
-          onClick={handleResetCamera}
-          className="p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold text-gray-700 hover:text-black hover:bg-white/80 transition-all cursor-pointer flex items-center gap-1.5"
-          title={t.overviewView}
-        >
-          <Camera className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-blue-600 shrink-0" />
-          <span className="hidden sm:inline font-medium">{t.overviewView}</span>
-        </button>
+      {/* BOTTOM-LEFT: Camera Preset & View Control Toolbar (Rotate & Overview - Hidden on Video Intro) */}
+      {!isIntroActive && (
+        <div className={`absolute bottom-4 sm:bottom-6 left-3 sm:left-6 z-20 glass-panel p-1 sm:p-1.5 rounded-2xl shadow-clay-md flex items-center gap-1 sm:gap-1.5 border border-white/80 transition-opacity duration-300 ${selectedCategory ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          <button
+            onClick={handleResetCamera}
+            className="p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold text-gray-700 hover:text-black hover:bg-white/80 transition-all cursor-pointer flex items-center gap-1.5"
+            title={t.overviewView}
+          >
+            <Camera className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-blue-600 shrink-0" />
+            <span className="hidden sm:inline font-medium">{t.overviewView}</span>
+          </button>
 
-        <button
-          onClick={() => {
-            sound.playSwitch();
-            setAutoRotate(!autoRotate);
-          }}
-          className={`p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
-            autoRotate ? 'bg-blue-600 text-white shadow-xs' : 'text-gray-700 hover:text-black hover:bg-white/80'
-          }`}
-          title={autoRotate ? t.autoRotateStop : t.autoRotateStart}
-        >
-          {autoRotate ? <Pause className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-white shrink-0" /> : <Play className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-blue-600 shrink-0" />}
-          <span className="hidden sm:inline font-medium">{autoRotate ? t.autoRotateStop : t.autoRotateStart}</span>
-        </button>
-      </div>
+          <button
+            onClick={() => {
+              sound.playSwitch();
+              setAutoRotate(!autoRotate);
+            }}
+            className={`p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+              autoRotate ? 'bg-blue-600 text-white shadow-xs' : 'text-gray-700 hover:text-black hover:bg-white/80'
+            }`}
+            title={autoRotate ? t.autoRotateStop : t.autoRotateStart}
+          >
+            {autoRotate ? <Pause className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-white shrink-0" /> : <Play className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-blue-600 shrink-0" />}
+            <span className="hidden sm:inline font-medium">{autoRotate ? t.autoRotateStop : t.autoRotateStart}</span>
+          </button>
+        </div>
+      )}
 
       {/* BOTTOM-CENTER: Lighting Mood Switcher Toolbar (Day, Sunset, Night) & Navigation Hint */}
-      {!selectedCategory && (
+      {!selectedCategory && !isIntroActive && (
         <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 sm:gap-2 max-w-[96vw] pb-[env(safe-area-inset-bottom,4px)]">
           {/* Lighting Mode Switcher Panel */}
           <div className="glass-panel p-1 sm:p-1.5 rounded-2xl shadow-clay-lg flex items-center gap-1 border border-white/90">

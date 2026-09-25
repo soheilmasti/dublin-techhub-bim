@@ -10,7 +10,7 @@ interface SEOProps {
 
 const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; dublin: string; resume: string; projects: string; clientPortal: string; partners: string; rnd: string }> = {
   en: {
-    default: 'BIMCO | Cost-Effective BIM Outsourcing & Revit Modeling | UK, Ireland & Europe',
+    default: 'BIMCO | BIM Coordination & Engineering Drawings in Barcelona',
     outsourcing: 'BIM Outsourcing for Architecture Studios | Save up to 50% | UK & Ireland',
     dublin: 'Dublin TechHub BIM Showcase | LOD 350/400 Case Study | BIMCO',
     resume: 'Architectural Portfolio & Professional BIM Expertise | BIMCO Studio',
@@ -20,7 +20,7 @@ const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; d
     rnd: 'BIM R&D Lab & Computational Plugins | Revit API, AI & Automation | BIMCO'
   },
   es: {
-    default: 'BIMCO | Outsourcing BIM y Modelado Revit Económico para Estudios | España y Europa',
+    default: 'BIMCO | Coordinación BIM y Planos de Ingeniería en Barcelona',
     outsourcing: 'Servicios de Outsourcing BIM para Arquitectura | Ahorro hasta 50% | Europa',
     dublin: 'Caso de Éxito BIM: Dublin TechHub | Nivel de Detalle LOD 350/400 | BIMCO',
     resume: 'Perfil Profesional y Experiencia en Arquitectura y BIM | BIMCO',
@@ -30,7 +30,7 @@ const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; d
     rnd: 'Laboratorio I+D BIM y Plugins Computacionales | Revit API e IA | BIMCO'
   },
   ca: {
-    default: 'BIMCO | Externalització BIM i Modelat Revit per a Estudis d’Arquitectura',
+    default: 'BIMCO | Coordinació BIM i Plànols d’Enginyeria a Barcelona',
     outsourcing: 'Serveis d’Externalització BIM per a Arquitectura | Estalvi fins al 50%',
     dublin: 'Demostració BIM Dublin TechHub | Estudi de Cas LOD 350/400 | BIMCO',
     resume: 'Perfil Professional i Trajectòria en Arquitectura BIM | BIMCO',
@@ -82,13 +82,13 @@ const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; d
 };
 
 const SEO_DESCRIPTIONS: Record<LanguageCode, string> = {
-  en: 'Nearshore architectural BIM outsourcing services for UK, Irish & European architecture practices. High-precision Revit modeling, clash detection, and construction documentation complying with ISO 19650 at up to 50% lower costs.',
-  es: 'Servicios de outsourcing BIM para estudios de arquitectura en Reino Unido, Irlanda y Europa. Modelado Revit de alta precisión bajo norma ISO 19650 con hasta un 50% de ahorro.',
-  ca: 'Serveis d’externalització BIM per a estudis d’arquitectura a Europa. Modelat Revit amb màxima precisió sota la norma ISO 19650 i estalvi de fins al 50%.',
-  de: 'BIM-Outsourcing für europäische Architekturbüros. Hochpräzise Revit-Modellierung nach ISO 19650 mit bis zu 50% Ersparnis.',
-  fr: 'Services de sous-traitance BIM pour architectes européens. Modélisation Revit de haute précision conforme à la norme ISO 19650 avec jusqu’à 50% d’économies.',
-  it: 'Servizi di outsourcing BIM per studi di architettura europei. Modellazione Revit di precisione conforme a ISO 19650 con risparmio fino al 50%.',
-  fa: 'خدمات برون‌سپاری مدل‌سازی BIM و نقشه‌کشی رویت برای دفاتر معماری انگلستان، ایرلند و اروپا با استاندارد بین‌المللی ISO 19650 و صرفه‌جویی تا ۵۰٪.'
+  en: 'Professional BIM Coordination, architectural, and industrial engineering drawing services based in Barcelona. Delivering high-end European standard solutions across the EU, UK, and Ireland.',
+  es: 'Servicios profesionales de Coordinación BIM y planos de ingeniería arquitectónica e industrial en Barcelona y Europa. Soluciones de alta precisión bajo norma ISO 19650.',
+  ca: 'Serveis professionals de Coordinació BIM i plànols d’enginyeria arquitectònica i industrial a Barcelona i Europa. Solucions d’alta precisió sota la norma ISO 19650.',
+  de: 'Professionelle BIM-Koordination und Architektur-/Industrie-Konstruktionszeichnungen in Barcelona und Europa nach ISO 19650.',
+  fr: 'Services professionnels de coordination BIM et plans d’ingénierie architecturale et industrielle basés à Barcelone et en Europe.',
+  it: 'Servizi professionali di coordinamento BIM e disegni tecnici di ingegneria a Barcellona e in tutta Europa conformi a ISO 19650.',
+  fa: 'استودیوی تخصصی هماهنگی بیم (BIM Coordination) و ترسیم نقشه‌های پیشرفته مهندسی و معماری مستقر در بارسلون، اسپانیا با پوشش سراسری اتحادیه اروپا.'
 };
 
 export const updateMetaTags = ({ view, language, selectedProjectName, selectedCategoryName }: SEOProps) => {

@@ -1,0 +1,20 @@
+Total: 19
+bandar-coastal-masterplan	طراحی شهری و سایت‌پلان توسعه ساحلی بندرعباس
+bandar-port-infrastructure	زیرساخت بندرگاهی و گمرکات جدید بندرعباس
+residential-darbandsara	پروژه مسکونی و پنت‌هاوس دربندسر
+residential-ando	پروژه مسکونی و پنت‌هاوس آندو
+residential-lumen	پروژه مسکونی و لابی لومن
+residential-arghavan	پروژه مسکونی ارغوان
+residential-royal	پروژه مسکونی رویال
+residential-noora	پروژه مسکونی نور و نورا
+residential-no10	پروژه مسکونی شماره ۱۰
+residential-aram	پروژه مسکونی و بازسازی آشپزخانه آرام
+residential-no4	پروژه مسکونی شماره ۴
+residential-bandar-abbas	پروژه مسکونی و پنت‌هاوس بندرعباس
+bandar-commercial-complex	مجتمع تجاری بزرگ بندرعباس (۵۲,۰۰۰ متر مربع)
+roudan-commercial	مجتمع تجاری و اداری رودان
+dublin-techhub-bim	برج اداری و فناوری ۷ طبقه دوبلین (BIM Audit LOD 350)
+apple-store-concept	پروژه تجاری و شوروم اپل استور
+hormozgan-engineering-hq	ساختمان مرکزی سازمان نظام مهندسی هرمزگان (مقام دوم مسابقه)
+bandar-lighthouse	المان و پاویون فانوس دریایی بندرعباس (طرح برگزیده)
+sapad-gateway	سردر ورودی مجموعه سپاد مشهد (طرح فینالیست)

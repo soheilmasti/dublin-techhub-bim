@@ -176,26 +176,29 @@ export const App: React.FC = () => {
   const isRTL = language === 'fa';
   const totalProjectsCount = localizedCategories.reduce((acc, cat) => acc + cat.projects.length, 0);
   const isOutsideHome = settings.activeView !== '3d';
+  const isIntroActive = settings.activeView === '3d' && !hasEntered3D;
 
   return (
     <div 
       className="relative min-h-screen bg-[#f5f6f8] text-gray-900 font-sans select-none overflow-x-hidden"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
-      {/* Top Header with Language Selector & Mobile View Navigation */}
-      <Header
-        settings={settings}
-        onUpdateSettings={handleUpdateSettings}
-        onOpenCustomizer={() => setIsCustomizerOpen(true)}
-        onOpenAbout={() => setIsAboutOpen(true)}
-        onOpenWhatsApp={handleOpenWhatsApp}
-        onOpenAiBooster={() => setIsAiBoosterModalOpen(true)}
-        onOpenKnowledgeHub={() => setIsKnowledgeHubOpen(true)}
-        totalProjectsCount={totalProjectsCount}
-        categoriesCount={localizedCategories.length}
-        currentLanguage={language}
-        onLanguageChange={handleLanguageChange}
-      />
+      {/* Top Header with Language Selector & Mobile View Navigation (Hidden on Video Intro) */}
+      {!isIntroActive && (
+        <Header
+          settings={settings}
+          onUpdateSettings={handleUpdateSettings}
+          onOpenCustomizer={() => setIsCustomizerOpen(true)}
+          onOpenAbout={() => setIsAboutOpen(true)}
+          onOpenWhatsApp={handleOpenWhatsApp}
+          onOpenAiBooster={() => setIsAiBoosterModalOpen(true)}
+          onOpenKnowledgeHub={() => setIsKnowledgeHubOpen(true)}
+          totalProjectsCount={totalProjectsCount}
+          categoriesCount={localizedCategories.length}
+          currentLanguage={language}
+          onLanguageChange={handleLanguageChange}
+        />
+      )}
 
       {/* Main Content by Active View */}
       <main className="w-full h-full">
@@ -260,6 +263,7 @@ export const App: React.FC = () => {
               selectedCategory={selectedCategory}
               currentLanguage={language}
               onExit3D={handleExit3D}
+              isIntroActive={isIntroActive}
             />
 
             {!hasEntered3D && (
@@ -285,11 +289,13 @@ export const App: React.FC = () => {
         </button>
       )}
 
-      {/* Floating WhatsApp Contact Hub */}
-      <FloatingContactHub
-        onOpenModal={() => handleOpenWhatsApp()}
-        isRTL={isRTL}
-      />
+      {/* Floating WhatsApp Contact Hub (Hidden on Video Intro) */}
+      {!isIntroActive && (
+        <FloatingContactHub
+          onOpenModal={() => handleOpenWhatsApp()}
+          isRTL={isRTL}
+        />
+      )}
 
       {/* Project Category Slide-over Drawer */}
       <ProjectDrawer
