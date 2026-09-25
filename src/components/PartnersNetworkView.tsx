@@ -24,6 +24,7 @@ import { LanguageCode } from '../utils/i18n';
 import { PartnerApplication } from '../types';
 import { sound } from '../utils/audio';
 import { RndLabSection } from './RndLabSection';
+import { RND_POSTS } from '../data/rndPosts';
 
 interface PartnersNetworkViewProps {
   currentLanguage: LanguageCode;
@@ -285,7 +286,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
               <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
                 activeTab === 'rnd' ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-700'
               }`}>
-                5 Labs
+                {RND_POSTS.length} Labs
               </span>
             </button>
           </div>

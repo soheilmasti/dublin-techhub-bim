@@ -36,6 +36,81 @@ export interface RndPost {
 
 export const RND_POSTS: RndPost[] = [
   {
+    id: 'rnd-00',
+    slug: 'archiq-ai-architectural-consultant-revit',
+    title: 'ArchIQ: AI-Powered Architectural Consultant & Multi-Regional Code Compliance Plugin for Autodesk Revit',
+    titleFa: 'آرک‌آی‌کیو (ArchIQ): دستیار هوش مصنوعی و بازرس خودکار ضوابط معماری و مقررات ملی در رویت',
+    category: 'revit-api',
+    categoryLabel: 'Revit API & AI Compliance',
+    categoryLabelFa: 'پلاگین رویت و هوش مصنوعی',
+    date: '2026',
+    version: 'v1.0 (Revit 2024 / 2025 / 2026)',
+    status: 'Open Source',
+    statusFa: 'متن‌باز',
+    author: 'Soheil Masti',
+    techStack: [
+      'C# .NET 8 / .NET 4.8',
+      'Autodesk Revit API (2024-2026)',
+      'Google Gemini AI (RAG)',
+      'Catalonia Decret 141/2012',
+      'Spanish CTE DB-SUA / DB-SI',
+      'Iran Building Codes (مبحث ۴)',
+      'WPF MVVM'
+    ],
+    summary: 'An intelligent, interactive architectural consultant directly inside Autodesk Revit. Combines deep Revit API parameter extraction with Google Gemini AI and RAG memory to automatically audit rooms and spaces against regional building regulations (Catalonia Decret 141/2012, Spanish CTE, and Iran Building Codes), featuring an in-canvas AI chat and automated memory logging.',
+    summaryFa: 'دستیار هوشمند و تعاملی معماری مستقر در محیط اتودسک رویت؛ ترکیب استخراج عمیق داده‌های رویت با هوش مصنوعی جمینای (Gemini AI) و فناوری RAG جهت بازرسی خودکار فضاها بر اساس ضوابط منطقه‌ای (مقررات مسکن کاتالونیا Decret 141/2012، مبحث ۴ مقررات ملی ساختمان و استانداردهای CTE اسپانیا) به همراه چت تعاملی و ثبت شناسنامه پروژه.',
+    metrics: [
+      { label: 'Audit Speedup', labelFa: 'افزایش سرعت بررسی ضوابط', value: '-94%' },
+      { label: 'Revit Versions', labelFa: 'نسخه‌های پشتیبانی‌شده رویت', value: '2024-2026' },
+      { label: 'Regional Standards', labelFa: 'کدهای مقرراتی تحت پوشش', value: 'Catalonia / CTE / مبحث ۴' }
+    ],
+    challenge: 'Architectural code compliance checking in BIM is traditionally a slow, fragmented manual process. Architects must manually calculate room net areas, glazing daylight ratios, ventilation quotas, and minimum ceiling heights across hundreds of spaces, leading to costly permit rejections or late-stage redesigns.',
+    challengeFa: 'بررسی انطباق نقشه‌ها با ضوابط ساختمانی و شهرسازی معمولاً فرآیندی دستی، خسته‌کننده و مستعد خطا است. معماران باید مساحت خالص، نسبت بازشو و نورگیری به کف، ارتفاع مفید سقف و ابعاد خالص صدها اتاق را یک‌به‌یک با آیین‌نامه‌ها مطابقت دهند که اغلب منجر به رد نقشه‌ها در نظام مهندسی یا شهرداری‌ها می‌شود.',
+    solution: 'Developed ArchIQ as a native C# Revit Add-in. The engine extracts geometry, spatial boundaries, and glazing parameters from Revit Rooms, checks them against mathematical rule sets (Catalonia Decret 141/2012, Spanish CTE, and Iranian National Codes), and feeds structured room metadata into a Google Gemini AI engine. Architects can converse with the AI in natural language to query non-compliant rooms, receive recommendations, and export automated compliance reports.',
+    solutionFa: 'توسعه پلاگین بومی سی‌شارپ ArchIQ برای رویت؛ این موتور هندسه، مرز فضایی و بازشوهای پنجره را از اتاق‌های رویت استخراج کرده و به صورت خودکار با جداول استاندارد کاتالونیا (Decret 141/2012)، کد CTE اسپانیا و الزامات مبحث ۴ مقایسه می‌کند. همچنین با اتصال به هوش مصنوعی گوگل جمینای، معمار می‌تواند به زبان طبیعی با پروژه گفتگو کند و راه‌حل‌های اصلاحی فوری دریافت نماید.',
+    keyFeatures: [
+      'Single-click native installers for Autodesk Revit 2024, 2025, and 2026',
+      'Automated audit of ceiling heights, minimum living/bedroom areas, and daylight glazing ratios',
+      'RAG-powered conversational AI chat for architectural queries directly inside Revit UI',
+      'Multi-regional regulatory support: Catalonia (Decret 141/2012), Spanish CTE, and National Building Codes',
+      'Automatic local project memory generation (ArchIQ_Memory_[ProjectName].md)'
+    ],
+    keyFeaturesFa: [
+      'نصب‌کننده خودکار و مستقل برای نسخه‌های رویت ۲۰۲۴، ۲۰۲۵ و ۲۰۲۶',
+      'کنترل آنی حداقل مساحت اتاق‌ها، ارتفاع مفید سقف و نسبت مساحت بازشو به کف',
+      'چت تعاملی مبتنی بر هوش مصنوعی جمینای (RAG) درون محیط رویت',
+      'پشتیبانی از مقررات چندمنطقه‌ای: کاتالونیا (Decret 141/2012)، اسپانیا (CTE) و مبحث ۴ مقررات ملی',
+      'تولید خودکار سند حافظه پروژه (ArchIQ_Memory_[ProjectName].md) برای شفافیت کامل'
+    ],
+    codeSnippet: {
+      language: 'csharp',
+      filename: 'CataloniaRegulations.cs',
+      code: `// ArchIQ - Regulatory Thresholds for Catalonia & Regional Code Evaluation
+public static class CataloniaRegulations
+{
+    public const double MinCeilingHeightHabitableM = 2.50; // Decret 141/2012
+    public const double MinCeilingHeightServiceM = 2.20;
+    public const double MinLightingGlazingRatio = 0.125;   // 1/8 of room area (12.5%)
+    public const double MinVentilationRatio = 0.0416;       // 1/24 of room area
+
+    public const double MinLivingRoomAreaM2 = 14.0;
+    public const double MinLivingKitchenAreaM2 = 20.0;
+    public const double MinDoubleBedroomAreaM2 = 8.0;
+    public const double MinSingleBedroomAreaM2 = 6.0;
+
+    public static List<ComplianceItem> EvaluateRoom(RoomData room)
+    {
+        var results = new List<ComplianceItem>();
+        // Evaluates room spatial envelope, fenestration & ceiling heights in Revit
+        // Ingested by Gemini RAG context for in-canvas interactive consultation
+        return results;
+    }
+}`
+    },
+    repoUrl: 'https://github.com/soheilmasti/ArchiIQ',
+    demoUrl: 'https://raw.githubusercontent.com/soheilmasti/ArchiIQ/main/Releases/ArchIQ_Full_Package.zip'
+  },
+  {
     id: 'rnd-01',
     slug: 'autoclash-revit-navisworks-clustering',
     title: 'AutoClash: Spatial Clustering & Multi-Discipline Resolution Engine',
