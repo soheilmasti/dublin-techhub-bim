@@ -247,17 +247,19 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
   const isRTL = currentLanguage === 'fa';
 
   // Architectural Physical Maquette PBR Materials
-  // 1. Pale Frosted Plexiglas Glazing
+  // 1. Pale Frosted Yellow Plexiglas Glazing (Clearly visible pale yellow with warm interior glow)
   const glazingMat = useMemo(() => new THREE.MeshPhysicalMaterial({
-    color: new THREE.Color('#F8F6E8'),
-    transmission: 0.88,
-    roughness: 0.40,
+    color: new THREE.Color('#FDE68A'), // Clearly distinct architectural pale warm yellow
+    transmission: 0.65, // Calibrated transmission so pale yellow body color remains solid and prominent
+    roughness: 0.25,
     ior: 1.49,
     thickness: 1.2,
+    attenuationColor: new THREE.Color('#F59E0B'),
+    attenuationDistance: 0.85,
     transparent: true,
-    opacity: 1.0,
-    emissive: new THREE.Color('#FFFBE8'),
-    emissiveIntensity: 0.16,
+    opacity: 0.98,
+    emissive: new THREE.Color('#FBBF24'), // Warm golden-yellow interior glow
+    emissiveIntensity: 0.52, // Distinct, elegant interior light
     depthWrite: false,
     side: THREE.DoubleSide
   }), []);
@@ -348,19 +350,23 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
   // 2. Reactive Lighting Mode Adjustments (Interior Window Illumination & Mood Tones)
   React.useEffect(() => {
     if (lightingMode === 'night') {
-      glazingMat.emissive.set('#FDE047');
-      glazingMat.emissiveIntensity = 2.2;
-      glazingMat.transmission = 0.82;
+      glazingMat.color.set('#FEF08A');
+      glazingMat.emissive.set('#FBBF24');
+      glazingMat.emissiveIntensity = 2.4;
+      glazingMat.transmission = 0.55;
       opaqueMat.roughness = 0.32;
     } else if (lightingMode === 'sunset') {
-      glazingMat.emissive.set('#FDBA74');
-      glazingMat.emissiveIntensity = 0.65;
-      glazingMat.transmission = 0.86;
+      glazingMat.color.set('#FCD34D');
+      glazingMat.emissive.set('#F59E0B');
+      glazingMat.emissiveIntensity = 0.85;
+      glazingMat.transmission = 0.60;
       opaqueMat.roughness = 0.28;
     } else {
-      glazingMat.emissive.set('#FFFBE8');
-      glazingMat.emissiveIntensity = 0.16;
-      glazingMat.transmission = 0.88;
+      // Day Mode: Clearly distinct pale yellow with gentle warm interior glow
+      glazingMat.color.set('#FDE68A');
+      glazingMat.emissive.set('#FBBF24');
+      glazingMat.emissiveIntensity = 0.52;
+      glazingMat.transmission = 0.65;
       opaqueMat.roughness = 0.28;
     }
     glazingMat.needsUpdate = true;
