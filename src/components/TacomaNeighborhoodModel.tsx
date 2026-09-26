@@ -91,6 +91,147 @@ const BUILDING_ZONES: {
 
 import { ArchitecturalEntourage } from './ArchitecturalEntourage';
 
+// Helpers for Automatic Mesh & Hierarchy Detection
+const isBaseElement = (name: string): boolean => {
+  const n = name.toLowerCase();
+  return (
+    n.includes('ground') ||
+    n.includes('asphalt') ||
+    n.includes('blacktop') ||
+    n.includes('paver') ||
+    n.includes('street') ||
+    n.includes('sidewalk') ||
+    n.includes('road') ||
+    n.includes('base') ||
+    n.includes('pedestal') ||
+    n.includes('terrain') ||
+    n.includes('earth') ||
+    n.includes('soil')
+  );
+};
+
+const isContextElement = (name: string): boolean => {
+  const n = name.toLowerCase();
+  return (
+    n.includes('tree') ||
+    n.includes('vegetat') ||
+    n.includes('plant') ||
+    n.includes('ivy') ||
+    n.includes('leaf') ||
+    n.includes('juniper') ||
+    n.includes('locust') ||
+    n.includes('people') ||
+    n.includes('person') ||
+    n.includes('human') ||
+    n.includes('rockit') ||
+    n.includes('stacy') ||
+    n.includes('jean') ||
+    n.includes('car') ||
+    n.includes('vehicle') ||
+    n.includes('lamp') ||
+    n.includes('pole') ||
+    n.includes('fixture')
+  );
+};
+
+const isGlazingElement = (name: string, mat?: THREE.Material | THREE.Material[]): boolean => {
+  const n = name.toLowerCase();
+  const rawMats = Array.isArray(mat) ? mat : mat ? [mat] : [];
+  const hasTranspMat = rawMats.some(m => m.transparent || (m.opacity !== undefined && m.opacity < 0.95));
+  const matNames = rawMats.map(m => (m.name || '').toLowerCase()).join(' ');
+
+  return (
+    n.includes('glass') ||
+    n.includes('window') ||
+    n.includes('curtain') ||
+    n.includes('glaze') ||
+    n.includes('trans') ||
+    n.includes('resin') ||
+    matNames.includes('glass') ||
+    matNames.includes('window') ||
+    matNames.includes('curtain') ||
+    matNames.includes('glaze') ||
+    matNames.includes('trans') ||
+    matNames.includes('resin') ||
+    hasTranspMat
+  );
+};
+
+const isRoofElement = (name: string, mesh: THREE.Mesh): boolean => {
+  if (isBaseElement(name) || isContextElement(name)) return false;
+
+  const n = name.toLowerCase();
+  if (
+    n.includes('roof') ||
+    n.includes('slab') ||
+    n.includes('cover') ||
+    n.includes('canopy') ||
+    n.includes('ceiling') ||
+    n.includes('beadboard') ||
+    n.includes('corrugat') ||
+    n.includes('concrete_tile') ||
+    /\b(top|rooftop)\b/.test(n)
+  ) {
+    return true;
+  }
+
+  // Geometric planar detection: thin horizontal mesh at high Y
+  if (mesh.geometry) {
+    if (!mesh.geometry.boundingBox) mesh.geometry.computeBoundingBox();
+    const bb = mesh.geometry.boundingBox;
+    if (bb) {
+      const height = bb.max.y - bb.min.y;
+      const width = bb.max.x - bb.min.x;
+      const depth = bb.max.z - bb.min.z;
+      // In local coordinates: thin planar mesh at upper building elevation
+      if (height < 60 && bb.min.y > 1350 && (width > 20 || depth > 20)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+};
+
+// Precision Floating Roof Slab for Signature Building Complexes (Anti-Gravity Diagram)
+const FloatingZoneRoof: React.FC<{
+  zone: typeof BUILDING_ZONES[0];
+  isSelected: boolean;
+  isHovered: boolean;
+  isNight: boolean;
+}> = ({ zone, isSelected, isHovered, isNight }) => {
+  const slabWidth = zone.size[0] * 1.05;
+  const slabDepth = zone.size[2] * 1.05;
+  const slabThickness = 0.12;
+  const floatY = zone.roof[1] + 0.42;
+
+  return (
+    <group position={[zone.roof[0], floatY, zone.roof[2]]}>
+      {/* 1. Main Floating Laser-Cut Roof Slab */}
+      <mesh castShadow receiveShadow>
+        <boxGeometry args={[slabWidth, slabThickness, slabDepth]} />
+        <meshStandardMaterial
+          color={isSelected ? '#ffffff' : '#f4f4f3'}
+          roughness={0.28}
+          metalness={0.04}
+          emissive={isSelected ? zone.color : isNight ? '#fbbf24' : '#000000'}
+          emissiveIntensity={isSelected ? 0.4 : isNight ? 0.08 : 0}
+        />
+      </mesh>
+
+      {/* 2. Sleek Architectural Under-Soffit Reveal / Trim */}
+      <mesh position={[0, -slabThickness * 0.55, 0]}>
+        <boxGeometry args={[slabWidth * 0.96, 0.03, slabDepth * 0.96]} />
+        <meshStandardMaterial
+          color="#1e293b"
+          roughness={0.6}
+          metalness={0.1}
+        />
+      </mesh>
+    </group>
+  );
+};
+
 export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = ({
   categories,
   onSelectCategory,
@@ -105,7 +246,51 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
   const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
   const isRTL = currentLanguage === 'fa';
 
-  // 1. Initial Scene Setup (executed once when gltf loads)
+  // Architectural Physical Maquette PBR Materials
+  // 1. Pale Frosted Plexiglas Glazing
+  const glazingMat = useMemo(() => new THREE.MeshPhysicalMaterial({
+    color: new THREE.Color('#F8F6E8'),
+    transmission: 0.88,
+    roughness: 0.40,
+    ior: 1.49,
+    thickness: 1.2,
+    transparent: true,
+    opacity: 1.0,
+    emissive: new THREE.Color('#FFFBE8'),
+    emissiveIntensity: 0.16,
+    depthWrite: false,
+    side: THREE.DoubleSide
+  }), []);
+
+  // 2. Laser-Cut White Architectural Model Board (Masses, Walls & Floating Roof Slabs)
+  const opaqueMat = useMemo(() => new THREE.MeshStandardMaterial({
+    color: new THREE.Color('#F4F4F3'),
+    roughness: 0.28,
+    metalness: 0.04,
+    side: THREE.DoubleSide
+  }), []);
+
+  // 3. Frosted Translucent CNC Acrylic (Context / Vegetation / Trees / Figures)
+  const contextMat = useMemo(() => new THREE.MeshPhysicalMaterial({
+    color: new THREE.Color('#FFFFFF'),
+    transmission: 0.78,
+    roughness: 0.35,
+    thickness: 0.8,
+    transparent: true,
+    opacity: 0.88,
+    depthWrite: false,
+    side: THREE.DoubleSide
+  }), []);
+
+  // 4. Dark Charcoal Presentation Plinth (Base / Ground / Pavement)
+  const baseMat = useMemo(() => new THREE.MeshStandardMaterial({
+    color: new THREE.Color('#1A1A1C'),
+    roughness: 0.80,
+    metalness: 0.05,
+    side: THREE.DoubleSide
+  }), []);
+
+  // 1. Initial Scene Setup & Anti-Gravity Floating Roofs
   const sceneClone = useMemo(() => {
     const clone = gltf.scene.clone();
 
@@ -115,94 +300,100 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     clone.position.set(-3948.0 * scale, -836.0 * scale, 8985.0 * scale);
     clone.rotation.set(0, 0, 0);
 
-    // Initial Material Cloning & Configuration
+    // Physical Maquette Material Overwrite & Exploded Roof Elevation
     clone.traverse((child) => {
-      if (child instanceof THREE.Mesh && child.material) {
-        child.castShadow = true;
-        child.receiveShadow = true;
+      if (child instanceof THREE.Mesh) {
+        const name = (child.name || '').toLowerCase();
 
-        const rawMaterials = Array.isArray(child.material) ? child.material : [child.material];
-        const newMaterials = rawMaterials.map((origMat) => {
-          const mat = origMat.clone();
-          mat.side = THREE.DoubleSide;
-          if (mat.map) {
-            mat.map.anisotropy = 16;
-          }
-          return mat;
-        });
+        if (isBaseElement(name)) {
+          child.material = baseMat;
+          child.castShadow = false;
+          child.receiveShadow = true;
+          child.renderOrder = 0;
+        } else if (isGlazingElement(name, child.material)) {
+          child.material = glazingMat;
+          child.castShadow = false;
+          child.receiveShadow = false;
+          child.renderOrder = 2;
+        } else if (isContextElement(name)) {
+          child.material = contextMat;
+          child.castShadow = true;
+          child.receiveShadow = false;
+          child.renderOrder = 1;
+        } else if (isRoofElement(name, child)) {
+          // Anti-Gravity Floating Roof: Lift vertically along +Y by ~10% to 15% of building height
+          if (!child.geometry.boundingBox) child.geometry.computeBoundingBox();
+          const bb = child.geometry.boundingBox;
+          const bHeight = bb ? (bb.max.y - 1050) : 1000;
+          const liftLocal = Math.max(115, Math.min(220, bHeight * 0.12));
+          child.position.y += liftLocal;
 
-        child.material = Array.isArray(child.material) ? newMaterials : newMaterials[0];
+          child.material = opaqueMat;
+          child.castShadow = true;
+          child.receiveShadow = true;
+          child.renderOrder = 0;
+        } else {
+          // Opaque Masses / Walls
+          child.material = opaqueMat;
+          child.castShadow = true;
+          child.receiveShadow = true;
+          child.renderOrder = 0;
+        }
       }
     });
 
     return clone;
-  }, [gltf]);
+  }, [gltf, baseMat, glazingMat, contextMat, opaqueMat]);
 
-  // 2. Dynamic Lighting & Window Glow Updates (Reactive without unmounting sceneClone)
+  // 2. Reactive Lighting Mode Adjustments (Interior Window Illumination & Mood Tones)
   React.useEffect(() => {
-    if (!sceneClone) return;
-
-    sceneClone.traverse((child) => {
-      if (child instanceof THREE.Mesh && child.material) {
-        const rawMaterials = Array.isArray(child.material) ? child.material : [child.material];
-        rawMaterials.forEach((mat) => {
-          if (mat instanceof THREE.MeshStandardMaterial) {
-            const meshName = (child.name || '').toLowerCase();
-            const matName = (mat.name || '').toLowerCase();
-            const isGlass = meshName.includes('glass') || meshName.includes('translucent') || meshName.includes('window') ||
-                            matName.includes('glass') || matName.includes('translucent') || matName.includes('window');
-
-            if (isGlass) {
-              mat.transparent = true;
-              mat.roughness = 0.05;
-              mat.metalness = 0.1;
-              mat.envMapIntensity = 2.0;
-
-              if (lightingMode === 'night') {
-                // Vibrant architectural warm interior window illumination
-                mat.opacity = 0.98;
-                mat.color.set('#fffbeb');
-                mat.emissive.set('#fbbf24'); // Warm golden amber interior illumination
-                mat.emissiveIntensity = 4.2;
-                mat.toneMapped = false;
-              } else if (lightingMode === 'sunset') {
-                mat.opacity = 0.75;
-                mat.color.set('#fed7aa');
-                mat.emissive.set('#ea580c');
-                mat.emissiveIntensity = 0.6;
-                mat.toneMapped = true;
-              } else {
-                mat.opacity = 0.68;
-                mat.color.set('#ffffff');
-                mat.emissive.set(0, 0, 0);
-                mat.emissiveIntensity = 0;
-                mat.toneMapped = true;
-              }
-            } else {
-              mat.roughness = THREE.MathUtils.clamp(mat.roughness || 0.45, 0.25, 0.7);
-              mat.metalness = THREE.MathUtils.clamp(mat.metalness || 0.05, 0.02, 0.3);
-              mat.envMapIntensity = 1.35;
-
-              if (lightingMode === 'night') {
-                mat.roughness = 0.35;
-                mat.metalness = 0.1;
-              } else if (lightingMode === 'sunset') {
-                mat.roughness = 0.35;
-              }
-            }
-            mat.needsUpdate = true;
-          }
-        });
-      }
-    });
-  }, [sceneClone, lightingMode]);
+    if (lightingMode === 'night') {
+      glazingMat.emissive.set('#FDE047');
+      glazingMat.emissiveIntensity = 2.2;
+      glazingMat.transmission = 0.82;
+      opaqueMat.roughness = 0.32;
+    } else if (lightingMode === 'sunset') {
+      glazingMat.emissive.set('#FDBA74');
+      glazingMat.emissiveIntensity = 0.65;
+      glazingMat.transmission = 0.86;
+      opaqueMat.roughness = 0.28;
+    } else {
+      glazingMat.emissive.set('#FFFBE8');
+      glazingMat.emissiveIntensity = 0.16;
+      glazingMat.transmission = 0.88;
+      opaqueMat.roughness = 0.28;
+    }
+    glazingMat.needsUpdate = true;
+    opaqueMat.needsUpdate = true;
+  }, [lightingMode, glazingMat, opaqueMat]);
 
   return (
     <group position={[0, 0, 0]}>
-      {/* Real SketchUp Neighborhood Site Model */}
+      {/* Real SketchUp Neighborhood Site Model with Physical Maquette Pipeline */}
       <primitive object={sceneClone} />
 
-      {/* 3D Proportional Scale Figures & Modern Street Lighting */}
+      {/* Dark Charcoal Presentation Plinth Foundation Slab */}
+      <mesh position={[0, 0.02, 3.5]} receiveShadow>
+        <boxGeometry args={[74, 0.25, 74]} />
+        <primitive object={baseMat} attach="material" />
+      </mesh>
+
+      {/* 5 Precision Floating Roof Slabs for Signature Architectural Zones (Anti-Gravity Diagram) */}
+      {BUILDING_ZONES.map((zone) => {
+        const isHovered = hoveredId === zone.categoryId;
+        const isSelected = selectedCategory?.id === zone.categoryId;
+        return (
+          <FloatingZoneRoof
+            key={`floating-slab-${zone.categoryId}`}
+            zone={zone}
+            isSelected={isSelected}
+            isHovered={isHovered}
+            isNight={lightingMode === 'night'}
+          />
+        );
+      })}
+
+      {/* 3D Proportional Frosted Scale Figures & Modern Street Lighting */}
       <ArchitecturalEntourage lightingMode={lightingMode as any} />
 
       {/* 5 Interactive Building Keys (Direct Building Selection & Clean Rooftop Badges - NO CIRCLES) */}
@@ -252,7 +443,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
             {!selectedCategory && showPins && (
               <group position={zone.roof}>
                 {/* Minimalist Floating Glass Pill Badge & Rich Project Card */}
-                <Html position={[0, 0.4, 0]} center distanceFactor={15} zIndexRange={[0, 5]}>
+                <Html position={[0, 0.75, 0]} center distanceFactor={15} zIndexRange={[0, 5]}>
                   <div
                     onClick={(e) => {
                       e.stopPropagation();

@@ -5,7 +5,24 @@ interface ArchitecturalEntourageProps {
   lightingMode: 'day' | 'sunset' | 'night';
 }
 
-// Stylized Architectural Scale Figure (1:300 Scale, ~1.75m Real Height = 0.22 World Units)
+// Shared Frosted Translucent CNC Acrylic Material for Physical Maquette Entourage
+const FROSTED_ACRYLIC_MATERIAL = new THREE.MeshPhysicalMaterial({
+  color: new THREE.Color('#FFFFFF'),
+  transmission: 0.78,
+  roughness: 0.35,
+  thickness: 0.8,
+  transparent: true,
+  opacity: 0.88,
+  depthWrite: false
+});
+
+const CHARCOAL_FIXTURE_MATERIAL = new THREE.MeshStandardMaterial({
+  color: new THREE.Color('#1A1A1C'),
+  roughness: 0.60,
+  metalness: 0.20
+});
+
+// Stylized Architectural Scale Figure (1:300 Scale Frosted CNC Acrylic Cutout)
 const ScaleFigure: React.FC<{
   position: [number, number, number];
   rotation?: number;
@@ -15,42 +32,33 @@ const ScaleFigure: React.FC<{
 }> = ({
   position,
   rotation = 0,
-  color = '#cbd5e1',
   isWalking = true,
-  isNight = false
 }) => {
-  const figureColor = isNight ? '#94a3b8' : color;
-
   return (
     <group position={position} rotation={[0, rotation, 0]}>
       {/* Head */}
-      <mesh position={[0, 0.20, 0]} castShadow>
+      <mesh position={[0, 0.20, 0]} castShadow material={FROSTED_ACRYLIC_MATERIAL}>
         <sphereGeometry args={[0.022, 12, 12]} />
-        <meshStandardMaterial color={figureColor} roughness={0.4} metalness={0.1} />
       </mesh>
 
       {/* Torso & Shoulders */}
-      <mesh position={[0, 0.135, 0]} castShadow>
+      <mesh position={[0, 0.135, 0]} castShadow material={FROSTED_ACRYLIC_MATERIAL}>
         <boxGeometry args={[0.05, 0.09, 0.03]} />
-        <meshStandardMaterial color={figureColor} roughness={0.4} metalness={0.1} />
       </mesh>
 
       {/* Legs (Standing or Walking Stride) */}
       {isWalking ? (
         <>
-          <mesh position={[0.014, 0.05, 0.015]} rotation={[0.2, 0, 0]} castShadow>
+          <mesh position={[0.014, 0.05, 0.015]} rotation={[0.2, 0, 0]} castShadow material={FROSTED_ACRYLIC_MATERIAL}>
             <boxGeometry args={[0.018, 0.09, 0.02]} />
-            <meshStandardMaterial color={figureColor} roughness={0.5} />
           </mesh>
-          <mesh position={[-0.014, 0.05, -0.015]} rotation={[-0.2, 0, 0]} castShadow>
+          <mesh position={[-0.014, 0.05, -0.015]} rotation={[-0.2, 0, 0]} castShadow material={FROSTED_ACRYLIC_MATERIAL}>
             <boxGeometry args={[0.018, 0.09, 0.02]} />
-            <meshStandardMaterial color={figureColor} roughness={0.5} />
           </mesh>
         </>
       ) : (
-        <mesh position={[0, 0.05, 0]} castShadow>
+        <mesh position={[0, 0.05, 0]} castShadow material={FROSTED_ACRYLIC_MATERIAL}>
           <boxGeometry args={[0.04, 0.09, 0.024]} />
-          <meshStandardMaterial color={figureColor} roughness={0.5} />
         </mesh>
       )}
 
@@ -71,25 +79,25 @@ const StreetLamp: React.FC<{
 }> = ({ position, rotation = 0, isNight }) => {
   return (
     <group position={position} rotation={[0, rotation, 0]}>
-      {/* Vertical Sleek Metallic Pole (Height ~ 3.5m = 0.45 Units) */}
-      <mesh position={[0, 0.225, 0]} castShadow>
+      {/* Vertical Sleek Charcoal Metallic Pole */}
+      <mesh position={[0, 0.225, 0]} castShadow material={CHARCOAL_FIXTURE_MATERIAL}>
         <cylinderGeometry args={[0.012, 0.016, 0.45, 8]} />
-        <meshStandardMaterial color="#1e293b" metalness={0.85} roughness={0.25} />
       </mesh>
 
       {/* Horizontal Luminaire Arm */}
-      <mesh position={[0.06, 0.44, 0]} rotation={[0, 0, Math.PI / 2]}>
+      <mesh position={[0.06, 0.44, 0]} rotation={[0, 0, Math.PI / 2]} material={CHARCOAL_FIXTURE_MATERIAL}>
         <cylinderGeometry args={[0.008, 0.008, 0.12, 8]} />
-        <meshStandardMaterial color="#1e293b" metalness={0.85} roughness={0.25} />
       </mesh>
 
-      {/* Modern Fixture Head */}
+      {/* Modern Frosted Fixture Head */}
       <mesh position={[0.11, 0.435, 0]}>
         <boxGeometry args={[0.045, 0.016, 0.028]} />
         <meshStandardMaterial 
-          color={isNight ? '#fde047' : '#64748b'} 
+          color={isNight ? '#fde047' : '#ffffff'} 
           emissive={isNight ? '#fde047' : '#000000'}
-          emissiveIntensity={isNight ? 6.0 : 0}
+          emissiveIntensity={isNight ? 5.0 : 0}
+          roughness={0.3}
+          metalness={0.1}
           toneMapped={false}
         />
       </mesh>

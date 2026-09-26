@@ -286,62 +286,67 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
           {/* Lighting based on mood */}
           {lightingMode === 'day' && (
             <>
-              <ambientLight intensity={1.2} />
+              <ambientLight intensity={1.1} />
               <directionalLight
-                position={[24, 38, 20]}
-                intensity={2.8}
-                color="#fffcf7"
+                position={[-24, 38, 20]}
+                intensity={2.85}
+                color="#fffdf8"
                 castShadow
                 shadow-mapSize-width={2048}
                 shadow-mapSize-height={2048}
-                shadow-camera-left={-30}
-                shadow-camera-right={30}
-                shadow-camera-top={30}
-                shadow-camera-bottom={-30}
+                shadow-camera-left={-35}
+                shadow-camera-right={35}
+                shadow-camera-top={35}
+                shadow-camera-bottom={-35}
                 shadow-camera-far={120}
                 shadow-bias={-0.00015}
               />
-              <directionalLight position={[-20, 18, -16]} intensity={1.2} color="#e0f2fe" />
-              <directionalLight position={[0, -10, 0]} intensity={0.5} color="#f8fafc" />
+              <directionalLight position={[20, 18, -16]} intensity={0.85} color="#e0f2fe" />
+              <directionalLight position={[0, -10, 0]} intensity={0.45} color="#f8fafc" />
             </>
           )}
 
           {lightingMode === 'sunset' && (
             <>
-              <ambientLight intensity={1.1} color="#fed7aa" />
+              <ambientLight intensity={1.05} color="#fed7aa" />
               <directionalLight
-                position={[30, 14, 12]}
-                intensity={3.4}
+                position={[-28, 20, 16]}
+                intensity={3.2}
                 color="#f97316"
                 castShadow
                 shadow-mapSize-width={2048}
                 shadow-mapSize-height={2048}
+                shadow-camera-left={-35}
+                shadow-camera-right={35}
+                shadow-camera-top={35}
+                shadow-camera-bottom={-35}
+                shadow-camera-far={120}
                 shadow-bias={-0.00015}
               />
-              <directionalLight position={[-18, 12, -12]} intensity={1.2} color="#60a5fa" />
+              <directionalLight position={[18, 14, -12]} intensity={1.1} color="#60a5fa" />
             </>
           )}
 
           {lightingMode === 'night' && (
             <>
               {/* Rich Urban Architectural Night: Clear Moon Bounce & Soft Blue Sky Fill */}
-              <ambientLight intensity={1.8} color="#93c5fd" />
+              <ambientLight intensity={1.6} color="#93c5fd" />
               <directionalLight 
-                position={[24, 38, 20]} 
-                intensity={3.2} 
+                position={[-24, 38, 20]} 
+                intensity={2.8} 
                 color="#e0f2fe" 
                 castShadow
                 shadow-mapSize-width={2048}
                 shadow-mapSize-height={2048}
-                shadow-camera-left={-30}
-                shadow-camera-right={30}
-                shadow-camera-top={30}
-                shadow-camera-bottom={-30}
+                shadow-camera-left={-35}
+                shadow-camera-right={35}
+                shadow-camera-top={35}
+                shadow-camera-bottom={-35}
                 shadow-camera-far={120}
                 shadow-bias={-0.00015}
               />
-              <directionalLight position={[-20, 20, -16]} intensity={1.8} color="#7dd3fc" />
-              <directionalLight position={[0, -10, 0]} intensity={0.8} color="#475569" />
+              <directionalLight position={[20, 20, -16]} intensity={1.5} color="#7dd3fc" />
+              <directionalLight position={[0, -10, 0]} intensity={0.7} color="#475569" />
 
               {/* 5 Distinct Architectural Accent Warm Light Sources (Zero shadow overhead) */}
               {/* 1. Dublin Tech Hub 7-Story Tower Facade */}
