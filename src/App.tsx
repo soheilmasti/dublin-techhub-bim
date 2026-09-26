@@ -277,6 +277,7 @@ export const App: React.FC = () => {
               currentLanguage={language}
               onExit3D={handleExit3D}
               isIntroActive={isIntroActive}
+              isFlipbookOpen={isFlipbookOpen}
               onOpenFlipbook={() => setIsFlipbookOpen(true)}
             />
 
@@ -374,6 +375,7 @@ export const App: React.FC = () => {
         isOpen={isFlipbookOpen}
         onClose={() => setIsFlipbookOpen(false)}
         initialVolume={flipbookVolume}
+        currentLanguage={language}
       />
 
       {/* Mobile/Tablet Orientation Rotate Prompt */}

@@ -53,6 +53,7 @@ interface ThreeDClayCanvasProps {
   currentLanguage?: LanguageCode;
   onExit3D?: () => void;
   isIntroActive?: boolean;
+  isFlipbookOpen?: boolean;
   onOpenFlipbook?: () => void;
 }
 
@@ -185,6 +186,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
   currentLanguage = 'en',
   onExit3D,
   isIntroActive = false,
+  isFlipbookOpen = false,
   onOpenFlipbook
 }) => {
   const [lightingMode, setLightingMode] = useState<'day' | 'sunset' | 'night' | 'wireframe'>('day');
@@ -365,7 +367,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
             onSelectCategory={onSelectCategory}
             lightingMode={lightingMode}
             currentLanguage={currentLanguage}
-            showPins={!isIntroActive}
+            showPins={!isIntroActive && !isFlipbookOpen && !selectedCategory}
           />
 
           {/* Soft Ground Contact Shadows */}
@@ -382,8 +384,8 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
         </Suspense>
       </Canvas>
 
-      {/* BOTTOM-LEFT: Camera Preset & View Control Toolbar (Rotate & Overview - Hidden on Video Intro) */}
-      {!isIntroActive && (
+      {/* BOTTOM-LEFT: Camera Preset & View Control Toolbar (Rotate & Overview - Hidden on Video Intro or Flipbook) */}
+      {!isIntroActive && !isFlipbookOpen && (
         <div className={`absolute bottom-4 sm:bottom-6 left-3 sm:left-6 z-20 glass-panel p-1 sm:p-1.5 rounded-2xl shadow-clay-md flex items-center gap-1 sm:gap-1.5 border border-white/80 transition-opacity duration-300 ${selectedCategory ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
           <button
             onClick={handleResetCamera}
@@ -427,7 +429,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
       )}
 
       {/* BOTTOM-CENTER: Lighting Mood Switcher Toolbar (Day, Sunset, Night) & Navigation Hint */}
-      {!selectedCategory && !isIntroActive && (
+      {!selectedCategory && !isIntroActive && !isFlipbookOpen && (
         <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 sm:gap-2 max-w-[96vw] pb-[env(safe-area-inset-bottom,4px)]">
           {/* Lighting Mode Switcher Panel */}
           <div className="glass-panel p-1 sm:p-1.5 rounded-2xl shadow-clay-lg flex items-center gap-1 border border-white/90">

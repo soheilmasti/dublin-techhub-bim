@@ -252,7 +252,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
             {!selectedCategory && showPins && (
               <group position={zone.roof}>
                 {/* Minimalist Floating Glass Pill Badge & Rich Project Card */}
-                <Html position={[0, 0.4, 0]} center distanceFactor={15}>
+                <Html position={[0, 0.4, 0]} center distanceFactor={15} zIndexRange={[0, 5]}>
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
