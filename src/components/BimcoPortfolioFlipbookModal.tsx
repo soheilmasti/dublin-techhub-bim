@@ -388,6 +388,39 @@ interface BimcoPortfolioFlipbookModalProps {
   currentLanguage?: LanguageCode;
 }
 
+export function computeOptimalBookSize(winW: number, winH: number) {
+  const isPortrait = winW < 768;
+  const verticalReserved = winW < 640 ? 135 : 155;
+  const horizontalReserved = winW < 640 ? 16 : 48;
+
+  const availW = Math.max(300, winW - horizontalReserved);
+  const availH = Math.max(250, winH - verticalReserved);
+
+  if (isPortrait) {
+    const ratio = 8 / 9; // Single page 8:9 ratio
+    let h = availH;
+    let w = Math.round(h * ratio);
+    if (w > availW) {
+      w = availW;
+      h = Math.round(w / ratio);
+    }
+    return { bookW: w, bookH: h, pageW: w, pageH: h, isPortrait: true };
+  } else {
+    const ratio = 16 / 9; // 2-page spread 16:9 ratio
+    let h = Math.min(1080, availH);
+    let w = Math.round(h * ratio);
+    if (w > Math.min(1920, availW)) {
+      w = Math.min(1920, availW);
+      h = Math.round(w / ratio);
+    }
+    // Ensure even width so both pages are exact same integer pixel width
+    const pageW = Math.floor(w / 2);
+    const bookW = pageW * 2;
+    const pageH = h;
+    return { bookW, bookH: pageH, pageW, pageH, isPortrait: false };
+  }
+}
+
 export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalProps> = ({
   isOpen,
   onClose,
@@ -398,20 +431,58 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
   const flipBookInstance = useRef<PageFlip | null>(null);
 
   const [activeVolume, setActiveVolume] = useState<PortfolioVolumeKey>(initialVolume);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [isPortraitMode, setIsPortraitMode] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const currentPageRef = useRef<number>(1);
+  const [bookSize, setBookSize] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return computeOptimalBookSize(window.innerWidth, window.innerHeight);
+    }
+    return { bookW: 1120, bookH: 630, pageW: 560, pageH: 630, isPortrait: false };
+  });
+
+  const [isPortraitMode, setIsPortraitMode] = useState<boolean>(bookSize.isPortrait);
   const [isBookReady, setIsBookReady] = useState<boolean>(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState<boolean>(true);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [isZoomed, setIsZoomed] = useState<boolean>(false);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
 
+  // Resize listener to recalculate optimal book dimensions
+  useEffect(() => {
+    const handleResize = () => {
+      const newSize = computeOptimalBookSize(window.innerWidth, window.innerHeight);
+      setBookSize(prev => {
+        if (Math.abs(prev.bookW - newSize.bookW) > 6 || Math.abs(prev.bookH - newSize.bookH) > 6) {
+          return newSize;
+        }
+        return prev;
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    document.addEventListener('fullscreenchange', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      document.removeEventListener('fullscreenchange', handleResize);
+    };
+  }, []);
+
   // Sync active volume with initialVolume prop if provided
   useEffect(() => {
     if (initialVolume && PORTFOLIO_VOLUMES[initialVolume]) {
       setActiveVolume(initialVolume);
+      setCurrentPage(1);
+      currentPageRef.current = 1;
     }
   }, [initialVolume]);
+
+  // Reset to Spread 1 (pages 2 & 3: Manifesto & Index) whenever modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentPage(1);
+      currentPageRef.current = 1;
+    }
+  }, [isOpen]);
 
   const langKey = (currentLanguage === 'fa' || currentLanguage === 'es' || currentLanguage === 'ca')
     ? currentLanguage
@@ -547,7 +618,6 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
     if (!isOpen) return;
 
     setIsBookReady(false);
-    setCurrentPage(0);
     setIsZoomed(false);
 
     let localPageFlip: PageFlip | null = null;
@@ -556,26 +626,26 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
     const timer = setTimeout(() => {
       if (!containerRef.current) return;
 
-      // Base page dimensions (8:9 ratio: 560 x 630 -> 2 pages = 1120 x 630 = 16:9)
-      const baseW = 560;
-      const baseH = 630;
+      containerRef.current.innerHTML = '';
+      const mountNode = document.createElement('div');
+      mountNode.style.width = `${bookSize.bookW}px`;
+      mountNode.style.height = `${bookSize.bookH}px`;
+      containerRef.current.appendChild(mountNode);
+
+      const targetStartPage = currentPageRef.current >= 0 ? currentPageRef.current : 1;
 
       try {
-        localPageFlip = new PageFlip(containerRef.current, {
-          width: baseW,
-          height: baseH,
-          size: 'stretch',
-          minWidth: 280,
-          maxWidth: 960,
-          minHeight: 315,
-          maxHeight: 1080,
+        localPageFlip = new PageFlip(mountNode, {
+          width: bookSize.pageW,
+          height: bookSize.pageH,
+          size: 'fixed',
           maxShadowOpacity: 0.45,
           showCover: true,
           mobileScrollSupport: false,
-          usePortrait: true,
-          startPage: 0,
+          usePortrait: bookSize.isPortrait,
+          startPage: targetStartPage,
           drawShadow: true,
-          flippingTime: 700,
+          flippingTime: 650,
           useMouseEvents: true,
           showPageCorners: true,
           swipeDistance: 25,
@@ -584,8 +654,9 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
         localPageFlip.loadFromImages(pageImages);
 
         localPageFlip.on('flip', (e: any) => {
-          const pageIndex = typeof e.data === 'number' ? e.data : (localPageFlip?.getCurrentPageIndex() ?? 0);
+          const pageIndex = typeof e.data === 'number' ? e.data : (localPageFlip?.getCurrentPageIndex() ?? 1);
           setCurrentPage(pageIndex);
+          currentPageRef.current = pageIndex;
           if (isAudioEnabled) {
             sound.playPageFlip();
           }
@@ -597,6 +668,9 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
 
         localPageFlip.on('init', () => {
           setIsBookReady(true);
+          const initPage = localPageFlip?.getCurrentPageIndex() ?? targetStartPage;
+          setCurrentPage(initPage);
+          currentPageRef.current = initPage;
           if (localPageFlip) {
             setIsPortraitMode((localPageFlip as any).getOrientation?.() === 'portrait');
           }
@@ -627,7 +701,7 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
       }
       flipBookInstance.current = null;
     };
-  }, [isOpen, activeVolume, pageImages, isAudioEnabled]);
+  }, [isOpen, activeVolume, pageImages, isAudioEnabled, bookSize]);
 
   // Keyboard navigation
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -661,6 +735,8 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
   const handleJumpToPage = useCallback((pageNum: number) => {
     if (flipBookInstance.current) {
       flipBookInstance.current.flip(pageNum);
+      setCurrentPage(pageNum);
+      currentPageRef.current = pageNum;
       if (isAudioEnabled) sound.playPageFlip();
     }
   }, [isAudioEnabled]);
@@ -668,6 +744,8 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
   const handleSwitchVolume = useCallback((volKey: PortfolioVolumeKey) => {
     if (volKey === activeVolume) return;
     sound.playClick();
+    setCurrentPage(1);
+    currentPageRef.current = 1;
     setActiveVolume(volKey);
   }, [activeVolume]);
 
@@ -723,11 +801,11 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
   // When closed at end (page 31): back cover sits on the left half. Translate +25% shifts it to exact center!
   // When open (pages 1 to 30): center spine is exactly in the middle. Translate 0%!
   const bookTransformStyle = useMemo(() => {
-    if (isPortraitMode) return 'none';
+    if (isPortraitMode || bookSize.isPortrait) return 'none';
     if (currentPage === 0) return 'translateX(-25%)';
     if (currentPage >= currentConfig.totalPages - 1) return 'translateX(25%)';
     return 'translateX(0%)';
-  }, [isPortraitMode, currentPage, currentConfig.totalPages]);
+  }, [isPortraitMode, bookSize.isPortrait, currentPage, currentConfig.totalPages]);
 
   // Compute readable page range string
   const pageStatusText = useMemo(() => {
@@ -930,8 +1008,13 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
             }}
           >
             <div 
-              key={activeVolume}
+              key={`${activeVolume}-${bookSize.bookW}-${bookSize.bookH}`}
               ref={containerRef} 
+              style={{
+                width: `${bookSize.bookW}px`,
+                height: `${bookSize.bookH}px`,
+                position: 'relative'
+              }}
               className="shadow-2xl drop-shadow-[0_25px_60px_rgba(0,0,0,0.9)] rounded-sm overflow-hidden"
             />
           </div>
