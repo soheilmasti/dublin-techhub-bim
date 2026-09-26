@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { PageFlip } from 'page-flip';
 import { 
   X, 
   ChevronLeft, 
@@ -25,7 +25,7 @@ export type PortfolioVolumeKey = 'villas' | 'apartments' | 'urban';
 
 export interface VolumeShortcut {
   label: string;
-  page: number;
+  page: number; // 0-based page index to flip to
 }
 
 export interface VolumeConfig {
@@ -48,10 +48,10 @@ export interface VolumeConfig {
 export const PORTFOLIO_VOLUMES: Record<PortfolioVolumeKey, VolumeConfig> = {
   villas: {
     id: 'villas',
-    totalPages: 24,
+    totalPages: 32,
     pdfUrl: '/BIMCO_Volume1_Villas_Portfolio.pdf',
     pdfDownloadName: 'BIMCO_Volume1_Luxury_Villas_Portfolio_2026.pdf',
-    pdfSizeText: '18.1 MB',
+    pdfSizeText: '24.5 MB',
     pagesFolder: '/portfolio_villas/book_pages',
     icon: <Home className="w-4 h-4" />,
     translations: {
@@ -63,16 +63,21 @@ export const PORTFOLIO_VOLUMES: Record<PortfolioVolumeKey, VolumeConfig> = {
         shortcuts: [
           { label: 'Front Cover', page: 0 },
           { label: 'Manifesto & Index', page: 1 },
-          { label: 'Violet Villa (Concept)', page: 2 },
-          { label: 'Violet (Plans & Site)', page: 4 },
-          { label: 'Violet (Facades & Materials)', page: 6 },
-          { label: 'Violet (Night Lighting)', page: 9 },
-          { label: 'Tehrandasht Villa', page: 11 },
-          { label: 'Tehrandasht (Foundation & Frame)', page: 13 },
-          { label: 'Australia Curve Villa', page: 15 },
-          { label: 'Australia (Joinery)', page: 17 },
-          { label: 'Project Directors', page: 22 },
-          { label: 'Back Cover & Standards', page: 23 },
+          { label: 'Dalkhani Forest Villa', page: 3 },
+          { label: 'Concrete & Glass Villa', page: 5 },
+          { label: 'Violet Villa (Concept)', page: 7 },
+          { label: 'Violet (Site Execution)', page: 9 },
+          { label: 'Mountain Chalet', page: 11 },
+          { label: 'Tehran Dasht Villa', page: 13 },
+          { label: 'Modern Villa Series', page: 15 },
+          { label: 'Australia Curve Villa', page: 17 },
+          { label: 'Brutalist Concrete', page: 19 },
+          { label: 'Landscape & Pergolas', page: 21 },
+          { label: 'Diamond Villa Town', page: 23 },
+          { label: 'Villa Interiors & Joinery', page: 25 },
+          { label: 'Execution Standards', page: 27 },
+          { label: 'Project Directors', page: 29 },
+          { label: 'Back Cover', page: 31 },
         ]
       },
       fa: {
@@ -83,16 +88,21 @@ export const PORTFOLIO_VOLUMES: Record<PortfolioVolumeKey, VolumeConfig> = {
         shortcuts: [
           { label: 'روی جلد', page: 0 },
           { label: 'مانیفست و فهرست', page: 1 },
-          { label: 'ویلای وایولت (کانسپت)', page: 2 },
-          { label: 'وایولت (پلان و کارگاه)', page: 4 },
-          { label: 'وایولت (نما و متریال)', page: 6 },
-          { label: 'وایولت (نورپردازی شب)', page: 9 },
-          { label: 'ویلای تهراندشت', page: 11 },
-          { label: 'تهراندشت (پی و اسکلت)', page: 13 },
-          { label: 'ویلای استرالیا و فرم منحنی', page: 15 },
-          { label: 'استرالیا (درودگری داخلی)', page: 17 },
-          { label: 'سرپرستان پروژه', page: 22 },
-          { label: 'پشت جلد و استانداردها', page: 23 },
+          { label: 'ویلای جنگلی دالخانی', page: 3 },
+          { label: 'ویلای بتن و شیشه', page: 5 },
+          { label: 'ویلای وایولت (کانسپت)', page: 7 },
+          { label: 'وایولت (نظارت کارگاهی)', page: 9 },
+          { label: 'شاله سنگی کوهستان', page: 11 },
+          { label: 'ویلای تهراندشت', page: 13 },
+          { label: 'مجموعه ویلاهای مدرن', page: 15 },
+          { label: 'ویلای منحنی استرالیا', page: 17 },
+          { label: 'ویلای بروتالیست صخره‌ای', page: 19 },
+          { label: 'محوطه‌سازی و پرگولا', page: 21 },
+          { label: 'شهرک ویلایی دایموند', page: 23 },
+          { label: 'معماری داخلی و درودگری', page: 25 },
+          { label: 'استانداردهای شش‌گانه', page: 27 },
+          { label: 'سرپرستان پروژه', page: 29 },
+          { label: 'پشت جلد', page: 31 },
         ]
       },
       es: {
@@ -103,16 +113,21 @@ export const PORTFOLIO_VOLUMES: Record<PortfolioVolumeKey, VolumeConfig> = {
         shortcuts: [
           { label: 'Portada', page: 0 },
           { label: 'Manifiesto e Índice', page: 1 },
-          { label: 'Villa Violet (Concepto)', page: 2 },
-          { label: 'Violet (Planos y Obra)', page: 4 },
-          { label: 'Violet (Fachadas y Materiales)', page: 6 },
-          { label: 'Violet (Iluminación Nocturna)', page: 9 },
-          { label: 'Villa Tehrandasht', page: 11 },
-          { label: 'Tehrandasht (Estructura)', page: 13 },
-          { label: 'Villa Curva Australia', page: 15 },
-          { label: 'Australia (Carpintería)', page: 17 },
-          { label: 'Directores de Proyecto', page: 22 },
-          { label: 'Contraportada y Normas', page: 23 },
+          { label: 'Villa Dalkhani en Bosque', page: 3 },
+          { label: 'Villa Hormigón y Vidrio', page: 5 },
+          { label: 'Villa Violet (Concepto)', page: 7 },
+          { label: 'Violet (Dirección de Obra)', page: 9 },
+          { label: 'Chalet de Montaña', page: 11 },
+          { label: 'Villa Tehrandasht', page: 13 },
+          { label: 'Serie Villas Modernas', page: 15 },
+          { label: 'Villa Curva Australia', page: 17 },
+          { label: 'Villa Brutalista', page: 19 },
+          { label: 'Paisajismo y Pérgolas', page: 21 },
+          { label: 'Urbanización Diamond', page: 23 },
+          { label: 'Interiores y Carpintería', page: 25 },
+          { label: 'Protocolo de Ejecución', page: 27 },
+          { label: 'Directores de Proyecto', page: 29 },
+          { label: 'Contraportada', page: 31 },
         ]
       },
       ca: {
@@ -123,111 +138,132 @@ export const PORTFOLIO_VOLUMES: Record<PortfolioVolumeKey, VolumeConfig> = {
         shortcuts: [
           { label: 'Portada', page: 0 },
           { label: 'Manifest i Índex', page: 1 },
-          { label: 'Vil·la Violet (Concepte)', page: 2 },
-          { label: 'Violet (Plànols i Obra)', page: 4 },
-          { label: 'Violet (Façanes i Materials)', page: 6 },
-          { label: 'Violet (Il·luminació Nocturna)', page: 9 },
-          { label: 'Vil·la Tehrandasht', page: 11 },
-          { label: 'Tehrandasht (Estructura)', page: 13 },
-          { label: 'Vil·la Curba Austràlia', page: 15 },
-          { label: 'Austràlia (Fusteria)', page: 17 },
-          { label: 'Directors de Projecte', page: 22 },
-          { label: 'Contraportada i Normes', page: 23 },
+          { label: 'Vil·la Dalkhani al Bosc', page: 3 },
+          { label: 'Vil·la Formigó i Vidre', page: 5 },
+          { label: 'Vil·la Violet (Concepte)', page: 7 },
+          { label: 'Violet (Direcció d\'Obra)', page: 9 },
+          { label: 'Chalet de Muntanya', page: 11 },
+          { label: 'Vil·la Tehrandasht', page: 13 },
+          { label: 'Sèrie Vil·les Modernes', page: 15 },
+          { label: 'Vil·la Curba Austràlia', page: 17 },
+          { label: 'Vil·la Brutalista', page: 19 },
+          { label: 'Paisatgisme i Pèrgoles', page: 21 },
+          { label: 'Urbanització Diamond', page: 23 },
+          { label: 'Interiors i Fusteria', page: 25 },
+          { label: 'Protocol d\'Execució', page: 27 },
+          { label: 'Directors de Projecte', page: 29 },
+          { label: 'Contraportada', page: 31 },
         ]
       }
     }
   },
   apartments: {
     id: 'apartments',
-    totalPages: 22,
+    totalPages: 32,
     pdfUrl: '/BIMCO_Volume2_Apartments_Facades.pdf',
     pdfDownloadName: 'BIMCO_Volume2_Apartments_Facades_2026.pdf',
-    pdfSizeText: '16.7 MB',
+    pdfSizeText: '23.8 MB',
     pagesFolder: '/portfolio_apartments/book_pages',
     icon: <Building2 className="w-4 h-4" />,
     translations: {
       en: {
         numberText: 'Volume II',
         badge: 'APARTMENTS & FACADES',
-        title: 'Apartments & Facade Engineering',
-        description: 'Derous facade engineering, Dalkhani hillside residences, modular towers, classical palace',
+        title: 'Residential & Facade Engineering',
+        description: 'Derous facade engineering, Dalkhani terraced housing, modular towers, classical palace and 1:20 details',
         shortcuts: [
           { label: 'Front Cover', page: 0 },
           { label: 'Facade Manifesto & Index', page: 1 },
-          { label: 'Derous Facade (Entrance)', page: 2 },
-          { label: 'Derous Night Lighting', page: 4 },
-          { label: 'Louvers & Sunshades', page: 6 },
-          { label: '1:20 Facade Details', page: 7 },
-          { label: 'Dalkhani Hillside Residences', page: 8 },
-          { label: 'Dalkhani Plans & Sections', page: 10 },
-          { label: 'Collective Residential Complex', page: 13 },
-          { label: 'Facade Modulation Type 1', page: 16 },
-          { label: 'Classical Grand Palace', page: 19 },
-          { label: 'Project Directors', page: 20 },
-          { label: 'Back Cover & Standards', page: 21 },
+          { label: 'Darrous Facade Entrance', page: 3 },
+          { label: 'Darrous Night Lighting', page: 5 },
+          { label: 'Darrous Elevation Geometry', page: 7 },
+          { label: 'Darrous 1:20 Cladding Details', page: 9 },
+          { label: 'Dalkhani Stepped Terraces', page: 11 },
+          { label: 'Dalkhani Floor Plans', page: 13 },
+          { label: 'Dalkhani Sections & Steps', page: 15 },
+          { label: 'Mid-Rise Urban Enclave', page: 17 },
+          { label: 'Modern Urban Apartments', page: 19 },
+          { label: 'High-Rise Typology 01', page: 21 },
+          { label: 'High-Rise Typology 02', page: 23 },
+          { label: 'Classical Palace', page: 25 },
+          { label: 'Execution Standards', page: 27 },
+          { label: 'Project Directors', page: 29 },
+          { label: 'Back Cover', page: 31 },
         ]
       },
       fa: {
         numberText: 'جلد دوم',
         badge: 'APARTMENTS & FACADES',
-        title: 'آپارتمان‌ها و مهندسی نما',
-        description: 'پروژه نمای دروس، مسکونی طبقاتی دالخانی، برج‌های مدولار و کاخ کلاسیک',
+        title: 'ساختمان‌های مسکونی و مهندسی نما',
+        description: 'طراحی نمای دروس، مسکونی شیب‌دار دالخانی، برج‌های مدولار و جزئیات اجرایی ۱:۲۰',
         shortcuts: [
           { label: 'روی جلد', page: 0 },
           { label: 'مانیفست نما و فهرست', page: 1 },
-          { label: 'نمای دروس (ورودی)', page: 2 },
-          { label: 'نورپردازی شب دروس', page: 4 },
-          { label: 'لوورها و آفتابگیرها', page: 6 },
-          { label: 'جزییات ۱:۲۰ نما', page: 7 },
-          { label: 'مسکونی شیبدار دالخانی', page: 8 },
-          { label: 'پلان و مقطع دالخانی', page: 10 },
-          { label: 'مجموعه مسکونی طبقاتی', page: 13 },
-          { label: 'مدولاسیون نما تیپ ۱', page: 16 },
-          { label: 'کاخ باشکوه کلاسیک', page: 19 },
-          { label: 'سرپرستان پروژه', page: 20 },
-          { label: 'پشت جلد و استانداردها', page: 21 },
+          { label: 'نمای دروس (ورودی و لابی)', page: 3 },
+          { label: 'نورپردازی شب دروس', page: 5 },
+          { label: 'هندسه لوور و سایه‌بان دروس', page: 7 },
+          { label: 'جزئیات اجرایی ۱:۲۰ دروس', page: 9 },
+          { label: 'مسکونی پلکانی دالخانی', page: 11 },
+          { label: 'پلان‌های طبقات دالخانی', page: 13 },
+          { label: 'برش و ترازهای دالخانی', page: 15 },
+          { label: 'مسکونی میان‌مرتبه مدرن', page: 17 },
+          { label: 'مجتمع آپارتمانی شهری', page: 19 },
+          { label: 'برج مدولار تیپ یک', page: 21 },
+          { label: 'برج مدولار تیپ دو', page: 23 },
+          { label: 'کاخ کلاسیک مجلل', page: 25 },
+          { label: 'استانداردهای مهندسی نما', page: 27 },
+          { label: 'سرپرستان پروژه', page: 29 },
+          { label: 'پشت جلد', page: 31 },
         ]
       },
       es: {
         numberText: 'Volumen II',
         badge: 'APARTMENTS & FACADES',
-        title: 'Apartamentos e Ingeniería de Fachadas',
-        description: 'Ingeniería de fachada Derous, residencial en pendiente Dalkhani, torres modulares y palacio clásico',
+        title: 'Residencial y Fachadas Técnicas',
+        description: 'Ingeniería de fachada Darrous, residencial Dalkhani en ladera, torres modulares y palacio clásico',
         shortcuts: [
           { label: 'Portada', page: 0 },
           { label: 'Manifiesto de Fachada e Índice', page: 1 },
-          { label: 'Fachada Derous (Entrada)', page: 2 },
-          { label: 'Iluminación Nocturna Derous', page: 4 },
-          { label: 'Lamas y Protección Solar', page: 6 },
-          { label: 'Detalles Constructivos 1:20', page: 7 },
-          { label: 'Residencial Dalkhani en Ladera', page: 8 },
-          { label: 'Plantas y Secciones Dalkhani', page: 10 },
-          { label: 'Conjunto Residencial Colectivo', page: 13 },
-          { label: 'Modulación de Fachada Tipo 1', page: 16 },
-          { label: 'Palacio Clásico Monumental', page: 19 },
-          { label: 'Directores de Proyecto', page: 20 },
-          { label: 'Contraportada y Normas', page: 21 },
+          { label: 'Fachada Darrous (Entrada)', page: 3 },
+          { label: 'Iluminación Nocturna Darrous', page: 5 },
+          { label: 'Lamas y Geometría Solar', page: 7 },
+          { label: 'Detalles Constructivos 1:20', page: 9 },
+          { label: 'Residencial Dalkhani en Ladera', page: 11 },
+          { label: 'Plantas Distribución Dalkhani', page: 13 },
+          { label: 'Secciones y Terrazas Dalkhani', page: 15 },
+          { label: 'Residencial Urbano Moderno', page: 17 },
+          { label: 'Complejo Colectivo Urbano', page: 19 },
+          { label: 'Torre Modular Tipología 01', page: 21 },
+          { label: 'Torre Modular Tipología 02', page: 23 },
+          { label: 'Palacio Clásico Monumental', page: 25 },
+          { label: 'Protocolo de Fachadas', page: 27 },
+          { label: 'Directores de Proyecto', page: 29 },
+          { label: 'Contraportada', page: 31 },
         ]
       },
       ca: {
         numberText: 'Volum II',
         badge: 'APARTMENTS & FACADES',
         title: 'Apartaments i Enginyeria de Façanes',
-        description: 'Enginyeria de façana Derous, residencial en pendent Dalkhani, torres modulars i palau clàssic',
+        description: 'Enginyeria de façana Darrous, residencial en pendent Dalkhani, torres modulars i palau clàssic',
         shortcuts: [
           { label: 'Portada', page: 0 },
           { label: 'Manifest de Façana i Índex', page: 1 },
-          { label: 'Façana Derous (Entrada)', page: 2 },
-          { label: 'Il·luminació Nocturna Derous', page: 4 },
-          { label: 'Lamel·les i Protecció Solar', page: 6 },
-          { label: 'Detalls Constructius 1:20', page: 7 },
-          { label: 'Residencial Dalkhani en Pendent', page: 8 },
-          { label: 'Plantes i Seccions Dalkhani', page: 10 },
-          { label: 'Conjunt Residencial Col·lectiu', page: 13 },
-          { label: 'Modulació de Façana Tipus 1', page: 16 },
-          { label: 'Palau Clàssic Monumental', page: 19 },
-          { label: 'Directors de Projecte', page: 20 },
-          { label: 'Contraportada i Normes', page: 21 },
+          { label: 'Façana Darrous (Entrada)', page: 3 },
+          { label: 'Il·luminació Nocturna Darrous', page: 5 },
+          { label: 'Lamel·les i Geometria Solar', page: 7 },
+          { label: 'Detalls Constructius 1:20', page: 9 },
+          { label: 'Residencial Dalkhani en Pendent', page: 11 },
+          { label: 'Plantes Distribució Dalkhani', page: 13 },
+          { label: 'Seccions i Terrasses Dalkhani', page: 15 },
+          { label: 'Residencial Urbà Modern', page: 17 },
+          { label: 'Complex Col·lectiu Urbà', page: 19 },
+          { label: 'Torre Modular Tipologia 01', page: 21 },
+          { label: 'Torre Modular Tipologia 02', page: 23 },
+          { label: 'Palau Clàssic Monumental', page: 25 },
+          { label: 'Protocol de Façanes', page: 27 },
+          { label: 'Directors de Projecte', page: 29 },
+          { label: 'Contraportada', page: 31 },
         ]
       }
     }
@@ -237,7 +273,7 @@ export const PORTFOLIO_VOLUMES: Record<PortfolioVolumeKey, VolumeConfig> = {
     totalPages: 32,
     pdfUrl: '/BIMCO_Volume3_Urban_Commercial.pdf',
     pdfDownloadName: 'BIMCO_Volume3_Urban_Commercial_2026.pdf',
-    pdfSizeText: '21.2 MB',
+    pdfSizeText: '26.1 MB',
     pagesFolder: '/portfolio_urban/book_pages',
     icon: <Landmark className="w-4 h-4" />,
     translations: {
@@ -249,17 +285,21 @@ export const PORTFOLIO_VOLUMES: Record<PortfolioVolumeKey, VolumeConfig> = {
         shortcuts: [
           { label: 'Front Cover', page: 0 },
           { label: 'Urban Manifesto & Index', page: 1 },
-          { label: 'Shargh Steel Complex', page: 2 },
-          { label: 'Atrium & Skylights', page: 5 },
-          { label: 'Steel Construction Frame', page: 8 },
-          { label: 'Erbil Arched Mall', page: 9 },
-          { label: 'Grade-Separated Junction', page: 14 },
-          { label: 'Zargandeh Valley Morphology', page: 15 },
-          { label: 'Ecological Valley Regeneration', page: 17 },
-          { label: 'Dense Urban Fabric', page: 20 },
-          { label: 'Arteries & Skyways', page: 25 },
-          { label: 'Project Directors', page: 30 },
-          { label: 'Back Cover & Standards', page: 31 },
+          { label: 'Steel Complex Master Site', page: 3 },
+          { label: 'Steel Commercial Showrooms', page: 5 },
+          { label: 'Administrative & Bank HQ', page: 7 },
+          { label: 'Logistics Bays & Elevation', page: 9 },
+          { label: 'Erbil Department Store', page: 11 },
+          { label: 'Retail Concourse & Skylight', page: 13 },
+          { label: 'Store Plans & Sections', page: 15 },
+          { label: 'Metropolitan Infrastructure', page: 17 },
+          { label: 'Zargandeh Basin Morphology', page: 19 },
+          { label: 'Riverbank Ecological Spine', page: 21 },
+          { label: 'High-Density Skyline', page: 23 },
+          { label: 'Transit-Oriented Development', page: 25 },
+          { label: 'Execution Standards', page: 27 },
+          { label: 'Project Directors', page: 29 },
+          { label: 'Back Cover', page: 31 },
         ]
       },
       fa: {
@@ -270,17 +310,21 @@ export const PORTFOLIO_VOLUMES: Record<PortfolioVolumeKey, VolumeConfig> = {
         shortcuts: [
           { label: 'روی جلد', page: 0 },
           { label: 'مانیفست شهری و فهرست', page: 1 },
-          { label: 'مجتمع فولاد شرق', page: 2 },
-          { label: 'آتریوم و نورگیرها', page: 5 },
-          { label: 'سازه فولادی کارگاه', page: 8 },
-          { label: 'مرکز خرید قوسی اربیل', page: 9 },
-          { label: 'تقاطع غیرهمسطح و پل', page: 14 },
-          { label: 'مورفولوژی روددره زرگنده', page: 15 },
-          { label: 'احیای اکولوژیک روددره', page: 17 },
-          { label: 'طراحی شهری متراکم', page: 20 },
-          { label: 'شریان‌ها و اسکای‌وی', page: 25 },
-          { label: 'سرپرستان پروژه', page: 30 },
-          { label: 'پشت جلد و استانداردها', page: 31 },
+          { label: 'مجتمع فولاد شرق (سایت کلان)', page: 3 },
+          { label: 'نمایشگاه‌های تخصصی فولاد', page: 5 },
+          { label: 'ساختمان اداری و شعبه بانک', page: 7 },
+          { label: 'بخش بارگیری و نمای اتوبان', page: 9 },
+          { label: 'مرکز تجاری قوسی اربیل', page: 11 },
+          { label: 'آتریوم مرکزی و نورگیر سقف', page: 13 },
+          { label: 'پلان‌های طبقات و مقاطع اربیل', page: 15 },
+          { label: 'تقاطع غیرهمسطح و پل شهری', page: 17 },
+          { label: 'مورفولوژی روددره زرگنده', page: 19 },
+          { label: 'احیای اکولوژیک روددره', page: 21 },
+          { label: 'اسکای‌لاین و کوریدورهای نور', page: 23 },
+          { label: 'توسعه مبتنی بر حمل‌ونقل (TOD)', page: 25 },
+          { label: 'استانداردهای طراحی شهری', page: 27 },
+          { label: 'سرپرستان پروژه', page: 29 },
+          { label: 'پشت جلد', page: 31 },
         ]
       },
       es: {
@@ -291,17 +335,21 @@ export const PORTFOLIO_VOLUMES: Record<PortfolioVolumeKey, VolumeConfig> = {
         shortcuts: [
           { label: 'Portada', page: 0 },
           { label: 'Manifiesto Urbano e Índice', page: 1 },
-          { label: 'Complejo Shargh Steel', page: 2 },
-          { label: 'Atrio y Lucernarios', page: 5 },
-          { label: 'Estructura Metálica de Obra', page: 8 },
-          { label: 'Centro Comercial Curvo Erbil', page: 9 },
-          { label: 'Intercambiador y Puentes', page: 14 },
-          { label: 'Morfología Cuenca Zargandeh', page: 15 },
-          { label: 'Regeneración Ecológica Fluvial', page: 17 },
-          { label: 'Diseño Urbano Denso', page: 20 },
-          { label: 'Arterias y Pasarelas Aéreas', page: 25 },
-          { label: 'Directores de Proyecto', page: 30 },
-          { label: 'Contraportada y Normas', page: 31 },
+          { label: 'Master Site Shargh Steel', page: 3 },
+          { label: 'Naves y Showrooms Comerciales', page: 5 },
+          { label: 'Sede Administrativa y Bancaria', page: 7 },
+          { label: 'Muelles Logísticos y Fachada', page: 9 },
+          { label: 'Centro Comercial Curvo Erbil', page: 11 },
+          { label: 'Galería Central y Lucernarios', page: 13 },
+          { label: 'Plantas y Secciones Erbil', page: 15 },
+          { label: 'Infraestructura Metropolitana', page: 17 },
+          { label: 'Morfología Cuenca Zargandeh', page: 19 },
+          { label: 'Regeneración Ribera Fluvial', page: 21 },
+          { label: 'Skyline Urbano Denso y CFD', page: 23 },
+          { label: 'Desarrollo Orientado al Transporte', page: 25 },
+          { label: 'Protocolo Urbano y BIM', page: 27 },
+          { label: 'Directores de Proyecto', page: 29 },
+          { label: 'Contraportada', page: 31 },
         ]
       },
       ca: {
@@ -312,17 +360,21 @@ export const PORTFOLIO_VOLUMES: Record<PortfolioVolumeKey, VolumeConfig> = {
         shortcuts: [
           { label: 'Portada', page: 0 },
           { label: 'Manifest Urbà i Índex', page: 1 },
-          { label: 'Complex Shargh Steel', page: 2 },
-          { label: 'Àtri i Lluernes', page: 5 },
-          { label: 'Estructura Metàl·lica d\'Obra', page: 8 },
-          { label: 'Centre Comercial Corbat Erbil', page: 9 },
-          { label: 'Intercanviador i Ponts', page: 14 },
-          { label: 'Morfologia Conca Zargandeh', page: 15 },
-          { label: 'Regeneració Ecològica Fluvial', page: 17 },
-          { label: 'Disseny Urbà Dens', page: 20 },
-          { label: 'Artèries i Passarel·les Aèries', page: 25 },
-          { label: 'Directors de Projecte', page: 30 },
-          { label: 'Contraportada i Normes', page: 31 },
+          { label: 'Master Site Shargh Steel', page: 3 },
+          { label: 'Naus i Showrooms Comercials', page: 5 },
+          { label: 'Seu Administrativa i Bancària', page: 7 },
+          { label: 'Molls Logístics i Façana', page: 9 },
+          { label: 'Centre Comercial Corbat Erbil', page: 11 },
+          { label: 'Galeria Central i Lluernes', page: 13 },
+          { label: 'Plantes i Seccions Erbil', page: 15 },
+          { label: 'Infraestructura Metropolitana', page: 17 },
+          { label: 'Morfologia Conca Zargandeh', page: 19 },
+          { label: 'Regeneració Ribera Fluvial', page: 21 },
+          { label: 'Skyline Urbà Dens i CFD', page: 23 },
+          { label: 'Desenvolupament Orientat al Transport', page: 25 },
+          { label: 'Protocol Urbà i BIM', page: 27 },
+          { label: 'Directors de Projecte', page: 29 },
+          { label: 'Contraportada', page: 31 },
         ]
       }
     }
@@ -342,13 +394,24 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
   initialVolume = 'villas',
   currentLanguage = 'en'
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const flipBookInstance = useRef<PageFlip | null>(null);
+
   const [activeVolume, setActiveVolume] = useState<PortfolioVolumeKey>(initialVolume);
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [direction, setDirection] = useState<number>(1); // +1: next, -1: prev
+  const [isPortraitMode, setIsPortraitMode] = useState<boolean>(false);
+  const [isBookReady, setIsBookReady] = useState<boolean>(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState<boolean>(true);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [isZoomed, setIsZoomed] = useState<boolean>(false);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
+
+  // Sync active volume with initialVolume prop if provided
+  useEffect(() => {
+    if (initialVolume && PORTFOLIO_VOLUMES[initialVolume]) {
+      setActiveVolume(initialVolume);
+    }
+  }, [initialVolume]);
 
   const langKey = (currentLanguage === 'fa' || currentLanguage === 'es' || currentLanguage === 'ca')
     ? currentLanguage
@@ -364,21 +427,21 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
       case 'fa':
         return {
           studioSubtitle: 'دفترچه تعاملی مونوگراف معماری | سهیل ماستی و سیاوش پازوکی',
-          downloadPdf: 'دانلود PDF',
+          downloadPdf: 'دانلود PDF اصلی',
           pageText: 'صفحه',
+          pagesText: 'صفحات',
           ofText: 'از',
           frontCover: 'روی جلد',
           backCover: 'پشت جلد',
           zoomIn: 'بزرگنمایی شیت',
           zoomOut: 'اندازه استاندارد',
-          share: 'کپی لینک این پورتفولیو',
+          share: 'کپی لینک این جلد',
           soundMute: 'قطع صدای ورق زدن',
           soundUnmute: 'وصل صدای ورق زدن',
           fullscreen: 'حالت تمام‌صفحه',
           exitFullscreen: 'خروج از تمام‌صفحه',
           close: 'بستن دفترچه (Esc)',
-          tipText: 'مشاهده شیت کامل ۱۶:۹ بدون برش • امکان کشیدن صفحه با لمس در موبایل و تبلت',
-          tipMobile: 'ورق زدن: کشیدن صفحه یا کلیدهای جهت‌نما',
+          tipText: 'ورق زدن فیزیکی کتاب: کشیدن گوشه برگه‌ها با ماوس یا لمس • دکمه‌های جهت‌نما',
           location: 'بارسلونا، اسپانیا • استودیو بیمکو',
           leadership: 'سهیل ماستی و سیاوش پازوکی',
           whatsapp: 'واتساپ: ۳۴۶۱۰۸۵۵۴۳۴+',
@@ -386,21 +449,21 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
       case 'es':
         return {
           studioSubtitle: 'Monografía Arquitectónica Interactiva | Soheil Masti & Siavash Pazouki',
-          downloadPdf: 'Descargar PDF',
+          downloadPdf: 'Descargar PDF Oficial',
           pageText: 'Página',
+          pagesText: 'Páginas',
           ofText: 'de',
           frontCover: 'Portada',
           backCover: 'Contraportada',
           zoomIn: 'Ampliar lámina',
           zoomOut: 'Tamaño estándar',
-          share: 'Copiar enlace del portfolio',
+          share: 'Copiar enlace de este tomo',
           soundMute: 'Silenciar sonido de páginas',
           soundUnmute: 'Activar sonido de páginas',
           fullscreen: 'Pantalla completa',
           exitFullscreen: 'Salir de pantalla completa',
           close: 'Cerrar portfolio (Esc)',
-          tipText: 'Lámina arquitectónica 16:9 completa sin recortes • Desliza para pasar página en táctil',
-          tipMobile: 'Pasar página: deslizar o pulsar botones',
+          tipText: 'Giro de libro físico: arrastre esquinas con ratón o táctil • Flechas del teclado',
           location: 'Barcelona, España • BIMCO Studio',
           leadership: 'Soheil Masti & Siavash Pazouki',
           whatsapp: 'WhatsApp: +34 610 855 434',
@@ -408,21 +471,21 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
       case 'ca':
         return {
           studioSubtitle: 'Monografia Arquitectònica Interactiva | Soheil Masti & Siavash Pazouki',
-          downloadPdf: 'Descarregar PDF',
+          downloadPdf: 'Descarregar PDF Oficial',
           pageText: 'Pàgina',
+          pagesText: 'Pàgines',
           ofText: 'de',
           frontCover: 'Portada',
           backCover: 'Contraportada',
           zoomIn: 'Ampliar làmina',
           zoomOut: 'Mida estàndard',
-          share: 'Copiar enllaç del dossier',
+          share: 'Copiar enllaç d\'aquest volum',
           soundMute: 'Silenciar so de pàgines',
           soundUnmute: 'Activar so de pàgines',
           fullscreen: 'Pantalla completa',
           exitFullscreen: 'Sortir de pantalla completa',
           close: 'Tancar dossier (Esc)',
-          tipText: 'Làmina arquitectònica 16:9 completa sense retallades • Llisca per passar pàgina',
-          tipMobile: 'Passar pàgina: lliscar o prémer botons',
+          tipText: 'Gir de llibre físic: arrossegueu cantonades amb ratolí o tàctil • Fletxes del teclat',
           location: 'Barcelona, Espanya • BIMCO Studio',
           leadership: 'Soheil Masti & Siavash Pazouki',
           whatsapp: 'WhatsApp: +34 610 855 434',
@@ -432,6 +495,7 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           studioSubtitle: 'Interactive Architectural Monograph | Soheil Masti & Siavash Pazouki',
           downloadPdf: 'Download Official PDF',
           pageText: 'Page',
+          pagesText: 'Pages',
           ofText: 'of',
           frontCover: 'Front Cover',
           backCover: 'Back Cover',
@@ -443,8 +507,7 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           fullscreen: 'Fullscreen View',
           exitFullscreen: 'Exit Fullscreen',
           close: 'Close Monograph (Esc)',
-          tipText: 'Complete 16:9 Master Drawing Sheet • Touch swipe supported on iPhone, Android & iPad',
-          tipMobile: 'Flip: Touch swipe or arrow buttons',
+          tipText: 'Authentic 2-Page Book: Drag page corners or use arrow keys / touch swipe',
           location: 'Barcelona, Spain • BIMCO Studio',
           leadership: 'Soheil Masti & Siavash Pazouki',
           whatsapp: 'WhatsApp: +34 610 855 434',
@@ -452,18 +515,18 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
     }
   }, [langKey]);
 
-  // List of all page image URLs for the active volume
+  // List of all 32 page image URLs for active volume
   const pageImages = useMemo(() => {
     return Array.from({ length: currentConfig.totalPages }, (_, i) => 
       `${currentConfig.pagesFolder}/page_${String(i + 1).padStart(2, '0')}.jpg`
     );
   }, [currentConfig]);
 
-  // Preload current, previous, and next images for zero-latency instant display
+  // Preload images
   useEffect(() => {
     if (!isOpen) return;
-
     const indicesToPreload = [
+      0, 1, 2, 3, 4,
       currentPage,
       Math.min(currentConfig.totalPages - 1, currentPage + 1),
       Math.min(currentConfig.totalPages - 1, currentPage + 2),
@@ -478,99 +541,136 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
     });
   }, [isOpen, currentPage, pageImages, currentConfig.totalPages]);
 
-  // Reset page when switching volume or reopening
+  // Initialize PageFlip instance
   useEffect(() => {
-    if (isOpen) {
-      setCurrentPage(0);
-      setIsZoomed(false);
-    }
-  }, [isOpen, activeVolume]);
+    if (!isOpen) return;
 
-  const handleNext = useCallback(() => {
-    if (currentPage >= currentConfig.totalPages - 1) return;
-    setDirection(1);
-    setCurrentPage(prev => prev + 1);
-    if (isAudioEnabled) sound.playPageFlip();
-  }, [currentPage, currentConfig.totalPages, isAudioEnabled]);
+    setIsBookReady(false);
+    setCurrentPage(0);
+    setIsZoomed(false);
 
-  const handlePrev = useCallback(() => {
-    if (currentPage <= 0) return;
-    setDirection(-1);
-    setCurrentPage(prev => prev - 1);
-    if (isAudioEnabled) sound.playPageFlip();
-  }, [currentPage, isAudioEnabled]);
+    let localPageFlip: PageFlip | null = null;
+    let fallbackTimer: any = null;
 
-  const handleJumpToPage = (pageNum: number) => {
-    if (pageNum === currentPage) return;
-    setDirection(pageNum > currentPage ? 1 : -1);
-    setCurrentPage(pageNum);
-    if (isAudioEnabled) sound.playPageFlip();
-  };
+    const timer = setTimeout(() => {
+      if (!containerRef.current) return;
 
-  const handleSwitchVolume = (volKey: PortfolioVolumeKey) => {
-    if (volKey === activeVolume) return;
-    sound.playClick();
-    setActiveVolume(volKey);
-  };
+      // Base page dimensions (8:9 ratio: 560 x 630 -> 2 pages = 1120 x 630 = 16:9)
+      const baseW = 560;
+      const baseH = 630;
+
+      try {
+        localPageFlip = new PageFlip(containerRef.current, {
+          width: baseW,
+          height: baseH,
+          size: 'stretch',
+          minWidth: 280,
+          maxWidth: 960,
+          minHeight: 315,
+          maxHeight: 1080,
+          maxShadowOpacity: 0.45,
+          showCover: true,
+          mobileScrollSupport: false,
+          usePortrait: true,
+          startPage: 0,
+          drawShadow: true,
+          flippingTime: 700,
+          useMouseEvents: true,
+          showPageCorners: true,
+          swipeDistance: 25,
+        });
+
+        localPageFlip.loadFromImages(pageImages);
+
+        localPageFlip.on('flip', (e: any) => {
+          const pageIndex = typeof e.data === 'number' ? e.data : (localPageFlip?.getCurrentPageIndex() ?? 0);
+          setCurrentPage(pageIndex);
+          if (isAudioEnabled) {
+            sound.playPageFlip();
+          }
+        });
+
+        localPageFlip.on('changeOrientation', (e: any) => {
+          setIsPortraitMode(e.data === 'portrait');
+        });
+
+        localPageFlip.on('init', () => {
+          setIsBookReady(true);
+          if (localPageFlip) {
+            setIsPortraitMode((localPageFlip as any).getOrientation?.() === 'portrait');
+          }
+        });
+
+        fallbackTimer = setTimeout(() => {
+          setIsBookReady(true);
+          if (localPageFlip) {
+            setIsPortraitMode((localPageFlip as any).getOrientation?.() === 'portrait');
+          }
+        }, 500);
+
+        flipBookInstance.current = localPageFlip;
+      } catch (err) {
+        console.error('PageFlip initialization error:', err);
+      }
+    }, 60);
+
+    return () => {
+      clearTimeout(timer);
+      if (fallbackTimer) clearTimeout(fallbackTimer);
+      if (localPageFlip) {
+        try {
+          localPageFlip.destroy();
+        } catch (e) {
+          // ignore cleanup errors
+        }
+      }
+      flipBookInstance.current = null;
+    };
+  }, [isOpen, activeVolume, pageImages, isAudioEnabled]);
 
   // Keyboard navigation
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (!isOpen) return;
     if (e.key === 'Escape') {
-      onClose();
+      if (isZoomed) {
+        setIsZoomed(false);
+      } else {
+        onClose();
+      }
     } else if (e.key === 'ArrowRight' || e.key === 'PageDown') {
-      if (isRTL) handlePrev();
-      else handleNext();
+      flipBookInstance.current?.flipNext();
     } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-      if (isRTL) handleNext();
-      else handlePrev();
-    } else if (e.key === 'Home') {
-      handleJumpToPage(0);
-    } else if (e.key === 'End') {
-      handleJumpToPage(currentConfig.totalPages - 1);
+      flipBookInstance.current?.flipPrev();
     }
-  }, [isOpen, onClose, handleNext, handlePrev, isRTL, currentConfig.totalPages]);
+  }, [isOpen, isZoomed, onClose]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
-  // Touch Swipe gestures for iPhone, Android, and Tablets
-  const touchStartX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>(null);
+  const handlePrev = useCallback(() => {
+    flipBookInstance.current?.flipPrev();
+  }, []);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (e.touches.length > 0) {
-      touchStartX.current = e.touches[0].clientX;
-      touchStartY.current = e.touches[0].clientY;
+  const handleNext = useCallback(() => {
+    flipBookInstance.current?.flipNext();
+  }, []);
+
+  const handleJumpToPage = useCallback((pageNum: number) => {
+    if (flipBookInstance.current) {
+      flipBookInstance.current.flip(pageNum);
+      if (isAudioEnabled) sound.playPageFlip();
     }
-  };
+  }, [isAudioEnabled]);
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return;
-    const endX = e.changedTouches[0].clientX;
-    const endY = e.changedTouches[0].clientY;
-    const diffX = endX - touchStartX.current;
-    const diffY = endY - (touchStartY.current || 0);
+  const handleSwitchVolume = useCallback((volKey: PortfolioVolumeKey) => {
+    if (volKey === activeVolume) return;
+    sound.playClick();
+    setActiveVolume(volKey);
+  }, [activeVolume]);
 
-    // If swipe distance is > 35px and mostly horizontal
-    if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
-      if (diffX < 0) {
-        // Swiped Left
-        if (isRTL) handlePrev();
-        else handleNext();
-      } else {
-        // Swiped Right
-        if (isRTL) handleNext();
-        else handlePrev();
-      }
-    }
-    touchStartX.current = null;
-    touchStartY.current = null;
-  };
-
-  const toggleFullscreen = () => {
+  const toggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().catch(() => {});
       setIsFullscreen(true);
@@ -578,97 +678,135 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
       document.exitFullscreen().catch(() => {});
       setIsFullscreen(false);
     }
-  };
+  }, []);
 
-  const handleCopyShareLink = () => {
+  const handleCopyShareLink = useCallback(() => {
     sound.playClick();
     const shareUrl = `${window.location.origin}/?portfolio=true&vol=${activeVolume}`;
     navigator.clipboard.writeText(shareUrl).then(() => {
       setCopiedLink(true);
       setTimeout(() => setCopiedLink(false), 2500);
     }).catch(() => {});
+  }, [activeVolume]);
+
+  // Touch Swipe Support
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
   };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const diffX = e.changedTouches[0].clientX - touchStartX.current;
+    const diffY = e.changedTouches[0].clientY - touchStartY.current;
+
+    // Dominant horizontal swipe
+    if (Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX < 0) {
+        // Swiped Left -> Next page
+        handleNext();
+      } else {
+        // Swiped Right -> Prev page
+        handlePrev();
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
+  // Centering transform calculation:
+  // When closed at start (page 0): cover sits on the right half. Translate -25% shifts it to exact center!
+  // When closed at end (page 31): back cover sits on the left half. Translate +25% shifts it to exact center!
+  // When open (pages 1 to 30): center spine is exactly in the middle. Translate 0%!
+  const bookTransformStyle = useMemo(() => {
+    if (isPortraitMode) return 'none';
+    if (currentPage === 0) return 'translateX(-25%)';
+    if (currentPage >= currentConfig.totalPages - 1) return 'translateX(25%)';
+    return 'translateX(0%)';
+  }, [isPortraitMode, currentPage, currentConfig.totalPages]);
+
+  // Compute readable page range string
+  const pageStatusText = useMemo(() => {
+    if (currentPage === 0) {
+      return `${ui.frontCover} (1 / ${currentConfig.totalPages})`;
+    }
+    if (currentPage >= currentConfig.totalPages - 1) {
+      return `${ui.backCover} (${currentConfig.totalPages} / ${currentConfig.totalPages})`;
+    }
+    if (isPortraitMode) {
+      return `${ui.pageText} ${currentPage + 1} ${ui.ofText} ${currentConfig.totalPages}`;
+    }
+    // 2-page spread
+    const leftPage = currentPage % 2 === 1 ? currentPage + 1 : currentPage;
+    const rightPage = Math.min(currentConfig.totalPages, leftPage + 1);
+    return `${ui.pagesText} ${String(leftPage).padStart(2, '0')} – ${String(rightPage).padStart(2, '0')} ${ui.ofText} ${currentConfig.totalPages}`;
+  }, [currentPage, currentConfig.totalPages, isPortraitMode, ui]);
 
   if (!isOpen) return null;
 
   return (
     <div 
-      className="fixed inset-0 z-[99999] isolate flex flex-col bg-[#0b0f17] text-white select-none overflow-hidden"
+      className="fixed inset-0 z-[100] flex flex-col bg-[#080c12]/98 backdrop-blur-2xl text-slate-100 select-none overflow-hidden"
       dir={isRTL ? 'rtl' : 'ltr'}
-      style={{ isolation: 'isolate' }}
     >
-      {/* 1. TOP HEADER & BRANDING BAR */}
-      <header className="px-3 sm:px-6 py-2.5 bg-[#0f172a]/95 border-b border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-2 shrink-0 z-20 shadow-lg">
-        {/* Left: BIMCO Identity */}
-        <div className="flex items-center justify-between md:justify-start gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-600/30 to-slate-900 p-1 border border-amber-500/30 flex items-center justify-center shadow-lg shadow-amber-950/30">
-              <img src="/logo.png" alt="BIMCO Logo" className="w-8 h-8 object-contain drop-shadow" />
+      {/* 1. TOP HEADER & STUDIO IDENTITY */}
+      <header className="px-3 sm:px-6 py-2.5 bg-slate-950/90 border-b border-white/10 flex items-center justify-between gap-2 shrink-0 z-20 shadow-md">
+        {/* Left: Studio Barcelona & Logo */}
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center p-1">
+            <img src="/logo.png" alt="BIMCO Logo" className="w-full h-full object-contain" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-white text-xs sm:text-sm tracking-wider font-mono">BIMCO</span>
+              <span className="text-[10px] text-amber-400 font-semibold px-1.5 py-0.5 rounded bg-amber-400/10 border border-amber-400/20">
+                BARCELONA
+              </span>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono font-black text-sm tracking-widest text-white">BIMCO STUDIO</span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">
-                  BARCELONA
-                </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hidden sm:inline-block">
-                  3 VOLUMES
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400 font-medium">
-                {ui.studioSubtitle}
-              </p>
+            <div className="text-[10px] text-slate-400 hidden md:block">
+              {ui.studioSubtitle}
             </div>
           </div>
-
-          {/* Close button for mobile inside header */}
-          <button
-            onClick={onClose}
-            className="md:hidden w-8 h-8 rounded-lg bg-red-500/20 hover:bg-red-500/40 border border-red-500/30 flex items-center justify-center text-red-300 transition-colors cursor-pointer"
-            title={ui.close}
-          >
-            <X className="w-4 h-4" />
-          </button>
         </div>
 
-        {/* Center: Thematic Volume Selector Tabs */}
-        <div className="flex items-center justify-center gap-1 sm:gap-2 p-1 bg-slate-950/80 rounded-xl border border-white/10 overflow-x-auto scrollbar-none">
-          {(Object.keys(PORTFOLIO_VOLUMES) as PortfolioVolumeKey[]).map((key) => {
-            const vol = PORTFOLIO_VOLUMES[key];
-            const trans = vol.translations[langKey] || vol.translations.en;
-            const isActive = activeVolume === key;
+        {/* Center: Volume Selector Buttons */}
+        <div className="flex items-center gap-1 sm:gap-2 bg-white/5 p-1 rounded-xl border border-white/10">
+          {(['villas', 'apartments', 'urban'] as PortfolioVolumeKey[]).map((volKey) => {
+            const v = PORTFOLIO_VOLUMES[volKey];
+            const vLoc = v.translations[langKey] || v.translations.en;
+            const isActive = activeVolume === volKey;
             return (
               <button
-                key={key}
-                onClick={() => handleSwitchVolume(key)}
-                className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                key={volKey}
+                onClick={() => handleSwitchVolume(volKey)}
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer ${
                   isActive
-                    ? 'bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-md shadow-amber-900/40 border border-amber-400/50 scale-[1.02]'
-                    : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                    ? 'bg-amber-600 text-white shadow-md shadow-amber-900/40 border border-amber-400'
+                    : 'text-slate-300 hover:text-white hover:bg-white/10'
                 }`}
-                title={trans.description}
               >
-                <span className={isActive ? 'text-amber-200' : 'text-slate-400'}>{vol.icon}</span>
-                <span>{trans.title}</span>
-                <span className={`text-[9px] px-1 py-0.2 rounded font-mono ${isActive ? 'bg-black/30 text-amber-200' : 'bg-white/5 text-slate-400'}`}>
-                  {trans.numberText}
-                </span>
+                {v.icon}
+                <span className="hidden sm:inline">{vLoc.numberText}:</span>
+                <span>{vLoc.badge}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Right: Actions, Download & Controls */}
-        <div className="hidden md:flex items-center gap-2">
-          {/* Download Current Volume PDF */}
+        {/* Right: Actions (Download PDF, Share, Sound, Fullscreen, Close) */}
+        <div className="flex items-center gap-1.5">
+          {/* Official PDF Download Button */}
           <a
             href={currentConfig.pdfUrl}
             download={currentConfig.pdfDownloadName}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold text-xs shadow-lg shadow-amber-900/30 border border-amber-400/40 transition-all duration-200 active:scale-95 cursor-pointer"
-            title={`${ui.downloadPdf} ${volLocalized.numberText} (${currentConfig.pdfSizeText})`}
+            className="hidden sm:flex items-center gap-1.5 text-xs bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-white px-3 py-1.5 rounded-xl font-bold transition-colors shadow-sm cursor-pointer"
+            title={`${ui.downloadPdf} (${currentConfig.pdfSizeText})`}
           >
-            <Download className="w-3.5 h-3.5 animate-bounce" />
-            <span>{ui.downloadPdf} {volLocalized.numberText}</span>
+            <Download className="w-3.5 h-3.5" />
+            <span>PDF</span>
             <span className="text-[10px] bg-black/20 px-1 py-0.5 rounded font-mono text-amber-200">
               {currentConfig.pdfSizeText}
             </span>
@@ -677,10 +815,14 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           {/* Zoom Toggle */}
           <button
             onClick={() => setIsZoomed(!isZoomed)}
-            className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer"
+            className={`w-8 h-8 rounded-xl border flex items-center justify-center transition-colors cursor-pointer ${
+              isZoomed 
+                ? 'bg-amber-600 border-amber-400 text-white' 
+                : 'bg-white/5 hover:bg-white/10 border-white/10 text-slate-300 hover:text-white'
+            }`}
             title={isZoomed ? ui.zoomOut : ui.zoomIn}
           >
-            {isZoomed ? <ZoomOut className="w-3.5 h-3.5 text-amber-400" /> : <ZoomIn className="w-3.5 h-3.5" />}
+            {isZoomed ? <ZoomOut className="w-3.5 h-3.5" /> : <ZoomIn className="w-3.5 h-3.5" />}
           </button>
 
           {/* Share Link */}
@@ -722,25 +864,25 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
       </header>
 
       {/* Volume Info Strip (Sub-header) */}
-      <div className="px-4 py-1.5 bg-[#0f172a]/70 border-b border-white/5 flex items-center justify-between text-xs text-slate-300 font-mono">
+      <div className="px-4 py-1.5 bg-slate-900/70 border-b border-white/5 flex items-center justify-between text-xs text-slate-300 font-mono">
         <div className="flex items-center gap-2">
-          <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+          <BookOpen className="w-3.5 h-3.5 text-amber-400 shrink-0" />
           <span className="font-bold text-amber-300">{volLocalized.numberText}:</span>
-          <span>{volLocalized.title}</span>
+          <span className="truncate max-w-[280px] sm:max-w-md">{volLocalized.title}</span>
         </div>
 
         {/* Page status indicator */}
         <div className="flex items-center gap-3">
-          <span className="text-slate-300">
-            {ui.pageText} <span className="text-amber-400 font-bold">{currentPage + 1}</span> {ui.ofText} {currentConfig.totalPages}
+          <span className="text-slate-300 font-medium">
+            {pageStatusText}
           </span>
           {currentPage === 0 && (
-            <span className="text-emerald-400 font-bold text-[10px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
+            <span className="text-emerald-400 font-bold text-[10px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 hidden sm:inline">
               {ui.frontCover}
             </span>
           )}
-          {currentPage === currentConfig.totalPages - 1 && (
-            <span className="text-amber-400 font-bold text-[10px] bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">
+          {currentPage >= currentConfig.totalPages - 1 && (
+            <span className="text-amber-400 font-bold text-[10px] bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20 hidden sm:inline">
               {ui.backCover}
             </span>
           )}
@@ -749,7 +891,7 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           <a
             href={currentConfig.pdfUrl}
             download={currentConfig.pdfDownloadName}
-            className="md:hidden flex items-center gap-1 text-[11px] bg-amber-600 hover:bg-amber-500 text-white px-2 py-0.5 rounded-md font-bold"
+            className="sm:hidden flex items-center gap-1 text-[11px] bg-amber-600 hover:bg-amber-500 text-white px-2 py-0.5 rounded-md font-bold"
           >
             <Download className="w-3 h-3" />
             <span>PDF</span>
@@ -757,126 +899,76 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
         </div>
       </div>
 
-      {/* 2. MAIN SINGLE FULL-SHEET 3D FOLIO STAGE (Centered 16:9 Architecture Display) */}
+      {/* 2. MAIN 3D FLIPBOOK STAGE */}
       <main 
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        className="flex-1 relative flex items-center justify-center p-2 sm:p-4 overflow-hidden touch-pan-y"
-        style={{ perspective: '1600px' }}
+        className="flex-1 relative flex items-center justify-center p-2 sm:p-4 overflow-hidden touch-pan-y bg-[#0a0e14]"
       >
-        {/* Navigation Previous Button */}
+        {/* Navigation Chevron Left */}
         <button
-          onClick={isRTL ? handleNext : handlePrev}
-          disabled={isRTL ? currentPage >= currentConfig.totalPages - 1 : currentPage <= 0}
-          className={`absolute left-2 sm:left-6 z-30 w-10 h-10 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-2xl ${
-            (isRTL ? currentPage >= currentConfig.totalPages - 1 : currentPage <= 0)
-              ? 'bg-white/5 text-slate-700 opacity-20 cursor-not-allowed pointer-events-none' 
-              : 'bg-slate-900/90 hover:bg-amber-600 text-white border border-white/20 hover:scale-110 hover:border-amber-400 active:scale-95'
+          onClick={handlePrev}
+          disabled={currentPage <= 0}
+          className={`absolute left-2 sm:left-6 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-xl ${
+            currentPage <= 0 
+              ? 'bg-white/5 text-slate-600 opacity-20 cursor-not-allowed' 
+              : 'bg-slate-900/80 hover:bg-amber-600 text-white border border-white/15 hover:scale-105 hover:border-amber-400'
           }`}
-          title={isRTL ? 'صفحه بعد' : 'Previous Page'}
+          title="Previous Page (Left Arrow)"
         >
-          <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
+          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
 
-        {/* Widescreen 16:9 Architectural Folio Board (Strict Unstretched Proportions) */}
-        <div 
-          className={`relative flex items-center justify-center w-full h-full max-w-full transition-transform duration-300 ${
-            isZoomed ? 'scale-115' : 'scale-100'
-          }`}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            width: '100%'
-          }}
-        >
+        {/* 3D FlipBook Target Canvas Container */}
+        <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
           <div 
-            className="relative flex items-center justify-center transition-all duration-300"
-            style={{ 
-              maxWidth: 'min(1720px, calc((100vh - 150px) * 16 / 9))',
-              aspectRatio: '16 / 9',
-              width: '100%',
-              height: 'auto',
-              maxHeight: 'calc(100vh - 150px)'
+            className="transition-transform duration-600 ease-out flex items-center justify-center pointer-events-auto"
+            style={{
+              transform: isZoomed ? `scale(1.28) ${bookTransformStyle}` : bookTransformStyle,
+              willChange: 'transform'
             }}
           >
-            <AnimatePresence initial={false} custom={direction} mode="wait">
-              <motion.div
-                key={`${activeVolume}-${currentPage}`}
-                custom={direction}
-                initial={{ 
-                  opacity: 0, 
-                  rotateY: direction > 0 ? 8 : -8,
-                  x: direction > 0 ? 25 : -25,
-                  scale: 0.985
-                }}
-                animate={{ 
-                  opacity: 1, 
-                  rotateY: 0,
-                  x: 0,
-                  scale: 1,
-                  transition: {
-                    duration: 0.32,
-                    ease: [0.16, 1, 0.3, 1]
-                  }
-                }}
-                exit={{ 
-                  opacity: 0, 
-                  rotateY: direction > 0 ? -8 : 8,
-                  x: direction > 0 ? -25 : 25,
-                  scale: 0.985,
-                  transition: {
-                    duration: 0.22,
-                    ease: [0.4, 0, 1, 1]
-                  }
-                }}
-                className="w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-[#0c1017] border border-white/15 shadow-[0_30px_90px_rgba(0,0,0,0.95)] flex items-center justify-center select-none"
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                <img
-                  src={pageImages[currentPage]}
-                  alt={`${volLocalized.title} - ${ui.pageText} ${currentPage + 1}`}
-                  className="w-full h-full object-contain pointer-events-none select-none max-w-full max-h-full"
-                  loading="eager"
-                  decoding="async"
-                />
-
-                {/* Subtle paper depth edge highlight */}
-                <div className="absolute inset-0 pointer-events-none rounded-xl sm:rounded-2xl ring-1 ring-inset ring-white/10 shadow-[inset_0_0_40px_rgba(0,0,0,0.4)]" />
-              </motion.div>
-            </AnimatePresence>
+            <div 
+              key={activeVolume}
+              ref={containerRef} 
+              className="shadow-2xl drop-shadow-[0_25px_60px_rgba(0,0,0,0.9)] rounded-sm overflow-hidden"
+            />
           </div>
         </div>
 
-        {/* Navigation Next Button */}
+        {/* Navigation Chevron Right */}
         <button
-          onClick={isRTL ? handlePrev : handleNext}
-          disabled={isRTL ? currentPage <= 0 : currentPage >= currentConfig.totalPages - 1}
-          className={`absolute right-2 sm:right-6 z-30 w-10 h-10 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-2xl ${
-            (isRTL ? currentPage <= 0 : currentPage >= currentConfig.totalPages - 1)
-              ? 'bg-white/5 text-slate-700 opacity-20 cursor-not-allowed pointer-events-none' 
-              : 'bg-slate-900/90 hover:bg-amber-600 text-white border border-white/20 hover:scale-110 hover:border-amber-400 active:scale-95'
+          onClick={handleNext}
+          disabled={currentPage >= currentConfig.totalPages - 1}
+          className={`absolute right-2 sm:right-6 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-xl ${
+            currentPage >= currentConfig.totalPages - 1 
+              ? 'bg-white/5 text-slate-600 opacity-20 cursor-not-allowed' 
+              : 'bg-slate-900/80 hover:bg-amber-600 text-white border border-white/15 hover:scale-105 hover:border-amber-400'
           }`}
-          title={isRTL ? 'صفحه قبل' : 'Next Page'}
+          title="Next Page (Right Arrow)"
         >
-          <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
+          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
       </main>
 
-      {/* 3. BOTTOM SCRUBBER & CATEGORY SHORTCUTS BAR */}
-      <footer className="px-3 sm:px-6 py-2 bg-[#0f172a]/95 border-t border-white/10 flex flex-col justify-center shrink-0 z-20 gap-1.5">
+      {/* 3. BOTTOM CATEGORY SHORTCUTS & VERIFICATION BAR */}
+      <footer className="px-3 sm:px-6 py-2 bg-slate-950/95 border-t border-white/10 flex flex-col justify-center shrink-0 z-20">
         {/* Quick jump tags for active volume */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none justify-start sm:justify-center">
           {volLocalized.shortcuts.map((sec, idx) => {
-            const isSelected = currentPage === sec.page;
+            const isSelected = sec.page === 0 
+              ? currentPage === 0 
+              : sec.page === currentConfig.totalPages - 1
+                ? currentPage >= currentConfig.totalPages - 1
+                : currentPage === sec.page || currentPage === sec.page + 1;
+
             return (
               <button
                 key={idx}
                 onClick={() => handleJumpToPage(sec.page)}
                 className={`px-2.5 py-1 rounded-lg text-[11px] font-medium whitespace-nowrap transition-all duration-200 cursor-pointer ${
                   isSelected
-                    ? 'bg-amber-600 text-white font-bold shadow-xs scale-105 border border-amber-400'
+                    ? 'bg-amber-600 text-white font-bold shadow-sm scale-105 border border-amber-400'
                     : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'
                 }`}
               >
@@ -886,12 +978,12 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           })}
         </div>
 
-        {/* Interactive scrubber & Studio watermark */}
-        <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono pt-0.5">
+        {/* Interactive instruction / Studio watermark */}
+        <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono pt-1">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="hidden sm:inline">{ui.tipText}</span>
-            <span className="sm:hidden">{ui.tipMobile}</span>
+            <span className="sm:hidden">ورق زدن: کشیدن برگه‌ها یا کلیدهای چپ/راست</span>
           </div>
           <div className="flex items-center gap-4 text-slate-400">
             <span className="hidden md:inline">{ui.location}</span>

@@ -64,7 +64,7 @@ def precreate_directories(ftp, file_list):
     
     # Clean remote stale book pages (> totalPages)
     print("Checking for remote stale pages in book_pages directories...")
-    for vol, count in [('portfolio_villas', 24), ('portfolio_apartments', 22), ('portfolio_urban', 32)]:
+    for vol, count in [('portfolio_villas', 32), ('portfolio_apartments', 32), ('portfolio_urban', 32)]:
         remote_bp = f"/{REMOTE_ROOT}/{vol}/book_pages"
         try:
             ftp.cwd(remote_bp)
