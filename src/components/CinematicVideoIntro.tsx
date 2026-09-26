@@ -92,10 +92,28 @@ export const CinematicVideoIntro: React.FC<CinematicVideoIntroProps> = ({
     };
   }, [handleWheel]);
 
-  // Ensure video autoplays smoothly
+  // Ensure video autoplays smoothly without controls, looping continuously until interaction
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(() => {});
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Force essential DOM properties for iOS Safari & Android Chrome autoplay policy
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.loop = true;
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        const startOnFirstTouch = () => {
+          video.play().catch(() => {});
+          window.removeEventListener('touchstart', startOnFirstTouch);
+          window.removeEventListener('pointerdown', startOnFirstTouch);
+        };
+        window.addEventListener('touchstart', startOnFirstTouch, { once: true });
+        window.addEventListener('pointerdown', startOnFirstTouch, { once: true });
+      });
     }
   }, []);
 
@@ -129,10 +147,11 @@ export const CinematicVideoIntro: React.FC<CinematicVideoIntroProps> = ({
           autoPlay
           muted
           playsInline
+          loop
           // @ts-ignore
           webkit-playsinline="true"
+          x5-playsinline="true"
           preload="auto"
-          onEnded={triggerEnter3D}
           className="w-full h-full object-contain pointer-events-none select-none max-w-full max-h-full"
         />
       </div>

@@ -91,7 +91,8 @@ const OVERVIEW_CAMERA = {
 const CameraController: React.FC<{
   targetFocus: { target: [number, number, number]; position: [number, number, number] } | null;
   autoRotate: boolean;
-}> = ({ targetFocus, autoRotate }) => {
+  onUserInteraction?: () => void;
+}> = ({ targetFocus, autoRotate, onUserInteraction }) => {
   const controlsRef = useRef<OrbitControlsType>(null);
   const isFlying = useRef<boolean>(false);
   const flightProgress = useRef<number>(1);
@@ -119,15 +120,16 @@ const CameraController: React.FC<{
     if (!controls) return;
 
     const handleUserStart = () => {
-      // User began interacting with mouse -> stop any programmatic flight immediately!
+      // User began interacting with mouse/touch -> stop flight and pause auto-rotation immediately!
       isFlying.current = false;
+      onUserInteraction?.();
     };
 
     controls.addEventListener('start', handleUserStart);
     return () => {
       controls.removeEventListener('start', handleUserStart);
     };
-  }, []);
+  }, [onUserInteraction]);
 
   useFrame(({ camera }, delta) => {
     const controls = controlsRef.current;
@@ -190,7 +192,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
   onOpenFlipbook
 }) => {
   const [lightingMode, setLightingMode] = useState<'day' | 'sunset' | 'night' | 'wireframe'>('day');
-  const [autoRotate, setAutoRotate] = useState<boolean>(false);
+  const [autoRotate, setAutoRotate] = useState<boolean>(true);
   const [cameraFocus, setCameraFocus] = useState<{ target: [number, number, number]; position: [number, number, number] } | null>(null);
 
   // Responsive FOV based on screen width/aspect ratio (auto-adapts for portrait phones & tablets)
@@ -379,8 +381,12 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
             far={14}
           />
 
-          {/* Smooth Camera Flight & Orbit Controls */}
-          <CameraController targetFocus={cameraFocus} autoRotate={autoRotate} />
+          {/* Smooth Camera Flight & Orbit Controls (Auto-rotates by default, pauses on manual touch/click/drag) */}
+          <CameraController 
+            targetFocus={cameraFocus} 
+            autoRotate={autoRotate} 
+            onUserInteraction={() => setAutoRotate(false)} 
+          />
         </Suspense>
       </Canvas>
 

@@ -725,12 +725,40 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
   }, [handleKeyDown]);
 
   const handlePrev = useCallback(() => {
-    flipBookInstance.current?.flipPrev();
+    if (!flipBookInstance.current) return;
+    const fp = flipBookInstance.current;
+    const curBefore = fp.getCurrentPageIndex();
+    try {
+      fp.flipPrev();
+    } catch (e) {
+      (fp as any).turnToPrevPage?.();
+    }
+    // Fail-safe for mobile portrait & rapid touch: if flip animation did not advance, turn directly
+    setTimeout(() => {
+      const cur = fp.getCurrentPageIndex();
+      if (cur === curBefore && curBefore > 0) {
+        (fp as any).turnToPrevPage?.();
+      }
+    }, 120);
   }, []);
 
   const handleNext = useCallback(() => {
-    flipBookInstance.current?.flipNext();
-  }, []);
+    if (!flipBookInstance.current) return;
+    const fp = flipBookInstance.current;
+    const curBefore = fp.getCurrentPageIndex();
+    try {
+      fp.flipNext();
+    } catch (e) {
+      (fp as any).turnToNextPage?.();
+    }
+    // Fail-safe for mobile portrait & rapid touch
+    setTimeout(() => {
+      const cur = fp.getCurrentPageIndex();
+      if (cur === curBefore && curBefore < currentConfig.totalPages - 1) {
+        (fp as any).turnToNextPage?.();
+      }
+    }, 120);
+  }, [currentConfig.totalPages]);
 
   const handleJumpToPage = useCallback((pageNum: number) => {
     if (flipBookInstance.current) {
@@ -833,23 +861,34 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
     >
       {/* 1. TOP HEADER & STUDIO IDENTITY */}
       <header className="px-3 sm:px-6 py-2.5 bg-slate-950/90 border-b border-white/10 flex items-center justify-between gap-2 shrink-0 z-20 shadow-md">
-        {/* Left: Studio Barcelona & Logo */}
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center p-1">
+        {/* Left: Studio Barcelona & Logo (Click -> Return to Home / First Page) */}
+        <button
+          onClick={() => {
+            sound.playClick();
+            onClose();
+          }}
+          className="flex items-center gap-2 sm:gap-3 cursor-pointer group p-1 -m-1 rounded-xl hover:bg-white/5 active:scale-95 transition-all text-left"
+          title={langKey === 'fa' ? 'بازگشت به صفحه اول سایت' : 'Return to Home'}
+        >
+          <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center p-1 group-hover:border-amber-400 group-hover:bg-amber-500/20 transition-all shrink-0">
             <img src="/logo.png" alt="BIMCO Logo" className="w-full h-full object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-white text-xs sm:text-sm tracking-wider font-mono">BIMCO</span>
-              <span className="text-[10px] text-amber-400 font-semibold px-1.5 py-0.5 rounded bg-amber-400/10 border border-amber-400/20">
+              <span className="font-extrabold text-white text-xs sm:text-sm tracking-wider font-mono group-hover:text-amber-300 transition-colors">BIMCO</span>
+              <span className="text-[10px] text-amber-400 font-semibold px-1.5 py-0.5 rounded bg-amber-400/10 border border-amber-400/20 group-hover:bg-amber-400 group-hover:text-black transition-all">
                 BARCELONA
+              </span>
+              <span className="sm:hidden text-[9px] text-amber-200 bg-amber-500/20 border border-amber-500/30 px-1.5 py-0.5 rounded flex items-center gap-1 font-sans">
+                <Home className="w-2.5 h-2.5 text-amber-400" />
+                <span>{langKey === 'fa' ? 'صفحه اول' : 'Home'}</span>
               </span>
             </div>
             <div className="text-[10px] text-slate-400 hidden md:block">
               {ui.studioSubtitle}
             </div>
           </div>
-        </div>
+        </button>
 
         {/* Center: Volume Selector Buttons */}
         <div className="flex items-center gap-1 sm:gap-2 bg-white/5 p-1 rounded-xl border border-white/10">
@@ -950,11 +989,44 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           <span className="truncate max-w-[280px] sm:max-w-md">{volLocalized.title}</span>
         </div>
 
-        {/* Page status indicator */}
-        <div className="flex items-center gap-3">
-          <span className="text-slate-300 font-medium">
+        {/* Page status indicator & Mobile Quick Navigation */}
+        <div className="flex items-center gap-1.5 sm:gap-3">
+          {/* Mobile fast prev button */}
+          <button
+            onClick={handlePrev}
+            onTouchEnd={(e) => { e.stopPropagation(); handlePrev(); }}
+            disabled={currentPage <= 0}
+            className={`sm:hidden px-2.5 py-1 rounded-lg text-xs font-bold border transition-all touch-manipulation cursor-pointer flex items-center gap-1 ${
+              currentPage <= 0 
+                ? 'opacity-20 border-white/5 text-slate-600 cursor-not-allowed' 
+                : 'bg-white/10 active:bg-amber-600 border-white/20 text-white shadow-xs'
+            }`}
+            title="صفحه قبلی"
+          >
+            <ChevronLeft className="w-3.5 h-3.5" />
+            <span className="text-[10px]">{langKey === 'fa' ? 'قبلی' : 'Prev'}</span>
+          </button>
+
+          <span className="text-slate-200 font-semibold text-xs sm:text-sm">
             {pageStatusText}
           </span>
+
+          {/* Mobile fast next button */}
+          <button
+            onClick={handleNext}
+            onTouchEnd={(e) => { e.stopPropagation(); handleNext(); }}
+            disabled={currentPage >= currentConfig.totalPages - 1}
+            className={`sm:hidden px-2.5 py-1 rounded-lg text-xs font-bold border transition-all touch-manipulation cursor-pointer flex items-center gap-1 ${
+              currentPage >= currentConfig.totalPages - 1 
+                ? 'opacity-20 border-white/5 text-slate-600 cursor-not-allowed' 
+                : 'bg-white/10 active:bg-amber-600 border-white/20 text-white shadow-xs'
+            }`}
+            title="صفحه بعدی"
+          >
+            <span className="text-[10px]">{langKey === 'fa' ? 'بعدی' : 'Next'}</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+
           {currentPage === 0 && (
             <span className="text-emerald-400 font-bold text-[10px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 hidden sm:inline">
               {ui.frontCover}
@@ -970,7 +1042,7 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           <a
             href={currentConfig.pdfUrl}
             download={currentConfig.pdfDownloadName}
-            className="sm:hidden flex items-center gap-1 text-[11px] bg-amber-600 hover:bg-amber-500 text-white px-2 py-0.5 rounded-md font-bold"
+            className="sm:hidden flex items-center gap-1 text-[11px] bg-amber-600 hover:bg-amber-500 text-white px-2 py-0.5 rounded-md font-bold shrink-0 ml-1"
           >
             <Download className="w-3 h-3" />
             <span>PDF</span>
@@ -987,11 +1059,15 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
         {/* Navigation Chevron Left */}
         <button
           onClick={handlePrev}
+          onTouchEnd={(e) => {
+            e.stopPropagation();
+            handlePrev();
+          }}
           disabled={currentPage <= 0}
-          className={`absolute left-2 sm:left-6 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-xl ${
+          className={`absolute left-1 sm:left-6 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-2xl touch-manipulation active:scale-90 ${
             currentPage <= 0 
               ? 'bg-white/5 text-slate-600 opacity-20 cursor-not-allowed' 
-              : 'bg-slate-900/80 hover:bg-amber-600 text-white border border-white/15 hover:scale-105 hover:border-amber-400'
+              : 'bg-slate-900/90 hover:bg-amber-600 text-white border border-white/20 hover:scale-105 hover:border-amber-400'
           }`}
           title="Previous Page (Left Arrow)"
         >
@@ -1023,11 +1099,15 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
         {/* Navigation Chevron Right */}
         <button
           onClick={handleNext}
+          onTouchEnd={(e) => {
+            e.stopPropagation();
+            handleNext();
+          }}
           disabled={currentPage >= currentConfig.totalPages - 1}
-          className={`absolute right-2 sm:right-6 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-xl ${
+          className={`absolute right-1 sm:right-6 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-2xl touch-manipulation active:scale-90 ${
             currentPage >= currentConfig.totalPages - 1 
               ? 'bg-white/5 text-slate-600 opacity-20 cursor-not-allowed' 
-              : 'bg-slate-900/80 hover:bg-amber-600 text-white border border-white/15 hover:scale-105 hover:border-amber-400'
+              : 'bg-slate-900/90 hover:bg-amber-600 text-white border border-white/20 hover:scale-105 hover:border-amber-400'
           }`}
           title="Next Page (Right Arrow)"
         >
