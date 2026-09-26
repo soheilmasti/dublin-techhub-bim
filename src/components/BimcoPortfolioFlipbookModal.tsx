@@ -1,0 +1,555 @@
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { PageFlip } from 'page-flip';
+import { 
+  X, 
+  ChevronLeft, 
+  ChevronRight, 
+  Download, 
+  Maximize2, 
+  Minimize2, 
+  Volume2, 
+  VolumeX, 
+  BookOpen, 
+  Home, 
+  Building2, 
+  Landmark, 
+  CheckCircle2,
+  Share2,
+  Check
+} from 'lucide-react';
+import { sound } from '../utils/audio';
+
+export type PortfolioVolumeKey = 'villas' | 'apartments' | 'urban';
+
+export interface VolumeConfig {
+  id: PortfolioVolumeKey;
+  numberText: string;
+  badge: string;
+  titleFa: string;
+  titleEn: string;
+  descriptionFa: string;
+  icon: React.ReactNode;
+  totalPages: number;
+  pdfUrl: string;
+  pdfDownloadName: string;
+  pdfSizeText: string;
+  pagesFolder: string;
+  shortcuts: { label: string; page: number }[];
+}
+
+export const PORTFOLIO_VOLUMES: Record<PortfolioVolumeKey, VolumeConfig> = {
+  villas: {
+    id: 'villas',
+    numberText: 'جلد اول',
+    badge: 'LUXURY VILLAS',
+    titleFa: 'ویلاهای لوکس و اقامتگاه‌ها',
+    titleEn: 'Luxury Villas & Topography',
+    descriptionFa: 'معماری همساز با شیب، ویلاهای دالخانی، وایولت، بتن اکسپوز و نظارت کارگاهی',
+    icon: <Home className="w-4 h-4" />,
+    totalPages: 32,
+    pdfUrl: '/BIMCO_Volume1_Villas_Portfolio.pdf',
+    pdfDownloadName: 'BIMCO_Volume1_Luxury_Villas_Portfolio_2026.pdf',
+    pdfSizeText: '5.2 MB',
+    pagesFolder: '/portfolio_villas/book_pages',
+    shortcuts: [
+      { label: 'جلد', page: 0 },
+      { label: 'مانیفست ویلا', page: 2 },
+      { label: 'ویلای دالخانی', page: 4 },
+      { label: 'پلان و مقطع ویلا', page: 6 },
+      { label: 'ویلای مجلل وایولت', page: 8 },
+      { label: 'نظارت اسکلت کارگاه', page: 10 },
+      { label: 'شاله کوهستانی و داربست', page: 12 },
+      { label: 'ویلای تهراندشت و پی', page: 14 },
+      { label: 'ویلاهای مدرن ۰۱-۰۵', page: 16 },
+      { label: 'ویلای مدرن استرالیا', page: 18 },
+      { label: 'استخر معلق بتنی', page: 20 },
+      { label: 'لنداسکیپ و پرگولا', page: 22 },
+      { label: 'شهرک ویلایی دیاموند', page: 24 },
+      { label: 'آشپزخانه و درودگری', page: 26 },
+      { label: 'سرپرستان پروژه', page: 28 },
+      { label: 'پشت جلد', page: 31 },
+    ]
+  },
+  apartments: {
+    id: 'apartments',
+    numberText: 'جلد دوم',
+    badge: 'APARTMENTS & FACADES',
+    titleFa: 'آپارتمان‌ها و مهندسی نما',
+    titleEn: 'Apartments & Facade Engineering',
+    descriptionFa: 'پروژه نمای دروس، مسکونی طبقاتی دالخانی، برج‌های مدولار و کاخ کلاسیک',
+    icon: <Building2 className="w-4 h-4" />,
+    totalPages: 32,
+    pdfUrl: '/BIMCO_Volume2_Apartments_Facades.pdf',
+    pdfDownloadName: 'BIMCO_Volume2_Apartments_Facades_2026.pdf',
+    pdfSizeText: '6.2 MB',
+    pagesFolder: '/portfolio_apartments/book_pages',
+    shortcuts: [
+      { label: 'جلد', page: 0 },
+      { label: 'مانیفست نما', page: 2 },
+      { label: 'نمای دروس - ورودی', page: 4 },
+      { label: 'نورپردازی شب دروس', page: 6 },
+      { label: 'لوورها و آفتابگیرها', page: 8 },
+      { label: 'جزییات ۱:۲۰ نما', page: 10 },
+      { label: 'مسکونی شیبدار دالخانی', page: 12 },
+      { label: 'پلان‌های طبقاتی دالخانی', page: 14 },
+      { label: 'مقاطع سازه‌ای دالخانی', page: 16 },
+      { label: 'آپارتمان تراس سبز', page: 18 },
+      { label: 'مجموعه مسکونی روز و شب', page: 20 },
+      { label: 'مدولاسیون نما تیپ ۱', page: 22 },
+      { label: 'کرنر و پنت‌هاوس تیپ ۲', page: 24 },
+      { label: 'کاخ باشکوه کلاسیک', page: 26 },
+      { label: 'سرپرستان پروژه', page: 28 },
+      { label: 'پشت جلد', page: 31 },
+    ]
+  },
+  urban: {
+    id: 'urban',
+    numberText: 'جلد سوم',
+    badge: 'URBAN & COMMERCIAL',
+    titleFa: 'معماری تجاری و طراحی شهری',
+    titleEn: 'Commercial & Urban Masterplanning',
+    descriptionFa: 'مجتمع فولاد شرق، مرکز خرید اربیل، تقاطع غیرهمسطح، مورفولوژی زرگنده و اسکای‌لاین',
+    icon: <Landmark className="w-4 h-4" />,
+    totalPages: 32,
+    pdfUrl: '/BIMCO_Volume3_Urban_Commercial.pdf',
+    pdfDownloadName: 'BIMCO_Volume3_Urban_Commercial_2026.pdf',
+    pdfSizeText: '5.5 MB',
+    pagesFolder: '/portfolio_urban/book_pages',
+    shortcuts: [
+      { label: 'جلد', page: 0 },
+      { label: 'مانیفست شهری', page: 2 },
+      { label: 'مجتمع فولاد شرق', page: 4 },
+      { label: 'شوروم تجاری و سوله', page: 6 },
+      { label: 'ساختمان بانک و اداری', page: 8 },
+      { label: 'بارانداز و لجستیک', page: 10 },
+      { label: 'مرکز خرید قوسی اربیل', page: 12 },
+      { label: 'آتریوم و گالریا اربیل', page: 14 },
+      { label: 'پلان‌ها و مقاطع اربیل', page: 16 },
+      { label: 'تقاطع غیرهمسطح و پل', page: 18 },
+      { label: 'مورفولوژی روددره زرگنده', page: 20 },
+      { label: 'احیای اکولوژیک روددره', page: 22 },
+      { label: 'اسکای‌لاین و باد شهری', page: 24 },
+      { label: 'توسعه حمل‌ونقل‌محور TOD', page: 26 },
+      { label: 'سرپرستان پروژه', page: 28 },
+      { label: 'پشت جلد', page: 31 },
+    ]
+  }
+};
+
+interface BimcoPortfolioFlipbookModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  initialVolume?: PortfolioVolumeKey;
+}
+
+export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalProps> = ({
+  isOpen,
+  onClose,
+  initialVolume = 'villas',
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const flipBookInstance = useRef<PageFlip | null>(null);
+  
+  const [activeVolume, setActiveVolume] = useState<PortfolioVolumeKey>(initialVolume);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [isAudioEnabled, setIsAudioEnabled] = useState<boolean>(true);
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const [isBookReady, setIsBookReady] = useState<boolean>(false);
+  const [copiedLink, setCopiedLink] = useState<boolean>(false);
+
+  const currentConfig = PORTFOLIO_VOLUMES[activeVolume];
+
+  // Initialize PageFlip on open or volume change
+  useEffect(() => {
+    if (!isOpen) return;
+
+    setIsBookReady(false);
+    setCurrentPage(0);
+    
+    let localPageFlip: PageFlip | null = null;
+    let fallbackTimer: any = null;
+
+    const timer = setTimeout(() => {
+      if (!containerRef.current) return;
+
+      const isMobile = window.innerWidth < 768;
+      const baseW = isMobile ? Math.min(window.innerWidth - 32, 480) : 600;
+      const baseH = Math.round(baseW * (1080 / 960)); // match 960x1080 page ratio
+
+      const pageImages = Array.from({ length: currentConfig.totalPages }, (_, i) => 
+        `${currentConfig.pagesFolder}/page_${String(i + 1).padStart(2, '0')}.jpg`
+      );
+
+      localPageFlip = new PageFlip(containerRef.current, {
+        width: baseW,
+        height: baseH,
+        size: 'stretch',
+        minWidth: 280,
+        maxWidth: 960,
+        minHeight: 315,
+        maxHeight: 1080,
+        maxShadowOpacity: 0.6,
+        showCover: true,
+        mobileScrollSupport: false,
+        usePortrait: true,
+        startPage: 0,
+        drawShadow: true,
+        flippingTime: 700,
+        useMouseEvents: true,
+        showPageCorners: true,
+        swipeDistance: 25,
+      });
+
+      localPageFlip.loadFromImages(pageImages);
+
+      localPageFlip.on('flip', (e: any) => {
+        const pageIndex = Number(e.data);
+        setCurrentPage(pageIndex);
+        if (isAudioEnabled) {
+          sound.playPageFlip();
+        }
+      });
+
+      localPageFlip.on('init', () => {
+        setIsBookReady(true);
+      });
+
+      fallbackTimer = setTimeout(() => {
+        setIsBookReady(true);
+      }, 450);
+
+      flipBookInstance.current = localPageFlip;
+    }, 50);
+
+    return () => {
+      clearTimeout(timer);
+      if (fallbackTimer) clearTimeout(fallbackTimer);
+      if (localPageFlip) {
+        try {
+          localPageFlip.destroy();
+        } catch (e) {
+          // ignore cleanup errors
+        }
+      }
+      flipBookInstance.current = null;
+    };
+  }, [isOpen, activeVolume, isAudioEnabled]);
+
+  // Keyboard navigation
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (!isOpen) return;
+    if (e.key === 'Escape') {
+      onClose();
+    } else if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+      flipBookInstance.current?.flipNext();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      flipBookInstance.current?.flipPrev();
+    }
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+
+  const handlePrev = () => {
+    flipBookInstance.current?.flipPrev();
+  };
+
+  const handleNext = () => {
+    flipBookInstance.current?.flipNext();
+  };
+
+  // Touch Swipe gestures for iPhone, Android, and Tablets
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length > 0) {
+      touchStartX.current = e.touches[0].clientX;
+      touchStartY.current = e.touches[0].clientY;
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const diffX = endX - touchStartX.current;
+    const diffY = endY - (touchStartY.current || 0);
+
+    // If swipe distance is > 35px and mostly horizontal
+    if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX < 0) {
+        // Swiped Left -> Next page
+        handleNext();
+      } else {
+        // Swiped Right -> Prev page
+        handlePrev();
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
+  const handleJumpToPage = (pageNum: number) => {
+    if (flipBookInstance.current) {
+      flipBookInstance.current.flip(pageNum);
+      if (isAudioEnabled) sound.playPageFlip();
+    }
+  };
+
+  const handleSwitchVolume = (volKey: PortfolioVolumeKey) => {
+    if (volKey === activeVolume) return;
+    sound.playClick();
+    setActiveVolume(volKey);
+  };
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen().catch(() => {});
+      setIsFullscreen(false);
+    }
+  };
+
+  const handleCopyShareLink = () => {
+    sound.playClick();
+    const shareUrl = `${window.location.origin}/?portfolio=true&vol=${activeVolume}`;
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2500);
+    }).catch(() => {});
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col bg-slate-950/98 backdrop-blur-2xl text-white select-none overflow-hidden animate-fadeIn">
+      {/* 1. TOP HEADER & BRANDING BAR */}
+      <header className="px-3 sm:px-6 py-2.5 bg-slate-900/95 border-b border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-2 shrink-0 z-20 shadow-lg">
+        {/* Left: BIMCO Barcelona Identity */}
+        <div className="flex items-center justify-between md:justify-start gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-600/30 to-emerald-900/40 p-1 border border-amber-500/30 flex items-center justify-center shadow-lg shadow-amber-950/30">
+              <img src="/logo.png" alt="BIMCO Logo" className="w-8 h-8 object-contain drop-shadow" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-mono font-black text-sm tracking-widest text-white">BIMCO STUDIO</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">
+                  BARCELONA
+                </span>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hidden sm:inline-block">
+                  3 VOLUMES
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-400 font-medium">
+                دفترچه تعاملی پورتفولیو و مونوگراف معماری | سهیل ماستی و سیاوش پازوکی
+              </p>
+            </div>
+          </div>
+
+          {/* Close button for mobile inside header */}
+          <button
+            onClick={onClose}
+            className="md:hidden w-8 h-8 rounded-lg bg-red-500/20 hover:bg-red-500/40 border border-red-500/30 flex items-center justify-center text-red-300 transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Center: Thematic Volume Selector Tabs */}
+        <div className="flex items-center justify-center gap-1 sm:gap-2 p-1 bg-slate-950/80 rounded-xl border border-white/10 overflow-x-auto scrollbar-none">
+          {(Object.keys(PORTFOLIO_VOLUMES) as PortfolioVolumeKey[]).map((key) => {
+            const vol = PORTFOLIO_VOLUMES[key];
+            const isActive = activeVolume === key;
+            return (
+              <button
+                key={key}
+                onClick={() => handleSwitchVolume(key)}
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                  isActive
+                    ? 'bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-md shadow-amber-900/40 border border-amber-400/50 scale-[1.02]'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                }`}
+                title={vol.descriptionFa}
+              >
+                <span className={isActive ? 'text-amber-200' : 'text-slate-400'}>{vol.icon}</span>
+                <span>{vol.titleFa}</span>
+                <span className={`text-[9px] px-1 py-0.2 rounded font-mono ${isActive ? 'bg-black/30 text-amber-200' : 'bg-white/5 text-slate-400'}`}>
+                  {vol.numberText}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Right: Actions, Download & Controls */}
+        <div className="hidden md:flex items-center gap-2">
+          {/* Download Current Volume PDF */}
+          <a
+            href={currentConfig.pdfUrl}
+            download={currentConfig.pdfDownloadName}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold text-xs shadow-lg shadow-amber-900/30 border border-amber-400/40 transition-all duration-200 active:scale-95 cursor-pointer"
+            title={`دانلود فایل باکیفیت و رسمی ${currentConfig.titleFa} (${currentConfig.pdfSizeText})`}
+          >
+            <Download className="w-3.5 h-3.5 animate-bounce" />
+            <span>دانلود PDF {currentConfig.numberText}</span>
+            <span className="text-[10px] bg-black/20 px-1 py-0.5 rounded font-mono text-amber-200">
+              {currentConfig.pdfSizeText}
+            </span>
+          </a>
+
+          {/* Share Link */}
+          <button
+            onClick={handleCopyShareLink}
+            className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer"
+            title="کپی لینک اختصاصی این پورتفولیو"
+          >
+            {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
+          </button>
+
+          {/* Sound Toggle */}
+          <button
+            onClick={() => setIsAudioEnabled(!isAudioEnabled)}
+            className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer"
+            title={isAudioEnabled ? 'قطع صدای ورق زدن' : 'وصل صدای ورق زدن'}
+          >
+            {isAudioEnabled ? <Volume2 className="w-3.5 h-3.5 text-emerald-400" /> : <VolumeX className="w-3.5 h-3.5 text-slate-500" />}
+          </button>
+
+          {/* Fullscreen Toggle */}
+          <button
+            onClick={toggleFullscreen}
+            className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer"
+            title={isFullscreen ? 'خروج از تمام‌صفحه' : 'حالت تمام‌صفحه'}
+          >
+            {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+          </button>
+
+          {/* Close Modal */}
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-xl bg-red-500/20 hover:bg-red-500/40 border border-red-500/30 flex items-center justify-center text-red-300 hover:text-white transition-colors cursor-pointer ml-1"
+            title="بستن دفترچه (Esc)"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      </header>
+
+      {/* Volume Info Strip (Sub-header) */}
+      <div className="px-4 py-1.5 bg-slate-900/60 border-b border-white/5 flex items-center justify-between text-xs text-slate-300 font-mono">
+        <div className="flex items-center gap-2">
+          <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+          <span className="font-bold text-amber-300">{currentConfig.numberText}:</span>
+          <span>{currentConfig.titleFa}</span>
+          <span className="text-slate-400 hidden sm:inline">({currentConfig.titleEn})</span>
+        </div>
+
+        {/* Page status indicator */}
+        <div className="flex items-center gap-3">
+          <span className="text-slate-300">
+            صفحه <span className="text-amber-400 font-bold">{currentPage + 1}</span> از {currentConfig.totalPages}
+          </span>
+          {currentPage === 0 && <span className="text-emerald-400 font-bold text-[10px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">روی جلد</span>}
+          {currentPage === currentConfig.totalPages - 1 && <span className="text-amber-400 font-bold text-[10px] bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">پشت جلد</span>}
+          
+          {/* Mobile Download Button */}
+          <a
+            href={currentConfig.pdfUrl}
+            download={currentConfig.pdfDownloadName}
+            className="md:hidden flex items-center gap-1 text-[11px] bg-amber-600 hover:bg-amber-500 text-white px-2 py-0.5 rounded-md font-bold"
+          >
+            <Download className="w-3 h-3" />
+            <span>PDF</span>
+          </a>
+        </div>
+      </div>
+
+      {/* 2. MAIN 3D FLIPBOOK STAGE */}
+      <main 
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        className="flex-1 relative flex items-center justify-center p-2 sm:p-4 overflow-hidden touch-pan-y"
+      >
+        {/* Navigation Chevron Left */}
+        <button
+          onClick={handlePrev}
+          disabled={currentPage <= 0}
+          className={`absolute left-2 sm:left-6 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-xl ${
+            currentPage <= 0 
+              ? 'bg-white/5 text-slate-600 opacity-20 cursor-not-allowed' 
+              : 'bg-slate-900/80 hover:bg-amber-600 text-white border border-white/15 hover:scale-105 hover:border-amber-400'
+          }`}
+          title="صفحه قبل (کلید چپ یا فلش بالا)"
+        >
+          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+        </button>
+
+        {/* 3D FlipBook Target Canvas Container */}
+        <div className="relative w-full h-full flex items-center justify-center">
+          <div 
+            key={activeVolume}
+            ref={containerRef} 
+            className="shadow-2xl transition-opacity duration-300 drop-shadow-[0_25px_60px_rgba(0,0,0,0.85)]"
+          />
+        </div>
+
+        {/* Navigation Chevron Right */}
+        <button
+          onClick={handleNext}
+          disabled={currentPage >= currentConfig.totalPages - 1}
+          className={`absolute right-2 sm:right-6 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-xl ${
+            currentPage >= currentConfig.totalPages - 1 
+              ? 'bg-white/5 text-slate-600 opacity-20 cursor-not-allowed' 
+              : 'bg-slate-900/80 hover:bg-amber-600 text-white border border-white/15 hover:scale-105 hover:border-amber-400'
+          }`}
+          title="صفحه بعد (کلید راست یا فلش پایین)"
+        >
+          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+        </button>
+      </main>
+
+      {/* 3. BOTTOM CATEGORY SHORTCUTS & VERIFICATION BAR */}
+      <footer className="px-3 sm:px-6 py-2 bg-slate-900/95 border-t border-white/10 flex flex-col justify-center shrink-0 z-20">
+        {/* Quick jump tags for active volume */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none justify-start sm:justify-center">
+          {currentConfig.shortcuts.map((sec, idx) => {
+            const isSelected = currentPage === sec.page || (currentPage === sec.page + 1 && sec.page > 0);
+            return (
+              <button
+                key={idx}
+                onClick={() => handleJumpToPage(sec.page)}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-medium whitespace-nowrap transition-all duration-200 cursor-pointer ${
+                  isSelected
+                    ? 'bg-amber-600 text-white font-bold shadow-xs scale-105 border border-amber-400'
+                    : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                {sec.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Interactive instruction / Studio watermark */}
+        <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono pt-1">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="hidden sm:inline">نکته: می‌توانید گوشه برگه‌ها را با ماوس یا انگشت بکشید و ورق بزنید</span>
+            <span className="sm:hidden">ورق زدن: کشیدن گوشه برگه‌ها یا لمس کلیدها</span>
+          </div>
+          <div className="flex items-center gap-4 text-slate-400">
+            <span className="hidden md:inline">بارسلونا، اسپانیا • استودیو بیمکو</span>
+            <span className="text-amber-400/90 font-bold">سهیل ماستی و سیاوش پازوکی</span>
+            <span className="hidden lg:inline text-[10px] text-slate-400">واتساپ: ۳۴۶۱۰۸۵۵۴۳۴+</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};

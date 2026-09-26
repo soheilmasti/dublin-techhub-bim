@@ -107,6 +107,43 @@ class SoundFX {
       // ignore
     }
   }
+
+  // Realistic paper turn sound simulation
+  public playPageFlip() {
+    if (!this.enabled) return;
+    try {
+      this.init();
+      if (!this.ctx) return;
+
+      const bufferSize = this.ctx.sampleRate * 0.15; // 150ms
+      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+
+      const noise = this.ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(1200, this.ctx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + 0.15);
+      filter.Q.setValueAtTime(1.5, this.ctx.currentTime);
+
+      const gain = this.ctx.createGain();
+      gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.15);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      noise.start();
+    } catch {
+      // Audio not permitted yet
+    }
+  }
 }
 
 export const sound = new SoundFX();

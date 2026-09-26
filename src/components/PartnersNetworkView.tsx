@@ -18,13 +18,19 @@ import {
   PhoneCall,
   UserCheck,
   Code,
-  Brain
+  Brain,
+  FileText,
+  Mail,
+  Instagram,
+  Eye,
+  X
 } from 'lucide-react';
 import { LanguageCode } from '../utils/i18n';
 import { PartnerApplication } from '../types';
 import { sound } from '../utils/audio';
 import { RndLabSection } from './RndLabSection';
 import { RND_POSTS } from '../data/rndPosts';
+import { STUDIO_PRINCIPALS } from '../data/initialData';
 
 interface PartnersNetworkViewProps {
   currentLanguage: LanguageCode;
@@ -91,6 +97,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
   const [submissionId, setSubmissionId] = useState('');
   const [copiedSummary, setCopiedSummary] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  const [selectedCvSheet, setSelectedCvSheet] = useState<string | null>(null);
 
   // Load existing submission if in session
   useEffect(() => {
@@ -416,87 +423,91 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Core Leadership & Principals (Soheil Masti & Siavash Pazooki) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            {/* Featured Leader Card: Soheil Masti (Spans 2 cols on lg) */}
-            <div className="lg:col-span-2 bg-gradient-to-br from-slate-900 via-slate-950 to-blue-950 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800 flex flex-col justify-between space-y-6 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+            {/* Principal 1: Soheil Masti */}
+            <div className="bg-gradient-to-br from-slate-900 via-slate-950 to-blue-950 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800 flex flex-col justify-between space-y-6 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
 
               <div className="space-y-4 relative z-10">
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-md font-mono shrink-0">
-                      SM
+                  <div className="flex items-center gap-3.5">
+                    <div className="relative w-14 h-14 rounded-2xl overflow-hidden border-2 border-blue-400/40 shadow-lg shrink-0 bg-slate-800">
+                      <img 
+                        src="/team/soheil-masti.png" 
+                        alt="Soheil Masti" 
+                        className="w-full h-full object-cover object-top"
+                      />
                     </div>
                     <div>
                       <h3 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
                         <span>{isRTL ? 'سهیل مستی' : 'Soheil Masti'}</span>
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 font-bold">
-                          {isRTL ? 'بیم کوردینیتور ارشد' : 'LEAD BIM COORDINATOR'}
-                        </span>
                       </h3>
-                      <p className="text-xs text-blue-300 font-mono">
+                      <span className="inline-block text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 font-bold mt-0.5">
+                        {isRTL ? 'بیم کوردینیتور ارشد و موسس' : 'LEAD BIM COORDINATOR & FOUNDER'}
+                      </span>
+                      <p className="text-xs text-blue-200/80 font-mono mt-1">
                         {isRTL ? 'معمار ارشد، موسس و استراتژیست سیستم‌های BIM و هوش مصنوعی' : 'Senior Architect, Founder & BIM/AI Systems Strategist'}
                       </p>
                     </div>
                   </div>
 
-                  <div className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 flex items-center gap-1.5">
+                  <div className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20 flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>Barcelona &amp; International Delivery</span>
+                    <span>Barcelona &amp; Global Delivery</span>
                   </div>
                 </div>
 
-                {/* 3 Core Strengths / نقاط قوت اصلی */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-1.5">
+                {/* 3 Core Strengths */}
+                <div className="space-y-2.5 pt-2">
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
                     <div className="text-xs font-bold text-cyan-300 flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                      <span>{isRTL ? 'خلاقیت کم‌نظیر معماری' : 'Creative Design Rigor'}</span>
+                      <Layers className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                      <span>{isRTL ? 'مدلسازی و هماهنگی پیشرفته BIM' : 'Advanced BIM Coordination (LOD 350-400)'}</span>
                     </div>
                     <p className="text-[11px] text-gray-300 leading-relaxed">
                       {isRTL 
-                        ? 'تلفیق نوآورانه زیبایی‌شناسی فرمی معاصر با دقت فنی اجرای ساختمان و حل چالش‌های فضایی پیچیده.'
-                        : 'Unique ability to balance bold contemporary architectural concepts with millimeter-accurate constructability.'}
+                        ? 'توسعه پکیج‌های فنی اجرایی، مدلسازی فمیلی‌های پارامتریک و ماتریس رفع تداخلات سازه و تاسیسات (Clash Detection).'
+                        : 'Full execution BIM packages, complex parametric Revit family libraries, and multi-service clash matrices.'}
                     </p>
                   </div>
 
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-1.5">
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
                     <div className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
                       <Code className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>{isRTL ? 'برنامه‌نویسی مهندسی' : 'Engineering Programming'}</span>
+                      <span>{isRTL ? 'برنامه‌نویسی و اتوماسیون مهندسی' : 'Engineering Automation & Scripting'}</span>
                     </div>
                     <p className="text-[11px] text-gray-300 leading-relaxed">
                       {isRTL 
-                        ? 'توسعه اسکریپت‌های اختصاصی پایتون، سی‌شارپ و داینامو برای اتوماسیون جریان‌های کاری، رفع کلش و حذف خطای انسانی.'
+                        ? 'توسعه اسکریپت‌های اختصاصی پایتون، سی‌شارپ و داینامو برای اتوماسیون فرآیندهای مهندسی و رفع خطای انسانی.'
                         : 'Custom Python, C#, and Dynamo scripting for engineering process management, clash QA, and model automation.'}
                     </p>
                   </div>
 
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-1.5">
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
                     <div className="text-xs font-bold text-indigo-300 flex items-center gap-1.5">
                       <Brain className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                      <span>{isRTL ? 'الگوریتم‌های هوش مصنوعی' : 'AI & Organizational Structure'}</span>
+                      <span>{isRTL ? 'الگوریتم‌های هوش مصنوعی و ساختار سازمان' : 'AI Systems & Organizational Strategy'}</span>
                     </div>
                     <p className="text-[11px] text-gray-300 leading-relaxed">
                       {isRTL 
-                        ? 'تسلط بر معماری الگوریتم‌های AI و مهندسی مجدد ساختار سازمانی دفاتر معماری جهت حداکثر راندمان و تصمیم‌گیری هوشمند.'
-                        : 'Deep mastery of AI algorithmic pipelines, Reverse-RAG, and restructuring architectural practice workflows for peak efficiency.'}
+                        ? 'تسلط بر معماری الگوریتم‌های AI، ساختارهای Reverse-RAG و مهندسی مجدد جریان کاری دفاتر معماری.'
+                        : 'Mastery of AI algorithmic pipelines, Reverse-RAG, and restructuring architectural practice workflows.'}
                     </p>
                   </div>
                 </div>
 
-                {/* Tech Pills */}
-                <div className="flex flex-wrap items-center gap-1.5 pt-2">
+                {/* Tech Stack Pills */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
                   {[
                     'Revit Architecture (LOD 400)',
-                    'Navisworks Clash Resolution',
-                    'Custom Python / C# Scripts',
-                    'AI Systems Architecture',
-                    'Dynamo & Grasshopper',
+                    'Navisworks Clash QA',
+                    'Python & Dynamo Scripting',
+                    'Rhino / Grasshopper',
                     'ISO 19650 CDE Lead'
                   ].map((skill, idx) => (
-                    <span key={idx} className="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-white/10 text-gray-200 border border-white/10">
+                    <span key={idx} className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-white/10 text-gray-200 border border-white/10">
                       {skill}
                     </span>
                   ))}
@@ -504,72 +515,239 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
               </div>
 
               {/* Direct Quick WhatsApp on Card */}
-              <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 text-xs font-mono text-gray-400 relative z-10">
-                <span>Direct Coordination: WhatsApp (+34 610 855 434)</span>
+              <div className="pt-3 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 text-xs font-mono text-gray-400 relative z-10">
+                <span className="text-[11px] text-gray-400">WhatsApp: +34 610 855 434</span>
                 <button
                   type="button"
                   onClick={() => onOpenWhatsApp?.('Hi Soheil, I would like to consult with you on architectural BIM coordination and engineering automation...')}
                   className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <PhoneCall className="w-3 h-3" />
-                  <span>{isRTL ? 'گفتگوی مستقیم با سهیل مستی' : 'Contact Lead'}</span>
+                  <span>{isRTL ? 'گفتگو با سهیل مستی' : 'Contact Soheil'}</span>
                 </button>
               </div>
             </div>
 
-            {/* Specialist Disciplines Grid (Col 3 on lg) */}
-            <div className="space-y-4">
-              
-              {/* Discipline 1: Architectural Modeler */}
-              <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-gray-900">{isRTL ? 'مدل‌سازی ارشد معماری' : 'Senior Architectural Modeler'}</span>
-                  <span className="text-[10px] font-mono bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-bold">LOD 350-400</span>
+            {/* Principal 2: Siavash Pazooki */}
+            <div className="bg-gradient-to-br from-slate-900 via-neutral-950 to-indigo-950 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800 flex flex-col justify-between space-y-6 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-72 h-72 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
+
+              <div className="space-y-4 relative z-10">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-3.5">
+                    <div className="relative w-14 h-14 rounded-2xl overflow-hidden border-2 border-indigo-400/40 shadow-lg shrink-0 bg-slate-800">
+                      <img 
+                        src="/team/siavash-pazooki.jpg" 
+                        alt="Siavash Pazooki" 
+                        className="w-full h-full object-cover object-top"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+                        <span>{isRTL ? 'سیاوش پازوکی' : 'Siavash Pazooki'}</span>
+                      </h3>
+                      <span className="inline-block text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 font-bold mt-0.5">
+                        {isRTL ? 'طراح ارشد کانسپت و سوپروایزر CGI' : 'SENIOR DESIGNER & CGI LEAD'}
+                      </span>
+                      <p className="text-xs text-indigo-200/80 font-mono mt-1">
+                        {isRTL ? 'معمار ارشد، کارشناسی ارشد طراحی شهری و مدیر تجسم‌سازی پیشرفته' : 'Senior Architectural Designer, M.Sc. Urban Design & CGI Visualizer'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="text-[10px] font-mono text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded-full border border-purple-500/20 flex items-center gap-1.5">
+                    <Sparkles className="w-3 h-3 text-purple-400" />
+                    <span>M.Sc. Urban Design</span>
+                  </div>
                 </div>
-                <p className="text-[11px] text-gray-500 leading-relaxed">
-                  {isRTL ? 'مدل‌سازی دقیق پوسته‌های ساختمانی، کتابخانه‌های فمیلی پارامتریک و انطباق با استاندارد بریتانیا و ایرلند.' : 'High-precision Revit models, complex parametric family libraries, and UK/Irish tender sets.'}
-                </p>
-                <div className="flex flex-wrap gap-1">
-                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Revit</span>
-                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Uniclass 2015</span>
-                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">RIBA 3-5</span>
+
+                {/* 3 Core Strengths */}
+                <div className="space-y-2.5 pt-2">
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
+                    <div className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <span>{isRTL ? 'طراحی کانسپت و زیبایی‌شناسی فضایی' : 'Concept Ideation & Spatial Harmony'}</span>
+                    </div>
+                    <p className="text-[11px] text-gray-300 leading-relaxed">
+                      {isRTL 
+                        ? 'ترکیب خلوص مینیمال، سازگاری فرم با بستر سایت و خلق هندسه‌های پیشرو در ویلاها، آپارتمان‌ها و مراکز تجاری.'
+                        : 'Transforming complex client briefs into elegant, functionally resolved, and contextually grounded architectural forms.'}
+                    </p>
+                  </div>
+
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
+                    <div className="text-xs font-bold text-cyan-300 flex items-center gap-1.5">
+                      <Eye className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                      <span>{isRTL ? 'رندرینگ فتورئالیستیک و انیمیشن CGI' : 'High-End Photorealistic 3D CGI'}</span>
+                    </div>
+                    <p className="text-[11px] text-gray-300 leading-relaxed">
+                      {isRTL 
+                        ? 'تخصص عمیق در شبیه‌سازی نور، متریال، اتمسفر اقلیمی و تولید شیت‌های فوق‌حرفه‌ای پرزنتیشن با تری‌دی‌مکس و وی‌ری.'
+                        : 'Industry-leading mastery of architectural lighting, materials, ForestPack landscaping, and cinematic presentations.'}
+                    </p>
+                  </div>
+
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
+                    <div className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <span>{isRTL ? 'دیتیلینگ درودگری و نظارت کارگاهی' : 'Luxury Millwork & On-Site Detailing'}</span>
+                    </div>
+                    <p className="text-[11px] text-gray-300 leading-relaxed">
+                      {isRTL 
+                        ? 'طراحی نقشه‌های اجرایی میلی‌متری کابینت‌ها، شومینه، وال‌کلازت و نظارت بر اجرای سازه‌های بتنی و اسکلت فلزی.'
+                        : 'Production-ready millwork detailing, bespoke joinery specifications, and meticulous on-site construction oversight.'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Tech Stack Pills */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  {[
+                    '3ds Max & V-Ray',
+                    'Forest Pack & RailClone',
+                    'AutoCAD Technical Detailing',
+                    'Rhino 8 & Organic Form',
+                    'Photoshop Post-Production',
+                    'Revit Architecture'
+                  ].map((skill, idx) => (
+                    <span key={idx} className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-white/10 text-gray-200 border border-white/10">
+                      {skill}
+                    </span>
+                  ))}
                 </div>
               </div>
 
-              {/* Discipline 2: MEP & Clash Specialist */}
-              <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-gray-900">{isRTL ? 'هماهنگی تاسیسات MEP و کلش' : 'MEP & Clash Coordinator'}</span>
-                  <span className="text-[10px] font-mono bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-bold">ZERO CLASH</span>
-                </div>
-                <p className="text-[11px] text-gray-500 leading-relaxed">
-                  {isRTL ? 'مسیریابی هوشمند لوله‌کشی و کانال‌ها در موتورخانه‌ها و ماتریس جامع رفع تداخلات چندرشته‌ای.' : 'Multi-service spatial coordination, plant room routing, and Navisworks clash matrices.'}
-                </p>
-                <div className="flex flex-wrap gap-1">
-                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Navisworks</span>
-                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Solibri</span>
-                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Revit MEP</span>
-                </div>
-              </div>
-
-              {/* Discipline 3: Computational & Visualizer */}
-              <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-gray-900">{isRTL ? 'طراحی الگوریتمیک و رندرینگ' : 'Computational Design & VR'}</span>
-                  <span className="text-[10px] font-mono bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-bold">REAL-TIME</span>
-                </div>
-                <p className="text-[11px] text-gray-500 leading-relaxed">
-                  {isRTL ? 'طراحی نماهای پارامتریک در گرس‌هاپر و تجسم تعاملی و سینمایی در آنریل انجین ۵ و لومیون.' : 'Parametric facade generation in Grasshopper and cinematic real-time tours in Unreal Engine 5.'}
-                </p>
-                <div className="flex flex-wrap gap-1">
-                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Grasshopper</span>
-                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Unreal Engine 5</span>
-                  <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Rhino 8</span>
+              {/* Direct Actions: View CV & Instagram */}
+              <div className="pt-3 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 text-xs font-mono text-gray-400 relative z-10">
+                <span className="text-[11px] text-gray-400">siavashpazookiart@gmail.com</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => { sound.playClick(); setSelectedCvSheet('/team/siavash-cv-sheet-1.jpg'); }}
+                    className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer border border-white/10"
+                  >
+                    <FileText className="w-3 h-3 text-indigo-400" />
+                    <span>{isRTL ? 'مشاهده مدارک و رزومه' : 'View CV Sheets'}</span>
+                  </button>
+                  <a
+                    href="https://instagram.com/Siavash_pzk"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-1.5 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-500/30 transition-colors flex items-center justify-center"
+                    title="Instagram @Siavash_pzk"
+                  >
+                    <Instagram className="w-4 h-4" />
+                  </a>
                 </div>
               </div>
-
             </div>
+
           </div>
+
+          {/* Specialist Practice & Disciplinary Network Row */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            
+            {/* Discipline 1: Architectural Modeler */}
+            <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-gray-900">{isRTL ? 'مدل‌سازی ارشد معماری' : 'Senior Architectural Modeler'}</span>
+                <span className="text-[10px] font-mono bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-bold">LOD 350-400</span>
+              </div>
+              <p className="text-[11px] text-gray-500 leading-relaxed">
+                {isRTL ? 'مدل‌سازی دقیق پوسته‌های ساختمانی، کتابخانه‌های فمیلی پارامتریک و انطباق با استاندارد بریتانیا و اروپا.' : 'High-precision Revit models, complex parametric family libraries, and European tender sets.'}
+              </p>
+              <div className="flex flex-wrap gap-1">
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Revit</span>
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Uniclass 2015</span>
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">RIBA 3-5</span>
+              </div>
+            </div>
+
+            {/* Discipline 2: MEP & Clash Specialist */}
+            <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-gray-900">{isRTL ? 'هماهنگی تاسیسات MEP و کلش' : 'MEP & Clash Coordinator'}</span>
+                <span className="text-[10px] font-mono bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-bold">ZERO CLASH</span>
+              </div>
+              <p className="text-[11px] text-gray-500 leading-relaxed">
+                {isRTL ? 'مسیریابی هوشمند لوله‌کشی و کانال‌ها در موتورخانه‌ها و ماتریس جامع رفع تداخلات چندرشته‌ای.' : 'Multi-service spatial coordination, plant room routing, and Navisworks clash matrices.'}
+              </p>
+              <div className="flex flex-wrap gap-1">
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Navisworks</span>
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Solibri</span>
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Revit MEP</span>
+              </div>
+            </div>
+
+            {/* Discipline 3: Computational & Visualizer */}
+            <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-gray-900">{isRTL ? 'طراحی الگوریتمیک و رندرینگ' : 'Computational Design & VR'}</span>
+                <span className="text-[10px] font-mono bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-bold">REAL-TIME</span>
+              </div>
+              <p className="text-[11px] text-gray-500 leading-relaxed">
+                {isRTL ? 'طراحی نماهای پارامتریک در گرس‌هاپر و تجسم تعاملی و سینمایی در آنریل انجین ۵ و لومیون.' : 'Parametric facade generation in Grasshopper and cinematic real-time tours in Unreal Engine 5.'}
+              </p>
+              <div className="flex flex-wrap gap-1">
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Grasshopper</span>
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Unreal Engine 5</span>
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Rhino 8</span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Siavash CV Lightbox Modal */}
+          {selectedCvSheet && (
+            <div 
+              className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6"
+              onClick={() => setSelectedCvSheet(null)}
+            >
+              <div 
+                className="relative max-w-5xl w-full bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-700 p-2 sm:p-4"
+                onClick={e => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between pb-3 px-2 border-b border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-white">
+                      {isRTL ? 'مدارک و رزومه رسمی مهندس سیاوش پازوکی' : 'Siavash Pazooki Official CV & Credentials'}
+                    </span>
+                    <div className="flex items-center gap-1.5 ml-3">
+                      <button
+                        onClick={() => setSelectedCvSheet('/team/siavash-cv-sheet-1.jpg')}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
+                          selectedCvSheet === '/team/siavash-cv-sheet-1.jpg' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-gray-300'
+                        }`}
+                      >
+                        Sheet 01 (Experience &amp; Education)
+                      </button>
+                      <button
+                        onClick={() => setSelectedCvSheet('/team/siavash-cv-sheet-2.jpg')}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
+                          selectedCvSheet === '/team/siavash-cv-sheet-2.jpg' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-gray-300'
+                        }`}
+                      >
+                        Sheet 02 (Summary &amp; Competencies)
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setSelectedCvSheet(null)}
+                    className="p-1.5 rounded-xl text-gray-400 hover:text-white hover:bg-slate-800 transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <div className="p-2 sm:p-4 flex items-center justify-center max-h-[80vh] overflow-auto">
+                  <img 
+                    src={selectedCvSheet} 
+                    alt="Siavash Pazooki CV" 
+                    className="w-full h-auto object-contain rounded-xl shadow-lg"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Main Content Area: Form & Talent Registry */}

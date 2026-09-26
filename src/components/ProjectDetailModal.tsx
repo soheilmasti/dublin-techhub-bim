@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
@@ -10,7 +10,10 @@ import {
   ChevronRight,
   ChevronLeft,
   Cpu,
-  UserCheck
+  UserCheck,
+  LayoutGrid,
+  ZoomIn,
+  Download
 } from 'lucide-react';
 import { Project } from '../types';
 import { sound } from '../utils/audio';
@@ -29,18 +32,68 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
   currentLanguage = 'en'
 }) => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [viewTab, setViewTab] = useState<'gallery' | 'plans'>('gallery');
-
-  if (!project) return null;
+  const [viewMode, setViewMode] = useState<'individual-grid' | 'spotlight'>('individual-grid');
+  const [zoomIndex, setZoomIndex] = useState<number | null>(null);
 
   const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
   const isRTL = currentLanguage === 'fa';
-  const currentGallery = viewTab === 'gallery' ? project.gallery : (project.plans || project.gallery);
+  const currentGallery = project?.gallery && project.gallery.length > 0 ? project.gallery : (project ? [project.coverImage] : []);
+
+  // Keyboard navigation for zoom lightbox
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (zoomIndex === null) return;
+    if (e.key === 'Escape') {
+      setZoomIndex(null);
+    } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      sound.playClick();
+      setZoomIndex(prev => (prev !== null && prev < currentGallery.length - 1 ? prev + 1 : 0));
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      sound.playClick();
+      setZoomIndex(prev => (prev !== null && prev > 0 ? prev - 1 : currentGallery.length - 1));
+    }
+  }, [zoomIndex, currentGallery.length]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+
+  // Touch Swipe for mobile lightbox (iPhone, Android, iPad)
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  const handleLightboxTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length > 0) {
+      touchStartX.current = e.touches[0].clientX;
+      touchStartY.current = e.touches[0].clientY;
+    }
+  };
+
+  const handleLightboxTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || zoomIndex === null) return;
+    const diffX = e.changedTouches[0].clientX - touchStartX.current;
+    const diffY = e.changedTouches[0].clientY - (touchStartY.current || 0);
+
+    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+      sound.playClick();
+      if (diffX < 0) {
+        // Swiped left -> next sheet
+        setZoomIndex(prev => (prev !== null && prev < currentGallery.length - 1 ? prev + 1 : 0));
+      } else {
+        // Swiped right -> prev sheet
+        setZoomIndex(prev => (prev !== null && prev > 0 ? prev - 1 : currentGallery.length - 1));
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
+  if (!project) return null;
 
   return (
     <AnimatePresence>
       <div 
-        className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-8"
+        className="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-6"
         dir={isRTL ? 'rtl' : 'ltr'}
       >
         <motion.div
@@ -48,12 +101,12 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 20 }}
           transition={{ type: 'spring', damping: 26, stiffness: 280 }}
-          className="relative w-full max-w-5xl bg-white rounded-3xl overflow-hidden shadow-2xl border border-white/90 my-auto"
+          className="relative w-full max-w-6xl bg-white rounded-3xl overflow-hidden shadow-2xl border border-white/90 my-auto"
         >
           {/* Close & Return Button */}
           <button
             onClick={() => { sound.playClick(); onClose(); }}
-            className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'} z-20 px-3.5 py-2 rounded-2xl bg-white/95 hover:bg-black hover:text-white backdrop-blur-md flex items-center gap-2 text-gray-900 font-bold text-xs shadow-lg transition-all duration-200 border border-gray-200 hover:scale-105 active:scale-95 cursor-pointer`}
+            className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'} z-30 px-3.5 py-2 rounded-2xl bg-white/95 hover:bg-black hover:text-white backdrop-blur-md flex items-center gap-2 text-gray-900 font-bold text-xs shadow-lg transition-all duration-200 border border-gray-200 hover:scale-105 active:scale-95 cursor-pointer`}
             title={t.close}
           >
             <X className="w-4 h-4" />
@@ -61,78 +114,129 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
           </button>
 
           {/* Grid Layout: Visual Media & Specs */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 max-h-[88vh] overflow-y-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 max-h-[90vh] overflow-y-auto">
             {/* Left Media Viewer (7 cols) */}
-            <div className="lg:col-span-7 bg-gray-950 flex flex-col justify-between relative min-h-[320px] sm:min-h-[420px] lg:min-h-[600px]">
-              {/* Media Mode Tabs */}
-              <div className={`absolute top-4 ${isRTL ? 'right-4' : 'left-4'} z-10 flex items-center gap-1.5 glass-panel-dark p-1 rounded-2xl`}>
-                <button
-                  onClick={() => { sound.playClick(); setViewTab('gallery'); setActiveImageIndex(0); }}
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
-                    viewTab === 'gallery'
-                      ? 'bg-white text-black'
-                      : 'text-gray-300 hover:text-white'
-                  }`}
-                >
-                  <ImageIcon className="w-3.5 h-3.5" />
-                  <span>{t.gallery}</span>
-                </button>
-                {project.plans && project.plans.length > 0 && (
+            <div className="lg:col-span-7 bg-slate-950 flex flex-col justify-between relative min-h-[400px] lg:min-h-[640px]">
+              
+              {/* Media Controls Header */}
+              <div className={`p-4 z-20 flex flex-wrap items-center justify-between gap-2 border-b border-white/10 bg-slate-900/80 backdrop-blur-md`}>
+                <div className="flex items-center gap-1.5 glass-panel-dark p-1 rounded-2xl">
                   <button
-                    onClick={() => { sound.playClick(); setViewTab('plans'); setActiveImageIndex(0); }}
-                    className={`flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
-                      viewTab === 'plans'
-                        ? 'bg-white text-black'
-                        : 'text-gray-300 hover:text-white'
+                    onClick={() => { sound.playClick(); setViewMode('individual-grid'); }}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      viewMode === 'individual-grid'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-gray-300 hover:text-white hover:bg-white/10'
                     }`}
                   >
-                    <FileText className="w-3.5 h-3.5" />
-                    <span>{t.plans}</span>
+                    <LayoutGrid className="w-3.5 h-3.5" />
+                    <span>{isRTL ? 'عکس‌ها و رندرها به صورت جدا جدا' : 'Project Renders & Photos'}</span>
+                    <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-white/20 ml-1">
+                      {currentGallery.length}
+                    </span>
                   </button>
-                )}
-              </div>
 
-              {/* Main Image Display */}
-              <div className="relative w-full h-full flex items-center justify-center p-3 sm:p-6">
-                <img
-                  src={currentGallery[activeImageIndex] || project.coverImage}
-                  alt={project.title}
-                  className="max-h-[300px] sm:max-h-[420px] lg:max-h-[500px] w-full object-contain rounded-2xl"
-                />
-
-                {/* Prev / Next Controls */}
-                {currentGallery.length > 1 && (
-                  <>
-                    <button
-                      onClick={() => { sound.playClick(); setActiveImageIndex((prev) => (prev > 0 ? prev - 1 : currentGallery.length - 1)); }}
-                      className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/60 text-white hover:bg-black flex items-center justify-center transition-colors cursor-pointer"
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={() => { sound.playClick(); setActiveImageIndex((prev) => (prev < currentGallery.length - 1 ? prev + 1 : 0)); }}
-                      className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/60 text-white hover:bg-black flex items-center justify-center transition-colors cursor-pointer"
-                    >
-                      <ChevronLeft className="w-5 h-5" />
-                    </button>
-                  </>
-                )}
-              </div>
-
-              {/* Thumbnails Row */}
-              <div className="p-3 sm:p-4 bg-black/50 backdrop-blur-md flex items-center justify-center gap-2 overflow-x-auto">
-                {currentGallery.map((img, idx) => (
                   <button
-                    key={idx}
-                    onClick={() => { sound.playClick(); setActiveImageIndex(idx); }}
-                    className={`w-12 h-9 sm:w-14 sm:h-10 rounded-lg overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
-                      activeImageIndex === idx ? 'border-white scale-105' : 'border-transparent opacity-40 hover:opacity-100'
+                    onClick={() => { sound.playClick(); setViewMode('spotlight'); }}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      viewMode === 'spotlight'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-gray-300 hover:text-white hover:bg-white/10'
                     }`}
                   >
-                    <img src={img} alt="thumb" className="w-full h-full object-cover" />
+                    <Maximize2 className="w-3.5 h-3.5" />
+                    <span>{isRTL ? 'پرزنتیشن تکی' : 'Spotlight View'}</span>
                   </button>
-                ))}
+                </div>
+
+                <span className="text-[11px] font-mono text-gray-400 font-medium">
+                  {currentGallery.length} {isRTL ? 'عکس و رندر اختصاصی' : 'Architectural Renders'}
+                </span>
               </div>
+
+              {/* View Mode 1: Individual Renders Grid (جدا جدا) */}
+              {viewMode === 'individual-grid' ? (
+                <div className="p-4 sm:p-6 overflow-y-auto max-h-[560px] space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {currentGallery.map((sheetUrl, idx) => (
+                      <div
+                        key={idx}
+                        onClick={() => { sound.playClick(); setZoomIndex(idx); }}
+                        className="group relative bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 hover:border-blue-500/60 shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer flex flex-col justify-between"
+                      >
+                        <div className="relative aspect-[16/9] w-full overflow-hidden bg-black/40">
+                          <img
+                            src={sheetUrl}
+                            alt={`${project.title} - Sheet ${idx + 1}`}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span className="px-3 py-1.5 rounded-xl bg-blue-600/90 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg backdrop-blur-xs">
+                              <ZoomIn className="w-3.5 h-3.5" />
+                              <span>{isRTL ? 'بزرگنمایی تصویر' : 'Zoom Image'}</span>
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="p-2.5 px-3 bg-slate-950/80 flex items-center justify-between text-xs border-t border-slate-800/60">
+                          <span className="font-mono text-[11px] font-bold text-blue-300">
+                            {isRTL ? `تصویر ${String(idx + 1).padStart(2, '0')}` : `Image ${String(idx + 1).padStart(2, '0')}`}
+                          </span>
+                          <span className="text-[10px] font-mono text-gray-500">
+                            {isRTL ? `از ${currentGallery.length}` : `of ${currentGallery.length}`}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                /* View Mode 2: Spotlight Single View */
+                <div className="flex-1 flex flex-col justify-between">
+                  <div className="relative w-full flex-1 flex items-center justify-center p-3 sm:p-6 min-h-[360px]">
+                    <img
+                      src={currentGallery[activeImageIndex] || project.coverImage}
+                      alt={project.title}
+                      onClick={() => { sound.playClick(); setZoomIndex(activeImageIndex); }}
+                      className="max-h-[380px] sm:max-h-[460px] w-full object-contain rounded-2xl cursor-zoom-in shadow-xl"
+                    />
+
+                    {/* Prev / Next Controls */}
+                    {currentGallery.length > 1 && (
+                      <>
+                        <button
+                          onClick={() => { sound.playClick(); setActiveImageIndex((prev) => (prev > 0 ? prev - 1 : currentGallery.length - 1)); }}
+                          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/70 text-white hover:bg-blue-600 flex items-center justify-center transition-colors cursor-pointer border border-white/20 shadow-lg"
+                        >
+                          <ChevronRight className="w-5 h-5" />
+                        </button>
+                        <button
+                          onClick={() => { sound.playClick(); setActiveImageIndex((prev) => (prev < currentGallery.length - 1 ? prev + 1 : 0)); }}
+                          className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/70 text-white hover:bg-blue-600 flex items-center justify-center transition-colors cursor-pointer border border-white/20 shadow-lg"
+                        >
+                          <ChevronLeft className="w-5 h-5" />
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Thumbnails Row */}
+                  <div className="p-3 bg-black/60 backdrop-blur-md flex items-center justify-center gap-2 overflow-x-auto border-t border-white/10">
+                    {currentGallery.map((img, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => { sound.playClick(); setActiveImageIndex(idx); }}
+                        className={`w-14 h-9 rounded-lg overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
+                          activeImageIndex === idx ? 'border-blue-500 scale-105 shadow-md' : 'border-transparent opacity-40 hover:opacity-100'
+                        }`}
+                      >
+                        <img src={img} alt="thumb" className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Right Architectural Info Sidebar (5 cols) */}
@@ -249,6 +353,93 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
             </div>
           </div>
         </motion.div>
+
+        {/* Fullscreen Lightbox Zoom Modal for Any Sheet (Optimized for Mobile/Tablet Swipes & Desktop Navigation) */}
+        {zoomIndex !== null && currentGallery[zoomIndex] && (
+          <div 
+            onTouchStart={handleLightboxTouchStart}
+            onTouchEnd={handleLightboxTouchEnd}
+            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col justify-between p-3 sm:p-6 select-none touch-pan-y"
+            onClick={() => setZoomIndex(null)}
+          >
+            {/* Top Toolbar */}
+            <div className="flex items-center justify-between pb-3 px-2 text-white z-20">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-xl bg-blue-600 text-white">
+                  {isRTL ? `شیت ${zoomIndex + 1} از ${currentGallery.length}` : `SHEET ${zoomIndex + 1} OF ${currentGallery.length}`}
+                </span>
+                <span className="text-xs text-gray-300 font-bold hidden sm:inline">
+                  {project.title}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <a
+                  href={currentGallery[zoomIndex]}
+                  download={`${project.id}-sheet-${zoomIndex + 1}.jpg`}
+                  onClick={e => e.stopPropagation()}
+                  className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all flex items-center gap-1.5 border border-white/10"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>{isRTL ? 'دانلود تصویر' : 'Download'}</span>
+                </a>
+                <button
+                  onClick={() => setZoomIndex(null)}
+                  className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                  title={t.close}
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Central Media Stage with Chevron Navigators */}
+            <div 
+              className="flex-1 relative flex items-center justify-center p-2 overflow-hidden"
+              onClick={e => e.stopPropagation()}
+            >
+              {/* Previous Sheet Chevron */}
+              {currentGallery.length > 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    sound.playClick();
+                    setZoomIndex(prev => (prev !== null && prev > 0 ? prev - 1 : currentGallery.length - 1));
+                  }}
+                  className="absolute left-2 sm:left-4 z-30 p-2.5 sm:p-3 rounded-full bg-black/70 hover:bg-blue-600 text-white border border-white/20 shadow-xl transition-all cursor-pointer hover:scale-105"
+                  title={isRTL ? 'شیت بعدی' : 'Previous Sheet'}
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+              )}
+
+              <img 
+                src={currentGallery[zoomIndex]} 
+                alt={`${project.title} - Sheet ${zoomIndex + 1}`}
+                className="max-h-[82vh] max-w-full object-contain rounded-2xl shadow-2xl border border-white/10 pointer-events-none sm:pointer-events-auto"
+              />
+
+              {/* Next Sheet Chevron */}
+              {currentGallery.length > 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    sound.playClick();
+                    setZoomIndex(prev => (prev !== null && prev < currentGallery.length - 1 ? prev + 1 : 0));
+                  }}
+                  className="absolute right-2 sm:right-4 z-30 p-2.5 sm:p-3 rounded-full bg-black/70 hover:bg-blue-600 text-white border border-white/20 shadow-xl transition-all cursor-pointer hover:scale-105"
+                  title={isRTL ? 'شیت قبلی' : 'Next Sheet'}
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              )}
+            </div>
+
+            {/* Bottom Hints for Gestures */}
+            <div className="pt-2 text-center text-[11px] text-gray-400 font-mono flex items-center justify-center gap-3">
+              <span>{isRTL ? 'روی گوشی به چپ یا راست بکشید (Swipe) • کلیدهای جهت‌نما در کیبورد' : 'Swipe left/right on touch devices • Arrow keys on keyboard'}</span>
+            </div>
+          </div>
+        )}
       </div>
     </AnimatePresence>
   );

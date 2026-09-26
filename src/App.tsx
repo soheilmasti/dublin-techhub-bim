@@ -17,6 +17,8 @@ import { ProjectDrawer } from './components/ProjectDrawer';
 import { ProjectDetailModal } from './components/ProjectDetailModal';
 import { AssetCustomizerModal } from './components/AssetCustomizerModal';
 import { AboutStudioModal } from './components/AboutStudioModal';
+import { BimcoPortfolioFlipbookModal } from './components/BimcoPortfolioFlipbookModal';
+import { DeviceOrientationPrompt } from './components/DeviceOrientationPrompt';
 import { INITIAL_CATEGORIES, INITIAL_SETTINGS } from './data/initialData';
 import { CategoryBuilding, Project, SiteSettings } from './types';
 import { sound } from './utils/audio';
@@ -34,6 +36,8 @@ export const App: React.FC = () => {
   const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
   const [isAiBoosterModalOpen, setIsAiBoosterModalOpen] = useState(false);
   const [isKnowledgeHubOpen, setIsKnowledgeHubOpen] = useState(false);
+  const [isFlipbookOpen, setIsFlipbookOpen] = useState(false);
+  const [flipbookVolume, setFlipbookVolume] = useState<'villas' | 'apartments' | 'urban'>('villas');
   const [whatsAppInitialMessage, setWhatsAppInitialMessage] = useState('');
 
   // Lightweight Fast-Preview Mode for Low-Speed Networks
@@ -104,6 +108,14 @@ export const App: React.FC = () => {
 
       if (urlParams.get('faq') === 'true' || viewParam === 'faq' || urlParams.get('qna') === 'true') {
         setIsKnowledgeHubOpen(true);
+      }
+
+      if (urlParams.get('flipbook') === 'true' || urlParams.get('portfolio') === 'true' || urlParams.get('book') === 'true') {
+        const vol = urlParams.get('vol') || urlParams.get('volume');
+        if (vol === 'apartments' || vol === 'urban' || vol === 'villas') {
+          setFlipbookVolume(vol);
+        }
+        setIsFlipbookOpen(true);
       }
 
       // Deep link direct project view
@@ -193,6 +205,7 @@ export const App: React.FC = () => {
           onOpenWhatsApp={handleOpenWhatsApp}
           onOpenAiBooster={() => setIsAiBoosterModalOpen(true)}
           onOpenKnowledgeHub={() => setIsKnowledgeHubOpen(true)}
+          onOpenFlipbook={() => setIsFlipbookOpen(true)}
           totalProjectsCount={totalProjectsCount}
           categoriesCount={localizedCategories.length}
           currentLanguage={language}
@@ -264,12 +277,14 @@ export const App: React.FC = () => {
               currentLanguage={language}
               onExit3D={handleExit3D}
               isIntroActive={isIntroActive}
+              onOpenFlipbook={() => setIsFlipbookOpen(true)}
             />
 
             {!hasEntered3D && (
               <CinematicVideoIntro
                 currentLanguage={language}
                 onEnter3D={handleEnter3D}
+                onOpenFlipbook={() => setIsFlipbookOpen(true)}
                 onNavigateToView={(v) => handleUpdateSettings({ activeView: v })}
               />
             )}
@@ -293,6 +308,7 @@ export const App: React.FC = () => {
       {!isIntroActive && (
         <FloatingContactHub
           onOpenModal={() => handleOpenWhatsApp()}
+          onOpenFlipbook={() => setIsFlipbookOpen(true)}
           isRTL={isRTL}
         />
       )}
@@ -352,6 +368,16 @@ export const App: React.FC = () => {
         currentLanguage={language}
         onOpenWhatsApp={handleOpenWhatsApp}
       />
+
+      {/* 3D Interactive Portfolio Flipbook Modal */}
+      <BimcoPortfolioFlipbookModal
+        isOpen={isFlipbookOpen}
+        onClose={() => setIsFlipbookOpen(false)}
+        initialVolume={flipbookVolume}
+      />
+
+      {/* Mobile/Tablet Orientation Rotate Prompt */}
+      <DeviceOrientationPrompt currentLanguage={language} />
     </div>
   );
 };

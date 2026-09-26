@@ -29,6 +29,7 @@ interface HeaderProps {
   onOpenWhatsApp?: (presetText?: string) => void;
   onOpenAiBooster?: () => void;
   onOpenKnowledgeHub?: () => void;
+  onOpenFlipbook?: () => void;
   totalProjectsCount: number;
   categoriesCount: number;
   currentLanguage: LanguageCode;
@@ -44,7 +45,8 @@ export const Header: React.FC<HeaderProps> = ({
   onLanguageChange,
   onOpenWhatsApp,
   onOpenAiBooster,
-  onOpenKnowledgeHub
+  onOpenKnowledgeHub,
+  onOpenFlipbook
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
@@ -184,6 +186,20 @@ export const Header: React.FC<HeaderProps> = ({
               <span>{currentLanguage === 'fa' ? 'راهنما و سوالات' : 'FAQ & Q&A'}</span>
               <span className="text-[9px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-full font-mono font-bold">
                 12
+              </span>
+            </button>
+          )}
+
+          {onOpenFlipbook && (
+            <button
+              onClick={() => { sound.playClick(); onOpenFlipbook(); }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500/15 to-amber-600/25 hover:from-amber-500 hover:to-amber-600 text-amber-900 hover:text-white border border-amber-300/80 transition-all duration-200 cursor-pointer shadow-xs group"
+              title="مشاهده دفترچه تعاملی پورتفولیو BIMCO (ورق‌خور) و دانلود PDF"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-amber-600 group-hover:text-white transition-colors" />
+              <span>{currentLanguage === 'fa' ? 'دفترچه پورتفولیو' : 'Portfolio Flipbook'}</span>
+              <span className="text-[9px] bg-amber-500 text-white px-1.5 py-0.5 rounded-full font-mono font-bold animate-pulse">
+                3D
               </span>
             </button>
           )}
@@ -385,6 +401,25 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
                 <span className="text-[10px] font-mono bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full font-bold">
                   12 Q&A
+                </span>
+              </button>
+            )}
+
+            {onOpenFlipbook && (
+              <button
+                onClick={() => {
+                  sound.playClick();
+                  setIsMobileMenuOpen(false);
+                  onOpenFlipbook();
+                }}
+                className="w-full flex items-center justify-between p-3 rounded-2xl text-xs font-bold bg-gradient-to-r from-amber-500/20 to-amber-600/30 text-amber-950 border border-amber-300 hover:bg-amber-100 transition-all cursor-pointer shadow-xs"
+              >
+                <div className="flex items-center gap-2.5">
+                  <BookOpen className="w-4 h-4 text-amber-700" />
+                  <span>{currentLanguage === 'fa' ? 'دفترچه تعاملی پورتفولیو BIMCO (ورق‌خور)' : 'BIMCO Portfolio Flipbook (3D)'}</span>
+                </div>
+                <span className="text-[10px] font-mono bg-amber-600 text-white px-2 py-0.5 rounded-full font-bold">
+                  3D PDF
                 </span>
               </button>
             )}

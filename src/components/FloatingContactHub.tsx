@@ -4,15 +4,36 @@ import { sound } from '../utils/audio';
 
 interface FloatingContactHubProps {
   onOpenModal: () => void;
+  onOpenFlipbook?: () => void;
   isRTL: boolean;
 }
 
 export const FloatingContactHub: React.FC<FloatingContactHubProps> = ({
   onOpenModal,
+  onOpenFlipbook,
   isRTL
 }) => {
   return (
     <div className={`fixed bottom-4 sm:bottom-6 ${isRTL ? 'left-3 sm:left-6' : 'right-3 sm:right-6'} z-40 flex items-center gap-2 pointer-events-auto pb-[env(safe-area-inset-bottom,0px)]`}>
+      {/* 3D Interactive Portfolio Flipbook Floating Trigger */}
+      {onOpenFlipbook && (
+        <button
+          onClick={() => {
+            sound.playClick();
+            onOpenFlipbook();
+          }}
+          className="group relative flex items-center justify-center gap-2 bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-500 hover:to-amber-600 text-white w-12 h-12 sm:w-auto sm:h-auto sm:px-4 sm:py-3 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 border-2 border-white cursor-pointer"
+          title="مشاهده دفترچه تعاملی پورتفولیو معماری BIMCO (ورق‌خور سه بعدی)"
+        >
+          <img src="/logo.png" alt="BIMCO" className="w-5 h-5 object-contain drop-shadow" />
+          <div className="hidden sm:flex flex-col text-right">
+            <span className="text-xs font-black tracking-wide leading-none">{isRTL ? 'پورتفولیو BIMCO' : 'BIMCO Portfolio'}</span>
+            <span className="text-[10px] text-amber-200 font-medium leading-none mt-1">{isRTL ? 'دفترچه ورق‌خور ۳D' : 'Interactive 3D Book'}</span>
+          </div>
+        </button>
+      )}
+
+      {/* WhatsApp Button */}
       <button
         onClick={() => {
           sound.playClick();
