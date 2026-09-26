@@ -105,11 +105,14 @@ def create_project_spread(
     brief_text="",
     technical_specs=""
 ):
-    canvas = Image.new('RGB', (TARGET_W, TARGET_H), (18, 24, 30))
+    canvas = Image.new('RGB', (TARGET_W, TARGET_H), (16, 22, 28))
     draw = ImageDraw.Draw(canvas)
     
-    avail_w = TARGET_W - 70
-    avail_h = TARGET_H - 72 - 46
+    # Modern minimal border and full-spread architectural proportions:
+    margin_x = 24
+    margin_y = 12
+    avail_w = TARGET_W - (margin_x * 2)  # 1920 - 48 = 1872
+    avail_h = (TARGET_H - 72 - 46) - (margin_y * 2) # 962 - 24 = 938
     
     with Image.open(spread_img_path) as sp:
         sp_rgb = sp.convert('RGB')
@@ -119,9 +122,10 @@ def create_project_spread(
         sp_resized = sp_rgb.resize((new_w, new_h), Image.Resampling.LANCZOS)
         
         pos_x = (TARGET_W - new_w) // 2
-        pos_y = 72 + (avail_h - new_h) // 2
+        pos_y = 72 + margin_y + (avail_h - new_h) // 2
         
-        draw.rectangle([pos_x - 2, pos_y - 2, pos_x + new_w + 2, pos_y + new_h + 2], fill=(40, 52, 64))
+        # Modern minimal hairline architectural border (1px)
+        draw.rectangle([pos_x - 1, pos_y - 1, pos_x + new_w, pos_y + new_h], outline=(55, 75, 92), width=1)
         canvas.paste(sp_resized, (pos_x, pos_y))
         
     draw.line([(PAGE_W, 72), (PAGE_W, TARGET_H - 46)], fill=(12, 16, 20), width=1)
@@ -363,20 +367,20 @@ def build_pdf_from_spreads(pdf_path, cover_img, full_spreads, back_cover_img):
     # 1. Front Cover Spread (Dark on left, Cover on right)
     cov_spread = Image.new('RGB', (TARGET_W, TARGET_H), (14, 18, 22))
     cov_spread.paste(cover_img, (PAGE_W, 0))
-    cov_spread.save(temp_img, quality=95, subsampling=0)
+    cov_spread.save(temp_img, quality=98, subsampling=0)
     pdf_page = pdf_doc.new_page(width=TARGET_W, height=TARGET_H)
     pdf_page.insert_image(fitz.Rect(0, 0, TARGET_W, TARGET_H), filename=temp_img)
     
     # 2. Spreads 1 to 15 (15 spreads x 2 = 30 pages)
     for sp in full_spreads:
-        sp.save(temp_img, quality=95, subsampling=0)
+        sp.save(temp_img, quality=98, subsampling=0)
         pdf_page = pdf_doc.new_page(width=TARGET_W, height=TARGET_H)
         pdf_page.insert_image(fitz.Rect(0, 0, TARGET_W, TARGET_H), filename=temp_img)
         
     # 3. Back Cover Spread (Back Cover on left, Dark on right)
     b_spread = Image.new('RGB', (TARGET_W, TARGET_H), (14, 18, 22))
     b_spread.paste(back_cover_img, (0, 0))
-    b_spread.save(temp_img, quality=95, subsampling=0)
+    b_spread.save(temp_img, quality=98, subsampling=0)
     pdf_page = pdf_doc.new_page(width=TARGET_W, height=TARGET_H)
     pdf_page.insert_image(fitz.Rect(0, 0, TARGET_W, TARGET_H), filename=temp_img)
     
@@ -413,7 +417,7 @@ def generate_villas_volume():
         "A DIALOGUE BETWEEN TOPOGRAPHY, FORM & BUILD INTEGRITY",
         "Curated Collection of Sloped Villas, Desert Retreats & Executive Construction Records"
     )
-    cov.save(os.path.join(out_dir, "page_01.jpg"), quality=95, subsampling=0)
+    cov.save(os.path.join(out_dir, "page_01.jpg"), quality=98, subsampling=0)
     
     # 2. Spread 1: Pages 02 & 03 (Prologue: Manifesto Left + Index Right)
     v_man = Image.new('RGB', (TARGET_W, TARGET_H), (20, 26, 33))
@@ -446,18 +450,18 @@ def generate_villas_volume():
     md.text((1020, 185), "Structured Progression from Mountain Slopes to Built Realities", fill=(194, 125, 83), font=get_font(14, bold=True))
     
     v_index = [
-        ("01", "DALKHANI FOREST VILLA", "Organic Curved Earthen Architecture", "PGS 04-05"),
-        ("02", "CONCRETE & GLASS TOPOGRAPHY VILLA", "Ground/First Plans, Pool & Daylight", "PGS 06-07"),
-        ("03", "VIOLET LUXURY RESIDENCE (CONCEPT)", "Volumetric Masterpiece & Site Renders", "PGS 08-09"),
-        ("04", "VIOLET RESIDENCE EXECUTION", "On-Site Steel/Concrete Construction Records", "PGS 10-11"),
-        ("05", "MOUNTAIN STONE & TIMBER CHALET", "Slope Architecture & Active Worksite Photos", "PGS 12-13"),
-        ("06", "TEHRAN DASHT MODERN VILLA", "Villa Renders & Pool Foundation Execution", "PGS 14-15"),
-        ("07", "MODERN VILLA SERIES 01 - 05", "Modular Luxury Compounds & Olive Landscaping", "PGS 16-17"),
-        ("08", "VILLA IN AUSTRALIA", "Double-Height Interior, Fireplace & Built Joinery", "PGS 18-19"),
-        ("09", "BRUTALIST CONCRETE & CANTILEVER VILLA", "Glass Bottom Pool & Cliffside Pavilion", "PGS 20-21"),
-        ("10", "LANDSCAPE, PERGOLAS & POOL REALMS", "Outdoor Living & Water Architecture", "PGS 22-23"),
-        ("11", "DIAMOND VILLA TOWN MASTERPLAN", "Gated Riverside Villa Community", "PGS 24-25"),
-        ("12", "VILLA INTERIORS & BESPOKE JOINERY", "Luxury Kitchen & Master Dressing Suites", "PGS 26-27")
+        ("01", "VIOLET LUXURY RESIDENCE", "Volumetric Design & Spatial Site Synthesis", "PGS 04-05"),
+        ("02", "VIOLET VILLA FLOOR PLANS", "Architectural Layouts & Environmental Sections", "PGS 06-07"),
+        ("03", "VIOLET VILLA STEEL FRAME", "Structural Steel Erection & Frame Progress", "PGS 08-09"),
+        ("04", "VIOLET VILLA CONSTRUCTION", "Concrete Pouring & On-Site Engineering Audit", "PGS 10-11"),
+        ("05", "TEHRAN DASHT MODERN VILLA", "Villa Retreat Design & Expansive Pool Integration", "PGS 12-13"),
+        ("06", "TEHRAN DASHT SITE WORKS", "Foundation Rebar & Worksite Construction Records", "PGS 14-15"),
+        ("07", "MODERN VILLA SERIES 01-05", "Modular Luxury Compounds & Olive Landscaping", "PGS 16-17"),
+        ("08", "MODERN VILLA PLANS & WOOD", "Natural Wood Joinery & Concrete Spatial Layouts", "PGS 18-19"),
+        ("09", "VILLA IN AUSTRALIA", "Curved Terraces & Organic Pool Architecture", "PGS 20-21"),
+        ("10", "AUSTRALIA TERRACED LIVING", "Terraced Living & Integrated Pool Pavilion", "PGS 22-23"),
+        ("11", "DIAMOND VILLA TOWN", "Gated Riverside Villa Community Masterplan", "PGS 24-25"),
+        ("12", "LANDSCAPE & OUTDOOR LIVING", "Luxury Pergolas, Water Elements & Sun Decks", "PGS 26-27")
     ]
     
     vy = 225
@@ -471,54 +475,45 @@ def generate_villas_volume():
         
     p2 = v_man.crop((0, 0, PAGE_W, PAGE_H))
     p3 = v_man.crop((PAGE_W, 0, PAGE_W * 2, PAGE_H))
-    p2.save(os.path.join(out_dir, "page_02.jpg"), quality=95, subsampling=0)
-    p3.save(os.path.join(out_dir, "page_03.jpg"), quality=95, subsampling=0)
+    p2.save(os.path.join(out_dir, "page_02.jpg"), quality=98, subsampling=0)
+    p3.save(os.path.join(out_dir, "page_03.jpg"), quality=98, subsampling=0)
     
-    # 3. Spreads 2 to 13: 12 Pure Villa Spreads (Pages 04 to 27)
+    # 3. Spreads 2 to 13: 12 Pure Villa Spreads (Pages 04 to 27) - 100% Authentic 2:1 Spreads
     villa_spreads = [
         (
-            (
-                r'01_Luxury_Villas\03_Dalkhani_Forest_Villa_Organic\WhatsApp Image 2026-09-25 at 23.26.18 (1).jpeg',
-                r'01_Luxury_Villas\03_Dalkhani_Forest_Villa_Organic\WhatsApp Image 2026-09-25 at 23.26.18 (2).jpeg'
-            ),
-            "VIL-01", "Dalkhani Forest Villa", "Organic Curved Earthen Architecture",
-            "Left: Complete architectural floor plans & sections. Right: Signature organic forest villa 3D render.",
-            "Topographic contour integration, thermal mass walls, environmental site drainage."
-        ),
-        (
-            (
-                r'01_Luxury_Villas\01_Concrete_Glass_Villa_Topography\WhatsApp Image 2026-09-25 at 22.54.36.jpeg',
-                r'01_Luxury_Villas\01_Concrete_Glass_Villa_Topography\WhatsApp Image 2026-09-25 at 22.55.56.jpeg'
-            ),
-            "VIL-02", "Concrete & Glass Villa", "Topographical Harmony & Ground/First Plans",
-            "Left: Detailed Ground & First floor plans with pool terrace. Right: 3D exterior concrete & glass render.",
-            "Structural concrete frame, floor-to-ceiling double-glazed curtain walls, sun shade louvers."
-        ),
-        (
             r'01_Luxury_Villas\06_Violet_Villa\WhatsApp Image 2026-09-25 at 23.29.58.jpeg',
-            "VIL-03", "Violet Luxury Residence", "Volumetric Design & Spatial Site Synthesis",
+            "VIL-01", "Violet Luxury Residence", "Volumetric Design & Spatial Site Synthesis",
             "Signature luxury villa layout featuring master suite wings, outdoor lounge, and garden pathways.",
             "BIM LOD 350 architectural model, stone facade cladding schedules, daylight optimization."
         ),
         (
+            r'01_Luxury_Villas\06_Violet_Villa\WhatsApp Image 2026-09-25 at 23.29.59 (2).jpeg',
+            "VIL-02", "Violet Villa Floor Plans", "Architectural Layouts & Environmental Sections",
+            "Comprehensive architectural floor plans detailing circulation cores, double-height living, and service zoning.",
+            "Precision CAD dimensioning, acoustic isolation walls, passive solar shading integration."
+        ),
+        (
             r'01_Luxury_Villas\06_Violet_Villa\WhatsApp Image 2026-09-25 at 23.29.59 (1).jpeg',
-            "VIL-04", "Violet Residence Execution", "Floor Plans & On-Site Construction Photos",
+            "VIL-03", "Violet Villa Steel Frame", "Structural Steel Erection & Frame Progress",
             "Comprehensive execution documentation displaying physical on-site steel/concrete erection and frame progress.",
             "Active site supervision, structural beam-column verification, daylight analysis & floor plan set."
         ),
         (
-            (
-                r'01_Luxury_Villas\02_Mountain_Hillside_Chalet_Stone_Timber\WhatsApp Image 2026-09-25 at 23.38.58.jpeg',
-                r'01_Luxury_Villas\02_Mountain_Hillside_Chalet_Stone_Timber\WhatsApp Image 2026-09-25 at 23.38.58 (1).jpeg'
-            ),
-            "VIL-05", "Mountain Hillside Chalet", "Stone & Timber Renders + Worksite Scaffolding",
-            "Left: Hillside stone chalet nestled in mountain slopes. Right: Active on-site concrete & scaffolding execution.",
-            "Rubble masonry retaining walls, timber roof trusses, seismic sloped foundation calculations."
+            r'01_Luxury_Villas\06_Violet_Villa\WhatsApp Image 2026-09-25 at 23.29.59 (3).jpeg',
+            "VIL-04", "Violet Villa Construction", "Concrete Pouring & On-Site Engineering Audit",
+            "Active construction supervision ensuring structural tolerances and seamless MEP integration.",
+            "Post-tensioned concrete slabs, waterproof retaining walls, zero clash tolerance on site."
+        ),
+        (
+            r'01_Luxury_Villas\05_Tehran_Dasht_Villa\WhatsApp Image 2026-09-25 at 23.28.48.jpeg',
+            "VIL-05", "Tehran Dasht Modern Villa", "Villa Retreat Design & Expansive Pool Integration",
+            "Modern villa retreat harmonizing indoor-outdoor living with private pool, garden pergolas, and sun decks.",
+            "Thermal envelope engineering, double-glazed curtain walls, structural pool shell."
         ),
         (
             r'01_Luxury_Villas\05_Tehran_Dasht_Villa\WhatsApp Image 2026-09-25 at 23.28.49.jpeg',
-            "VIL-06", "Tehran Dasht Modern Villa", "Villa Retreat & Pool Foundation Rebar Execution",
-            "Villa retreat with private pool and expansive gardens, verified by foundation and pool rebar construction photos.",
+            "VIL-06", "Tehran Dasht Site Works", "Foundation Rebar & Worksite Construction Records",
+            "Verified physical construction records showcasing foundation excavation, rebar tying, and pool shell casting.",
             "Reinforced concrete pool shell, hydraulic MEP coordination, integrated landscape lighting."
         ),
         (
@@ -528,65 +523,54 @@ def generate_villas_volume():
             "Modular structural bay spacing, cantilevered terrace engineering, drip irrigation landscape."
         ),
         (
-            r'01_Luxury_Villas\07_Villa_in_Australia_and_Curved_Residences\WhatsApp Image 2026-09-25 at 23.30.00 (2).jpeg',
-            "VIL-08", "Villa in Australia", "Curved Terraces & Organic Pool Architecture",
+            r'01_Luxury_Villas\04_Modern_Villa_Series_01_to_05\WhatsApp Image 2026-09-25 at 23.31.01 (2).jpeg',
+            "VIL-08", "Modern Villa Plans & Details", "Natural Wood Joinery & Concrete Spatial Layouts",
+            "Executive details of natural timber screens, polished concrete flooring, and bespoke interior cabinetry.",
+            "1:20 joinery shop drawings, thermal break window frames, integrated linear HVAC slots."
+        ),
+        (
+            r'01_Luxury_Villas\07_Villa_in_Australia_and_Curved_Residences\WhatsApp Image 2026-09-25 at 23.27.44.jpeg',
+            "VIL-09", "Villa in Australia", "Curved Terraces & Organic Pool Architecture",
             "Modern villa in Australia featuring fluid curvilinear balconies, open-plan great room, and integrated pool.",
             "Curved formwork engineering, passive solar shading, luxury master suite layout."
         ),
         (
-            (
-                r'01_Luxury_Villas\08_Brutalist_Cantilever_Concrete_Villa\WhatsApp Image 2026-09-25 at 23.43.32 (1).jpeg',
-                r'01_Luxury_Villas\08_Brutalist_Cantilever_Concrete_Villa\WhatsApp Image 2026-09-25 at 23.40.55.jpeg'
-            ),
-            "VIL-09", "Brutalist Concrete Villa", "Cantilevered Glass Pool & Cliff House Pavilion",
-            "Left: Architectural floor plans & cantilever details. Right: Daring board-formed cantilevered glass-bottom pool.",
-            "Post-tensioned concrete cantilevers, structural glass balustrades, geotechnical rock anchors."
+            r'01_Luxury_Villas\07_Villa_in_Australia_and_Curved_Residences\WhatsApp Image 2026-09-25 at 23.30.00 (2).jpeg',
+            "VIL-10", "Australia Terraced Living", "Terraced Living & Integrated Pool Pavilion",
+            "Panoramic living areas opening onto curved cantilevered decks with glass balustrades and ocean outlooks.",
+            "Structural post-tensioned slabs, marine-grade stainless hardware, frameless glass balustrades."
         ),
         (
-            r'05_Urban_Planning_and_Landscape\21_Landscape_Pergolas_and_Outdoor_Living\WhatsApp Image 2026-09-25 at 23.36.48.jpeg',
-            "VIL-10", "Landscape & Outdoor Living", "Luxury Pergolas, Water Elements & Sun Decks",
-            "Architectural landscape integration with modern steel pergolas, sunken seating pits, and infinity water edges.",
-            "Outdoor MEP coordination, waterproof timber decking, night lighting photometric calculations."
-        ),
-        (
-            r'05_Urban_Planning_and_Landscape\20_Diamond_Villa_Town_Masterplan\WhatsApp Image 2026-09-25 at 23.28.07 (2).jpeg',
+            r'05_Urban_Planning_and_Landscape\20_Diamond_Villa_Town_Masterplan\WhatsApp Image 2026-09-25 at 23.28.07.jpeg',
             "VIL-11", "Diamond Villa Town", "Gated Riverside Villa Community Masterplan",
             "Masterplanned gated residential enclave along riverfront greenway with monumental entrance gateway.",
             "Macro parcel subdivision, storm water retention swales, hierarchical private road infrastructure."
         ),
         (
-            r'04_Interior_Architecture\16_Kitchen_Design_and_Appliances\WhatsApp Image 2026-09-25 at 23.32.32 (3).jpeg',
-            "VIL-12", "Villa Interiors & Joinery", "Luxury Kitchen Architecture & Smeg Appliances",
-            "Bespoke villa kitchen and joinery architecture with bookmatched marble, natural oak, and Smeg specifications.",
-            "Millwork shop drawings (1:20), concealed pantry mechanisms, built-in induction & extraction."
+            r'05_Urban_Planning_and_Landscape\21_Landscape_Pergolas_and_Outdoor_Living\WhatsApp Image 2026-09-25 at 23.36.48.jpeg',
+            "VIL-12", "Landscape & Outdoor Living", "Luxury Pergolas, Water Elements & Sun Decks",
+            "Architectural landscape integration with modern steel pergolas, sunken seating pits, and infinity water edges.",
+            "Outdoor MEP coordination, waterproof timber decking, night lighting photometric calculations."
         )
     ]
     
     full_spreads = [v_man]
     
-    for idx, (img_info, code, title, sub, br, sp) in enumerate(villa_spreads):
+    for idx, (rel_path, code, title, sub, br, sp) in enumerate(villa_spreads):
         pl = 4 + idx * 2
         pr = 5 + idx * 2
         print(f"Generating Villa Spread {idx+1}: [{code}] {title} (Pages {pl:02d}-{pr:02d})...")
-        if isinstance(img_info, tuple):
-            left_path = os.path.join(BASE_IMG_DIR, img_info[0])
-            right_path = os.path.join(BASE_IMG_DIR, img_info[1])
-            sp_img = create_two_page_spread(
-                left_path, right_path, VOL_TITLE, code, "Luxury Villas & Private Residences", 
-                title, pl, pr, TOTAL_PAGES, brief_text=br, technical_specs=sp
-            )
-        else:
-            full_path = os.path.join(BASE_IMG_DIR, img_info)
-            sp_img = create_project_spread(
-                full_path, VOL_TITLE, code, "Luxury Villas & Private Residences", 
-                title, pl, pr, TOTAL_PAGES, brief_text=br, technical_specs=sp
-            )
+        full_path = os.path.join(BASE_IMG_DIR, rel_path)
+        sp_img = create_project_spread(
+            full_path, VOL_TITLE, code, "Luxury Villas & Private Residences", 
+            title, pl, pr, TOTAL_PAGES, brief_text=br, technical_specs=sp
+        )
         full_spreads.append(sp_img)
         
         lp = sp_img.crop((0, 0, PAGE_W, PAGE_H))
         rp = sp_img.crop((PAGE_W, 0, PAGE_W * 2, PAGE_H))
-        lp.save(os.path.join(out_dir, f"page_{pl:02d}.jpg"), quality=95, subsampling=0)
-        rp.save(os.path.join(out_dir, f"page_{pr:02d}.jpg"), quality=95, subsampling=0)
+        lp.save(os.path.join(out_dir, f"page_{pl:02d}.jpg"), quality=98, subsampling=0)
+        rp.save(os.path.join(out_dir, f"page_{pr:02d}.jpg"), quality=98, subsampling=0)
         
     # 4. Spread 14: Pages 28 & 29 (Execution Standards)
     v_steps = [
@@ -601,20 +585,20 @@ def generate_villas_volume():
     full_spreads.append(std_spread)
     p28 = std_spread.crop((0, 0, PAGE_W, PAGE_H))
     p29 = std_spread.crop((PAGE_W, 0, PAGE_W * 2, PAGE_H))
-    p28.save(os.path.join(out_dir, "page_28.jpg"), quality=95, subsampling=0)
-    p29.save(os.path.join(out_dir, "page_29.jpg"), quality=95, subsampling=0)
+    p28.save(os.path.join(out_dir, "page_28.jpg"), quality=98, subsampling=0)
+    p29.save(os.path.join(out_dir, "page_29.jpg"), quality=98, subsampling=0)
     
     # 5. Spread 15: Pages 30 & 31 (Principals Leadership)
     prin_spread = create_principals_spread(VOL_TITLE, "Villa Practice Leadership", pl=30, pr=31, total_pages=32)
     full_spreads.append(prin_spread)
     p30 = prin_spread.crop((0, 0, PAGE_W, PAGE_H))
     p31 = prin_spread.crop((PAGE_W, 0, PAGE_W * 2, PAGE_H))
-    p30.save(os.path.join(out_dir, "page_30.jpg"), quality=95, subsampling=0)
-    p31.save(os.path.join(out_dir, "page_31.jpg"), quality=95, subsampling=0)
+    p30.save(os.path.join(out_dir, "page_30.jpg"), quality=98, subsampling=0)
+    p31.save(os.path.join(out_dir, "page_31.jpg"), quality=98, subsampling=0)
     
     # 6. Page 32: Back Cover (PAGE_W x PAGE_H)
     b_cov = create_back_cover("VOLUME I: LUXURY VILLAS & RESIDENCES")
-    b_cov.save(os.path.join(out_dir, "page_32.jpg"), quality=95, subsampling=0)
+    b_cov.save(os.path.join(out_dir, "page_32.jpg"), quality=98, subsampling=0)
     
     # Copy all to dist
     dist_b_dir = os.path.join(DIST_DIR, 'portfolio_villas', 'book_pages')
@@ -647,7 +631,7 @@ def generate_apartments_volume():
         "THE HIGH-PERFORMANCE BUILDING ENVELOPE & COLLECTIVE LIVING",
         "Curated Monograph of Urban Mid-Rise, Terraced Enclaves & High-Rise Facades"
     )
-    cov.save(os.path.join(out_dir, "page_01.jpg"), quality=95, subsampling=0)
+    cov.save(os.path.join(out_dir, "page_01.jpg"), quality=98, subsampling=0)
     
     # 2. Spread 1: Pages 02 & 03 (Prologue: Manifesto Left + Index Right)
     v_man = Image.new('RGB', (TARGET_W, TARGET_H), (20, 26, 33))
@@ -705,8 +689,8 @@ def generate_apartments_volume():
         
     p2 = v_man.crop((0, 0, PAGE_W, PAGE_H))
     p3 = v_man.crop((PAGE_W, 0, PAGE_W * 2, PAGE_H))
-    p2.save(os.path.join(out_dir, "page_02.jpg"), quality=95, subsampling=0)
-    p3.save(os.path.join(out_dir, "page_03.jpg"), quality=95, subsampling=0)
+    p2.save(os.path.join(out_dir, "page_02.jpg"), quality=98, subsampling=0)
+    p3.save(os.path.join(out_dir, "page_03.jpg"), quality=98, subsampling=0)
     
     # 3. Spreads 2 to 13: 12 Apartment Spreads (Pages 04 to 27)
     apt_spreads = [
@@ -799,8 +783,8 @@ def generate_apartments_volume():
         
         lp = sp_img.crop((0, 0, PAGE_W, PAGE_H))
         rp = sp_img.crop((PAGE_W, 0, PAGE_W * 2, PAGE_H))
-        lp.save(os.path.join(out_dir, f"page_{pl:02d}.jpg"), quality=95, subsampling=0)
-        rp.save(os.path.join(out_dir, f"page_{pr:02d}.jpg"), quality=95, subsampling=0)
+        lp.save(os.path.join(out_dir, f"page_{pl:02d}.jpg"), quality=98, subsampling=0)
+        rp.save(os.path.join(out_dir, f"page_{pr:02d}.jpg"), quality=98, subsampling=0)
         
     # 4. Spread 14: Pages 28 & 29 (Execution Standards)
     apt_steps = [
@@ -815,20 +799,20 @@ def generate_apartments_volume():
     full_spreads.append(std_spread)
     p28 = std_spread.crop((0, 0, PAGE_W, PAGE_H))
     p29 = std_spread.crop((PAGE_W, 0, PAGE_W * 2, PAGE_H))
-    p28.save(os.path.join(out_dir, "page_28.jpg"), quality=95, subsampling=0)
-    p29.save(os.path.join(out_dir, "page_29.jpg"), quality=95, subsampling=0)
+    p28.save(os.path.join(out_dir, "page_28.jpg"), quality=98, subsampling=0)
+    p29.save(os.path.join(out_dir, "page_29.jpg"), quality=98, subsampling=0)
     
     # 5. Spread 15: Pages 30 & 31 (Principals Leadership)
     prin_spread = create_principals_spread(VOL_TITLE, "Apartments & Facade Leadership", pl=30, pr=31, total_pages=32)
     full_spreads.append(prin_spread)
     p30 = prin_spread.crop((0, 0, PAGE_W, PAGE_H))
     p31 = prin_spread.crop((PAGE_W, 0, PAGE_W * 2, PAGE_H))
-    p30.save(os.path.join(out_dir, "page_30.jpg"), quality=95, subsampling=0)
-    p31.save(os.path.join(out_dir, "page_31.jpg"), quality=95, subsampling=0)
+    p30.save(os.path.join(out_dir, "page_30.jpg"), quality=98, subsampling=0)
+    p31.save(os.path.join(out_dir, "page_31.jpg"), quality=98, subsampling=0)
     
     # 6. Page 32: Back Cover
     b_cov = create_back_cover("VOLUME II: RESIDENTIAL APARTMENTS & FACADES")
-    b_cov.save(os.path.join(out_dir, "page_32.jpg"), quality=95, subsampling=0)
+    b_cov.save(os.path.join(out_dir, "page_32.jpg"), quality=98, subsampling=0)
     
     # Copy all to dist
     dist_b_dir = os.path.join(DIST_DIR, 'portfolio_apartments', 'book_pages')
@@ -861,7 +845,7 @@ def generate_urban_commercial_volume():
         "MACRO-SCALE ARCHITECTURAL SYSTEMS & URBAN MORPHOLOGY",
         "Curated Monograph of Commercial Hubs, Retail Atriums, Infrastructure & River Basins"
     )
-    cov.save(os.path.join(out_dir, "page_01.jpg"), quality=95, subsampling=0)
+    cov.save(os.path.join(out_dir, "page_01.jpg"), quality=98, subsampling=0)
     
     # 2. Spread 1: Pages 02 & 03 (Prologue: Manifesto Left + Index Right)
     v_man = Image.new('RGB', (TARGET_W, TARGET_H), (20, 26, 33))
@@ -919,8 +903,8 @@ def generate_urban_commercial_volume():
         
     p2 = v_man.crop((0, 0, PAGE_W, PAGE_H))
     p3 = v_man.crop((PAGE_W, 0, PAGE_W * 2, PAGE_H))
-    p2.save(os.path.join(out_dir, "page_02.jpg"), quality=95, subsampling=0)
-    p3.save(os.path.join(out_dir, "page_03.jpg"), quality=95, subsampling=0)
+    p2.save(os.path.join(out_dir, "page_02.jpg"), quality=98, subsampling=0)
+    p3.save(os.path.join(out_dir, "page_03.jpg"), quality=98, subsampling=0)
     
     # 3. Spreads 2 to 13: 12 Commercial & Urban Spreads (Pages 04 to 27)
     urb_spreads = [
@@ -1013,8 +997,8 @@ def generate_urban_commercial_volume():
         
         lp = sp_img.crop((0, 0, PAGE_W, PAGE_H))
         rp = sp_img.crop((PAGE_W, 0, PAGE_W * 2, PAGE_H))
-        lp.save(os.path.join(out_dir, f"page_{pl:02d}.jpg"), quality=95, subsampling=0)
-        rp.save(os.path.join(out_dir, f"page_{pr:02d}.jpg"), quality=95, subsampling=0)
+        lp.save(os.path.join(out_dir, f"page_{pl:02d}.jpg"), quality=98, subsampling=0)
+        rp.save(os.path.join(out_dir, f"page_{pr:02d}.jpg"), quality=98, subsampling=0)
         
     # 4. Spread 14: Pages 28 & 29 (Execution Standards)
     urb_steps = [
@@ -1029,20 +1013,20 @@ def generate_urban_commercial_volume():
     full_spreads.append(std_spread)
     p28 = std_spread.crop((0, 0, PAGE_W, PAGE_H))
     p29 = std_spread.crop((PAGE_W, 0, PAGE_W * 2, PAGE_H))
-    p28.save(os.path.join(out_dir, "page_28.jpg"), quality=95, subsampling=0)
-    p29.save(os.path.join(out_dir, "page_29.jpg"), quality=95, subsampling=0)
+    p28.save(os.path.join(out_dir, "page_28.jpg"), quality=98, subsampling=0)
+    p29.save(os.path.join(out_dir, "page_29.jpg"), quality=98, subsampling=0)
     
     # 5. Spread 15: Pages 30 & 31 (Principals Leadership)
     prin_spread = create_principals_spread(VOL_TITLE, "Commercial & Urban Leadership", pl=30, pr=31, total_pages=32)
     full_spreads.append(prin_spread)
     p30 = prin_spread.crop((0, 0, PAGE_W, PAGE_H))
     p31 = prin_spread.crop((PAGE_W, 0, PAGE_W * 2, PAGE_H))
-    p30.save(os.path.join(out_dir, "page_30.jpg"), quality=95, subsampling=0)
-    p31.save(os.path.join(out_dir, "page_31.jpg"), quality=95, subsampling=0)
+    p30.save(os.path.join(out_dir, "page_30.jpg"), quality=98, subsampling=0)
+    p31.save(os.path.join(out_dir, "page_31.jpg"), quality=98, subsampling=0)
     
     # 6. Page 32: Back Cover
     b_cov = create_back_cover("VOLUME III: COMMERCIAL & URBAN MASTERPLANNING")
-    b_cov.save(os.path.join(out_dir, "page_32.jpg"), quality=95, subsampling=0)
+    b_cov.save(os.path.join(out_dir, "page_32.jpg"), quality=98, subsampling=0)
     
     # Copy all to dist
     dist_b_dir = os.path.join(DIST_DIR, 'portfolio_urban', 'book_pages')
