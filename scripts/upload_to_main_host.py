@@ -99,7 +99,9 @@ def upload_single_file(item, worker_id, total, counter_dict):
 
             local_size = os.path.getsize(local_path)
 
-            if remote_size == local_size:
+            # Force upload index.html and manifest files to avoid stale caching
+            always_upload = (rel_path == "index.html" or rel_path.endswith(".json") or rel_path.startswith("assets/"))
+            if not always_upload and remote_size == local_size:
                 ftp.quit()
                 counter_dict['done'] += 1
                 curr = counter_dict['done']

@@ -105,7 +105,7 @@ def create_project_spread(
     brief_text="",
     technical_specs=""
 ):
-    canvas = Image.new('RGB', (TARGET_W, TARGET_H), (246, 248, 250))
+    canvas = Image.new('RGB', (TARGET_W, TARGET_H), (18, 24, 30))
     draw = ImageDraw.Draw(canvas)
     
     avail_w = TARGET_W - 70
@@ -121,9 +121,72 @@ def create_project_spread(
         pos_x = (TARGET_W - new_w) // 2
         pos_y = 72 + (avail_h - new_h) // 2
         
-        draw.rectangle([pos_x - 2, pos_y - 2, pos_x + new_w + 2, pos_y + new_h + 2], fill=(220, 225, 230))
+        draw.rectangle([pos_x - 2, pos_y - 2, pos_x + new_w + 2, pos_y + new_h + 2], fill=(40, 52, 64))
         canvas.paste(sp_resized, (pos_x, pos_y))
         
+    draw.line([(PAGE_W, 72), (PAGE_W, TARGET_H - 46)], fill=(12, 16, 20), width=1)
+    apply_bimco_framing(
+        canvas,
+        vol_title,
+        project_code,
+        category_title,
+        project_title,
+        page_left_num,
+        page_right_num,
+        total_pages,
+        brief_text=brief_text,
+        technical_specs=technical_specs
+    )
+    return canvas
+
+def create_two_page_spread(
+    left_img_path,
+    right_img_path,
+    vol_title,
+    project_code,
+    category_title,
+    project_title,
+    page_left_num,
+    page_right_num,
+    total_pages=32,
+    brief_text="",
+    technical_specs=""
+):
+    canvas = Image.new('RGB', (TARGET_W, TARGET_H), (18, 24, 30))
+    draw = ImageDraw.Draw(canvas)
+    
+    avail_h = TARGET_H - 72 - 46
+    page_w = PAGE_W
+    max_w = page_w - 60
+    max_h = avail_h - 40
+    
+    # Left Page Image (0 to 960)
+    with Image.open(left_img_path) as im_l:
+        l_rgb = im_l.convert('RGB')
+        scale_l = min(max_w / l_rgb.width, max_h / l_rgb.height)
+        new_wl = int(l_rgb.width * scale_l)
+        new_hl = int(l_rgb.height * scale_l)
+        l_resized = l_rgb.resize((new_wl, new_hl), Image.Resampling.LANCZOS)
+        pos_xl = (page_w - new_wl) // 2
+        pos_yl = 72 + (avail_h - new_hl) // 2
+        draw.rectangle([pos_xl - 2, pos_yl - 2, pos_xl + new_wl + 2, pos_yl + new_hl + 2], fill=(40, 52, 64))
+        canvas.paste(l_resized, (pos_xl, pos_yl))
+        
+    # Right Page Image (960 to 1920)
+    with Image.open(right_img_path) as im_r:
+        r_rgb = im_r.convert('RGB')
+        scale_r = min(max_w / r_rgb.width, max_h / r_rgb.height)
+        new_wr = int(r_rgb.width * scale_r)
+        new_hr = int(r_rgb.height * scale_r)
+        r_resized = r_rgb.resize((new_wr, new_hr), Image.Resampling.LANCZOS)
+        pos_xr = page_w + (page_w - new_wr) // 2
+        pos_yr = 72 + (avail_h - new_hr) // 2
+        draw.rectangle([pos_xr - 2, pos_yr - 2, pos_xr + new_wr + 2, pos_yr + new_hr + 2], fill=(40, 52, 64))
+        canvas.paste(r_resized, (pos_xr, pos_yr))
+        
+    # Center spine line
+    draw.line([(PAGE_W, 72), (PAGE_W, TARGET_H - 46)], fill=(12, 16, 20), width=2)
+    
     apply_bimco_framing(
         canvas,
         vol_title,
@@ -414,15 +477,21 @@ def generate_villas_volume():
     # 3. Spreads 2 to 13: 12 Pure Villa Spreads (Pages 04 to 27)
     villa_spreads = [
         (
-            r'01_Luxury_Villas\03_Dalkhani_Forest_Villa_Organic\WhatsApp Image 2026-09-25 at 23.26.18 (6).jpeg',
+            (
+                r'01_Luxury_Villas\03_Dalkhani_Forest_Villa_Organic\WhatsApp Image 2026-09-25 at 23.26.18 (1).jpeg',
+                r'01_Luxury_Villas\03_Dalkhani_Forest_Villa_Organic\WhatsApp Image 2026-09-25 at 23.26.18 (2).jpeg'
+            ),
             "VIL-01", "Dalkhani Forest Villa", "Organic Curved Earthen Architecture",
-            "Organic villa contoured into the dense mountain forest of Dalkhani with natural earth finishes.",
+            "Left: Complete architectural floor plans & sections. Right: Signature organic forest villa 3D render.",
             "Topographic contour integration, thermal mass walls, environmental site drainage."
         ),
         (
-            r'01_Luxury_Villas\01_Concrete_Glass_Villa_Topography\WhatsApp Image 2026-09-25 at 22.54.37.jpeg',
+            (
+                r'01_Luxury_Villas\01_Concrete_Glass_Villa_Topography\WhatsApp Image 2026-09-25 at 22.54.36.jpeg',
+                r'01_Luxury_Villas\01_Concrete_Glass_Villa_Topography\WhatsApp Image 2026-09-25 at 22.55.56.jpeg'
+            ),
             "VIL-02", "Concrete & Glass Villa", "Topographical Harmony & Ground/First Plans",
-            "Complete Ground & First floor plans with seamless connection between interior spaces and private pool.",
+            "Left: Detailed Ground & First floor plans with pool terrace. Right: 3D exterior concrete & glass render.",
             "Structural concrete frame, floor-to-ceiling double-glazed curtain walls, sun shade louvers."
         ),
         (
@@ -438,9 +507,12 @@ def generate_villas_volume():
             "Active site supervision, structural beam-column verification, daylight analysis & floor plan set."
         ),
         (
-            r'01_Luxury_Villas\02_Mountain_Hillside_Chalet_Stone_Timber\WhatsApp Image 2026-09-25 at 23.38.58 (1).jpeg',
+            (
+                r'01_Luxury_Villas\02_Mountain_Hillside_Chalet_Stone_Timber\WhatsApp Image 2026-09-25 at 23.38.58.jpeg',
+                r'01_Luxury_Villas\02_Mountain_Hillside_Chalet_Stone_Timber\WhatsApp Image 2026-09-25 at 23.38.58 (1).jpeg'
+            ),
             "VIL-05", "Mountain Hillside Chalet", "Stone & Timber Renders + Worksite Scaffolding",
-            "Hillside stone chalet nestled in mountain slopes with real construction scaffolding and concrete site photos.",
+            "Left: Hillside stone chalet nestled in mountain slopes. Right: Active on-site concrete & scaffolding execution.",
             "Rubble masonry retaining walls, timber roof trusses, seismic sloped foundation calculations."
         ),
         (
@@ -462,9 +534,12 @@ def generate_villas_volume():
             "Curved formwork engineering, passive solar shading, luxury master suite layout."
         ),
         (
-            r'01_Luxury_Villas\08_Brutalist_Cantilever_Concrete_Villa\WhatsApp Image 2026-09-25 at 23.40.55.jpeg',
+            (
+                r'01_Luxury_Villas\08_Brutalist_Cantilever_Concrete_Villa\WhatsApp Image 2026-09-25 at 23.43.32 (1).jpeg',
+                r'01_Luxury_Villas\08_Brutalist_Cantilever_Concrete_Villa\WhatsApp Image 2026-09-25 at 23.40.55.jpeg'
+            ),
             "VIL-09", "Brutalist Concrete Villa", "Cantilevered Glass Pool & Cliff House Pavilion",
-            "Daring architectural statement in board-formed exposed concrete with cantilevered glass-bottom pool.",
+            "Left: Architectural floor plans & cantilever details. Right: Daring board-formed cantilevered glass-bottom pool.",
             "Post-tensioned concrete cantilevers, structural glass balustrades, geotechnical rock anchors."
         ),
         (
@@ -489,15 +564,23 @@ def generate_villas_volume():
     
     full_spreads = [v_man]
     
-    for idx, (rel_path, code, title, sub, br, sp) in enumerate(villa_spreads):
+    for idx, (img_info, code, title, sub, br, sp) in enumerate(villa_spreads):
         pl = 4 + idx * 2
         pr = 5 + idx * 2
-        full_path = os.path.join(BASE_IMG_DIR, rel_path)
         print(f"Generating Villa Spread {idx+1}: [{code}] {title} (Pages {pl:02d}-{pr:02d})...")
-        sp_img = create_project_spread(
-            full_path, VOL_TITLE, code, "Luxury Villas & Private Residences", 
-            title, pl, pr, TOTAL_PAGES, brief_text=br, technical_specs=sp
-        )
+        if isinstance(img_info, tuple):
+            left_path = os.path.join(BASE_IMG_DIR, img_info[0])
+            right_path = os.path.join(BASE_IMG_DIR, img_info[1])
+            sp_img = create_two_page_spread(
+                left_path, right_path, VOL_TITLE, code, "Luxury Villas & Private Residences", 
+                title, pl, pr, TOTAL_PAGES, brief_text=br, technical_specs=sp
+            )
+        else:
+            full_path = os.path.join(BASE_IMG_DIR, img_info)
+            sp_img = create_project_spread(
+                full_path, VOL_TITLE, code, "Luxury Villas & Private Residences", 
+                title, pl, pr, TOTAL_PAGES, brief_text=br, technical_specs=sp
+            )
         full_spreads.append(sp_img)
         
         lp = sp_img.crop((0, 0, PAGE_W, PAGE_H))
