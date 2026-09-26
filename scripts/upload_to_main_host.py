@@ -61,6 +61,26 @@ def precreate_directories(ftp, file_list):
     for d in sorted_dirs:
         make_dirs_recursive(ftp, d)
     print(f"Created {len(sorted_dirs)} remote directories.")
+    
+    # Clean remote stale book pages (> totalPages)
+    print("Checking for remote stale pages in book_pages directories...")
+    for vol, count in [('portfolio_villas', 24), ('portfolio_apartments', 22), ('portfolio_urban', 32)]:
+        remote_bp = f"/{REMOTE_ROOT}/{vol}/book_pages"
+        try:
+            ftp.cwd(remote_bp)
+            remote_files = ftp.nlst()
+            for rf in remote_files:
+                if rf.endswith('.jpg'):
+                    try:
+                        num = int(rf.replace('page_', '').replace('.jpg', ''))
+                        if num > count:
+                            print(f"Removing remote stale file: {remote_bp}/{rf}")
+                            ftp.delete(rf)
+                    except Exception:
+                        pass
+        except Exception as e:
+            pass
+    ftp.cwd(f"/{REMOTE_ROOT}")
 
 def upload_single_file(item, worker_id, total, counter_dict):
     local_path, rel_path = item
