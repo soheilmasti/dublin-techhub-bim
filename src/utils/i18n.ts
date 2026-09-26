@@ -188,31 +188,31 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     exploreCategory: 'Explorar projectes',
     clickToEnter: 'Clica per entrar',
 
-    zones: {
+        zones: {
       'urban-design': {
-        label: 'Disseny Urbà, Ports i Infraestructura',
+        label: 'Disseny Urbà, Planificació i Paisatgisme',
         badge: 'ZONA 01',
-        desc: 'Planificació urbana a gran escala, fronts marítims, canals i ponts sostenibles.'
+        desc: 'Planificació urbana d\'alta densitat, morfologia de Zargandeh, pla director Diamond i infraestructures viàries.'
       },
       'residential-luxury': {
-        label: 'Residencial de Luxe i Xalets',
+        label: 'Viles de Luxe i Residències de Muntanya',
         badge: 'ZONA 02',
-        desc: 'Arquitectura d’habitatges exclusius, àtics de disseny i xalets a Barcelona i internacionalment.'
+        desc: 'Vila Violet, formigó vist en topografia, xalets de muntanya Dalkhani, arquitectura orgànica i xalets d\'esbarjo.'
       },
       'commercial-complexes': {
         label: 'Complexos Comercials, Oficines i Torres',
         badge: 'ZONA 03',
-        desc: 'Megaprojectes comercials de fins a 52.000 m², torres d’oficines i integració BIM avançada.'
+        desc: 'Complex comercial Teheran Est, grans magatzems Erbil, façanes d\'enginyeria Darrous i terrasses Dalkhani.'
       },
       'retail-stores': {
-        label: 'Botigues Concept i Espais Comercials',
+        label: 'Arquitectura Interior, Fusteria i Hostaleria',
         badge: 'ZONA 04',
-        desc: 'Showrooms d’alta tecnologia, disseny interior per a Apple Store i experiència interactiva.'
+        desc: 'Cuines d\'alta gamma, salons de disseny, vestidors i suites principals, restaurants i espais gastronòmics.'
       },
       'institutional-competitions': {
-        label: 'Concursos d’Arquitectura i Edificis Públics',
+        label: 'Palaus Clàssics, Tipologies i Esbossos',
         badge: 'ZONA 05',
-        desc: 'Projectes guardonats en concursos nacionals, fars emblemàtics i seus institucionals.'
+        desc: 'Palaus monumentals d\'estil clàssic, recerca tipològica de cabanes i esbossos conceptuals a mà alçada.'
       }
     },
 
@@ -295,9 +295,9 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
   },
 
   fa: {
-    home3d: 'پورتفولیو کارها',
+    home3d: 'ماکت ۳بعدی استودیو',
     planIsometric: 'پلان ایزومتریک',
-    projectsArchive: 'پروژه‌ها',
+    projectsArchive: 'نمونه کارها',
     resume: 'رزومه',
     dublinBim: '🇮🇪 دمو دوبلین (BIM)',
     bimOutsourcing: 'برون‌سپاری و مدل‌سازی BIM',
@@ -309,7 +309,7 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     askAiAboutUs: 'پرسش از هوش مصنوعی درباره BIMCO',
     studioName: 'بیم‌کو // BIMCO',
     studioTagline: 'استودیو معماری و تولید استراتژیک BIM // سهیل مستی و همکاران',
-    returnToHome: 'بازگشت به پورتفولیو کارها',
+    returnToHome: 'بازگشت به ماکت ۳بعدی',
     contactWhatsapp: 'تماس مستقیم در واتساپ (+34 610 855 434)',
     customizer: 'ویرایشگر کالبد / GLB',
     soundToggle: 'صدای تعاملی',
@@ -331,31 +331,31 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     exploreCategory: 'مشاهده لیست پروژه‌ها',
     clickToEnter: 'کلیک برای ورود به پروژه‌ها',
 
-    zones: {
+        zones: {
       'urban-design': {
-        label: 'طراحی شهری، بنادر و زیرساخت کلان',
+        label: 'طراحی شهری، برنامه‌ریزی کلان و لنداسکیپ',
         badge: 'زون ۰۱',
-        desc: 'طراحی کلان سایت‌پلان‌های شهری، توسعه ساحلی، پل‌های ارتباطی و شبکه‌بندی پیاده‌محور.'
+        desc: 'برنامه‌ریزی شهری با تراکم بالا، مورفولوژی روددره زرگنده، شهرک ویلایی دیاموند، معماری منظر و تقاطع‌های شریانی.'
       },
       'residential-luxury': {
-        label: 'پروژه‌های مسکونی لوکس و ویلاها',
+        label: 'ویلاهای لوکس و اقامتگاه‌های صخره‌ای',
         badge: 'زون ۰۲',
-        desc: 'طراحی داخلی و معماری ویلاها، آپارتمان‌های مینیمال و پنت‌هاوس‌های لوکس در بارسلون و ایران.'
+        desc: 'ویلای وایولت، ویلای مدرن بر بستر توپوگرافی، شله‌های کوهستانی دالخانی، ویلاهای ارگانیک و تهراندشت.'
       },
       'commercial-complexes': {
-        label: 'مجتمع‌های تجاری، اداری و برج‌ها',
+        label: 'مجتمع‌های تجاری، اداری و برج‌های مسکونی',
         badge: 'زون ۰۳',
-        desc: 'هدایت و طراحی مجتمع‌های تجاری مقیاس بزرگ تا ۵۲,۰۰۰ متر مربع و برج‌های فناوری.'
+        desc: 'مجتمع اسکلت فلزی شرق تهران، دپارتمنت‌استور اربیل، آپارتمان‌های دروس و تراس‌های پلکانی دالخانی.'
       },
       'retail-stores': {
-        label: 'فروشگاه‌های کانسپت و شوروم‌ها',
+        label: 'معماری داخلی، درودگری لوکس و هاسپیتالیتی',
         badge: 'زون ۰۴',
-        desc: 'معماری و طراحی داخلی فروشگاه‌های تخصصی مانند اپل استور با قفسه‌بندی چوبی دست‌ساز.'
+        desc: 'طراحی آشپزخانه‌های سفارشی، سالن‌های نشیمن و وال‌کلازت، سوئیت‌های مستر و معماری رستوران‌ها و کافه‌ها.'
       },
       'institutional-competitions': {
-        label: 'مسابقات معماری و پروژه‌های عمومی',
+        label: 'کاخ‌های کلاسیک، گونه‌شناسی‌ها و اسکیس‌ها',
         badge: 'زون ۰۵',
-        desc: 'طرح‌های برگزیده در مسابقات ملی معماری، ساختمان نظام مهندسی، المان فانوس دریایی و سردر سپاد.'
+        desc: 'عمارت‌های مسکونی کلاسیک باشکوه، گونه‌شناسی تطبیقی ریزورت‌ها و کلبه‌ها، و کروکی‌های مفهومی دست‌آزاد.'
       }
     },
 
@@ -474,31 +474,31 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     exploreCategory: 'Ver proyectos',
     clickToEnter: 'Clic para entrar',
 
-    zones: {
+        zones: {
       'urban-design': {
-        label: 'Diseño Urbano, Puertos e Infraestructura',
+        label: 'Diseño Urbano, Planificación y Paisajismo',
         badge: 'ZONA 01',
-        desc: 'Planificación urbana a gran escala, frentes marítimos, canales y puentes peatonales.'
+        desc: 'Planificación urbana de alta densidad, morfología de Zargandeh, plan maestro Diamond e infraestructuras viales.'
       },
       'residential-luxury': {
-        label: 'Residencial de Lujo y Villas',
+        label: 'Villas de Lujo y Residencias de Montaña',
         badge: 'ZONA 02',
-        desc: 'Arquitectura de viviendas exclusivas, áticos de diseño y villas en Barcelona e internacionalmente.'
+        desc: 'Villa Violet, hormigón visto en ladera, chalets de montaña Dalkhani, arquitectura orgánica y fincas de recreo.'
       },
       'commercial-complexes': {
         label: 'Complejos Comerciales, Oficinas y Torres',
         badge: 'ZONA 03',
-        desc: 'Megaproyectos comerciales de hasta 52.000 m², torres corporativas y modelado BIM avanzado.'
+        desc: 'Complejo comercial Teherán Este, grandes almacenes Erbil, ingeniería de fachadas Darrous y terrazas Dalkhani.'
       },
       'retail-stores': {
-        label: 'Tiendas Concept y Espacios Comerciales',
+        label: 'Arquitectura Interior, Ebanistería y Hostelería',
         badge: 'ZONA 04',
-        desc: 'Showrooms de tecnología digital, diseño interior para Apple Store y retail contemporáneo.'
+        desc: 'Cocinas de alta gama, salones de diseño, vestidores y suites principales, restaurantes y espacios gastronómicos.'
       },
       'institutional-competitions': {
-        label: 'Concursos de Arquitectura y Edificios Públicos',
+        label: 'Palacios Clásicos, Tipologías y Bocetos',
         badge: 'ZONA 05',
-        desc: 'Proyectos galardonados en concursos nacionales, faros emblemáticos y sedes institucionales.'
+        desc: 'Palacios monumentales de corte clásico, investigación tipológica de cabañas y bocetos conceptuales a mano alzada.'
       }
     },
 
@@ -617,31 +617,31 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     exploreCategory: 'Explore projects',
     clickToEnter: 'Click to open projects',
 
-    zones: {
+        zones: {
       'urban-design': {
-        label: 'Urban Design, Ports & Infrastructure',
+        label: 'Urban Design, Masterplanning & Landscape',
         badge: 'ZONE 01',
-        desc: 'Large-scale urban masterplans, coastal waterfront developments, and pedestrian bridge networks.'
+        desc: 'High-density urban planning, Zargandeh river corridor morphology, Diamond town masterplan, and highway infrastructure.'
       },
       'residential-luxury': {
-        label: 'Luxury Residential & Alpine Penthouses',
+        label: 'Luxury Villas & Mountain Residences',
         badge: 'ZONE 02',
-        desc: 'High-end villas, minimal apartments, and alpine penthouses across Barcelona, Tehran, and international sites.'
+        desc: 'Violet Residence, stepped topography villa, Dalkhani mountain chalets, organic clay villa, and Australian curved villa.'
       },
       'commercial-complexes': {
-        label: 'Commercial Complexes & Office Towers',
+        label: 'Commercial Complexes, Retail & High-Rise',
         badge: 'ZONE 03',
-        desc: '52,000 m² commercial mega-complexes, modern office headquarters, and 7-story BIM towers.'
+        desc: 'East Tehran steel complex, Erbil vaulted department store, Darrous engineered facade, and Dalkhani slope terraces.'
       },
       'retail-stores': {
-        label: 'Concept Stores & Tech Showrooms',
+        label: 'Interior Architecture, Millwork & Hospitality',
         badge: 'ZONE 04',
-        desc: 'Digital retail architecture, bespoke timber joinery, and Apple Store concept spaces.'
+        desc: 'Bespoke luxury kitchens, designer living lounges, master suite dressing rooms, and restaurant architecture.'
       },
       'institutional-competitions': {
-        label: 'Architecture Competitions & Landmarks',
+        label: 'Classical Estates, Typologies & Concept Sketches',
         badge: 'ZONE 05',
-        desc: 'Award-winning competition designs, institutional headquarters, and maritime landmarks.'
+        desc: 'Classical monumental palace residences, comparative resort & cabin typologies, and hand-drawn conceptual ideation.'
       }
     },
 
@@ -760,31 +760,31 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     exploreCategory: 'Explorer les projets',
     clickToEnter: 'Cliquer pour entrer',
 
-    zones: {
+        zones: {
       'urban-design': {
-        label: 'Design Urbain, Ports & Infrastructure',
+        label: 'Design Urbain, Planification & Paysage',
         badge: 'ZONE 01',
-        desc: 'Masterplans urbains à grande échelle, développement côtier et réseaux piétons durables.'
+        desc: 'Urbanisme haute densité, morphologie fluviale de Zargandeh, plan directeur Diamond et infrastructures d\'art.'
       },
       'residential-luxury': {
-        label: 'Résidentiel de Luxe & Villas',
+        label: 'Villas de Luxe & Résidences de Montagne',
         badge: 'ZONE 02',
-        desc: 'Architecture résidentielle haut de gamme, penthouses minimalistes et villas exclusives.'
+        desc: 'Villa Violet, villa en déclivité sur roc, chalets d\'altitude Dalkhani, habitat organique et villas contemporaines.'
       },
       'commercial-complexes': {
-        label: 'Complexes Commerciaux & Tours',
+        label: 'Complexes Commerciaux, Bureaux & Tours',
         badge: 'ZONE 03',
-        desc: 'Méga-complexes commerciaux jusqu’à 52 000 m², sièges d’entreprises et gestion BIM poussée.'
+        desc: 'Centre d\'affaires Téhéran Est, grand magasin voûté d\'Erbil, façades techniques Darrous et terrasses Dalkhani.'
       },
       'retail-stores': {
-        label: 'Boutiques Concept & Showrooms',
+        label: 'Architecture Intérieure, Ébénisterie & Hôtellerie',
         badge: 'ZONE 04',
-        desc: 'Espaces de vente technologiques, menuiserie sur mesure et concepts type Apple Store.'
+        desc: 'Cuisines d\'exception, salons de réception, dressings et suites parentales, restaurants et lieux de vie.'
       },
       'institutional-competitions': {
-        label: 'Concours d’Architecture & Édifices Publics',
+        label: 'Palais Classiques, Typologies & Croquis',
         badge: 'ZONE 05',
-        desc: 'Projets lauréats de concours nationaux, phares emblématiques et sièges institutionnels.'
+        desc: 'Demeures classiques monumentales, typologies comparées de refuges et croquis de conception à main levée.'
       }
     },
 
@@ -903,31 +903,31 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     exploreCategory: 'Projekte ansehen',
     clickToEnter: 'Klicken zum Öffnen',
 
-    zones: {
+        zones: {
       'urban-design': {
-        label: 'Städtebau, Häfen & Infrastruktur',
+        label: 'Stadtplanung, Masterplanung & Landschaft',
         badge: 'ZONE 01',
-        desc: 'Großflächige Masterpläne, Uferpromenaden, nachhaltige Stadtbrücken und Fußgängerzonen.'
+        desc: 'Hochdichte Stadtplanung, Zargandeh-Flussraummorphologie, Diamond-Masterplan und Verkehrsinfrastruktur.'
       },
       'residential-luxury': {
-        label: 'Luxuswohnungsbau & Villen',
+        label: 'Luxusvillen & alpine Hangresidenzen',
         badge: 'ZONE 02',
-        desc: 'High-End-Villen, minimalistische Wohnungen und alpine Penthäuser in Barcelona und international.'
+        desc: 'Villa Violet, Hangvilla auf Felsgrund, Dalkhani Bergchalets, organische Lehmarchitektur und moderne Villen.'
       },
       'commercial-complexes': {
-        label: 'Gewerbekomplexe & Bürotürme',
+        label: 'Gewerbekomplexe, Büros & Hochhäuser',
         badge: 'ZONE 03',
-        desc: 'Großprojekte mit bis zu 52.000 m², moderne Bürogebäude und BIM-gestützte Hochhaustürme.'
+        desc: 'Stahl-Gewerbezentrum Ost-Teheran, Kaufhaus Erbil mit Gewölben, Darrous Fassaden und Terrassenwohnungen.'
       },
       'retail-stores': {
-        label: 'Konzept-Stores & Tech-Showrooms',
+        label: 'Innenarchitektur, Tischlerhandwerk & Gastronomie',
         badge: 'ZONE 04',
-        desc: 'Digitale Markenräume, handgefertigte Holzmöblierung und Apple Store-Konzepte.'
+        desc: 'Bespoke Luxusküchen, Wohnsalons, begehbare Master-Kleiderschränke und anspruchsvolle Gastronomiegestaltung.'
       },
       'institutional-competitions': {
-        label: 'Architekturwettbewerbe & Öffentliche Bauten',
+        label: 'Klassische Paläste, Typologien & Skizzen',
         badge: 'ZONE 05',
-        desc: 'Ausgezeichnete Wettbewerbsentwürfe, Landmark-Leuchttürme und offizielle Verbandsgebäude.'
+        desc: 'Monumentale Residenzschlösser, vergleichende Hüttentypologien und freie konzeptionelle Handzeichnungen.'
       }
     },
 
@@ -1046,31 +1046,31 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     exploreCategory: 'Esplora progetti',
     clickToEnter: 'Clicca per entrare',
 
-    zones: {
+        zones: {
       'urban-design': {
-        label: 'Progettazione Urbana, Porti e Infrastrutture',
+        label: 'Progettazione Urbana, Masterplan & Paesaggio',
         badge: 'ZONA 01',
-        desc: 'Masterplan urbani su larga scala, sviluppo costiero e passerelle pedonali sostenibili.'
+        desc: 'Pianificazione urbana ad alta densità, morfologia fluviale Zargandeh, masterplan Diamond e infrastrutture viarie.'
       },
       'residential-luxury': {
-        label: 'Residenziale di Lusso e Ville',
+        label: 'Ville di Lusso & Residenze di Montagna',
         badge: 'ZONA 02',
-        desc: 'Architettura abitativa d’élite, attici alpini e ville di design a Barcellona e all’estero.'
+        desc: 'Villa Violet, villa terrazzata su pendio, chalet montani Dalkhani, architettura organica e ville contemporanee.'
       },
       'commercial-complexes': {
-        label: 'Complessi Commerciali, Uffici e Torri',
+        label: 'Complessi Commerciali, Uffici & Torri',
         badge: 'ZONA 03',
-        desc: 'Mega-complessi commerciali fino a 52.000 m², torri per uffici e coordinamento BIM avanzato.'
+        desc: 'Polo commerciale Teheran Est, department store Erbil, facciate ingegnerizzate Darrous e terrazzamenti Dalkhani.'
       },
       'retail-stores': {
-        label: 'Concept Store e Showroom',
+        label: 'Architettura d\'Interni, Falegnameria & Hospitality',
         badge: 'ZONA 04',
-        desc: 'Spazi commerciali digitali contemporanei, arredi in legno su misura e concept Apple Store.'
+        desc: 'Cucine su misura d\'alta gamma, salotti di rappresentanza, cabine armadio e design per la ristorazione.'
       },
       'institutional-competitions': {
-        label: 'Concorsi di Architettura ed Edifici Pubblici',
+        label: 'Palazzi Classici, Tipologie & Schizzi',
         badge: 'ZONA 05',
-        desc: 'Progetti premiati in concorsi nazionali, fari monumentali e sedi istituzionali.'
+        desc: 'Palazzi monumentali classici, ricerca tipologica comparata su capanne ed ecolodge, e schizzi a mano libera.'
       }
     },
 
