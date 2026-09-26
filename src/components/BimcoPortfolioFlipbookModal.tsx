@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { PageFlip } from 'page-flip';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
   ChevronLeft, 
@@ -13,9 +13,11 @@ import {
   Home, 
   Building2, 
   Landmark, 
-  CheckCircle2,
-  Share2,
-  Check
+  Share2, 
+  Check,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw
 } from 'lucide-react';
 import { sound } from '../utils/audio';
 
@@ -137,93 +139,76 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
   onClose,
   initialVolume = 'villas',
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const flipBookInstance = useRef<PageFlip | null>(null);
-  
   const [activeVolume, setActiveVolume] = useState<PortfolioVolumeKey>(initialVolume);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [direction, setDirection] = useState<number>(1); // +1: next, -1: prev
   const [isAudioEnabled, setIsAudioEnabled] = useState<boolean>(true);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
-  const [isBookReady, setIsBookReady] = useState<boolean>(false);
+  const [isZoomed, setIsZoomed] = useState<boolean>(false);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
 
   const currentConfig = PORTFOLIO_VOLUMES[activeVolume];
 
-  // Initialize PageFlip on open or volume change
+  // List of all page image URLs for the active volume
+  const pageImages = useMemo(() => {
+    return Array.from({ length: currentConfig.totalPages }, (_, i) => 
+      `${currentConfig.pagesFolder}/page_${String(i + 1).padStart(2, '0')}.jpg`
+    );
+  }, [currentConfig]);
+
+  // Preload current, previous, and next images for zero-latency instant display
   useEffect(() => {
     if (!isOpen) return;
 
-    setIsBookReady(false);
-    setCurrentPage(0);
-    
-    let localPageFlip: PageFlip | null = null;
-    let fallbackTimer: any = null;
+    const indicesToPreload = [
+      currentPage,
+      Math.min(currentConfig.totalPages - 1, currentPage + 1),
+      Math.min(currentConfig.totalPages - 1, currentPage + 2),
+      Math.max(0, currentPage - 1)
+    ];
 
-    const timer = setTimeout(() => {
-      if (!containerRef.current) return;
-
-      // 16:9 full architectural landscape sheet ratio
-      const baseW = 1280;
-      const baseH = 720;
-
-      const pageImages = Array.from({ length: currentConfig.totalPages }, (_, i) => 
-        `${currentConfig.pagesFolder}/page_${String(i + 1).padStart(2, '0')}.jpg`
-      );
-
-      localPageFlip = new PageFlip(containerRef.current, {
-        width: baseW,
-        height: baseH,
-        size: 'stretch',
-        minWidth: 3200, // Forces single-page view so 16:9 sheets are complete and never halved
-        maxWidth: 2560,
-        minHeight: 1800,
-        maxHeight: 1440,
-        maxShadowOpacity: 0.6,
-        showCover: false,
-        mobileScrollSupport: false,
-        usePortrait: true,
-        startPage: 0,
-        drawShadow: true,
-        flippingTime: 650,
-        useMouseEvents: true,
-        showPageCorners: true,
-        swipeDistance: 25,
-      });
-
-      localPageFlip.loadFromImages(pageImages);
-
-      localPageFlip.on('flip', (e: any) => {
-        const pageIndex = Number(e.data);
-        setCurrentPage(pageIndex);
-        if (isAudioEnabled) {
-          sound.playPageFlip();
-        }
-      });
-
-      localPageFlip.on('init', () => {
-        setIsBookReady(true);
-      });
-
-      fallbackTimer = setTimeout(() => {
-        setIsBookReady(true);
-      }, 450);
-
-      flipBookInstance.current = localPageFlip;
-    }, 50);
-
-    return () => {
-      clearTimeout(timer);
-      if (fallbackTimer) clearTimeout(fallbackTimer);
-      if (localPageFlip) {
-        try {
-          localPageFlip.destroy();
-        } catch (e) {
-          // ignore cleanup errors
-        }
+    indicesToPreload.forEach(idx => {
+      if (pageImages[idx]) {
+        const img = new Image();
+        img.src = pageImages[idx];
       }
-      flipBookInstance.current = null;
-    };
-  }, [isOpen, activeVolume, isAudioEnabled]);
+    });
+  }, [isOpen, currentPage, pageImages, currentConfig.totalPages]);
+
+  // Reset page when switching volume or reopening
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentPage(0);
+      setIsZoomed(false);
+    }
+  }, [isOpen, activeVolume]);
+
+  const handleNext = useCallback(() => {
+    if (currentPage >= currentConfig.totalPages - 1) return;
+    setDirection(1);
+    setCurrentPage(prev => prev + 1);
+    if (isAudioEnabled) sound.playPageFlip();
+  }, [currentPage, currentConfig.totalPages, isAudioEnabled]);
+
+  const handlePrev = useCallback(() => {
+    if (currentPage <= 0) return;
+    setDirection(-1);
+    setCurrentPage(prev => prev - 1);
+    if (isAudioEnabled) sound.playPageFlip();
+  }, [currentPage, isAudioEnabled]);
+
+  const handleJumpToPage = (pageNum: number) => {
+    if (pageNum === currentPage) return;
+    setDirection(pageNum > currentPage ? 1 : -1);
+    setCurrentPage(pageNum);
+    if (isAudioEnabled) sound.playPageFlip();
+  };
+
+  const handleSwitchVolume = (volKey: PortfolioVolumeKey) => {
+    if (volKey === activeVolume) return;
+    sound.playClick();
+    setActiveVolume(volKey);
+  };
 
   // Keyboard navigation
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -231,24 +216,20 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
     if (e.key === 'Escape') {
       onClose();
     } else if (e.key === 'ArrowRight' || e.key === 'PageDown') {
-      flipBookInstance.current?.flipNext();
+      handleNext();
     } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-      flipBookInstance.current?.flipPrev();
+      handlePrev();
+    } else if (e.key === 'Home') {
+      handleJumpToPage(0);
+    } else if (e.key === 'End') {
+      handleJumpToPage(currentConfig.totalPages - 1);
     }
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, handleNext, handlePrev, currentConfig.totalPages]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
-
-  const handlePrev = () => {
-    flipBookInstance.current?.flipPrev();
-  };
-
-  const handleNext = () => {
-    flipBookInstance.current?.flipNext();
-  };
 
   // Touch Swipe gestures for iPhone, Android, and Tablets
   const touchStartX = useRef<number | null>(null);
@@ -282,19 +263,6 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
     touchStartY.current = null;
   };
 
-  const handleJumpToPage = (pageNum: number) => {
-    if (flipBookInstance.current) {
-      flipBookInstance.current.flip(pageNum);
-      if (isAudioEnabled) sound.playPageFlip();
-    }
-  };
-
-  const handleSwitchVolume = (volKey: PortfolioVolumeKey) => {
-    if (volKey === activeVolume) return;
-    sound.playClick();
-    setActiveVolume(volKey);
-  };
-
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().catch(() => {});
@@ -317,13 +285,16 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-slate-950/98 backdrop-blur-2xl text-white select-none overflow-hidden animate-fadeIn">
+    <div 
+      className="fixed inset-0 z-[100] flex flex-col bg-[#0b0f17] text-white select-none overflow-hidden"
+      dir="rtl"
+    >
       {/* 1. TOP HEADER & BRANDING BAR */}
-      <header className="px-3 sm:px-6 py-2.5 bg-slate-900/95 border-b border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-2 shrink-0 z-20 shadow-lg">
-        {/* Left: BIMCO Barcelona Identity */}
+      <header className="px-3 sm:px-6 py-2.5 bg-[#0f172a]/95 border-b border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-2 shrink-0 z-20 shadow-lg">
+        {/* Left: BIMCO Identity */}
         <div className="flex items-center justify-between md:justify-start gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-600/30 to-emerald-900/40 p-1 border border-amber-500/30 flex items-center justify-center shadow-lg shadow-amber-950/30">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-600/30 to-slate-900 p-1 border border-amber-500/30 flex items-center justify-center shadow-lg shadow-amber-950/30">
               <img src="/logo.png" alt="BIMCO Logo" className="w-8 h-8 object-contain drop-shadow" />
             </div>
             <div>
@@ -337,7 +308,7 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 font-medium">
-                دفترچه تعاملی پورتفولیو و مونوگراف معماری | سهیل ماستی و سیاوش پازوکی
+                دفترچه تعاملی مونوگراف معماری | سهیل ماستی و سیاوش پازوکی
               </p>
             </div>
           </div>
@@ -345,7 +316,8 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           {/* Close button for mobile inside header */}
           <button
             onClick={onClose}
-            className="md:hidden w-8 h-8 rounded-lg bg-red-500/20 hover:bg-red-500/40 border border-red-500/30 flex items-center justify-center text-red-300 transition-colors"
+            className="md:hidden w-8 h-8 rounded-lg bg-red-500/20 hover:bg-red-500/40 border border-red-500/30 flex items-center justify-center text-red-300 transition-colors cursor-pointer"
+            title="بستن"
           >
             <X className="w-4 h-4" />
           </button>
@@ -393,6 +365,15 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
             </span>
           </a>
 
+          {/* Zoom Toggle */}
+          <button
+            onClick={() => setIsZoomed(!isZoomed)}
+            className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer"
+            title={isZoomed ? 'بزرگنمایی عادی' : 'بزرگنمایی شیت'}
+          >
+            {isZoomed ? <ZoomOut className="w-3.5 h-3.5 text-amber-400" /> : <ZoomIn className="w-3.5 h-3.5" />}
+          </button>
+
           {/* Share Link */}
           <button
             onClick={handleCopyShareLink}
@@ -432,7 +413,7 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
       </header>
 
       {/* Volume Info Strip (Sub-header) */}
-      <div className="px-4 py-1.5 bg-slate-900/60 border-b border-white/5 flex items-center justify-between text-xs text-slate-300 font-mono">
+      <div className="px-4 py-1.5 bg-[#0f172a]/70 border-b border-white/5 flex items-center justify-between text-xs text-slate-300 font-mono">
         <div className="flex items-center gap-2">
           <BookOpen className="w-3.5 h-3.5 text-amber-400" />
           <span className="font-bold text-amber-300">{currentConfig.numberText}:</span>
@@ -445,8 +426,16 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           <span className="text-slate-300">
             صفحه <span className="text-amber-400 font-bold">{currentPage + 1}</span> از {currentConfig.totalPages}
           </span>
-          {currentPage === 0 && <span className="text-emerald-400 font-bold text-[10px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">روی جلد</span>}
-          {currentPage === currentConfig.totalPages - 1 && <span className="text-amber-400 font-bold text-[10px] bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">پشت جلد</span>}
+          {currentPage === 0 && (
+            <span className="text-emerald-400 font-bold text-[10px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
+              روی جلد
+            </span>
+          )}
+          {currentPage === currentConfig.totalPages - 1 && (
+            <span className="text-amber-400 font-bold text-[10px] bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">
+              پشت جلد
+            </span>
+          )}
           
           {/* Mobile Download Button */}
           <a
@@ -460,56 +449,103 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
         </div>
       </div>
 
-      {/* 2. MAIN 3D FLIPBOOK STAGE */}
+      {/* 2. MAIN SINGLE FULL-SHEET 3D FOLIO STAGE (Centered 16:9 Architecture Display) */}
       <main 
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         className="flex-1 relative flex items-center justify-center p-2 sm:p-4 overflow-hidden touch-pan-y"
+        style={{ perspective: '1600px' }}
       >
-        {/* Navigation Chevron Left */}
+        {/* Navigation Chevron Left (Previous Page in LTR / Next in RTL) */}
         <button
           onClick={handlePrev}
           disabled={currentPage <= 0}
-          className={`absolute left-2 sm:left-6 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-xl ${
+          className={`absolute left-2 sm:left-6 z-30 w-10 h-10 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-2xl ${
             currentPage <= 0 
-              ? 'bg-white/5 text-slate-600 opacity-20 cursor-not-allowed' 
-              : 'bg-slate-900/80 hover:bg-amber-600 text-white border border-white/15 hover:scale-105 hover:border-amber-400'
+              ? 'bg-white/5 text-slate-700 opacity-20 cursor-not-allowed pointer-events-none' 
+              : 'bg-slate-900/90 hover:bg-amber-600 text-white border border-white/20 hover:scale-110 hover:border-amber-400 active:scale-95'
           }`}
-          title="صفحه قبل (کلید چپ یا فلش بالا)"
+          title="صفحه قبل (کلید چپ کیبورد)"
         >
-          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+          <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
         </button>
 
-        {/* 3D FlipBook Target Canvas Container */}
-        <div className="relative w-full h-full flex items-center justify-center">
-          <div 
-            key={activeVolume}
-            ref={containerRef} 
-            className="shadow-2xl transition-opacity duration-300 drop-shadow-[0_25px_60px_rgba(0,0,0,0.85)]"
-          />
+        {/* Widescreen 16:9 Architectural Folio Board */}
+        <div 
+          className={`relative flex items-center justify-center w-full h-full max-w-full transition-transform duration-300 ${
+            isZoomed ? 'scale-115' : 'scale-100'
+          }`}
+        >
+          <div className="relative w-full max-w-[1720px] max-h-[calc(100vh-140px)] aspect-[16/9] flex items-center justify-center">
+            <AnimatePresence initial={false} custom={direction} mode="wait">
+              <motion.div
+                key={`${activeVolume}-${currentPage}`}
+                custom={direction}
+                initial={{ 
+                  opacity: 0, 
+                  rotateY: direction > 0 ? 10 : -10,
+                  x: direction > 0 ? 30 : -30,
+                  scale: 0.98
+                }}
+                animate={{ 
+                  opacity: 1, 
+                  rotateY: 0,
+                  x: 0,
+                  scale: 1,
+                  transition: {
+                    duration: 0.35,
+                    ease: [0.16, 1, 0.3, 1]
+                  }
+                }}
+                exit={{ 
+                  opacity: 0, 
+                  rotateY: direction > 0 ? -10 : 10,
+                  x: direction > 0 ? -30 : 30,
+                  scale: 0.98,
+                  transition: {
+                    duration: 0.25,
+                    ease: [0.4, 0, 1, 1]
+                  }
+                }}
+                className="w-full h-full rounded-xl sm:rounded-2xl overflow-hidden bg-[#0c1017] border border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.9)] flex items-center justify-center select-none"
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                <img
+                  src={pageImages[currentPage]}
+                  alt={`${currentConfig.titleFa} - صفحه ${currentPage + 1}`}
+                  className="w-full h-full object-contain pointer-events-none select-none max-w-full max-h-full"
+                  loading="eager"
+                  decoding="async"
+                />
+
+                {/* Subtle paper depth edge highlight */}
+                <div className="absolute inset-0 pointer-events-none rounded-xl sm:rounded-2xl ring-1 ring-inset ring-white/10 shadow-[inset_0_0_40px_rgba(0,0,0,0.4)]" />
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
 
-        {/* Navigation Chevron Right */}
+        {/* Navigation Chevron Right (Next Page in LTR / Prev in RTL) */}
         <button
           onClick={handleNext}
           disabled={currentPage >= currentConfig.totalPages - 1}
-          className={`absolute right-2 sm:right-6 z-30 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-xl ${
+          className={`absolute right-2 sm:right-6 z-30 w-10 h-10 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-2xl ${
             currentPage >= currentConfig.totalPages - 1 
-              ? 'bg-white/5 text-slate-600 opacity-20 cursor-not-allowed' 
-              : 'bg-slate-900/80 hover:bg-amber-600 text-white border border-white/15 hover:scale-105 hover:border-amber-400'
+              ? 'bg-white/5 text-slate-700 opacity-20 cursor-not-allowed pointer-events-none' 
+              : 'bg-slate-900/90 hover:bg-amber-600 text-white border border-white/20 hover:scale-110 hover:border-amber-400 active:scale-95'
           }`}
-          title="صفحه بعد (کلید راست یا فلش پایین)"
+          title="صفحه بعد (کلید راست کیبورد)"
         >
-          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+          <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
         </button>
       </main>
 
-      {/* 3. BOTTOM CATEGORY SHORTCUTS & VERIFICATION BAR */}
-      <footer className="px-3 sm:px-6 py-2 bg-slate-900/95 border-t border-white/10 flex flex-col justify-center shrink-0 z-20">
+      {/* 3. BOTTOM SCRUBBER & CATEGORY SHORTCUTS BAR */}
+      <footer className="px-3 sm:px-6 py-2 bg-[#0f172a]/95 border-t border-white/10 flex flex-col justify-center shrink-0 z-20 gap-1.5">
         {/* Quick jump tags for active volume */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none justify-start sm:justify-center">
           {currentConfig.shortcuts.map((sec, idx) => {
-            const isSelected = currentPage === sec.page || (currentPage === sec.page + 1 && sec.page > 0);
+            const isSelected = currentPage === sec.page;
             return (
               <button
                 key={idx}
@@ -526,12 +562,12 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           })}
         </div>
 
-        {/* Interactive instruction / Studio watermark */}
-        <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono pt-1">
+        {/* Interactive scrubber & Studio watermark */}
+        <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono pt-0.5">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="hidden sm:inline">نکته: می‌توانید گوشه برگه‌ها را با ماوس یا انگشت بکشید و ورق بزنید</span>
-            <span className="sm:hidden">ورق زدن: کشیدن گوشه برگه‌ها یا لمس کلیدها</span>
+            <span className="hidden sm:inline">مشاهده تک‌شیت کامل ۱۶:۹ بدون برش • امکان کشیدن صفحه با لمس در موبایل و تبلت</span>
+            <span className="sm:hidden">ورق زدن: کشیدن صفحه با انگشت یا کلیدها</span>
           </div>
           <div className="flex items-center gap-4 text-slate-400">
             <span className="hidden md:inline">بارسلونا، اسپانیا • استودیو بیمکو</span>
