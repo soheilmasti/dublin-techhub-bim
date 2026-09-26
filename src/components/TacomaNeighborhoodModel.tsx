@@ -134,6 +134,23 @@ const isContextElement = (name: string): boolean => {
   );
 };
 
+// Detect architectural window frames, mullions, louvers, and shadow reveals (creates 3D relief!)
+const isDarkTrimElement = (name: string): boolean => {
+  const n = name.toLowerCase();
+  return (
+    n.includes('color_007') ||
+    n.includes('color_008') ||
+    n.includes('color_009') ||
+    n.includes('_charcoal_') ||
+    n.includes('m_0135_darkgray') ||
+    n.includes('_black_') ||
+    n.includes('steel_2') ||
+    n.includes('fencing') ||
+    n.includes('color_006')
+  );
+};
+
+// Detect all windows, storefronts, and glazed facade openings across the neighborhood
 const isGlazingElement = (name: string, mat?: THREE.Material | THREE.Material[]): boolean => {
   const n = name.toLowerCase();
   const rawMats = Array.isArray(mat) ? mat : mat ? [mat] : [];
@@ -147,6 +164,13 @@ const isGlazingElement = (name: string, mat?: THREE.Material | THREE.Material[])
     n.includes('glaze') ||
     n.includes('trans') ||
     n.includes('resin') ||
+    // Include all SketchUp window meshes colored in yellow/amber:
+    n.includes('color_d02') ||
+    n.includes('color_d01') ||
+    n.includes('color_d04') ||
+    n.includes('color_d05') ||
+    n.includes('color_e05') ||
+    /\byel\b/.test(n) ||
     matNames.includes('glass') ||
     matNames.includes('window') ||
     matNames.includes('curtain') ||
@@ -158,7 +182,7 @@ const isGlazingElement = (name: string, mat?: THREE.Material | THREE.Material[])
 };
 
 const isRoofElement = (name: string, mesh: THREE.Mesh): boolean => {
-  if (isBaseElement(name) || isContextElement(name)) return false;
+  if (isBaseElement(name) || isContextElement(name) || isGlazingElement(name) || isDarkTrimElement(name)) return false;
 
   const n = name.toLowerCase();
   if (
@@ -193,38 +217,58 @@ const isRoofElement = (name: string, mesh: THREE.Mesh): boolean => {
   return false;
 };
 
-// Precision Floating Roof Slab for Signature Building Complexes (Anti-Gravity Diagram)
+// Precision Floating Roof Slab with Raised Perimeter Lip (Matching reference photo)
 const FloatingZoneRoof: React.FC<{
   zone: typeof BUILDING_ZONES[0];
   isSelected: boolean;
   isHovered: boolean;
   isNight: boolean;
 }> = ({ zone, isSelected, isHovered, isNight }) => {
-  const slabWidth = zone.size[0] * 1.05;
-  const slabDepth = zone.size[2] * 1.05;
-  const slabThickness = 0.12;
-  const floatY = zone.roof[1] + 0.42;
+  const width = zone.size[0] * 1.06;
+  const depth = zone.size[2] * 1.06;
+  const slabThick = 0.10;
+  const rimHeight = 0.08;
+  const rimThick = 0.08;
+  const floatY = zone.roof[1] + 0.46;
 
   return (
     <group position={[zone.roof[0], floatY, zone.roof[2]]}>
       {/* 1. Main Floating Laser-Cut Roof Slab */}
       <mesh castShadow receiveShadow>
-        <boxGeometry args={[slabWidth, slabThickness, slabDepth]} />
+        <boxGeometry args={[width, slabThick, depth]} />
         <meshStandardMaterial
-          color={isSelected ? '#ffffff' : '#f4f4f3'}
-          roughness={0.28}
-          metalness={0.04}
+          color={isSelected ? '#ffffff' : '#f8f8f6'}
+          roughness={0.30}
+          metalness={0.02}
           emissive={isSelected ? zone.color : isNight ? '#fbbf24' : '#000000'}
-          emissiveIntensity={isSelected ? 0.4 : isNight ? 0.08 : 0}
+          emissiveIntensity={isSelected ? 0.35 : isNight ? 0.08 : 0}
         />
       </mesh>
 
-      {/* 2. Sleek Architectural Under-Soffit Reveal / Trim */}
-      <mesh position={[0, -slabThickness * 0.55, 0]}>
-        <boxGeometry args={[slabWidth * 0.96, 0.03, slabDepth * 0.96]} />
+      {/* 2. Raised Perimeter Rim / Parapet Lip (as in reference physical maquette) */}
+      <mesh position={[0, (slabThick + rimHeight) * 0.5, depth * 0.5 - rimThick * 0.5]} castShadow>
+        <boxGeometry args={[width, rimHeight, rimThick]} />
+        <meshStandardMaterial color="#f8f8f6" roughness={0.30} metalness={0.02} />
+      </mesh>
+      <mesh position={[0, (slabThick + rimHeight) * 0.5, -depth * 0.5 + rimThick * 0.5]} castShadow>
+        <boxGeometry args={[width, rimHeight, rimThick]} />
+        <meshStandardMaterial color="#f8f8f6" roughness={0.30} metalness={0.02} />
+      </mesh>
+      <mesh position={[width * 0.5 - rimThick * 0.5, (slabThick + rimHeight) * 0.5, 0]} castShadow>
+        <boxGeometry args={[rimThick, rimHeight, depth - rimThick * 2]} />
+        <meshStandardMaterial color="#f8f8f6" roughness={0.30} metalness={0.02} />
+      </mesh>
+      <mesh position={[-width * 0.5 + rimThick * 0.5, (slabThick + rimHeight) * 0.5, 0]} castShadow>
+        <boxGeometry args={[rimThick, rimHeight, depth - rimThick * 2]} />
+        <meshStandardMaterial color="#f8f8f6" roughness={0.30} metalness={0.02} />
+      </mesh>
+
+      {/* 3. Sleek Architectural Under-Soffit Reveal / Trim */}
+      <mesh position={[0, -slabThick * 0.55, 0]}>
+        <boxGeometry args={[width * 0.96, 0.025, depth * 0.96]} />
         <meshStandardMaterial
-          color="#1e293b"
-          roughness={0.6}
+          color="#282c34"
+          roughness={0.5}
           metalness={0.1}
         />
       </mesh>
@@ -246,49 +290,52 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
   const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
   const isRTL = currentLanguage === 'fa';
 
-  // Architectural Physical Maquette PBR Materials
-  // 1. Pale Frosted Yellow Plexiglas Glazing (Clearly visible pale yellow with warm interior glow)
-  const glazingMat = useMemo(() => new THREE.MeshPhysicalMaterial({
-    color: new THREE.Color('#FDE68A'), // Clearly distinct architectural pale warm yellow
-    transmission: 0.65, // Calibrated transmission so pale yellow body color remains solid and prominent
-    roughness: 0.25,
-    ior: 1.49,
-    thickness: 1.2,
-    attenuationColor: new THREE.Color('#F59E0B'),
-    attenuationDistance: 0.85,
+  // Architectural Physical Maquette PBR Materials (Matching reference image)
+  // 1. Pale Yellow Frosted Plexiglas Glazing (Milky cream-yellow with warm interior backlight glow)
+  const glazingMat = useMemo(() => new THREE.MeshStandardMaterial({
+    color: new THREE.Color('#FEF08A'), // Pale warm cream-yellow as in reference photo
+    emissive: new THREE.Color('#FDE047'), // Warm golden interior glow
+    emissiveIntensity: 0.58, // Clearly discernible, elegant internal light
+    roughness: 0.35,
+    metalness: 0.05,
     transparent: true,
-    opacity: 0.98,
-    emissive: new THREE.Color('#FBBF24'), // Warm golden-yellow interior glow
-    emissiveIntensity: 0.52, // Distinct, elegant interior light
-    depthWrite: false,
+    opacity: 0.96,
     side: THREE.DoubleSide
   }), []);
 
-  // 2. Laser-Cut White Architectural Model Board (Masses, Walls & Floating Roof Slabs)
+  // 2. Crisp White Laser-Cut Architectural Model Board (Walls, Facades & Main Volumes)
   const opaqueMat = useMemo(() => new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#F4F4F3'),
-    roughness: 0.28,
+    color: new THREE.Color('#F8F8F6'),
+    roughness: 0.30,
+    metalness: 0.02,
+    side: THREE.DoubleSide
+  }), []);
+
+  // 3. Dark Architectural Graphite Relief Trim (Mullions, Window Frames, Louvers, Shadow Reveals)
+  const darkTrimMat = useMemo(() => new THREE.MeshStandardMaterial({
+    color: new THREE.Color('#282C34'), // Dark charcoal-graphite for crisp frame contrast & 3D relief
+    roughness: 0.45,
+    metalness: 0.15,
+    side: THREE.DoubleSide
+  }), []);
+
+  // 4. Matte Dark Charcoal Presentation Plinth (Base / Ground / Pavement)
+  const baseMat = useMemo(() => new THREE.MeshStandardMaterial({
+    color: new THREE.Color('#1A1B1F'),
+    roughness: 0.82,
     metalness: 0.04,
     side: THREE.DoubleSide
   }), []);
 
-  // 3. Frosted Translucent CNC Acrylic (Context / Vegetation / Trees / Figures)
+  // 5. Frosted Translucent CNC Acrylic (Context / Vegetation / Trees / Figures)
   const contextMat = useMemo(() => new THREE.MeshPhysicalMaterial({
     color: new THREE.Color('#FFFFFF'),
-    transmission: 0.78,
-    roughness: 0.35,
-    thickness: 0.8,
+    transmission: 0.82,
+    roughness: 0.30,
+    thickness: 1.0,
     transparent: true,
     opacity: 0.88,
     depthWrite: false,
-    side: THREE.DoubleSide
-  }), []);
-
-  // 4. Dark Charcoal Presentation Plinth (Base / Ground / Pavement)
-  const baseMat = useMemo(() => new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#1A1A1C'),
-    roughness: 0.80,
-    metalness: 0.05,
     side: THREE.DoubleSide
   }), []);
 
@@ -315,19 +362,25 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
         } else if (isGlazingElement(name, child.material)) {
           child.material = glazingMat;
           child.castShadow = false;
-          child.receiveShadow = false;
-          child.renderOrder = 2;
+          child.receiveShadow = true;
+          child.renderOrder = 1;
+        } else if (isDarkTrimElement(name)) {
+          // Architectural Reveals, Frames, Louvers and Mullions -> Sharp 3D relief!
+          child.material = darkTrimMat;
+          child.castShadow = true;
+          child.receiveShadow = true;
+          child.renderOrder = 0;
         } else if (isContextElement(name)) {
           child.material = contextMat;
           child.castShadow = true;
           child.receiveShadow = false;
-          child.renderOrder = 1;
+          child.renderOrder = 2;
         } else if (isRoofElement(name, child)) {
           // Anti-Gravity Floating Roof: Lift vertically along +Y by ~10% to 15% of building height
           if (!child.geometry.boundingBox) child.geometry.computeBoundingBox();
           const bb = child.geometry.boundingBox;
           const bHeight = bb ? (bb.max.y - 1050) : 1000;
-          const liftLocal = Math.max(115, Math.min(220, bHeight * 0.12));
+          const liftLocal = Math.max(125, Math.min(240, bHeight * 0.13));
           child.position.y += liftLocal;
 
           child.material = opaqueMat;
@@ -335,7 +388,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
           child.receiveShadow = true;
           child.renderOrder = 0;
         } else {
-          // Opaque Masses / Walls
+          // Main Laser-cut White Architectural Model Board
           child.material = opaqueMat;
           child.castShadow = true;
           child.receiveShadow = true;
@@ -345,29 +398,26 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     });
 
     return clone;
-  }, [gltf, baseMat, glazingMat, contextMat, opaqueMat]);
+  }, [gltf, baseMat, glazingMat, darkTrimMat, contextMat, opaqueMat]);
 
   // 2. Reactive Lighting Mode Adjustments (Interior Window Illumination & Mood Tones)
   React.useEffect(() => {
     if (lightingMode === 'night') {
       glazingMat.color.set('#FEF08A');
       glazingMat.emissive.set('#FBBF24');
-      glazingMat.emissiveIntensity = 2.4;
-      glazingMat.transmission = 0.55;
+      glazingMat.emissiveIntensity = 2.5;
       opaqueMat.roughness = 0.32;
     } else if (lightingMode === 'sunset') {
       glazingMat.color.set('#FCD34D');
       glazingMat.emissive.set('#F59E0B');
-      glazingMat.emissiveIntensity = 0.85;
-      glazingMat.transmission = 0.60;
+      glazingMat.emissiveIntensity = 0.90;
       opaqueMat.roughness = 0.28;
     } else {
-      // Day Mode: Clearly distinct pale yellow with gentle warm interior glow
-      glazingMat.color.set('#FDE68A');
-      glazingMat.emissive.set('#FBBF24');
-      glazingMat.emissiveIntensity = 0.52;
-      glazingMat.transmission = 0.65;
-      opaqueMat.roughness = 0.28;
+      // Day Mode: Clearly distinct pale warm yellow with gentle interior glow (matching photo)
+      glazingMat.color.set('#FEF08A');
+      glazingMat.emissive.set('#FDE047');
+      glazingMat.emissiveIntensity = 0.58;
+      opaqueMat.roughness = 0.30;
     }
     glazingMat.needsUpdate = true;
     opaqueMat.needsUpdate = true;
@@ -378,10 +428,16 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
       {/* Real SketchUp Neighborhood Site Model with Physical Maquette Pipeline */}
       <primitive object={sceneClone} />
 
-      {/* Dark Charcoal Presentation Plinth Foundation Slab */}
+      {/* Gallery Presentation Plinth Block (matching reference image) */}
+      {/* 1. Top Plinth Surface Plate */}
       <mesh position={[0, 0.02, 3.5]} receiveShadow>
-        <boxGeometry args={[74, 0.25, 74]} />
+        <boxGeometry args={[76, 0.25, 76]} />
         <primitive object={baseMat} attach="material" />
+      </mesh>
+      {/* 2. Deep Plinth Gallery Pedestal Body */}
+      <mesh position={[0, -3.8, 3.5]} receiveShadow>
+        <boxGeometry args={[74, 7.4, 74]} />
+        <meshStandardMaterial color="#141416" roughness={0.88} metalness={0.04} />
       </mesh>
 
       {/* 5 Precision Floating Roof Slabs for Signature Architectural Zones (Anti-Gravity Diagram) */}

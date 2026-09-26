@@ -273,23 +273,24 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
           <SceneExposure mode={lightingMode} />
           <ResponsiveCameraUpdater fov={responsiveFov} />
 
-          {/* Clean Horizon Background */}
-          <color attach="background" args={[lightingMode === 'night' ? '#0a0f1d' : lightingMode === 'sunset' ? '#1c1520' : '#eaeff5']} />
+          {/* Clean Horizon Background (Matching professional model studio in reference photo) */}
+          <color attach="background" args={[lightingMode === 'night' ? '#0a0f1d' : lightingMode === 'sunset' ? '#1c1520' : '#d4d9e2']} />
 
-          {/* Hemisphere Ambient Sky Bounce (100% offline, zero external GitHub HDR requests) */}
+          {/* Hemisphere Ambient Sky Bounce (Calibrated for crisp architectural relief) */}
           <hemisphereLight 
-            intensity={lightingMode === 'night' ? 1.4 : lightingMode === 'sunset' ? 1.1 : 1.3} 
+            intensity={lightingMode === 'night' ? 1.2 : lightingMode === 'sunset' ? 0.85 : 0.65} 
             color={lightingMode === 'sunset' ? '#fed7aa' : lightingMode === 'night' ? '#bae6fd' : '#ffffff'} 
-            groundColor={lightingMode === 'night' ? '#334155' : '#64748b'} 
+            groundColor={lightingMode === 'night' ? '#1e2430' : '#252832'} 
           />
 
           {/* Lighting based on mood */}
           {lightingMode === 'day' && (
             <>
-              <ambientLight intensity={1.1} />
+              {/* Reduced ambient light so shadow faces create deep, clear 3D volumetric relief */}
+              <ambientLight intensity={0.38} />
               <directionalLight
-                position={[-24, 38, 20]}
-                intensity={2.85}
+                position={[-26, 42, 24]}
+                intensity={3.2}
                 color="#fffdf8"
                 castShadow
                 shadow-mapSize-width={2048}
@@ -299,10 +300,10 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
                 shadow-camera-top={35}
                 shadow-camera-bottom={-35}
                 shadow-camera-far={120}
-                shadow-bias={-0.00015}
+                shadow-bias={-0.0001}
               />
-              <directionalLight position={[20, 18, -16]} intensity={0.85} color="#e0f2fe" />
-              <directionalLight position={[0, -10, 0]} intensity={0.45} color="#f8fafc" />
+              <directionalLight position={[22, 16, -18]} intensity={0.42} color="#cbd5e1" />
+              <directionalLight position={[0, -10, 0]} intensity={0.3} color="#f8fafc" />
             </>
           )}
 

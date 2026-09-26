@@ -22,6 +22,60 @@ const CHARCOAL_FIXTURE_MATERIAL = new THREE.MeshStandardMaterial({
   metalness: 0.20
 });
 
+// Stylized Laser-Cut 2D Frosted Acrylic Tree on Slotted Base Plate (Matching reference photo)
+const FrostedAcrylicTree: React.FC<{
+  position: [number, number, number];
+  rotation?: number;
+  scale?: number;
+}> = ({ position, rotation = 0, scale = 1.0 }) => {
+  return (
+    <group position={position} rotation={[0, rotation, 0]} scale={[scale, scale, scale]}>
+      {/* 1. Slotted Clear Acrylic Base Strip */}
+      <mesh position={[0, 0.01, 0]} receiveShadow material={FROSTED_ACRYLIC_MATERIAL}>
+        <boxGeometry args={[0.32, 0.018, 0.12]} />
+      </mesh>
+
+      {/* 2. Laser-Cut Flat Notched Tree Silhouette Profile (Thickness 2.5mm = 0.02 Units) */}
+      {/* Lower Tier Canopy */}
+      <mesh position={[0, 0.22, 0]} castShadow material={FROSTED_ACRYLIC_MATERIAL}>
+        <cylinderGeometry args={[0.09, 0.14, 0.22, 8]} />
+      </mesh>
+      {/* Upper Tier Canopy */}
+      <mesh position={[0, 0.36, 0]} castShadow material={FROSTED_ACRYLIC_MATERIAL}>
+        <cylinderGeometry args={[0.04, 0.10, 0.18, 8]} />
+      </mesh>
+      {/* Tree Trunk */}
+      <mesh position={[0, 0.06, 0]} castShadow material={FROSTED_ACRYLIC_MATERIAL}>
+        <cylinderGeometry args={[0.015, 0.018, 0.12, 6]} />
+      </mesh>
+    </group>
+  );
+};
+
+// Stylized Solid Frosted Acrylic Car Block (Matching reference photo)
+const FrostedAcrylicCar: React.FC<{
+  position: [number, number, number];
+  rotation?: number;
+}> = ({ position, rotation = 0 }) => {
+  return (
+    <group position={position} rotation={[0, rotation, 0]}>
+      {/* Aerodynamic Lower Body */}
+      <mesh position={[0, 0.045, 0]} castShadow material={FROSTED_ACRYLIC_MATERIAL}>
+        <boxGeometry args={[0.48, 0.07, 0.21]} />
+      </mesh>
+      {/* Cabin / Windshield Dome */}
+      <mesh position={[-0.03, 0.10, 0]} castShadow material={FROSTED_ACRYLIC_MATERIAL}>
+        <boxGeometry args={[0.26, 0.065, 0.18]} />
+      </mesh>
+      {/* Ground Contact Shadow Disk */}
+      <mesh position={[0, 0.005, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.18, 12]} />
+        <meshBasicMaterial color="#000000" transparent opacity={0.3} />
+      </mesh>
+    </group>
+  );
+};
+
 // Stylized Architectural Scale Figure (1:300 Scale Frosted CNC Acrylic Cutout)
 const ScaleFigure: React.FC<{
   position: [number, number, number];
@@ -192,12 +246,69 @@ const STREETLAMP_POSITIONS: [number, number, number, number][] = [
   [6.2, 0.743, 13.5, Math.PI / 2]
 ];
 
+// Frosted Acrylic Trees along Avenues, Plazas, and Promenades (matching reference photo)
+const FROSTED_TREES: [number, number, number, number, number][] = [
+  // [x, y, z, rotation, scale]
+  // Boulevard Row along Dublin Tech Hub Avenue (Zone 03 / Zone 04)
+  [3.6, 1.02, 1.0, 0, 1.1],
+  [3.6, 1.02, 2.2, 0.2, 1.0],
+  [3.6, 1.02, 3.4, -0.1, 1.2],
+  [3.6, 1.02, 4.6, 0.3, 1.05],
+  [3.6, 1.02, 5.8, 0, 1.15],
+  // Commercial Plaza West (Zone 04)
+  [-3.2, 1.68, 0.5, Math.PI / 2, 1.0],
+  [-3.2, 1.68, 1.6, Math.PI / 2, 1.1],
+  [-3.2, 1.68, 2.7, Math.PI / 2, 0.95],
+  // Residential Villa Gardens (Zone 02)
+  [-4.5, 1.54, 9.2, 0.5, 1.2],
+  [-5.2, 1.55, 10.2, -0.4, 1.0],
+  [-6.0, 1.62, 11.2, 0.8, 1.1],
+  // Port Promenade Waterfront (Zone 01)
+  [-5.2, 1.86, -4.0, 0, 1.1],
+  [-5.8, 1.88, -5.0, 0.2, 1.0],
+  [-6.5, 1.90, -6.0, -0.3, 1.15]
+];
+
+// Frosted Acrylic Cars parked along curbs & driving on avenues (matching reference photo)
+const FROSTED_CARS: [number, number, number, number][] = [
+  // [x, y, z, rotation]
+  // Central Avenue Traffic (Zone 03)
+  [2.1, 1.11, 1.8, 0],
+  [2.1, 1.10, 3.6, 0],
+  [2.1, 1.08, 5.2, 0],
+  [2.9, 1.05, 0.2, Math.PI],
+  [2.9, 1.04, -1.8, Math.PI],
+  // Commercial South Parking Lane (Zone 04)
+  [-1.8, 1.72, -0.2, Math.PI / 2],
+  [-1.8, 1.71, 1.2, Math.PI / 2],
+  [-1.8, 1.70, 2.4, Math.PI / 2]
+];
+
 export const ArchitecturalEntourage: React.FC<ArchitecturalEntourageProps> = ({ lightingMode }) => {
   const isNight = lightingMode === 'night';
 
   return (
     <group position={[0, 0, 0]}>
-      {/* 1. Scale Human Figures (Pedestrians, Professionals, Visitors - Flush on Pavement) */}
+      {/* 1. Frosted Laser-Cut Acrylic Trees on Slotted Acrylic Strip Bases */}
+      {FROSTED_TREES.map(([x, y, z, rot, scl], idx) => (
+        <FrostedAcrylicTree
+          key={`tree-${idx}`}
+          position={[x, y, z]}
+          rotation={rot}
+          scale={scl}
+        />
+      ))}
+
+      {/* 2. Frosted Acrylic Car Blocks along Roads and Curbs */}
+      {FROSTED_CARS.map(([x, y, z, rot], idx) => (
+        <FrostedAcrylicCar
+          key={`car-${idx}`}
+          position={[x, y, z]}
+          rotation={rot}
+        />
+      ))}
+
+      {/* 3. Scale Human Figures (Frosted CNC Acrylic Cutouts - Flush on Pavement) */}
       {PEOPLE_COORDINATES.map((person, idx) => (
         <ScaleFigure
           key={idx}
@@ -209,7 +320,7 @@ export const ArchitecturalEntourage: React.FC<ArchitecturalEntourageProps> = ({ 
         />
       ))}
 
-      {/* 2. Architectural Streetlamps & Night Light Pools */}
+      {/* 4. Architectural Streetlamps & Night Light Pools */}
       {STREETLAMP_POSITIONS.map(([x, y, z, rot], idx) => (
         <StreetLamp
           key={idx}
