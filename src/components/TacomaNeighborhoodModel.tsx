@@ -181,101 +181,6 @@ const isGlazingElement = (name: string, mat?: THREE.Material | THREE.Material[])
   );
 };
 
-const isRoofElement = (name: string, mesh: THREE.Mesh): boolean => {
-  if (isBaseElement(name) || isContextElement(name) || isGlazingElement(name) || isDarkTrimElement(name)) return false;
-
-  const n = name.toLowerCase();
-  if (
-    n.includes('roof') ||
-    n.includes('slab') ||
-    n.includes('cover') ||
-    n.includes('canopy') ||
-    n.includes('ceiling') ||
-    n.includes('beadboard') ||
-    n.includes('corrugat') ||
-    n.includes('concrete_tile') ||
-    /\b(top|rooftop)\b/.test(n)
-  ) {
-    return true;
-  }
-
-  // Geometric planar detection: thin horizontal mesh at high Y
-  if (mesh.geometry) {
-    if (!mesh.geometry.boundingBox) mesh.geometry.computeBoundingBox();
-    const bb = mesh.geometry.boundingBox;
-    if (bb) {
-      const height = bb.max.y - bb.min.y;
-      const width = bb.max.x - bb.min.x;
-      const depth = bb.max.z - bb.min.z;
-      // In local coordinates: thin planar mesh at upper building elevation
-      if (height < 60 && bb.min.y > 1350 && (width > 20 || depth > 20)) {
-        return true;
-      }
-    }
-  }
-
-  return false;
-};
-
-// Precision Floating Roof Slab with Raised Perimeter Lip (Matching reference photo)
-const FloatingZoneRoof: React.FC<{
-  zone: typeof BUILDING_ZONES[0];
-  isSelected: boolean;
-  isHovered: boolean;
-  isNight: boolean;
-}> = ({ zone, isSelected, isHovered, isNight }) => {
-  const width = zone.size[0] * 1.06;
-  const depth = zone.size[2] * 1.06;
-  const slabThick = 0.10;
-  const rimHeight = 0.08;
-  const rimThick = 0.08;
-  const floatY = zone.roof[1] + 0.46;
-
-  return (
-    <group position={[zone.roof[0], floatY, zone.roof[2]]}>
-      {/* 1. Main Floating Laser-Cut Roof Slab */}
-      <mesh castShadow receiveShadow>
-        <boxGeometry args={[width, slabThick, depth]} />
-        <meshStandardMaterial
-          color={isSelected ? '#ffffff' : '#f8f8f6'}
-          roughness={0.30}
-          metalness={0.02}
-          emissive={isSelected ? zone.color : isNight ? '#fbbf24' : '#000000'}
-          emissiveIntensity={isSelected ? 0.35 : isNight ? 0.08 : 0}
-        />
-      </mesh>
-
-      {/* 2. Raised Perimeter Rim / Parapet Lip (as in reference physical maquette) */}
-      <mesh position={[0, (slabThick + rimHeight) * 0.5, depth * 0.5 - rimThick * 0.5]} castShadow>
-        <boxGeometry args={[width, rimHeight, rimThick]} />
-        <meshStandardMaterial color="#f8f8f6" roughness={0.30} metalness={0.02} />
-      </mesh>
-      <mesh position={[0, (slabThick + rimHeight) * 0.5, -depth * 0.5 + rimThick * 0.5]} castShadow>
-        <boxGeometry args={[width, rimHeight, rimThick]} />
-        <meshStandardMaterial color="#f8f8f6" roughness={0.30} metalness={0.02} />
-      </mesh>
-      <mesh position={[width * 0.5 - rimThick * 0.5, (slabThick + rimHeight) * 0.5, 0]} castShadow>
-        <boxGeometry args={[rimThick, rimHeight, depth - rimThick * 2]} />
-        <meshStandardMaterial color="#f8f8f6" roughness={0.30} metalness={0.02} />
-      </mesh>
-      <mesh position={[-width * 0.5 + rimThick * 0.5, (slabThick + rimHeight) * 0.5, 0]} castShadow>
-        <boxGeometry args={[rimThick, rimHeight, depth - rimThick * 2]} />
-        <meshStandardMaterial color="#f8f8f6" roughness={0.30} metalness={0.02} />
-      </mesh>
-
-      {/* 3. Sleek Architectural Under-Soffit Reveal / Trim */}
-      <mesh position={[0, -slabThick * 0.55, 0]}>
-        <boxGeometry args={[width * 0.96, 0.025, depth * 0.96]} />
-        <meshStandardMaterial
-          color="#282c34"
-          roughness={0.5}
-          metalness={0.1}
-        />
-      </mesh>
-    </group>
-  );
-};
-
 export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = ({
   categories,
   onSelectCategory,
@@ -375,20 +280,8 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
           child.castShadow = true;
           child.receiveShadow = false;
           child.renderOrder = 2;
-        } else if (isRoofElement(name, child)) {
-          // Anti-Gravity Floating Roof: Lift vertically along +Y by ~10% to 15% of building height
-          if (!child.geometry.boundingBox) child.geometry.computeBoundingBox();
-          const bb = child.geometry.boundingBox;
-          const bHeight = bb ? (bb.max.y - 1050) : 1000;
-          const liftLocal = Math.max(125, Math.min(240, bHeight * 0.13));
-          child.position.y += liftLocal;
-
-          child.material = opaqueMat;
-          child.castShadow = true;
-          child.receiveShadow = true;
-          child.renderOrder = 0;
         } else {
-          // Main Laser-cut White Architectural Model Board
+          // Laser-cut White Architectural Model Board (Walls, Facades & Roofs in natural position)
           child.material = opaqueMat;
           child.castShadow = true;
           child.receiveShadow = true;
@@ -440,21 +333,6 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
         <meshStandardMaterial color="#141416" roughness={0.88} metalness={0.04} />
       </mesh>
 
-      {/* 5 Precision Floating Roof Slabs for Signature Architectural Zones (Anti-Gravity Diagram) */}
-      {BUILDING_ZONES.map((zone) => {
-        const isHovered = hoveredId === zone.categoryId;
-        const isSelected = selectedCategory?.id === zone.categoryId;
-        return (
-          <FloatingZoneRoof
-            key={`floating-slab-${zone.categoryId}`}
-            zone={zone}
-            isSelected={isSelected}
-            isHovered={isHovered}
-            isNight={lightingMode === 'night'}
-          />
-        );
-      })}
-
       {/* 3D Proportional Frosted Scale Figures & Modern Street Lighting */}
       <ArchitecturalEntourage lightingMode={lightingMode as any} />
 
@@ -505,7 +383,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
             {!selectedCategory && showPins && (
               <group position={zone.roof}>
                 {/* Minimalist Floating Glass Pill Badge & Rich Project Card */}
-                <Html position={[0, 0.75, 0]} center distanceFactor={15} zIndexRange={[0, 5]}>
+                <Html position={[0, 0.35, 0]} center distanceFactor={15} zIndexRange={[0, 5]}>
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
