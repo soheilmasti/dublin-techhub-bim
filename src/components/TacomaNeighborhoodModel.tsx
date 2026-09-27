@@ -181,6 +181,20 @@ const isGlazingElement = (name: string, mat?: THREE.Material | THREE.Material[])
   );
 };
 
+// Detect roof planes, slabs, and copings for negative polygon offset
+const isRoofElement = (name: string): boolean => {
+  const n = name.toLowerCase();
+  return (
+    n.includes('roof') ||
+    n.includes('parapet') ||
+    n.includes('coping') ||
+    n.includes('beadboard') ||
+    n.includes('concrete_tile') ||
+    n.includes('metal_steel_textured_white') ||
+    n.includes('metal_corrugated_shiny')
+  );
+};
+
 export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = ({
   categories,
   onSelectCategory,
@@ -237,12 +251,15 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     side: THREE.DoubleSide
   }), []);
 
-  // 4. Matte Dark Charcoal Presentation Plinth (Base / Ground / Pavement)
+  // 4. Matte Dark Charcoal Presentation Plinth (Base / Ground / Pavement) - Offset slightly back so walls cleanly sit on top
   const baseMat = useMemo(() => new THREE.MeshStandardMaterial({
     color: new THREE.Color('#1A1B1F'),
     roughness: 0.82,
     metalness: 0.04,
-    side: THREE.DoubleSide
+    side: THREE.DoubleSide,
+    polygonOffset: true,
+    polygonOffsetFactor: 1,
+    polygonOffsetUnits: 1
   }), []);
 
   // 5. Frosted Translucent CNC Acrylic (Context / Vegetation / Trees / Figures)
@@ -293,7 +310,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
           child.castShadow = true;
           child.receiveShadow = false;
           child.renderOrder = 2;
-        } else if (name.includes('roof') || name.includes('parapet') || name.includes('coping')) {
+        } else if (isRoofElement(name)) {
           // Roof planes, copings, and parapets with negative polygon offset to eliminate z-fighting
           child.material = roofMat;
           child.castShadow = true;
@@ -317,7 +334,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     if (lightingMode === 'night') {
       glazingMat.color.set('#FEF08A');
       glazingMat.emissive.set('#FBBF24');
-      glazingMat.emissiveIntensity = 2.5;
+      glazingMat.emissiveIntensity = 2.0;
       opaqueMat.roughness = 0.32;
       roofMat.roughness = 0.32;
     } else if (lightingMode === 'sunset') {
@@ -344,15 +361,9 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
       {/* Real SketchUp Neighborhood Site Model with Physical Maquette Pipeline */}
       <primitive object={sceneClone} />
 
-      {/* Gallery Presentation Plinth Block (matching reference image) */}
-      {/* 1. Top Plinth Surface Plate */}
-      <mesh position={[0, 0.02, 3.5]} receiveShadow>
-        <boxGeometry args={[76, 0.25, 76]} />
-        <primitive object={baseMat} attach="material" />
-      </mesh>
-      {/* 2. Deep Plinth Gallery Pedestal Body */}
-      <mesh position={[0, -3.8, 3.5]} receiveShadow>
-        <boxGeometry args={[74, 7.4, 74]} />
+      {/* Gallery Presentation Plinth Block (Sitting cleanly below model base, zero coplanar overlap) */}
+      <mesh position={[0, -3.75, 3.5]} receiveShadow>
+        <boxGeometry args={[76, 7.4, 76]} />
         <meshStandardMaterial color="#141416" roughness={0.88} metalness={0.04} />
       </mesh>
 

@@ -2,10 +2,7 @@ import React, { useRef, useState, useEffect, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import {
   OrbitControls,
-  Environment,
-  AccumulativeShadows,
-  RandomizedLight,
-  MeshTransmissionMaterial
+  Environment
 } from '@react-three/drei';
 import * as THREE from 'three';
 import type { OrbitControls as OrbitControlsType } from 'three-stdlib';
@@ -27,13 +24,21 @@ import {
 import { TacomaNeighborhoodModel } from './TacomaNeighborhoodModel';
 import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 
-// Dynamic Tone Mapping Exposure without recreating WebGLRenderer
+// Dynamic Tone Mapping Exposure and Environment Intensity calibration
 const SceneExposure: React.FC<{ mode: 'day' | 'sunset' | 'night' | 'wireframe' }> = ({ mode }) => {
-  const { gl } = useThree();
+  const { gl, scene } = useThree();
   useEffect(() => {
     gl.toneMapping = THREE.ACESFilmicToneMapping;
-    gl.toneMappingExposure = mode === 'sunset' ? 1.25 : mode === 'night' ? 1.22 : 1.18;
-  }, [mode, gl]);
+    // Controlled exposure: prevents blown-out white walls & preserves deep architectural contrast
+    gl.toneMappingExposure = mode === 'sunset' ? 0.95 : mode === 'night' ? 0.80 : 0.92;
+    gl.shadowMap.enabled = true;
+    gl.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    // Subtly balance HDR environment reflections so they don't wash out shadows
+    if ('environmentIntensity' in scene) {
+      (scene as any).environmentIntensity = mode === 'night' ? 0.03 : mode === 'sunset' ? 0.16 : 0.22;
+    }
+  }, [mode, gl, scene]);
   return null;
 };
 
@@ -287,96 +292,93 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
           <ResponsiveCameraUpdater fov={responsiveFov} />
 
           {/* Clean Horizon Background (Matching professional model studio in reference photo) */}
-          <color attach="background" args={[lightingMode === 'night' ? '#0a0f1d' : lightingMode === 'sunset' ? '#1c1520' : '#d4d9e2']} />
+          <color attach="background" args={[lightingMode === 'night' ? '#070a12' : lightingMode === 'sunset' ? '#1c1520' : '#e2e6ee']} />
 
-          {/* Hemisphere Ambient Sky Bounce (Calibrated for crisp architectural relief) */}
+          {/* Hemisphere Ambient Sky Bounce (Calibrated for crisp architectural relief without washing out shadow faces) */}
           <hemisphereLight 
-            intensity={lightingMode === 'night' ? 1.2 : lightingMode === 'sunset' ? 0.85 : 0.65} 
-            color={lightingMode === 'sunset' ? '#fed7aa' : lightingMode === 'night' ? '#bae6fd' : '#ffffff'} 
-            groundColor={lightingMode === 'night' ? '#1e2430' : '#252832'} 
+            intensity={lightingMode === 'night' ? 0.08 : lightingMode === 'sunset' ? 0.22 : 0.24} 
+            color={lightingMode === 'sunset' ? '#fed7aa' : lightingMode === 'night' ? '#1e293b' : '#e0f2fe'} 
+            groundColor={lightingMode === 'night' ? '#070a12' : '#1e2430'} 
           />
 
           {/* Lighting based on mood */}
           {lightingMode === 'day' && (
             <>
-              {/* Reduced ambient light so shadow faces create deep, clear 3D volumetric relief */}
-              <ambientLight intensity={0.38} />
+              {/* Soft natural ambient fill - leaves deep, readable 3D architectural volume and shadow relief */}
+              <ambientLight intensity={0.15} color="#f1f5f9" />
+              {/* Dominant crisp architectural sun (angled at 45 deg, casting sharp, natural surface shadows onto walls, roofs & ground) */}
               <directionalLight
-                position={[-26, 42, 24]}
-                intensity={3.2}
-                color="#fffdf8"
+                position={[-28, 44, 22]}
+                intensity={2.1}
+                color="#fffcf2"
                 castShadow
-                shadow-mapSize-width={2048}
-                shadow-mapSize-height={2048}
-                shadow-camera-left={-35}
-                shadow-camera-right={35}
-                shadow-camera-top={35}
-                shadow-camera-bottom={-35}
+                shadow-mapSize-width={4096}
+                shadow-mapSize-height={4096}
+                shadow-camera-left={-38}
+                shadow-camera-right={38}
+                shadow-camera-top={38}
+                shadow-camera-bottom={-38}
+                shadow-camera-near={1}
                 shadow-camera-far={120}
-                shadow-bias={-0.0001}
+                shadow-bias={-0.0004}
+                shadow-normalBias={0.035}
               />
-              <directionalLight position={[22, 16, -18]} intensity={0.42} color="#cbd5e1" />
-              <directionalLight position={[0, -10, 0]} intensity={0.3} color="#f8fafc" />
+              {/* Gentle opposite sky bounce fill so shadow faces show crisp details without washing out */}
+              <directionalLight position={[24, 18, -16]} intensity={0.22} color="#cbd5e1" />
             </>
           )}
 
           {lightingMode === 'sunset' && (
             <>
-              <ambientLight intensity={1.05} color="#fed7aa" />
+              <ambientLight intensity={0.16} color="#fed7aa" />
               <directionalLight
-                position={[-28, 20, 16]}
-                intensity={3.2}
+                position={[-30, 22, 16]}
+                intensity={2.3}
                 color="#f97316"
                 castShadow
-                shadow-mapSize-width={2048}
-                shadow-mapSize-height={2048}
-                shadow-camera-left={-35}
-                shadow-camera-right={35}
-                shadow-camera-top={35}
-                shadow-camera-bottom={-35}
+                shadow-mapSize-width={4096}
+                shadow-mapSize-height={4096}
+                shadow-camera-left={-38}
+                shadow-camera-right={38}
+                shadow-camera-top={38}
+                shadow-camera-bottom={-38}
+                shadow-camera-near={1}
                 shadow-camera-far={120}
-                shadow-bias={-0.00015}
+                shadow-bias={-0.0004}
+                shadow-normalBias={0.035}
               />
-              <directionalLight position={[18, 14, -12]} intensity={1.1} color="#60a5fa" />
+              <directionalLight position={[18, 14, -12]} intensity={0.25} color="#60a5fa" />
             </>
           )}
 
           {lightingMode === 'night' && (
             <>
-              {/* Rich Urban Architectural Night: Clear Moon Bounce & Soft Blue Sky Fill */}
-              <ambientLight intensity={1.6} color="#93c5fd" />
+              {/* Deep, authentic architectural night: subtle dark blue sky ambience */}
+              <ambientLight intensity={0.05} color="#0f172a" />
+              {/* Soft, cool moonlight casting gentle, moody shadows */}
               <directionalLight 
                 position={[-24, 38, 20]} 
-                intensity={2.8} 
-                color="#e0f2fe" 
+                intensity={0.35} 
+                color="#93c5fd" 
                 castShadow
                 shadow-mapSize-width={2048}
                 shadow-mapSize-height={2048}
-                shadow-camera-left={-35}
-                shadow-camera-right={35}
-                shadow-camera-top={35}
-                shadow-camera-bottom={-35}
+                shadow-camera-left={-38}
+                shadow-camera-right={38}
+                shadow-camera-top={38}
+                shadow-camera-bottom={-38}
+                shadow-camera-near={1}
                 shadow-camera-far={120}
-                shadow-bias={-0.00015}
+                shadow-bias={-0.0004}
+                shadow-normalBias={0.035}
               />
-              <directionalLight position={[20, 20, -16]} intensity={1.5} color="#7dd3fc" />
-              <directionalLight position={[0, -10, 0]} intensity={0.7} color="#475569" />
 
-              {/* 5 Distinct Architectural Accent Warm Light Sources (Zero shadow overhead) */}
-              {/* 1. Dublin Tech Hub 7-Story Tower Facade */}
-              <pointLight position={[6.57, 8.0, 6.23]} intensity={10} color="#fbbf24" distance={40} decay={2} />
-
-              {/* 2. Commercial Mall & Terraces */}
-              <pointLight position={[-0.87, 4.5, -1.03]} intensity={8} color="#fbbf24" distance={35} decay={2} />
-
-              {/* 3. Urban Port & Promenade Waterfront */}
-              <pointLight position={[-6.95, 4.5, -6.17]} intensity={8} color="#38bdf8" distance={35} decay={2} />
-
-              {/* 4. Residential Villas Pathway */}
-              <pointLight position={[-6.19, 3.5, 11.89]} intensity={8} color="#fde047" distance={30} decay={2} />
-
-              {/* 5. Central Plaza & Boulevard Hub */}
-              <pointLight position={[2.5, 2.5, 2.5]} intensity={8} color="#fbbf24" distance={30} decay={2} />
+              {/* Subtle architectural focal warm light pools (intimate accent glows, not blinding floodlights) */}
+              <pointLight position={[6.57, 6.0, 6.23]} intensity={2.2} color="#fbbf24" distance={20} decay={2} />
+              <pointLight position={[-0.87, 3.5, -1.03]} intensity={1.8} color="#fbbf24" distance={18} decay={2} />
+              <pointLight position={[-6.95, 3.5, -6.17]} intensity={1.8} color="#38bdf8" distance={18} decay={2} />
+              <pointLight position={[-6.19, 2.5, 11.89]} intensity={1.6} color="#fde047" distance={16} decay={2} />
+              <pointLight position={[2.5, 2.0, 2.5]} intensity={1.8} color="#fbbf24" distance={18} decay={2} />
             </>
           )}
 
@@ -391,26 +393,13 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
             showPins={!isIntroActive && !isFlipbookOpen && !selectedCategory}
           />
 
-          {/* Soft Ground Contact Shadows */}
-          <AccumulativeShadows
-            scale={32}
-            temporal={!isIntroActive}
-            frames={100}
-            color={lightingMode === 'night' ? '#111' : '#000'}
-            opacity={lightingMode === 'night' ? 0.85 : 0.65}
-            alphaTest={0.85}
-            position={[0, 0.03, 0]}
-          >
-            <RandomizedLight amount={8} radius={12} ambient={0.5} intensity={0.75} position={[-5, 5, -5]} />
-          </AccumulativeShadows>
-
           {/* Smooth Camera Flight & Orbit Controls (Auto-rotates by default, pauses on manual touch/click/drag) */}
           <CameraController 
             targetFocus={cameraFocus} 
             autoRotate={autoRotate} 
             onUserInteraction={() => setAutoRotate(false)} 
           />
-        <Environment preset="studio" blur={0.8} />
+          <Environment preset="studio" blur={0.8} />
         </Suspense>
       </Canvas>
 
