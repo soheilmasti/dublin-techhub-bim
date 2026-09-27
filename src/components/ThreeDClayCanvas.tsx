@@ -1,8 +1,11 @@
 import React, { useRef, useState, useEffect, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { 
-  OrbitControls, 
-  ContactShadows
+import {
+  OrbitControls,
+  Environment,
+  AccumulativeShadows,
+  RandomizedLight,
+  MeshTransmissionMaterial
 } from '@react-three/drei';
 import * as THREE from 'three';
 import type { OrbitControls as OrbitControlsType } from 'three-stdlib';
@@ -163,7 +166,7 @@ const CameraController: React.FC<{
       enablePan={true}
       enableZoom={true}
       enableRotate={true}
-      rotateSpeed={0.7}
+      rotateSpeed={0.49}
       zoomSpeed={1.0}
       enableDamping={true}
       dampingFactor={0.06}
@@ -195,28 +198,32 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
   const [autoRotate, setAutoRotate] = useState<boolean>(true);
   const [cameraFocus, setCameraFocus] = useState<{ target: [number, number, number]; position: [number, number, number] } | null>(null);
 
-  // Responsive FOV based on screen width/aspect ratio (auto-adapts for portrait phones & tablets)
+  // Responsive FOV helper based on screen width/aspect ratio (auto-adapts for portrait phones & tablets)
+  const computeOverviewFov = () => {
+    const width = typeof window !== 'undefined' ? window.innerWidth : 1200;
+    const height = typeof window !== 'undefined' ? window.innerHeight : 800;
+    const aspect = width / height;
+
+    if (aspect < 0.6) {
+      // Tall portrait mobile (e.g. iPhone, Samsung Galaxy) -> wider FOV to fit full horizontal masterplan
+      return 55;
+    } else if (aspect < 0.9) {
+      // Tablet portrait (iPad)
+      return 46;
+    } else if (aspect < 1.3) {
+      // Small laptops / square windows
+      return 42;
+    } else {
+      // Standard wide desktop
+      return 38;
+    }
+  };
+
   const [responsiveFov, setResponsiveFov] = useState<number>(38);
 
   useEffect(() => {
     const updateFov = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const aspect = width / height;
-
-      if (aspect < 0.6) {
-        // Tall portrait mobile (e.g. iPhone, Samsung Galaxy) -> wider FOV to fit full horizontal masterplan
-        setResponsiveFov(55);
-      } else if (aspect < 0.9) {
-        // Tablet portrait (iPad)
-        setResponsiveFov(46);
-      } else if (aspect < 1.3) {
-        // Small laptops / square windows
-        setResponsiveFov(42);
-      } else {
-        // Standard wide desktop
-        setResponsiveFov(38);
-      }
+      setResponsiveFov(computeOverviewFov());
     };
 
     updateFov();
@@ -239,12 +246,14 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
     } else if (!selectedCategory) {
       // Whenever user closes project drawer or returns to 3D space, smoothly fly back to panoramic Overview!
       setCameraFocus({ ...OVERVIEW_CAMERA });
+      setResponsiveFov(computeOverviewFov());
     }
   }, [selectedCategory]);
 
   const handleResetCamera = () => {
     sound.playClick();
     setCameraFocus({ ...OVERVIEW_CAMERA });
+    setResponsiveFov(computeOverviewFov());
   };
 
   const handleFocusZone = (cat: CategoryBuilding) => {
@@ -255,15 +264,19 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
     }
   };
 
+  const isMobile = typeof navigator !== 'undefined' && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+
   return (
     <div className="relative w-full h-[100dvh] h-screen bg-[#0f141c] overflow-hidden select-none touch-none">
       {/* 3D WebGL Canvas with PBR Tone Mapping & Wide Overview Camera */}
       <Canvas
         shadows
-        dpr={[1, 2]}
-        camera={{ position: [32, 24, -24], fov: 38 }}
-        gl={{ 
+        dpr={isMobile ? [1, 1.5] : [1, 2]}
+        camera={{ position: [32, 24, -24], near: 0.5, far: 200, fov: 38 }}
+        gl={{
           antialias: true,
+          logarithmicDepthBuffer: true,
+          toneMapping: THREE.ACESFilmicToneMapping,
           preserveDrawingBuffer: true,
           powerPreference: 'high-performance'
         }}
@@ -379,13 +392,17 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
           />
 
           {/* Soft Ground Contact Shadows */}
-          <ContactShadows
-            position={[0, 0.03, 0]}
-            opacity={lightingMode === 'night' ? 0.85 : 0.65}
+          <AccumulativeShadows
             scale={32}
-            blur={2.0}
-            far={14}
-          />
+            temporal={!isIntroActive}
+            frames={100}
+            color={lightingMode === 'night' ? '#111' : '#000'}
+            opacity={lightingMode === 'night' ? 0.85 : 0.65}
+            alphaTest={0.85}
+            position={[0, 0.03, 0]}
+          >
+            <RandomizedLight amount={8} radius={12} ambient={0.5} intensity={0.75} position={[-5, 5, -5]} />
+          </AccumulativeShadows>
 
           {/* Smooth Camera Flight & Orbit Controls (Auto-rotates by default, pauses on manual touch/click/drag) */}
           <CameraController 
@@ -393,6 +410,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
             autoRotate={autoRotate} 
             onUserInteraction={() => setAutoRotate(false)} 
           />
+        <Environment preset="studio" blur={0.8} />
         </Suspense>
       </Canvas>
 

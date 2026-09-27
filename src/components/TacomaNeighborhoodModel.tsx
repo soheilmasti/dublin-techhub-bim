@@ -196,11 +196,13 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
   const isRTL = currentLanguage === 'fa';
 
   // Architectural Physical Maquette PBR Materials (Matching reference image)
-  // 1. Pale Yellow Frosted Plexiglas Glazing (Milky cream-yellow with warm interior backlight glow)
-  const glazingMat = useMemo(() => new THREE.MeshStandardMaterial({
+  // 1. Pale Yellow Frosted Plexiglas Glazing (Milky cream-yellow with warm interior backlight glow & physical transmission)
+  const glazingMat = useMemo(() => new THREE.MeshPhysicalMaterial({
     color: new THREE.Color('#FEF08A'), // Pale warm cream-yellow as in reference photo
     emissive: new THREE.Color('#FDE047'), // Warm golden interior glow
     emissiveIntensity: 0.58, // Clearly discernible, elegant internal light
+    transmission: 0.82,
+    thickness: 0.5,
     roughness: 0.35,
     metalness: 0.05,
     transparent: true,
@@ -214,6 +216,17 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     roughness: 0.30,
     metalness: 0.02,
     side: THREE.DoubleSide
+  }), []);
+
+  // 2b. White Roof Material with polygonOffset to completely eliminate Z-fighting on overlapping copings
+  const roofMat = useMemo(() => new THREE.MeshStandardMaterial({
+    color: new THREE.Color('#F8F8F6'),
+    roughness: 0.30,
+    metalness: 0.02,
+    side: THREE.DoubleSide,
+    polygonOffset: true,
+    polygonOffsetFactor: -1,
+    polygonOffsetUnits: -1
   }), []);
 
   // 3. Dark Architectural Graphite Relief Trim (Mullions, Window Frames, Louvers, Shadow Reveals)
@@ -280,8 +293,14 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
           child.castShadow = true;
           child.receiveShadow = false;
           child.renderOrder = 2;
+        } else if (name.includes('roof') || name.includes('parapet') || name.includes('coping')) {
+          // Roof planes, copings, and parapets with negative polygon offset to eliminate z-fighting
+          child.material = roofMat;
+          child.castShadow = true;
+          child.receiveShadow = true;
+          child.renderOrder = 0;
         } else {
-          // Laser-cut White Architectural Model Board (Walls, Facades & Roofs in natural position)
+          // Laser-cut White Architectural Model Board (Walls, Facades & Massing in natural position)
           child.material = opaqueMat;
           child.castShadow = true;
           child.receiveShadow = true;
@@ -291,7 +310,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     });
 
     return clone;
-  }, [gltf, baseMat, glazingMat, darkTrimMat, contextMat, opaqueMat]);
+  }, [gltf, baseMat, glazingMat, darkTrimMat, contextMat, opaqueMat, roofMat]);
 
   // 2. Reactive Lighting Mode Adjustments (Interior Window Illumination & Mood Tones)
   React.useEffect(() => {
@@ -300,21 +319,25 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
       glazingMat.emissive.set('#FBBF24');
       glazingMat.emissiveIntensity = 2.5;
       opaqueMat.roughness = 0.32;
+      roofMat.roughness = 0.32;
     } else if (lightingMode === 'sunset') {
       glazingMat.color.set('#FCD34D');
       glazingMat.emissive.set('#F59E0B');
       glazingMat.emissiveIntensity = 0.90;
       opaqueMat.roughness = 0.28;
+      roofMat.roughness = 0.28;
     } else {
       // Day Mode: Clearly distinct pale warm yellow with gentle interior glow (matching photo)
       glazingMat.color.set('#FEF08A');
       glazingMat.emissive.set('#FDE047');
       glazingMat.emissiveIntensity = 0.58;
       opaqueMat.roughness = 0.30;
+      roofMat.roughness = 0.30;
     }
     glazingMat.needsUpdate = true;
     opaqueMat.needsUpdate = true;
-  }, [lightingMode, glazingMat, opaqueMat]);
+    roofMat.needsUpdate = true;
+  }, [lightingMode, glazingMat, opaqueMat, roofMat]);
 
   return (
     <group position={[0, 0, 0]}>
