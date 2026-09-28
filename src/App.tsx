@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Home } from 'lucide-react';
 import { Header } from './components/Header';
 import { ThreeDClayCanvas } from './components/ThreeDClayCanvas';
 import { MasterIndexView } from './components/MasterIndexView';
@@ -12,7 +11,7 @@ import { CinematicVideoIntro } from './components/CinematicVideoIntro';
 import { ContactWhatsAppModal } from './components/ContactWhatsAppModal';
 import { AiSearchBoosterModal } from './components/AiSearchBoosterModal';
 import { BimKnowledgeHubModal } from './components/BimKnowledgeHubModal';
-import { FloatingContactHub } from './components/FloatingContactHub';
+import { BottomToolbar } from './components/BottomToolbar';
 import { ProjectDrawer } from './components/ProjectDrawer';
 import { ProjectDetailModal } from './components/ProjectDetailModal';
 import { AssetCustomizerModal } from './components/AssetCustomizerModal';
@@ -39,6 +38,9 @@ export const App: React.FC = () => {
   const [isFlipbookOpen, setIsFlipbookOpen] = useState(false);
   const [flipbookVolume, setFlipbookVolume] = useState<'villas' | 'apartments' | 'urban'>('villas');
   const [whatsAppInitialMessage, setWhatsAppInitialMessage] = useState('');
+  const [lightingMode, setLightingMode] = useState<'day' | 'sunset' | 'night'>('day');
+  const [autoRotate, setAutoRotate] = useState<boolean>(true);
+  const [resetCameraTrigger, setResetCameraTrigger] = useState<number>(0);
 
   // Lightweight Fast-Preview Mode for Low-Speed Networks
   const [hasEntered3D, setHasEntered3D] = useState<boolean>(() => {
@@ -279,6 +281,10 @@ export const App: React.FC = () => {
               isIntroActive={isIntroActive}
               isFlipbookOpen={isFlipbookOpen}
               onOpenFlipbook={() => setIsFlipbookOpen(true)}
+              lightingMode={lightingMode}
+              autoRotate={autoRotate}
+              onAutoRotateChange={setAutoRotate}
+              resetCameraTrigger={resetCameraTrigger}
             />
 
             {!hasEntered3D && (
@@ -293,24 +299,22 @@ export const App: React.FC = () => {
         )}
       </main>
 
-      {/* Universal Floating Home Button (Desktop & Tablet) */}
-      {isOutsideHome && (
-        <button
-          onClick={handleResetToHome}
-          className={`fixed bottom-6 ${isRTL ? 'right-6' : 'left-6'} z-40 hidden sm:flex glass-panel px-4 py-3 rounded-2xl shadow-clay-lg items-center gap-2 text-xs font-black text-gray-900 bg-white/95 hover:bg-black hover:text-white transition-all duration-300 hover:scale-105 active:scale-95 border-2 border-blue-500/40 pointer-events-auto cursor-pointer`}
-          title={t.returnToHome}
-        >
-          <Home className="w-4 h-4 text-blue-600 group-hover:text-white shrink-0" />
-          <span>{t.returnToHome}</span>
-        </button>
-      )}
-
-      {/* Floating WhatsApp Contact Hub (Hidden on Video Intro) */}
+      {/* Unified Floating Minimal Bottom Toolbar (Centered, not full-width, studio aesthetic) */}
       {!isIntroActive && (
-        <FloatingContactHub
-          onOpenModal={() => handleOpenWhatsApp()}
+        <BottomToolbar
+          activeView={settings.activeView}
+          currentLanguage={language}
+          lightingMode={lightingMode}
+          onChangeLighting={setLightingMode}
+          autoRotate={autoRotate}
+          onToggleAutoRotate={() => setAutoRotate(prev => !prev)}
+          onResetCamera={() => setResetCameraTrigger(c => c + 1)}
+          onExit3D={handleExit3D}
+          onNavigateHome={handleResetToHome}
           onOpenFlipbook={() => setIsFlipbookOpen(true)}
-          isRTL={isRTL}
+          onOpenWhatsApp={() => handleOpenWhatsApp()}
+          selectedCategory={selectedCategory}
+          isFlipbookOpen={isFlipbookOpen}
         />
       )}
 

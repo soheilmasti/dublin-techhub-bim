@@ -66,200 +66,150 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-40 px-2 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between pointer-events-none">
-        {/* Studio Branding & Architect Title (Click = Return to 3D Home) */}
-        <div 
-          onClick={() => handleNavClick('3d')}
-          className="glass-panel px-3 sm:px-4 py-1.5 sm:py-2 rounded-2xl shadow-clay-sm flex items-center gap-2 sm:gap-3 pointer-events-auto border border-white/90 cursor-pointer transition-all duration-300 hover:shadow-clay-md hover:scale-102 group"
-          title={t.returnToHome}
-        >
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-black text-white flex items-center justify-center shadow-xs font-mono font-bold text-xs group-hover:bg-blue-600 transition-colors shrink-0">
-            <Home className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          </div>
-          <div>
-            <h1 className="text-xs sm:text-sm font-black tracking-wider text-black flex items-center gap-1.5">
-              <span>{t.studioName}</span>
-              <span className="hidden sm:inline text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-100 text-blue-700">
-                3D
-              </span>
-            </h1>
-            <p className="hidden sm:block text-[9px] sm:text-[10px] text-gray-500 font-medium tracking-tight line-clamp-1">
-              {t.studioTagline}
-            </p>
-          </div>
-        </div>
-
-        {/* Desktop View Switcher (Hidden on mobile/tablet < 1024px) */}
-        <div className="hidden lg:flex glass-panel p-1 rounded-2xl shadow-clay-sm items-center gap-1 pointer-events-auto border border-white/90">
-          <button
+      <header className="fixed top-3 sm:top-5 left-1/2 -translate-x-1/2 z-40 max-w-[96vw] pointer-events-none">
+        <div className="pointer-events-auto glass-panel bg-white/95 backdrop-blur-xl border border-white/90 shadow-clay-md rounded-2xl px-2 sm:px-3.5 py-1 sm:py-1.5 flex items-center gap-1.5 sm:gap-2.5">
+          {/* Studio Branding (Click = Return to 3D Home) */}
+          <div 
             onClick={() => handleNavClick('3d')}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-              settings.activeView === '3d'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-gray-700 hover:text-black hover:bg-gray-100/70'
-            }`}
+            className="flex items-center gap-1.5 sm:gap-2 px-1.5 sm:px-2 py-1 rounded-xl cursor-pointer hover:bg-gray-100/70 transition-all group shrink-0"
+            title={t.returnToHome}
           >
-            <Home className="w-3.5 h-3.5" />
-            <span>{t.home3d}</span>
-          </button>
-
-          <button
-            onClick={() => handleNavClick('grid')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
-              settings.activeView === 'grid'
-                ? 'bg-black text-white shadow-xs'
-                : 'text-gray-600 hover:text-black hover:bg-gray-100/70'
-            }`}
-          >
-            <Grid3X3 className="w-3.5 h-3.5" />
-            <span>{t.projectsArchive} ({totalProjectsCount})</span>
-          </button>
-
-          <button
-            onClick={() => handleNavClick('resume')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
-              settings.activeView === 'resume'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'text-gray-600 hover:text-black hover:bg-gray-100/70'
-            }`}
-          >
-            <UserCheck className="w-3.5 h-3.5" />
-            <span>{t.resume}</span>
-          </button>
-
-          <button
-            onClick={() => handleNavClick('bim-outsourcing')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-              settings.activeView === 'bim-outsourcing'
-                ? 'bg-blue-600 text-white shadow-md scale-105 ring-2 ring-blue-400'
-                : 'bg-blue-50 text-blue-900 hover:bg-blue-100 border border-blue-200'
-            }`}
-          >
-            <span>{t.bimOutsourcing || 'BIM Outsourcing & Delivery'}</span>
-            {t.bimOutsourcingBadge && (
-              <span className="text-[9px] bg-emerald-500 text-white px-1.5 py-0.5 rounded-full font-mono font-bold">
-                {t.bimOutsourcingBadge}
+            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-black text-white flex items-center justify-center font-mono font-bold text-xs group-hover:bg-blue-600 transition-colors shrink-0">
+              <Home className="w-3.5 h-3.5" />
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="text-xs sm:text-sm font-black tracking-wider text-black font-sans">
+                {t.studioName.split('//')[0].trim()}
               </span>
-            )}
-          </button>
-
-          <button
-            onClick={() => handleNavClick('client-portal')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-              settings.activeView === 'client-portal'
-                ? 'bg-indigo-600 text-white shadow-md scale-105 ring-2 ring-indigo-400'
-                : 'bg-indigo-50/90 text-indigo-900 hover:bg-indigo-100 border border-indigo-200'
-            }`}
-          >
-            <FolderSync className="w-3.5 h-3.5 text-indigo-600" />
-            <span>{t.clientPortal || 'Client Portal'}</span>
-            <span className="text-[9px] bg-indigo-500 text-white px-1.5 py-0.5 rounded-full font-mono font-bold flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse"></span>
-              {t.clientPortalBadge || 'Live'}
-            </span>
-          </button>
-
-          <button
-            onClick={() => handleNavClick('partners')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-              settings.activeView === 'partners'
-                ? 'bg-blue-600 text-white shadow-md scale-105 ring-2 ring-blue-400'
-                : 'text-gray-700 hover:text-black hover:bg-gray-100/70 border border-transparent'
-            }`}
-          >
-            <Users className="w-3.5 h-3.5 text-blue-600" />
-            <span>{t.partners || 'Partners'}</span>
-            {t.partnersBadge && (
-              <span className="text-[9px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full font-mono font-bold">
-                {t.partnersBadge}
-              </span>
-            )}
-          </button>
-
-          {onOpenKnowledgeHub && (
-            <button
-              onClick={() => { sound.playClick(); onOpenKnowledgeHub(); }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-gray-700 hover:text-black hover:bg-gray-100/70 border border-transparent transition-all duration-200 cursor-pointer"
-              title={t.faqTooltip || "BIM Knowledge Hub & FAQs"}
-            >
-              <BookOpen className="w-3.5 h-3.5 text-blue-600" />
-              <span>{t.faq || (currentLanguage === 'fa' ? 'راهنما و سوالات' : 'FAQ & Q&A')}</span>
-              <span className="text-[9px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-full font-mono font-bold">
-                12
-              </span>
-            </button>
-          )}
-
-          {onOpenFlipbook && (
-            <button
-              onClick={() => { sound.playClick(); onOpenFlipbook(); }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500/15 to-amber-600/25 hover:from-amber-500 hover:to-amber-600 text-amber-900 hover:text-white border border-amber-300/80 transition-all duration-200 cursor-pointer shadow-xs group"
-              title={t.portfolioFlipbookTooltip || (currentLanguage === 'fa' ? 'مشاهده دفترچه تعاملی پورتفولیو BIMCO (ورق‌خور) و دانلود PDF' : 'View BIMCO interactive portfolio flipbook (3D) & download PDF')}
-            >
-              <BookOpen className="w-3.5 h-3.5 text-amber-600 group-hover:text-white transition-colors" />
-              <span>{t.portfolioFlipbook || (currentLanguage === 'fa' ? 'دفترچه پورتفولیو' : 'Portfolio Flipbook')}</span>
-              <span className="text-[9px] bg-amber-500 text-white px-1.5 py-0.5 rounded-full font-mono font-bold animate-pulse">
+              <span className="hidden sm:inline text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-blue-100 text-blue-700">
                 3D
               </span>
+            </div>
+          </div>
+
+          {/* Desktop Navigation Links (All Sections In Top Toolbar) */}
+          <div className="hidden lg:flex items-center gap-1 border-x border-gray-200/80 px-2 mx-0.5">
+            <button
+              onClick={() => handleNavClick('3d')}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                settings.activeView === '3d'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-gray-700 hover:text-black hover:bg-gray-100/70'
+              }`}
+            >
+              <Home className="w-3.5 h-3.5" />
+              <span>{t.home3d}</span>
             </button>
-          )}
-        </div>
 
-        {/* Right Controls: Language Selector, Sound, WhatsApp & Mobile Menu */}
-        <div className="flex items-center gap-1.5 pointer-events-auto">
+            <button
+              onClick={() => handleNavClick('grid')}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                settings.activeView === 'grid'
+                  ? 'bg-black text-white shadow-xs'
+                  : 'text-gray-600 hover:text-black hover:bg-gray-100/70'
+              }`}
+            >
+              <Grid3X3 className="w-3.5 h-3.5" />
+              <span>{t.projectsArchive} ({totalProjectsCount})</span>
+            </button>
 
-          {/* 7-Language Switcher */}
-          <LanguageSelector
-            currentLanguage={currentLanguage}
-            onLanguageChange={onLanguageChange}
-          />
+            <button
+              onClick={() => handleNavClick('bim-outsourcing')}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                settings.activeView === 'bim-outsourcing'
+                  ? 'bg-blue-600 text-white shadow-xs ring-1 ring-blue-400'
+                  : 'bg-blue-50 text-blue-900 hover:bg-blue-100 border border-blue-200/70'
+              }`}
+            >
+              <span>{t.bimOutsourcing || 'BIM Outsourcing'}</span>
+              {t.bimOutsourcingBadge && (
+                <span className="text-[9px] bg-emerald-500 text-white px-1.5 py-0.2 rounded-full font-mono font-bold">
+                  {t.bimOutsourcingBadge}
+                </span>
+              )}
+            </button>
 
-          {/* Sound Toggle */}
-          <button
-            onClick={toggleSound}
-            className="glass-panel p-2 rounded-xl shadow-clay-sm text-gray-700 hover:text-black transition-colors cursor-pointer"
-            title={settings.soundEnabled ? 'Mute' : 'Unmute'}
-          >
-            {settings.soundEnabled ? <Volume2 className="w-4 h-4 text-blue-600" /> : <VolumeX className="w-4 h-4 text-gray-400" />}
-          </button>
+            <button
+              onClick={() => handleNavClick('client-portal')}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                settings.activeView === 'client-portal'
+                  ? 'bg-indigo-600 text-white shadow-xs ring-1 ring-indigo-400'
+                  : 'bg-indigo-50/90 text-indigo-900 hover:bg-indigo-100 border border-indigo-200/70'
+              }`}
+            >
+              <FolderSync className="w-3.5 h-3.5 text-indigo-600" />
+              <span>{t.clientPortal || 'Client Portal'}</span>
+              <span className="text-[9px] bg-indigo-500 text-white px-1.5 py-0.2 rounded-full font-mono font-bold flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
+                {t.clientPortalBadge || 'Live'}
+              </span>
+            </button>
 
-          {/* Direct WhatsApp Contact */}
-          <button
-            onClick={() => {
-              sound.playClick();
-              if (onOpenWhatsApp) {
-                onOpenWhatsApp();
-              } else {
-                window.open('https://wa.me/34610855434', '_blank');
-              }
-            }}
-            className="glass-panel p-2 rounded-xl shadow-clay-sm text-emerald-700 hover:bg-emerald-50 transition-colors border border-emerald-200 hidden sm:flex items-center gap-1.5 cursor-pointer"
-            title={t.contactWhatsapp}
-          >
-            <PhoneCall className="w-4 h-4 text-emerald-600" />
-            <span className="hidden xl:inline text-[11px] font-bold text-emerald-900">WhatsApp</span>
-          </button>
+            <button
+              onClick={() => handleNavClick('partners')}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                settings.activeView === 'partners'
+                  ? 'bg-blue-600 text-white shadow-xs ring-1 ring-blue-400'
+                  : 'text-gray-700 hover:text-black hover:bg-gray-100/70'
+              }`}
+            >
+              <Users className="w-3.5 h-3.5 text-blue-600" />
+              <span>{t.partners || 'Partners'}</span>
+            </button>
 
-          {/* Customizer Button (Desktop) */}
-          <button
-            onClick={() => { sound.playClick(); onOpenCustomizer(); }}
-            className="glass-panel p-2 rounded-xl shadow-clay-sm text-gray-700 hover:text-black transition-colors border border-white/90 hidden md:flex items-center cursor-pointer"
-            title={t.customizer}
-          >
-            <Sliders className="w-4 h-4 text-blue-600" />
-          </button>
+            <button
+              onClick={() => handleNavClick('resume')}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                settings.activeView === 'resume'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-gray-600 hover:text-black hover:bg-gray-100/70'
+              }`}
+            >
+              <UserCheck className="w-3.5 h-3.5" />
+              <span>{t.resume}</span>
+            </button>
 
-          {/* Mobile Navigation Toggle Button (Visible on < 1024px) */}
-          <button
-            onClick={() => {
-              sound.playClick();
-              setIsMobileMenuOpen(!isMobileMenuOpen);
-            }}
-            className="lg:hidden glass-panel p-2 rounded-xl shadow-clay-sm text-gray-800 hover:text-black transition-all cursor-pointer border border-white/90"
-            aria-label="Toggle Navigation Menu"
-          >
-            {isMobileMenuOpen ? <X className="w-4 h-4 text-red-500" /> : <Menu className="w-4 h-4 text-blue-600" />}
-          </button>
+            {onOpenKnowledgeHub && (
+              <button
+                onClick={() => { sound.playClick(); onOpenKnowledgeHub(); }}
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold text-gray-700 hover:text-black hover:bg-gray-100/70 transition-all cursor-pointer"
+                title={t.faqTooltip || "BIM Knowledge Hub & FAQs"}
+              >
+                <BookOpen className="w-3.5 h-3.5 text-blue-600" />
+                <span>{t.faq || 'FAQ'}</span>
+              </button>
+            )}
+          </div>
+
+          {/* Right Controls: Language Selector, Sound & Mobile Menu */}
+          <div className="flex items-center gap-1 shrink-0">
+            {/* 7-Language Switcher */}
+            <LanguageSelector
+              currentLanguage={currentLanguage}
+              onLanguageChange={onLanguageChange}
+            />
+
+            {/* Sound Toggle */}
+            <button
+              onClick={toggleSound}
+              className="p-1.5 rounded-xl text-gray-600 hover:text-black hover:bg-gray-100/80 transition-colors cursor-pointer"
+              title={settings.soundEnabled ? 'Mute' : 'Unmute'}
+            >
+              {settings.soundEnabled ? <Volume2 className="w-4 h-4 text-blue-600" /> : <VolumeX className="w-4 h-4 text-gray-400" />}
+            </button>
+
+            {/* Mobile Navigation Toggle Button (Visible on < 1024px) */}
+            <button
+              onClick={() => {
+                sound.playClick();
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+              }}
+              className="lg:hidden p-1.5 rounded-xl text-gray-800 hover:text-black hover:bg-gray-100/80 transition-all cursor-pointer"
+              aria-label="Toggle Navigation Menu"
+            >
+              {isMobileMenuOpen ? <X className="w-4 h-4 text-red-500" /> : <Menu className="w-4 h-4 text-blue-600" />}
+            </button>
+          </div>
         </div>
       </header>
 

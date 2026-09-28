@@ -8,19 +8,6 @@ import * as THREE from 'three';
 import type { OrbitControls as OrbitControlsType } from 'three-stdlib';
 import { CategoryBuilding } from '../types';
 import { sound } from '../utils/audio';
-import { 
-  Sun, 
-  Sunset, 
-  Moon, 
-  Code2, 
-  RotateCw, 
-  MousePointerClick,
-  Camera,
-  Play,
-  Pause,
-  Zap,
-  BookOpen
-} from 'lucide-react';
 import { TacomaNeighborhoodModel } from './TacomaNeighborhoodModel';
 import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 
@@ -63,6 +50,10 @@ interface ThreeDClayCanvasProps {
   isIntroActive?: boolean;
   isFlipbookOpen?: boolean;
   onOpenFlipbook?: () => void;
+  lightingMode?: 'day' | 'sunset' | 'night' | 'wireframe';
+  autoRotate?: boolean;
+  onAutoRotateChange?: (rotating: boolean) => void;
+  resetCameraTrigger?: number;
 }
 
 // 5 Zone Centroid & Camera Targets for Smooth Focus (Rotated 90 deg CCW to match Horizontal Overview perspective)
@@ -197,10 +188,17 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
   onExit3D,
   isIntroActive = false,
   isFlipbookOpen = false,
-  onOpenFlipbook
+  onOpenFlipbook,
+  lightingMode: propLightingMode,
+  autoRotate: propAutoRotate,
+  onAutoRotateChange,
+  resetCameraTrigger
 }) => {
-  const [lightingMode, setLightingMode] = useState<'day' | 'sunset' | 'night' | 'wireframe'>('day');
-  const [autoRotate, setAutoRotate] = useState<boolean>(true);
+  const [localLightingMode, setLocalLightingMode] = useState<'day' | 'sunset' | 'night' | 'wireframe'>('day');
+  const [localAutoRotate, setLocalAutoRotate] = useState<boolean>(true);
+  const lightingMode = propLightingMode ?? localLightingMode;
+  const autoRotate = propAutoRotate ?? localAutoRotate;
+
   const [cameraFocus, setCameraFocus] = useState<{ target: [number, number, number]; position: [number, number, number] } | null>(null);
 
   // Responsive FOV helper based on screen width/aspect ratio (auto-adapts for portrait phones & tablets)
@@ -260,6 +258,13 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
     setCameraFocus({ ...OVERVIEW_CAMERA });
     setResponsiveFov(computeOverviewFov());
   };
+
+  // External trigger from BottomToolbar to reset camera view
+  useEffect(() => {
+    if (resetCameraTrigger && resetCameraTrigger > 0) {
+      handleResetCamera();
+    }
+  }, [resetCameraTrigger]);
 
   const handleFocusZone = (cat: CategoryBuilding) => {
     sound.playClick();
@@ -397,120 +402,14 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
           <CameraController 
             targetFocus={cameraFocus} 
             autoRotate={autoRotate} 
-            onUserInteraction={() => setAutoRotate(false)} 
+            onUserInteraction={() => {
+              if (onAutoRotateChange) onAutoRotateChange(false);
+              setLocalAutoRotate(false);
+            }} 
           />
           <Environment preset="studio" blur={0.8} />
         </Suspense>
       </Canvas>
-
-      {/* BOTTOM-LEFT: Camera Preset & View Control Toolbar (Rotate & Overview - Hidden on Video Intro or Flipbook) */}
-      {!isIntroActive && !isFlipbookOpen && (
-        <div className={`absolute bottom-4 sm:bottom-6 left-3 sm:left-6 z-20 glass-panel p-1 sm:p-1.5 rounded-2xl shadow-clay-md flex items-center gap-1 sm:gap-1.5 border border-white/80 transition-opacity duration-300 ${selectedCategory ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-          <button
-            onClick={handleResetCamera}
-            className="p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold text-gray-700 hover:text-black hover:bg-white/80 transition-all cursor-pointer flex items-center gap-1.5"
-            title={t.overviewView}
-          >
-            <Camera className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-blue-600 shrink-0" />
-            <span className="hidden sm:inline font-medium">{t.overviewView}</span>
-          </button>
-
-          <button
-            onClick={() => {
-              sound.playSwitch();
-              setAutoRotate(!autoRotate);
-            }}
-            className={`p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
-              autoRotate ? 'bg-blue-600 text-white shadow-xs' : 'text-gray-700 hover:text-black hover:bg-white/80'
-            }`}
-            title={autoRotate ? t.autoRotateStop : t.autoRotateStart}
-          >
-            {autoRotate ? <Pause className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-white shrink-0" /> : <Play className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-blue-600 shrink-0" />}
-            <span className="hidden sm:inline font-medium">{autoRotate ? t.autoRotateStop : t.autoRotateStart}</span>
-          </button>
-
-          {onOpenFlipbook && (
-            <button
-              onClick={() => {
-                sound.playPageFlip();
-                onOpenFlipbook();
-              }}
-              className="p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-xs hover:scale-105 active:scale-95 border border-amber-400/40"
-              title={t.portfolioFlipbookTooltip || (currentLanguage === 'fa' ? 'ورق زدن دفترچه پورتفولیو استودیو' : 'Open Portfolio Flipbook')}
-            >
-              <BookOpen className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-white shrink-0" />
-              <span className="hidden sm:inline font-bold">
-                {t.portfolioBook || (currentLanguage === 'fa' ? 'دفترچه پورتفولیو' : 'Portfolio Book')}
-              </span>
-            </button>
-          )}
-        </div>
-      )}
-
-      {/* BOTTOM-CENTER: Lighting Mood Switcher Toolbar (Day, Sunset, Night) & Navigation Hint */}
-      {!selectedCategory && !isIntroActive && !isFlipbookOpen && (
-        <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 sm:gap-2 max-w-[96vw] pb-[env(safe-area-inset-bottom,4px)]">
-          {/* Lighting Mode Switcher Panel */}
-          <div className="glass-panel p-1 sm:p-1.5 rounded-2xl shadow-clay-lg flex items-center gap-1 border border-white/90">
-            <button
-              onClick={() => { setLightingMode('day'); sound.playSwitch(); }}
-              className={`p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                lightingMode === 'day' ? 'bg-black text-white shadow-xs' : 'text-gray-700 hover:text-black hover:bg-white/80'
-              }`}
-              title={t.dayMode}
-            >
-              <Sun className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-amber-500 shrink-0" />
-              <span className="hidden sm:inline">{t.dayMode}</span>
-            </button>
-
-            <button
-              onClick={() => { setLightingMode('sunset'); sound.playSwitch(); }}
-              className={`p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                lightingMode === 'sunset' ? 'bg-orange-600 text-white shadow-xs' : 'text-gray-700 hover:text-black hover:bg-white/80'
-              }`}
-              title={t.sunsetMode}
-            >
-              <Sunset className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-orange-400 shrink-0" />
-              <span className="hidden sm:inline">{t.sunsetMode}</span>
-            </button>
-
-            <button
-              onClick={() => { setLightingMode('night'); sound.playSwitch(); }}
-              className={`p-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                lightingMode === 'night' ? 'bg-indigo-950 text-white shadow-xs ring-2 ring-sky-400/60' : 'text-gray-700 hover:text-black hover:bg-white/80'
-              }`}
-              title={t.nightMode}
-            >
-              <Moon className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-indigo-300 shrink-0" />
-              <span className="hidden sm:inline">{t.nightMode}</span>
-            </button>
-
-            {onExit3D && (
-              <button
-                onClick={() => { sound.playClick(); onExit3D(); }}
-                className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl text-xs font-bold text-blue-700 hover:bg-blue-50 transition-all cursor-pointer flex items-center gap-1 border-l border-slate-200/80 ml-1 pl-2"
-                title={t.fastModeTooltip || (currentLanguage === 'fa' ? 'بازگشت به نسخه سبک و پرسرعت دو بعدی' : 'Switch to Ultra-Fast 2D Mode')}
-              >
-                <Zap className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                <span className="hidden md:inline">{t.fastMode || (currentLanguage === 'fa' ? 'نسخه سبک' : 'Fast Mode')}</span>
-              </button>
-            )}
-          </div>
-
-          {/* Minimal Navigation Hint (Desktop only) */}
-          <div className="hidden sm:flex text-[11px] font-medium text-slate-300 bg-slate-950/70 backdrop-blur-md px-3.5 py-1 rounded-full border border-white/10 items-center gap-3">
-            <span className="flex items-center gap-1">
-              <MousePointerClick className="w-3 h-3 text-sky-400 shrink-0" />
-              <span>{t.clickBuildingHint}</span>
-            </span>
-            <span>•</span>
-            <span className="flex items-center gap-1">
-              <RotateCw className="w-3 h-3 text-emerald-400 shrink-0" />
-              <span>{t.rotateHint}</span>
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
