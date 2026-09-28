@@ -61,7 +61,7 @@ export const BottomToolbar: React.FC<BottomToolbarProps> = ({
   };
 
   return (
-    <div className="fixed bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 z-40 max-w-[96vw] pointer-events-none pb-[env(safe-area-inset-bottom,0px)] transition-all duration-300">
+    <div className="fixed bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 z-40 w-max max-w-[96vw] pointer-events-none pb-[env(safe-area-inset-bottom,0px)] transition-all duration-300">
       <div className="pointer-events-auto glass-panel bg-white/95 backdrop-blur-xl border border-white/90 shadow-clay-md rounded-2xl px-2 sm:px-3 py-1.5 sm:py-2 flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar">
         {activeView === '3d' ? (
           <>
