@@ -43,6 +43,19 @@ export interface TranslationDict {
   soundToggle: string;
   menu: string;
   close: string;
+  faq?: string;
+  faqTooltip?: string;
+  portfolioBook?: string;
+  fastMode?: string;
+  fastModeTooltip?: string;
+  portfolioFlipbook?: string;
+  portfolioFlipbookTooltip?: string;
+  individualRendersGrid?: string;
+  spotlightView?: string;
+  zoomImage?: string;
+  previousSheet?: string;
+  nextSheet?: string;
+  swipeNavigationHint?: string;
 
   // Media tabs
   gallery: string;
@@ -172,6 +185,19 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     soundToggle: 'Àudio interactiu',
     menu: 'Menú',
     close: 'Tancar',
+    faq: 'Preguntes Freqüents',
+    faqTooltip: 'Centre de coneixement BIM i preguntes freqüents',
+    portfolioBook: 'Dossier de Treballs',
+    fastMode: 'Mode Ràpid',
+    fastModeTooltip: 'Canviar a la versió 2D ultra ràpida',
+    portfolioFlipbook: 'Dossier Interactiu 3D',
+    portfolioFlipbookTooltip: 'Veure el dossier interactiu 3D de BIMCO i descarregar en PDF',
+    individualRendersGrid: 'Galeria de Rènders Individuals',
+    spotlightView: 'Vista Individual',
+    zoomImage: 'Ampliar Imatge',
+    previousSheet: 'Làmina Anterior',
+    nextSheet: 'Làmina Següent',
+    swipeNavigationHint: 'Llisqueu a esquerra/dreta en mòbil • Fletxes del teclat',
 
     gallery: 'Galeria d’Imatges',
     plans: 'Plànols i Esquemes',
@@ -315,6 +341,19 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     soundToggle: 'صدای تعاملی',
     menu: 'منو',
     close: 'بستن',
+    faq: 'راهنما و سوالات',
+    faqTooltip: 'مرکز دانش BIM و سوالات متداول',
+    portfolioBook: 'دفترچه پورتفولیو',
+    fastMode: 'نسخه سبک',
+    fastModeTooltip: 'بازگشت به نسخه سبک و پرسرعت دو بعدی',
+    portfolioFlipbook: 'دفترچه پورتفولیو',
+    portfolioFlipbookTooltip: 'مشاهده دفترچه تعاملی پورتفولیو BIMCO (ورق‌خور) و دانلود PDF',
+    individualRendersGrid: 'عکس‌ها و رندرها (جدا جدا)',
+    spotlightView: 'پرزنتیشن تکی',
+    zoomImage: 'بزرگنمایی تصویر',
+    previousSheet: 'شیت قبلی',
+    nextSheet: 'شیت بعدی',
+    swipeNavigationHint: 'روی گوشی به چپ یا راست بکشید (Swipe) • کلیدهای جهت‌نما در کیبورد',
 
     gallery: 'گالری تصاویر',
     plans: 'پلان‌ها و نقشه‌های فنی',
@@ -458,6 +497,19 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     soundToggle: 'Audio interactivo',
     menu: 'Menú',
     close: 'Cerrar',
+    faq: 'Preguntas Frecuentes',
+    faqTooltip: 'Centro de conocimiento BIM y preguntas frecuentes',
+    portfolioBook: 'Libro de Portfolio',
+    fastMode: 'Modo Rápido',
+    fastModeTooltip: 'Cambiar a versión 2D ultra rápida',
+    portfolioFlipbook: 'Portfolio Interactivo 3D',
+    portfolioFlipbookTooltip: 'Ver dossier interactivo 3D de BIMCO y descargar PDF',
+    individualRendersGrid: 'Galería de Renders Individuales',
+    spotlightView: 'Vista Individual',
+    zoomImage: 'Ampliar Imagen',
+    previousSheet: 'Lámina Anterior',
+    nextSheet: 'Lámina Siguiente',
+    swipeNavigationHint: 'Desliza a izquierda/derecha en móvil • Flechas del teclado',
 
     gallery: 'Galería de Imágenes',
     plans: 'Planos Técnicos',
@@ -601,6 +653,19 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     soundToggle: 'Interactive Audio',
     menu: 'Menu',
     close: 'Close',
+    faq: 'FAQ & Q&A',
+    faqTooltip: 'BIM Knowledge Hub & FAQs',
+    portfolioBook: 'Portfolio Book',
+    fastMode: 'Fast Mode',
+    fastModeTooltip: 'Switch to Ultra-Fast 2D Mode',
+    portfolioFlipbook: 'Portfolio Flipbook',
+    portfolioFlipbookTooltip: 'View BIMCO interactive 3D portfolio flipbook & download PDF',
+    individualRendersGrid: 'Individual Renders Grid',
+    spotlightView: 'Spotlight View',
+    zoomImage: 'Zoom Image',
+    previousSheet: 'Previous Sheet',
+    nextSheet: 'Next Sheet',
+    swipeNavigationHint: 'Swipe left/right on touch devices • Arrow keys on keyboard',
 
     gallery: 'Image Gallery',
     plans: 'Technical Drawings',
@@ -744,6 +809,19 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     soundToggle: 'Audio Interactif',
     menu: 'Menu',
     close: 'Fermer',
+    faq: 'Questions Fréquentes',
+    faqTooltip: 'Centre de connaissances BIM & FAQ',
+    portfolioBook: 'Livre de Portfolio',
+    fastMode: 'Mode Rapide',
+    fastModeTooltip: 'Passer en mode 2D ultra-rapide',
+    portfolioFlipbook: 'Portfolio Interactif 3D',
+    portfolioFlipbookTooltip: 'Consulter le portfolio interactif 3D de BIMCO et télécharger le PDF',
+    individualRendersGrid: 'Grille des Rendus Individuels',
+    spotlightView: 'Vue Plein Écran',
+    zoomImage: 'Agrandir l’Image',
+    previousSheet: 'Planche Précédente',
+    nextSheet: 'Planche Suivante',
+    swipeNavigationHint: 'Glissez vers la gauche/droite sur mobile • Flèches du clavier',
 
     gallery: 'Galerie d’Images',
     plans: 'Plans Techniques',
@@ -887,6 +965,19 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     soundToggle: 'Interaktiver Ton',
     menu: 'Menü',
     close: 'Schließen',
+    faq: 'Häufige Fragen',
+    faqTooltip: 'BIM-Wissenszentrum & FAQs',
+    portfolioBook: 'Portfolio-Buch',
+    fastMode: 'Schnellmodus',
+    fastModeTooltip: 'Zum ultraschnellen 2D-Modus wechseln',
+    portfolioFlipbook: 'Interaktives 3D-Portfolio',
+    portfolioFlipbookTooltip: 'Interaktives 3D-BIMCO-Portfolio ansehen und PDF herunterladen',
+    individualRendersGrid: 'Einzelne Renderings-Raster',
+    spotlightView: 'Spotlight-Ansicht',
+    zoomImage: 'Bild Vergrößern',
+    previousSheet: 'Vorheriges Blatt',
+    nextSheet: 'Nächstes Blatt',
+    swipeNavigationHint: 'Wischen auf Mobilgeräten • Pfeiltasten auf Tastatur',
 
     gallery: 'Bildergalerie',
     plans: 'Technische Zeichnungen',
@@ -1030,6 +1121,19 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
     soundToggle: 'Audio Interattivo',
     menu: 'Menu',
     close: 'Chiudi',
+    faq: 'Domande Frequenti',
+    faqTooltip: 'Centro di conoscenza BIM e FAQ',
+    portfolioBook: 'Libro Portfolio',
+    fastMode: 'Modalità Veloce',
+    fastModeTooltip: 'Passa alla modalità 2D ultra-rapida',
+    portfolioFlipbook: 'Portfolio Interattivo 3D',
+    portfolioFlipbookTooltip: 'Visualizza il portfolio interattivo 3D di BIMCO e scarica il PDF',
+    individualRendersGrid: 'Griglia Rendering Individuali',
+    spotlightView: 'Vista Dettaglio',
+    zoomImage: 'Ingrandisci Immagine',
+    previousSheet: 'Tavola Precedente',
+    nextSheet: 'Tavola Successiva',
+    swipeNavigationHint: 'Scorri a sinistra/destra su smartphone • Frecce direzionali',
 
     gallery: 'Galleria Immagini',
     plans: 'Piani Tecnici',

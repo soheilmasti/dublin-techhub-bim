@@ -56,7 +56,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
   const individualSheets = filteredProjects.flatMap(proj => 
     (proj.gallery && proj.gallery.length > 0 ? proj.gallery : [proj.coverImage]).map((sheetUrl, sIdx, arr) => ({
       url: sheetUrl,
-      projectTitle: isRTL ? proj.title : (proj.englishTitle || proj.title),
+      projectTitle: proj.title,
       sheetIndex: sIdx + 1,
       totalSheets: arr.length,
       categoryTitle: proj.categoryTitle,
@@ -145,7 +145,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
-            <span>{isRTL ? 'پروژه‌ها' : 'Projects'} ({filteredProjects.length})</span>
+            <span>{t.projectsArchive || (isRTL ? 'پروژه‌ها' : 'Projects')} ({filteredProjects.length})</span>
           </button>
 
           <button
@@ -155,7 +155,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
             }`}
           >
             <LayoutGrid className="w-3.5 h-3.5" />
-            <span>{isRTL ? 'عکس‌ها و رندرها (جدا جدا)' : 'Individual Renders Grid'} ({individualSheets.length})</span>
+            <span>{t.individualRendersGrid || (isRTL ? 'عکس‌ها و رندرها (جدا جدا)' : 'Individual Renders Grid')} ({individualSheets.length})</span>
           </button>
         </div>
       </div>
@@ -271,7 +271,9 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
                       {project.year}
                     </span>
                   </div>
-                  <p className="text-xs font-mono text-gray-400 mt-0.5 font-medium truncate">{project.englishTitle}</p>
+                  {isRTL && project.englishTitle && (
+                    <p className="text-xs font-mono text-gray-400 mt-0.5 font-medium truncate">{project.englishTitle}</p>
+                  )}
                   
                   <p className="text-xs text-gray-600 line-clamp-2 mt-2 leading-relaxed">
                     {project.concept}
@@ -320,7 +322,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <span className="px-3 py-1.5 rounded-xl bg-blue-600/90 text-white text-xs font-bold flex items-center gap-1 shadow-md">
                     <ZoomIn className="w-3.5 h-3.5" />
-                    <span>{isRTL ? 'بزرگنمایی' : 'Zoom'}</span>
+                    <span>{t.zoomImage || (isRTL ? 'بزرگنمایی' : 'Zoom')}</span>
                   </span>
                 </div>
               </div>

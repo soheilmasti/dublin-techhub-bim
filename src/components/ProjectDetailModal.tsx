@@ -130,7 +130,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                     }`}
                   >
                     <LayoutGrid className="w-3.5 h-3.5" />
-                    <span>{isRTL ? 'عکس‌ها و رندرها به صورت جدا جدا' : 'Project Renders & Photos'}</span>
+                    <span>{t.individualRendersGrid || (isRTL ? 'عکس‌ها و رندرها به صورت جدا جدا' : 'Project Renders & Photos')}</span>
                     <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-white/20 ml-1">
                       {currentGallery.length}
                     </span>
@@ -145,7 +145,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                     }`}
                   >
                     <Maximize2 className="w-3.5 h-3.5" />
-                    <span>{isRTL ? 'پرزنتیشن تکی' : 'Spotlight View'}</span>
+                    <span>{t.spotlightView || (isRTL ? 'پرزنتیشن تکی' : 'Spotlight View')}</span>
                   </button>
                 </div>
 
@@ -174,7 +174,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                           <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                             <span className="px-3 py-1.5 rounded-xl bg-blue-600/90 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg backdrop-blur-xs">
                               <ZoomIn className="w-3.5 h-3.5" />
-                              <span>{isRTL ? 'بزرگنمایی تصویر' : 'Zoom Image'}</span>
+                              <span>{t.zoomImage || (isRTL ? 'بزرگنمایی تصویر' : 'Zoom Image')}</span>
                             </span>
                           </div>
                         </div>
@@ -255,11 +255,13 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                 </div>
 
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1 leading-tight">
-                  {isRTL ? project.title : (project.englishTitle || project.title)}
+                  {project.title}
                 </h2>
-                <p className="text-xs font-mono text-gray-400 mt-0.5 font-medium">
-                  {isRTL ? project.englishTitle : project.title}
-                </p>
+                {isRTL && project.englishTitle ? (
+                  <p className="text-xs font-mono text-gray-400 mt-0.5 font-medium">
+                    {project.englishTitle}
+                  </p>
+                ) : null}
 
                 {/* Specs Matrix */}
                 <div className="grid grid-cols-2 gap-3 my-4 sm:my-5 bg-gray-50 p-3.5 sm:p-4 rounded-2xl border border-gray-100 text-xs">
@@ -406,7 +408,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                     setZoomIndex(prev => (prev !== null && prev > 0 ? prev - 1 : currentGallery.length - 1));
                   }}
                   className="absolute left-2 sm:left-4 z-30 p-2.5 sm:p-3 rounded-full bg-black/70 hover:bg-blue-600 text-white border border-white/20 shadow-xl transition-all cursor-pointer hover:scale-105"
-                  title={isRTL ? 'شیت بعدی' : 'Previous Sheet'}
+                  title={t.previousSheet || (isRTL ? 'شیت قبلی' : 'Previous Sheet')}
                 >
                   <ChevronLeft className="w-6 h-6" />
                 </button>
@@ -427,7 +429,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                     setZoomIndex(prev => (prev !== null && prev < currentGallery.length - 1 ? prev + 1 : 0));
                   }}
                   className="absolute right-2 sm:right-4 z-30 p-2.5 sm:p-3 rounded-full bg-black/70 hover:bg-blue-600 text-white border border-white/20 shadow-xl transition-all cursor-pointer hover:scale-105"
-                  title={isRTL ? 'شیت قبلی' : 'Next Sheet'}
+                  title={t.nextSheet || (isRTL ? 'شیت بعدی' : 'Next Sheet')}
                 >
                   <ChevronRight className="w-6 h-6" />
                 </button>
@@ -436,7 +438,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
 
             {/* Bottom Hints for Gestures */}
             <div className="pt-2 text-center text-[11px] text-gray-400 font-mono flex items-center justify-center gap-3">
-              <span>{isRTL ? 'روی گوشی به چپ یا راست بکشید (Swipe) • کلیدهای جهت‌نما در کیبورد' : 'Swipe left/right on touch devices • Arrow keys on keyboard'}</span>
+              <span>{t.swipeNavigationHint || (isRTL ? 'روی گوشی به چپ یا راست بکشید (Swipe) • کلیدهای جهت‌نما در کیبورد' : 'Swipe left/right on touch devices • Arrow keys on keyboard')}</span>
             </div>
           </div>
         )}

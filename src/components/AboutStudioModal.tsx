@@ -22,11 +22,11 @@ interface AboutStudioModalProps {
 export const AboutStudioModal: React.FC<AboutStudioModalProps> = ({
   isOpen,
   onClose,
-  currentLanguage = 'fa'
+  currentLanguage = 'en'
 }) => {
   if (!isOpen) return null;
 
-  const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.fa;
+  const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
   const isRTL = currentLanguage === 'fa';
 
   return (

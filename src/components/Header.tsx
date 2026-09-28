@@ -180,10 +180,10 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={() => { sound.playClick(); onOpenKnowledgeHub(); }}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-gray-700 hover:text-black hover:bg-gray-100/70 border border-transparent transition-all duration-200 cursor-pointer"
-              title="Knowledge Hub & FAQs"
+              title={t.faqTooltip || "BIM Knowledge Hub & FAQs"}
             >
               <BookOpen className="w-3.5 h-3.5 text-blue-600" />
-              <span>{currentLanguage === 'fa' ? 'راهنما و سوالات' : 'FAQ & Q&A'}</span>
+              <span>{t.faq || (currentLanguage === 'fa' ? 'راهنما و سوالات' : 'FAQ & Q&A')}</span>
               <span className="text-[9px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-full font-mono font-bold">
                 12
               </span>
@@ -194,10 +194,10 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={() => { sound.playClick(); onOpenFlipbook(); }}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500/15 to-amber-600/25 hover:from-amber-500 hover:to-amber-600 text-amber-900 hover:text-white border border-amber-300/80 transition-all duration-200 cursor-pointer shadow-xs group"
-              title="مشاهده دفترچه تعاملی پورتفولیو BIMCO (ورق‌خور) و دانلود PDF"
+              title={t.portfolioFlipbookTooltip || (currentLanguage === 'fa' ? 'مشاهده دفترچه تعاملی پورتفولیو BIMCO (ورق‌خور) و دانلود PDF' : 'View BIMCO interactive portfolio flipbook (3D) & download PDF')}
             >
               <BookOpen className="w-3.5 h-3.5 text-amber-600 group-hover:text-white transition-colors" />
-              <span>{currentLanguage === 'fa' ? 'دفترچه پورتفولیو' : 'Portfolio Flipbook'}</span>
+              <span>{t.portfolioFlipbook || (currentLanguage === 'fa' ? 'دفترچه پورتفولیو' : 'Portfolio Flipbook')}</span>
               <span className="text-[9px] bg-amber-500 text-white px-1.5 py-0.5 rounded-full font-mono font-bold animate-pulse">
                 3D
               </span>
@@ -397,7 +397,7 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <div className="flex items-center gap-2.5">
                   <BookOpen className="w-4 h-4 text-amber-700" />
-                  <span>{currentLanguage === 'fa' ? 'مرکز دانش و پرسش‌ها (FAQ & Q&A)' : 'BIM Knowledge & FAQ Hub'}</span>
+                  <span>{t.faqTooltip || (currentLanguage === 'fa' ? 'مرکز دانش و پرسش‌ها (FAQ & Q&A)' : 'BIM Knowledge & FAQ Hub')}</span>
                 </div>
                 <span className="text-[10px] font-mono bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full font-bold">
                   12 Q&A
@@ -416,7 +416,7 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <div className="flex items-center gap-2.5">
                   <BookOpen className="w-4 h-4 text-amber-700" />
-                  <span>{currentLanguage === 'fa' ? 'دفترچه تعاملی پورتفولیو BIMCO (ورق‌خور)' : 'BIMCO Portfolio Flipbook (3D)'}</span>
+                  <span>{t.portfolioFlipbook || (currentLanguage === 'fa' ? 'دفترچه تعاملی پورتفولیو BIMCO (ورق‌خور)' : 'BIMCO Portfolio Flipbook (3D)')}</span>
                 </div>
                 <span className="text-[10px] font-mono bg-amber-600 text-white px-2 py-0.5 rounded-full font-bold">
                   3D PDF

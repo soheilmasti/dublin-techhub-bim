@@ -516,6 +516,11 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           location: 'بارسلونا، اسپانیا • استودیو بیمکو',
           leadership: 'سهیل ماستی و سیاوش پازوکی',
           whatsapp: 'واتساپ: ۳۴۶۱۰۸۵۵۴۳۴+',
+          prev: 'صفحه قبلی',
+          prevShort: 'قبلی',
+          next: 'صفحه بعدی',
+          nextShort: 'بعدی',
+          mobileHint: 'ورق زدن: کشیدن برگه‌ها یا کلیدهای چپ/راست',
         };
       case 'es':
         return {
@@ -538,6 +543,11 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           location: 'Barcelona, España • BIMCO Studio',
           leadership: 'Soheil Masti & Siavash Pazouki',
           whatsapp: 'WhatsApp: +34 610 855 434',
+          prev: 'Página anterior',
+          prevShort: 'Ant',
+          next: 'Página siguiente',
+          nextShort: 'Sig',
+          mobileHint: 'Pasar página: arrastrar esquinas o botones',
         };
       case 'ca':
         return {
@@ -560,6 +570,11 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           location: 'Barcelona, Espanya • BIMCO Studio',
           leadership: 'Soheil Masti & Siavash Pazouki',
           whatsapp: 'WhatsApp: +34 610 855 434',
+          prev: 'Pàgina anterior',
+          prevShort: 'Ant',
+          next: 'Pàgina següent',
+          nextShort: 'Seg',
+          mobileHint: 'Passar pàgina: arrossegar cantonades o botons',
         };
       default:
         return {
@@ -582,6 +597,11 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           location: 'Barcelona, Spain • BIMCO Studio',
           leadership: 'Soheil Masti & Siavash Pazouki',
           whatsapp: 'WhatsApp: +34 610 855 434',
+          prev: 'Previous page',
+          prevShort: 'Prev',
+          next: 'Next page',
+          nextShort: 'Next',
+          mobileHint: 'Flip: Drag page corners or navigation buttons',
         };
     }
   }, [langKey]);
@@ -1001,10 +1021,10 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
                 ? 'opacity-20 border-white/5 text-slate-600 cursor-not-allowed' 
                 : 'bg-white/10 active:bg-amber-600 border-white/20 text-white shadow-xs'
             }`}
-            title="صفحه قبلی"
+            title={ui.prev}
           >
             <ChevronLeft className="w-3.5 h-3.5" />
-            <span className="text-[10px]">{langKey === 'fa' ? 'قبلی' : 'Prev'}</span>
+            <span className="text-[10px]">{ui.prevShort}</span>
           </button>
 
           <span className="text-slate-200 font-semibold text-xs sm:text-sm">
@@ -1021,9 +1041,9 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
                 ? 'opacity-20 border-white/5 text-slate-600 cursor-not-allowed' 
                 : 'bg-white/10 active:bg-amber-600 border-white/20 text-white shadow-xs'
             }`}
-            title="صفحه بعدی"
+            title={ui.next}
           >
-            <span className="text-[10px]">{langKey === 'fa' ? 'بعدی' : 'Next'}</span>
+            <span className="text-[10px]">{ui.nextShort}</span>
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
 
@@ -1147,7 +1167,7 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="hidden sm:inline">{ui.tipText}</span>
-            <span className="sm:hidden">ورق زدن: کشیدن برگه‌ها یا کلیدهای چپ/راست</span>
+            <span className="sm:hidden">{ui.mobileHint}</span>
           </div>
           <div className="flex items-center gap-4 text-slate-400">
             <span className="hidden md:inline">{ui.location}</span>

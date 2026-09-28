@@ -18,20 +18,26 @@ import {
 } from 'lucide-react';
 import { CategoryBuilding, SiteSettings } from '../types';
 import { sound } from '../utils/audio';
+import { TRANSLATIONS, LanguageCode } from '../utils/i18n';
 
 interface MaquetteIsometricCanvasProps {
   categories: CategoryBuilding[];
   settings: SiteSettings;
   onSelectCategory: (category: CategoryBuilding) => void;
   selectedCategory: CategoryBuilding | null;
+  currentLanguage?: LanguageCode;
 }
 
 export const MaquetteIsometricCanvas: React.FC<MaquetteIsometricCanvasProps> = ({
   categories,
   settings,
   onSelectCategory,
-  selectedCategory
+  selectedCategory,
+  currentLanguage = 'en'
 }) => {
+  const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
+  const isRTL = currentLanguage === 'fa';
+
   const [hoveredCategory, setHoveredCategory] = useState<CategoryBuilding | null>(null);
   const [zoomLevel, setZoomLevel] = useState<number>(1);
   const [useCustomBg, setUseCustomBg] = useState<boolean>(false);
@@ -311,7 +317,7 @@ export const MaquetteIsometricCanvas: React.FC<MaquetteIsometricCanvasProps> = (
                               ZONE {cat.categoryNumber}
                             </span>
                             <span className="text-[11px] font-bold text-blue-600">
-                              {cat.projects.length} پروژه واقعی
+                              {cat.projects.length} {t.projectsCount}
                             </span>
                           </div>
                           
@@ -334,7 +340,7 @@ export const MaquetteIsometricCanvas: React.FC<MaquetteIsometricCanvasProps> = (
                             ))}
                             <div className="flex-1 text-left">
                               <span className="text-[10px] font-bold text-blue-600 flex items-center gap-0.5 justify-end">
-                                مشاهده لیست <ChevronLeft className="w-3.5 h-3.5" />
+                                {isRTL ? 'مشاهده لیست' : 'View Projects'} <ChevronLeft className={`w-3.5 h-3.5 ${isRTL ? '' : 'rotate-180'}`} />
                               </span>
                             </div>
                           </div>
@@ -352,21 +358,21 @@ export const MaquetteIsometricCanvas: React.FC<MaquetteIsometricCanvasProps> = (
             <button
               onClick={handleZoomIn}
               className="p-2 rounded-xl text-gray-700 hover:text-black hover:bg-gray-100 transition-colors"
-              title="بزرگنمایی"
+              title={isRTL ? 'بزرگنمایی' : 'Zoom In'}
             >
               <ZoomIn className="w-4 h-4" />
             </button>
             <button
               onClick={handleZoomOut}
               className="p-2 rounded-xl text-gray-700 hover:text-black hover:bg-gray-100 transition-colors"
-              title="کوچک‌نمایی"
+              title={isRTL ? 'کوچک‌نمایی' : 'Zoom Out'}
             >
               <ZoomOut className="w-4 h-4" />
             </button>
             <button
               onClick={handleResetZoom}
               className="p-2 rounded-xl text-gray-700 hover:text-black hover:bg-gray-100 transition-colors"
-              title="بازنشانی اندازه"
+              title={isRTL ? 'بازنشانی اندازه' : 'Reset View'}
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
@@ -380,9 +386,9 @@ export const MaquetteIsometricCanvas: React.FC<MaquetteIsometricCanvasProps> = (
                   ? 'bg-blue-600 text-white shadow-xs' 
                   : 'text-gray-700 hover:text-black hover:bg-gray-100'
               }`}
-              title="سوییچ به تصویر پس‌زمینه رندر دلخواه شما"
+              title={isRTL ? 'سوییچ به تصویر پس‌زمینه رندر دلخواه شما' : 'Switch Custom Background'}
             >
-              {useCustomBg ? 'پس‌زمینه عکس سفارشی' : 'ماکت رندر سفید'}
+              {useCustomBg ? (isRTL ? 'پس‌زمینه عکس سفارشی' : 'Custom BG') : (isRTL ? 'ماکت رندر سفید' : 'Clay White')}
             </button>
           </div>
 
@@ -391,21 +397,21 @@ export const MaquetteIsometricCanvas: React.FC<MaquetteIsometricCanvasProps> = (
             <button
               onClick={() => { setLightingMode('day'); sound.playClick(); }}
               className={`p-2 rounded-xl transition-all ${lightingMode === 'day' ? 'bg-black text-white' : 'text-gray-600 hover:text-black'}`}
-              title="نور روز ماکتی"
+              title={t.dayMode}
             >
               <Sun className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => { setLightingMode('sunset'); sound.playClick(); }}
               className={`p-2 rounded-xl transition-all ${lightingMode === 'sunset' ? 'bg-orange-600 text-white' : 'text-gray-600 hover:text-black'}`}
-              title="نور غروب طلایی"
+              title={t.sunsetMode}
             >
               <Sunset className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => { setLightingMode('night'); sound.playClick(); }}
               className={`p-2 rounded-xl transition-all ${lightingMode === 'night' ? 'bg-indigo-950 text-white' : 'text-gray-600 hover:text-black'}`}
-              title="نور شب معماری"
+              title={t.nightMode}
             >
               <Moon className="w-3.5 h-3.5" />
             </button>

@@ -82,9 +82,11 @@ export const ProjectDrawer: React.FC<ProjectDrawerProps> = ({
               <h2 className="text-lg sm:text-2xl font-bold text-gray-900 tracking-tight leading-snug">
                 {categoryTitle}
               </h2>
-              <p className="text-[11px] font-mono text-gray-400 mt-0.5 uppercase tracking-wider">
-                {category.englishTitle}
-              </p>
+              {category.englishTitle && (
+                <p className="text-[11px] font-mono text-gray-400 mt-0.5 uppercase tracking-wider">
+                  {category.englishTitle}
+                </p>
+              )}
 
               <p className="text-xs text-gray-600 leading-relaxed mt-2.5 bg-gray-50/80 p-3 rounded-2xl border border-gray-100">
                 {categoryDesc}
@@ -131,11 +133,13 @@ export const ProjectDrawer: React.FC<ProjectDrawerProps> = ({
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <h3 className="text-sm sm:text-base font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-                          {isRTL ? project.title : (project.englishTitle || project.title)}
+                          {project.title}
                         </h3>
-                        <p className="text-[11px] font-mono text-gray-400">
-                          {isRTL ? project.englishTitle : project.title}
-                        </p>
+                        {isRTL && project.englishTitle ? (
+                          <p className="text-[11px] font-mono text-gray-400">
+                            {project.englishTitle}
+                          </p>
+                        ) : null}
                       </div>
                       <div className="shrink-0">
                         <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-800">

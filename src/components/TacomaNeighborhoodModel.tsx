@@ -42,7 +42,7 @@ const BUILDING_ZONES: {
     center: [-6.95, 4.17, -6.17],
     size: [3.2, 4.74, 12.5],
     roof: [-6.95, 6.75, -6.17],
-    label: 'طراحی شهری، بنادر و زیرساخت کلان',
+    label: 'Urban Design, Ports & Infrastructure',
     badge: 'ZONE 01',
     color: '#0284c7',
     icon: Compass
@@ -52,7 +52,7 @@ const BUILDING_ZONES: {
     center: [-6.19, 2.66, 11.89],
     size: [4.8, 2.43, 5.5],
     roof: [-6.19, 4.05, 11.89],
-    label: 'پروژه‌های مسکونی و ویلاهای لوکس',
+    label: 'Luxury Villas & Residential Enclaves',
     badge: 'ZONE 02',
     color: '#10b981',
     icon: Home
@@ -62,7 +62,7 @@ const BUILDING_ZONES: {
     center: [6.57, 4.69, 6.23],
     size: [4.2, 7.98, 12.8],
     roof: [6.57, 8.85, 6.23],
-    label: 'مجتمع‌های تجاری، اداری و برج‌ها',
+    label: 'Commercial Complexes & Mixed-Use Towers',
     badge: 'ZONE 03',
     color: '#6366f1',
     icon: Briefcase
@@ -72,7 +72,7 @@ const BUILDING_ZONES: {
     center: [-0.87, 2.67, -1.03],
     size: [6.5, 3.44, 18.0],
     roof: [-0.87, 4.65, -1.03],
-    label: 'فروشگاه‌های کانسپت و فضاهای تجاری مدرن',
+    label: 'Modern Retail Spaces & Concept Showrooms',
     badge: 'ZONE 04',
     color: '#ec4899',
     icon: ShoppingBag
@@ -82,7 +82,7 @@ const BUILDING_ZONES: {
     center: [7.31, 1.60, 16.02],
     size: [2.8, 1.94, 3.6],
     roof: [7.31, 2.75, 16.02],
-    label: 'مسابقات معماری و پروژه‌های عمومی',
+    label: 'Civic Architecture & Design Competitions',
     badge: 'ZONE 05',
     color: '#f59e0b',
     icon: Award
@@ -522,7 +522,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
                           </div>
                         )}
                         <div className="text-xs font-bold line-clamp-1 text-slate-100">
-                          {isRTL ? leadProject.title : (leadProject.englishTitle || leadProject.title)}
+                          {leadProject.title}
                         </div>
                         <div className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">
                           {leadProject.location} • {leadProject.typology}

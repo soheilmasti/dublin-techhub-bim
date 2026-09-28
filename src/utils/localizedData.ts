@@ -2159,7 +2159,9 @@ export function getLocalizedProject(project: Project, lang: LanguageCode): Proje
 
   const isFa = lang === 'fa';
   const localizedTitle = isFa ? project.title : (trans.title[lang] || project.englishTitle || project.title);
-  const secondaryTitle = isFa ? project.englishTitle : project.title;
+  const secondaryTitle = isFa 
+    ? (project.englishTitle || trans.title.en || '') 
+    : (lang !== 'en' ? (trans.title.en || project.englishTitle || '') : '');
 
   return {
     ...project,
@@ -2178,13 +2180,13 @@ export function getLocalizedProject(project: Project, lang: LanguageCode): Proje
 
 export function getLocalizedCategory(category: CategoryBuilding, lang: LanguageCode): CategoryBuilding {
   const zoneInfo = TRANSLATIONS[lang]?.zones?.[category.id as keyof typeof TRANSLATIONS[typeof lang]['zones']];
-  const localizedTitle = zoneInfo?.label || (lang === 'fa' ? category.title : category.englishTitle);
+  const localizedTitle = zoneInfo?.label || (lang === 'fa' ? category.title : (category.englishTitle || category.title));
   const localizedDesc = zoneInfo?.desc || category.description;
 
   return {
     ...category,
     title: localizedTitle,
-    englishTitle: lang === 'fa' ? category.englishTitle : category.title,
+    englishTitle: lang === 'fa' ? category.englishTitle : (zoneInfo?.badge || category.englishTitle || ''),
     description: localizedDesc,
     projects: category.projects.map(p => getLocalizedProject(p, lang))
   };
