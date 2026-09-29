@@ -203,7 +203,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
   currentLanguage = 'en',
   showPins = true
 }) => {
-  const gltf = useGLTF('/models/tacoma/Tacoma_Neighborhood.glb');
+  const gltf = useGLTF('/models/tacoma/Tacoma_Neighborhood.glb', '/draco/');
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
@@ -229,7 +229,8 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     color: new THREE.Color('#F8F8F6'),
     roughness: 0.30,
     metalness: 0.02,
-    side: THREE.DoubleSide
+    side: THREE.FrontSide,
+    shadowSide: THREE.BackSide
   }), []);
 
   // 2b. White Roof Material with polygonOffset to completely eliminate Z-fighting on overlapping copings
@@ -237,10 +238,11 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     color: new THREE.Color('#F8F8F6'),
     roughness: 0.30,
     metalness: 0.02,
-    side: THREE.DoubleSide,
+    side: THREE.FrontSide,
+    shadowSide: THREE.BackSide,
     polygonOffset: true,
-    polygonOffsetFactor: -1,
-    polygonOffsetUnits: -1
+    polygonOffsetFactor: -0.5,
+    polygonOffsetUnits: -0.5
   }), []);
 
   // 3. Dark Architectural Graphite Relief Trim (Mullions, Window Frames, Louvers, Shadow Reveals)
@@ -258,8 +260,8 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     metalness: 0.04,
     side: THREE.DoubleSide,
     polygonOffset: true,
-    polygonOffsetFactor: 1,
-    polygonOffsetUnits: 1
+    polygonOffsetFactor: 0.5,
+    polygonOffsetUnits: 0.5
   }), []);
 
   // 5. Frosted Translucent CNC Acrylic (Context / Vegetation / Trees / Figures)
@@ -547,4 +549,4 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
   );
 };
 
-useGLTF.preload('/models/tacoma/Tacoma_Neighborhood.glb');
+useGLTF.preload('/models/tacoma/Tacoma_Neighborhood.glb', '/draco/');

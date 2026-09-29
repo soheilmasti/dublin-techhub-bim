@@ -66,7 +66,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <header className="fixed top-3 sm:top-5 left-1/2 -translate-x-1/2 z-40 w-max max-w-[96vw] pointer-events-none">
+      <header className="fixed top-[max(0.75rem,env(safe-area-inset-top))] sm:top-5 left-1/2 -translate-x-1/2 z-40 w-max max-w-[96vw] pointer-events-none">
         <div className="pointer-events-auto glass-panel bg-white/95 backdrop-blur-xl border border-white/90 shadow-clay-md rounded-2xl px-2 sm:px-3.5 py-1 sm:py-1.5 flex items-center gap-1.5 sm:gap-2.5">
           {/* Studio Branding (Click = Return to 3D Home) */}
           <div 

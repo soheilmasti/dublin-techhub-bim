@@ -17,7 +17,6 @@ import { ProjectDetailModal } from './components/ProjectDetailModal';
 import { AssetCustomizerModal } from './components/AssetCustomizerModal';
 import { AboutStudioModal } from './components/AboutStudioModal';
 import { BimcoPortfolioFlipbookModal } from './components/BimcoPortfolioFlipbookModal';
-import { DeviceOrientationPrompt } from './components/DeviceOrientationPrompt';
 import { INITIAL_CATEGORIES, INITIAL_SETTINGS } from './data/initialData';
 import { CategoryBuilding, Project, SiteSettings } from './types';
 import { sound } from './utils/audio';
@@ -381,9 +380,6 @@ export const App: React.FC = () => {
         initialVolume={flipbookVolume}
         currentLanguage={language}
       />
-
-      {/* Mobile/Tablet Orientation Rotate Prompt */}
-      <DeviceOrientationPrompt currentLanguage={language} />
     </div>
   );
 };

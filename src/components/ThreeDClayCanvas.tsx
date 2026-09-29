@@ -275,6 +275,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
   };
 
   const isMobile = typeof navigator !== 'undefined' && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+  const shadowMapRes = isMobile ? 1024 : 2048;
 
   return (
     <div className="relative w-full h-[100dvh] h-screen bg-[#0f141c] overflow-hidden select-none touch-none">
@@ -282,14 +283,13 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
       <Canvas
         shadows
         dpr={isMobile ? [1, 1.5] : [1, 2]}
-        camera={{ position: [32, 24, -24], near: 0.5, far: 200, fov: 38 }}
+        camera={{ position: [32, 24, -24], near: 1.0, far: 180, fov: 38 }}
         gl={{
           antialias: true,
-          logarithmicDepthBuffer: true,
           toneMapping: THREE.ACESFilmicToneMapping,
-          preserveDrawingBuffer: true,
           powerPreference: 'high-performance'
         }}
+        style={{ touchAction: 'none' }}
         className="w-full h-full"
       >
         <Suspense fallback={null}>
@@ -317,15 +317,15 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
                 intensity={2.1}
                 color="#fffcf2"
                 castShadow
-                shadow-mapSize-width={4096}
-                shadow-mapSize-height={4096}
+                shadow-mapSize-width={shadowMapRes}
+                shadow-mapSize-height={shadowMapRes}
                 shadow-camera-left={-38}
                 shadow-camera-right={38}
                 shadow-camera-top={38}
                 shadow-camera-bottom={-38}
                 shadow-camera-near={1}
                 shadow-camera-far={120}
-                shadow-bias={-0.0004}
+                shadow-bias={-0.00003}
                 shadow-normalBias={0.035}
               />
               {/* Gentle opposite sky bounce fill so shadow faces show crisp details without washing out */}
@@ -341,15 +341,15 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
                 intensity={2.3}
                 color="#f97316"
                 castShadow
-                shadow-mapSize-width={4096}
-                shadow-mapSize-height={4096}
+                shadow-mapSize-width={shadowMapRes}
+                shadow-mapSize-height={shadowMapRes}
                 shadow-camera-left={-38}
                 shadow-camera-right={38}
                 shadow-camera-top={38}
                 shadow-camera-bottom={-38}
                 shadow-camera-near={1}
                 shadow-camera-far={120}
-                shadow-bias={-0.0004}
+                shadow-bias={-0.00003}
                 shadow-normalBias={0.035}
               />
               <directionalLight position={[18, 14, -12]} intensity={0.25} color="#60a5fa" />
@@ -366,15 +366,15 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
                 intensity={0.35} 
                 color="#93c5fd" 
                 castShadow
-                shadow-mapSize-width={2048}
-                shadow-mapSize-height={2048}
+                shadow-mapSize-width={shadowMapRes}
+                shadow-mapSize-height={shadowMapRes}
                 shadow-camera-left={-38}
                 shadow-camera-right={38}
                 shadow-camera-top={38}
                 shadow-camera-bottom={-38}
                 shadow-camera-near={1}
                 shadow-camera-far={120}
-                shadow-bias={-0.0004}
+                shadow-bias={-0.00003}
                 shadow-normalBias={0.035}
               />
 
