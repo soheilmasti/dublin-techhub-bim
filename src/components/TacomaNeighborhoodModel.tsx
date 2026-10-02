@@ -209,28 +209,23 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
   const t = TRANSLATIONS[currentLanguage] || TRANSLATIONS.en;
   const isRTL = currentLanguage === 'fa';
 
-  // Architectural Physical Maquette PBR Materials (Matching reference image)
-  // 1. Pale Yellow Frosted Plexiglas Glazing (Milky cream-yellow with warm interior backlight glow & physical transmission)
-  const glazingMat = useMemo(() => new THREE.MeshPhysicalMaterial({
-    color: new THREE.Color('#FEF08A'), // Pale warm cream-yellow as in reference photo
+  // Architectural Physical Maquette PBR Materials (Studio Maquette Standard)
+  // 1. Warm Frosted Luminous Glazing / Windows (Solid backlit architectural panels - NO hollow see-through transmission!)
+  const glazingMat = useMemo(() => new THREE.MeshStandardMaterial({
+    color: new THREE.Color('#FFF5D6'), // Warm ivory cream
     emissive: new THREE.Color('#FDE047'), // Warm golden interior glow
-    emissiveIntensity: 0.58, // Clearly discernible, elegant internal light
-    transmission: 0.82,
-    thickness: 0.5,
-    roughness: 0.35,
+    emissiveIntensity: 0.65, // Elegant internal light
+    roughness: 0.28,
     metalness: 0.05,
-    transparent: true,
-    opacity: 0.96,
     side: THREE.DoubleSide
   }), []);
 
-  // 2. Crisp White Laser-Cut Architectural Model Board (Walls, Facades & Main Volumes)
+  // 2. Crisp White Laser-Cut Architectural Model Board (Walls, Facades & Main Volumes - 100% Solid & DoubleSide)
   const opaqueMat = useMemo(() => new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#F8F8F6'),
-    roughness: 0.30,
+    color: new THREE.Color('#F5F5F3'),
+    roughness: 0.35,
     metalness: 0.02,
-    side: THREE.FrontSide,
-    shadowSide: THREE.BackSide
+    side: THREE.DoubleSide
   }), []);
 
   // 2b. White Roof Material with polygonOffset to completely eliminate Z-fighting on overlapping copings
@@ -238,8 +233,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     color: new THREE.Color('#F8F8F6'),
     roughness: 0.30,
     metalness: 0.02,
-    side: THREE.FrontSide,
-    shadowSide: THREE.BackSide,
+    side: THREE.DoubleSide,
     polygonOffset: true,
     polygonOffsetFactor: -0.5,
     polygonOffsetUnits: -0.5
@@ -255,24 +249,20 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
 
   // 4. Matte Dark Charcoal Presentation Plinth (Base / Ground / Pavement) - Offset slightly back so walls cleanly sit on top
   const baseMat = useMemo(() => new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#1A1B1F'),
-    roughness: 0.82,
-    metalness: 0.04,
+    color: new THREE.Color('#23262D'), // Refined studio graphite plinth
+    roughness: 0.85,
+    metalness: 0.02,
     side: THREE.DoubleSide,
     polygonOffset: true,
     polygonOffsetFactor: 0.5,
     polygonOffsetUnits: 0.5
   }), []);
 
-  // 5. Frosted Translucent CNC Acrylic (Context / Vegetation / Trees / Figures)
-  const contextMat = useMemo(() => new THREE.MeshPhysicalMaterial({
-    color: new THREE.Color('#FFFFFF'),
-    transmission: 0.82,
-    roughness: 0.30,
-    thickness: 1.0,
-    transparent: true,
-    opacity: 0.88,
-    depthWrite: false,
+  // 5. Solid Architectural Model Context (Trees / Vegetation / Site Entourage - Clean solid architectural finish)
+  const contextMat = useMemo(() => new THREE.MeshStandardMaterial({
+    color: new THREE.Color('#E2E8F0'), // Clean laser-cut architectural model context
+    roughness: 0.60,
+    metalness: 0.02,
     side: THREE.DoubleSide
   }), []);
 
@@ -286,7 +276,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     clone.position.set(-3948.0 * scale, -836.0 * scale, 8985.0 * scale);
     clone.rotation.set(0, 0, 0);
 
-    // Physical Maquette Material Overwrite & Exploded Roof Elevation
+    // Physical Maquette Material Overwrite & Complete Volume Assurance
     clone.traverse((child) => {
       if (child instanceof THREE.Mesh) {
         const name = (child.name || '').toLowerCase();
@@ -298,9 +288,9 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
           child.renderOrder = 0;
         } else if (isGlazingElement(name, child.material)) {
           child.material = glazingMat;
-          child.castShadow = false;
+          child.castShadow = true;
           child.receiveShadow = true;
-          child.renderOrder = 1;
+          child.renderOrder = 0;
         } else if (isDarkTrimElement(name)) {
           // Architectural Reveals, Frames, Louvers and Mullions -> Sharp 3D relief!
           child.material = darkTrimMat;
@@ -310,8 +300,8 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
         } else if (isContextElement(name)) {
           child.material = contextMat;
           child.castShadow = true;
-          child.receiveShadow = false;
-          child.renderOrder = 2;
+          child.receiveShadow = true;
+          child.renderOrder = 0;
         } else if (isRoofElement(name)) {
           // Roof planes, copings, and parapets with negative polygon offset to eliminate z-fighting
           child.material = roofMat;
@@ -319,7 +309,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
           child.receiveShadow = true;
           child.renderOrder = 0;
         } else {
-          // Laser-cut White Architectural Model Board (Walls, Facades & Massing in natural position)
+          // Laser-cut White Architectural Model Board (Walls, Facades & Massing - Complete Solid Volumes)
           child.material = opaqueMat;
           child.castShadow = true;
           child.receiveShadow = true;
@@ -336,22 +326,22 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
     if (lightingMode === 'night') {
       glazingMat.color.set('#FEF08A');
       glazingMat.emissive.set('#FBBF24');
-      glazingMat.emissiveIntensity = 2.0;
+      glazingMat.emissiveIntensity = 1.8;
+      opaqueMat.roughness = 0.38;
+      roofMat.roughness = 0.38;
+    } else if (lightingMode === 'sunset') {
+      glazingMat.color.set('#FDE68A');
+      glazingMat.emissive.set('#F59E0B');
+      glazingMat.emissiveIntensity = 1.1;
       opaqueMat.roughness = 0.32;
       roofMat.roughness = 0.32;
-    } else if (lightingMode === 'sunset') {
-      glazingMat.color.set('#FCD34D');
-      glazingMat.emissive.set('#F59E0B');
-      glazingMat.emissiveIntensity = 0.90;
-      opaqueMat.roughness = 0.28;
-      roofMat.roughness = 0.28;
     } else {
-      // Day Mode: Clearly distinct pale warm yellow with gentle interior glow (matching photo)
-      glazingMat.color.set('#FEF08A');
+      // Day Mode: Clearly distinct pale warm yellow with gentle interior glow
+      glazingMat.color.set('#FFF5D6');
       glazingMat.emissive.set('#FDE047');
-      glazingMat.emissiveIntensity = 0.58;
-      opaqueMat.roughness = 0.30;
-      roofMat.roughness = 0.30;
+      glazingMat.emissiveIntensity = 0.55;
+      opaqueMat.roughness = 0.35;
+      roofMat.roughness = 0.35;
     }
     glazingMat.needsUpdate = true;
     opaqueMat.needsUpdate = true;
@@ -366,11 +356,8 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
       {/* Gallery Presentation Plinth Block (Sitting cleanly below model base, zero coplanar overlap) */}
       <mesh position={[0, -3.75, 3.5]} receiveShadow>
         <boxGeometry args={[76, 7.4, 76]} />
-        <meshStandardMaterial color="#141416" roughness={0.88} metalness={0.04} />
+        <meshStandardMaterial color="#181B20" roughness={0.88} metalness={0.04} />
       </mesh>
-
-      {/* 3D Proportional Frosted Scale Figures & Modern Street Lighting */}
-      <ArchitecturalEntourage lightingMode={lightingMode as any} />
 
       {/* 5 Interactive Building Keys (Direct Building Selection & Clean Rooftop Badges - NO CIRCLES) */}
       {BUILDING_ZONES.map((zone) => {

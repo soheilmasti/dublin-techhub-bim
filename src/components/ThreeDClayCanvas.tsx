@@ -16,14 +16,14 @@ const SceneExposure: React.FC<{ mode: 'day' | 'sunset' | 'night' | 'wireframe' }
   const { gl, scene } = useThree();
   useEffect(() => {
     gl.toneMapping = THREE.ACESFilmicToneMapping;
-    // Controlled exposure: prevents blown-out white walls & preserves deep architectural contrast
-    gl.toneMappingExposure = mode === 'sunset' ? 0.95 : mode === 'night' ? 0.80 : 0.92;
+    // Master Studio Exposure: Balanced key-to-fill ratios, preventing clipped white highlights and lifting shadow details
+    gl.toneMappingExposure = mode === 'sunset' ? 1.02 : mode === 'night' ? 0.98 : 1.06;
     gl.shadowMap.enabled = true;
     gl.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    // Subtly balance HDR environment reflections so they don't wash out shadows
+    // Subtly balance HDR environment reflections so materials receive natural studio GI bounce
     if ('environmentIntensity' in scene) {
-      (scene as any).environmentIntensity = mode === 'night' ? 0.03 : mode === 'sunset' ? 0.16 : 0.22;
+      (scene as any).environmentIntensity = mode === 'night' ? 0.18 : mode === 'sunset' ? 0.42 : 0.55;
     }
   }, [mode, gl, scene]);
   return null;
@@ -275,7 +275,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
   };
 
   const isMobile = typeof navigator !== 'undefined' && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-  const shadowMapRes = isMobile ? 1024 : 2048;
+  const shadowMapRes = isMobile ? 1024 : 4096;
 
   return (
     <div className="relative w-full h-[100dvh] h-screen bg-[#0f141c] overflow-hidden select-none touch-none">
@@ -296,26 +296,26 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
           <SceneExposure mode={lightingMode} />
           <ResponsiveCameraUpdater fov={responsiveFov} />
 
-          {/* Clean Horizon Background (Matching professional model studio in reference photo) */}
-          <color attach="background" args={[lightingMode === 'night' ? '#070a12' : lightingMode === 'sunset' ? '#1c1520' : '#e2e6ee']} />
+          {/* Clean Studio Horizon Background (Architectural Studio Stage) */}
+          <color attach="background" args={[lightingMode === 'night' ? '#090d14' : lightingMode === 'sunset' ? '#161320' : '#14171d']} />
 
           {/* Hemisphere Ambient Sky Bounce (Calibrated for crisp architectural relief without washing out shadow faces) */}
           <hemisphereLight 
-            intensity={lightingMode === 'night' ? 0.08 : lightingMode === 'sunset' ? 0.22 : 0.24} 
-            color={lightingMode === 'sunset' ? '#fed7aa' : lightingMode === 'night' ? '#1e293b' : '#e0f2fe'} 
-            groundColor={lightingMode === 'night' ? '#070a12' : '#1e2430'} 
+            intensity={lightingMode === 'night' ? 0.22 : lightingMode === 'sunset' ? 0.32 : 0.35} 
+            color={lightingMode === 'sunset' ? '#fed7aa' : lightingMode === 'night' ? '#38bdf8' : '#f8fafc'} 
+            groundColor={lightingMode === 'night' ? '#090d14' : lightingMode === 'sunset' ? '#1c1520' : '#1a1d24'} 
           />
 
           {/* Lighting based on mood */}
           {lightingMode === 'day' && (
             <>
-              {/* Soft natural ambient fill - leaves deep, readable 3D architectural volume and shadow relief */}
-              <ambientLight intensity={0.15} color="#f1f5f9" />
-              {/* Dominant crisp architectural sun (angled at 45 deg, casting sharp, natural surface shadows onto walls, roofs & ground) */}
+              {/* Soft luminous ambient fill - lifts shadow faces so all windows, facades and reveals remain readable */}
+              <ambientLight intensity={0.42} color="#f8fafc" />
+              {/* Dominant crisp architectural sun (angled at 45 deg, balanced intensity so white volumes don't blow out) */}
               <directionalLight
-                position={[-28, 44, 22]}
-                intensity={2.1}
-                color="#fffcf2"
+                position={[-28, 42, 24]}
+                intensity={1.35}
+                color="#fffbf2"
                 castShadow
                 shadow-mapSize-width={shadowMapRes}
                 shadow-mapSize-height={shadowMapRes}
@@ -325,21 +325,23 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
                 shadow-camera-bottom={-38}
                 shadow-camera-near={1}
                 shadow-camera-far={120}
-                shadow-bias={-0.00003}
-                shadow-normalBias={0.035}
+                shadow-bias={-0.00004}
+                shadow-normalBias={0.012}
               />
               {/* Gentle opposite sky bounce fill so shadow faces show crisp details without washing out */}
-              <directionalLight position={[24, 18, -16]} intensity={0.22} color="#cbd5e1" />
+              <directionalLight position={[24, 18, -16]} intensity={0.32} color="#94a3b8" />
             </>
           )}
 
           {lightingMode === 'sunset' && (
             <>
-              <ambientLight intensity={0.16} color="#fed7aa" />
+              {/* Luminous twilight ambient fill */}
+              <ambientLight intensity={0.36} color="#cbd5e1" />
+              {/* Warm golden hour sun casting dramatic, long shadows across roofs and plazas */}
               <directionalLight
-                position={[-30, 22, 16]}
-                intensity={2.3}
-                color="#f97316"
+                position={[-32, 20, 16]}
+                intensity={1.45}
+                color="#fb923c"
                 castShadow
                 shadow-mapSize-width={shadowMapRes}
                 shadow-mapSize-height={shadowMapRes}
@@ -349,21 +351,22 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
                 shadow-camera-bottom={-38}
                 shadow-camera-near={1}
                 shadow-camera-far={120}
-                shadow-bias={-0.00003}
-                shadow-normalBias={0.035}
+                shadow-bias={-0.00004}
+                shadow-normalBias={0.012}
               />
-              <directionalLight position={[18, 14, -12]} intensity={0.25} color="#60a5fa" />
+              {/* Cool twilight sky fill bounce (complementary blue-lavender tone) */}
+              <directionalLight position={[20, 16, -14]} intensity={0.38} color="#818cf8" />
             </>
           )}
 
           {lightingMode === 'night' && (
             <>
-              {/* Deep, authentic architectural night: subtle dark blue sky ambience */}
-              <ambientLight intensity={0.05} color="#0f172a" />
-              {/* Soft, cool moonlight casting gentle, moody shadows */}
+              {/* Clear, legible architectural nocturnal ambient sky fill - prevents buildings from disappearing into pitch black */}
+              <ambientLight intensity={0.28} color="#334155" />
+              {/* Soft, cool moonlight casting gentle, readable shadows across the masterplan */}
               <directionalLight 
                 position={[-24, 38, 20]} 
-                intensity={0.35} 
+                intensity={0.65} 
                 color="#93c5fd" 
                 castShadow
                 shadow-mapSize-width={shadowMapRes}
@@ -374,16 +377,16 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
                 shadow-camera-bottom={-38}
                 shadow-camera-near={1}
                 shadow-camera-far={120}
-                shadow-bias={-0.00003}
-                shadow-normalBias={0.035}
+                shadow-bias={-0.00004}
+                shadow-normalBias={0.012}
               />
 
-              {/* Subtle architectural focal warm light pools (intimate accent glows, not blinding floodlights) */}
-              <pointLight position={[6.57, 6.0, 6.23]} intensity={2.2} color="#fbbf24" distance={20} decay={2} />
-              <pointLight position={[-0.87, 3.5, -1.03]} intensity={1.8} color="#fbbf24" distance={18} decay={2} />
-              <pointLight position={[-6.95, 3.5, -6.17]} intensity={1.8} color="#38bdf8" distance={18} decay={2} />
-              <pointLight position={[-6.19, 2.5, 11.89]} intensity={1.6} color="#fde047" distance={16} decay={2} />
-              <pointLight position={[2.5, 2.0, 2.5]} intensity={1.8} color="#fbbf24" distance={18} decay={2} />
+              {/* Subtle architectural focal warm light pools (intimate accent glows at key building entrances & plazas) */}
+              <pointLight position={[6.57, 5.0, 6.23]} intensity={1.5} color="#fbbf24" distance={22} decay={2} />
+              <pointLight position={[-0.87, 3.2, -1.03]} intensity={1.4} color="#fbbf24" distance={20} decay={2} />
+              <pointLight position={[-6.95, 3.2, -6.17]} intensity={1.4} color="#38bdf8" distance={20} decay={2} />
+              <pointLight position={[-6.19, 2.2, 11.89]} intensity={1.3} color="#fde047" distance={18} decay={2} />
+              <pointLight position={[2.5, 1.8, 2.5]} intensity={1.4} color="#fbbf24" distance={20} decay={2} />
             </>
           )}
 
