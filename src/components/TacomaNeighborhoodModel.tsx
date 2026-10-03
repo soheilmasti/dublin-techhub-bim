@@ -214,11 +214,18 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
 
   // Architectural Physical Maquette PBR Materials (Studio Maquette Standard)
   // 1. Warm Frosted Luminous Glazing / Windows (Solid backlit architectural panels - NO hollow see-through transmission!)
-  const glazingMat = useMemo(() => new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#a8a7a2'), // Warm ivory cream
+  const glazingMat = useMemo(() => new THREE.MeshPhysicalMaterial({
+    color: new THREE.Color('#b5c0bd'), // Warm ivory cream
     emissive: new THREE.Color('#ffe2b8'), // Warm golden interior glow
-    emissiveIntensity: 0.02, // Elegant internal light
-    roughness: 0.65,
+    emissiveIntensity: 0.32, // Diffused warm light behind the acrylic panel
+    roughness: 0.28,
+    ior: 1.49,
+    transmission: 0.08,
+    thickness: 0.12,
+    attenuationColor: new THREE.Color('#e4d7bb'),
+    attenuationDistance: 1.5,
+    clearcoat: 0.65,
+    clearcoatRoughness: 0.22,
     metalness: 0,
     flatShading: true,
     side: THREE.DoubleSide
@@ -226,7 +233,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
 
   // 2. Crisp White Laser-Cut Architectural Model Board (Walls, Facades & Main Volumes - 100% Solid & DoubleSide)
   const opaqueMat = useMemo(() => new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#eee7dc'),
+    color: new THREE.Color('#d9d2c7'),
     roughness: 0.95,
     metalness: 0,
     flatShading: true,
@@ -235,7 +242,7 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
 
   // 2b. White Roof Material with polygonOffset to completely eliminate Z-fighting on overlapping copings
   const roofMat = useMemo(() => new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#e1dace'),
+    color: new THREE.Color('#c8c1b6'),
     roughness: 0.95,
     metalness: 0,
     flatShading: true,
@@ -354,9 +361,9 @@ export const TacomaNeighborhoodModel: React.FC<TacomaNeighborhoodModelProps> = (
   React.useEffect(() => {
     const night = lightingMode === 'night';
     const dusk = lightingMode === 'sunset';
-    glazingMat.color.set(night ? '#ded0b7' : dusk ? '#c4bbac' : '#a8a7a2');
+    glazingMat.color.set(night ? '#d2c5ae' : dusk ? '#c0b9a7' : '#b5c0bd');
     glazingMat.emissive.set('#ffe2b8');
-    glazingMat.emissiveIntensity = night ? 0.85 : dusk ? 0.28 : 0.02;
+    glazingMat.emissiveIntensity = night ? 0.9 : dusk ? 0.55 : 0.32;
   }, [lightingMode, glazingMat]);
 
   return (

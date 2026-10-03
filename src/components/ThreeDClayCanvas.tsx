@@ -16,7 +16,7 @@ const SceneExposure: React.FC<{ mode: 'day' | 'sunset' | 'night' | 'wireframe' }
   useEffect(() => {
     gl.toneMapping = THREE.ACESFilmicToneMapping;
     // Master Studio Exposure: Balanced key-to-fill ratios, preventing clipped white highlights and lifting shadow details
-    gl.toneMappingExposure = mode === 'sunset' ? 0.95 : mode === 'night' ? 0.95 : 0.8;
+    gl.toneMappingExposure = mode === 'sunset' ? 0.78 : mode === 'night' ? 0.85 : 0.72;
     gl.shadowMap.enabled = true;
     gl.shadowMap.type = THREE.PCFShadowMap;
 
@@ -211,14 +211,14 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
           <SoftShadows size={65} samples={isMobile ? 8 : 16} focus={0} />
           <color attach="background" args={[lightingMode === 'night' ? '#373b43' : lightingMode === 'sunset' ? '#c5b9ab' : '#d7d2c9']} />
           <hemisphereLight
-            intensity={lightingMode === 'night' ? 0.3 : 0.35}
+            intensity={lightingMode === 'night' ? 0.3 : 0.42}
             color={lightingMode === 'night' ? '#cbd5e1' : '#fff8ee'}
             groundColor={lightingMode === 'night' ? '#737680' : '#b7aea2'}
           />
           <ambientLight intensity={0.08} color="#fff5e7" />
           <directionalLight
             position={lightingMode === 'sunset' ? [-26, 25, 18] : [-18, 45, 15]}
-            intensity={lightingMode === 'night' ? 0.65 : lightingMode === 'sunset' ? 1.5 : 1.8}
+            intensity={lightingMode === 'night' ? 0.55 : lightingMode === 'sunset' ? 1.1 : 1.25}
             color={lightingMode === 'night' ? '#d5deef' : lightingMode === 'sunset' ? '#ffdab4' : '#fff4e2'}
             castShadow
             shadow-mapSize-width={shadowMapRes}
@@ -232,7 +232,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
             shadow-bias={-0.00012}
             shadow-normalBias={0.035}
           />
-          <directionalLight position={[22, 18, -20]} intensity={lightingMode === 'night' ? 0.15 : 0.28} color="#f1f0eb" />
+          <directionalLight position={[22, 18, -20]} intensity={lightingMode === 'night' ? 0.15 : 0.32} color="#f1f0eb" />
           <ContactShadows
             key={lightingMode}
             position={[0, -0.885, 0]}
