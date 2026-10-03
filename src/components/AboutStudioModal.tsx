@@ -1,3 +1,4 @@
+import { localizeText } from '../utils/localizeText';
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -73,31 +74,31 @@ export const AboutStudioModal: React.FC<AboutStudioModalProps> = ({
           <div className="mt-5 space-y-3">
             <h4 className="text-xs font-bold text-gray-900 font-mono flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-              <span>{isRTL ? 'معماران ارشد و موسسین استودیو' : 'Studio Principals & Partners'}</span>
+              <span>{localizeText("Studio Principals & Partners", currentLanguage)}</span>
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {/* Soheil Masti */}
               <div className="p-3.5 rounded-2xl border border-gray-100 bg-gray-50/60 flex items-center gap-3">
                 <div className="w-12 h-12 rounded-xl overflow-hidden border border-blue-200 shrink-0 bg-white">
-                  <img src="/team/soheil-masti.png" alt="Soheil Masti" className="w-full h-full object-cover object-top" />
+                  <img src="/team/soheil-masti.png" alt={localizeText("Soheil Masti", currentLanguage)} className="w-full h-full object-cover object-top" />
                 </div>
                 <div className="min-w-0">
-                  <h5 className="text-xs font-bold text-gray-900">{isRTL ? 'سهیل مستی' : 'Soheil Masti'}</h5>
-                  <p className="text-[10px] font-mono text-blue-600 font-bold">{isRTL ? 'مدیر سیستم‌های BIM و هوش مصنوعی' : 'BIM Director & AI Strategist'}</p>
-                  <p className="text-[10px] text-gray-500 font-mono truncate">soheil.masti@gmail.com</p>
+                  <h5 className="text-xs font-bold text-gray-900">{localizeText("Soheil Masti", currentLanguage)}</h5>
+                  <p className="text-[10px] font-mono text-blue-600 font-bold">{localizeText("BIM Director & AI Strategist", currentLanguage)}</p>
+                  <p className="text-[10px] text-gray-500 font-mono truncate">{localizeText("soheil.masti@gmail.com", currentLanguage)}</p>
                 </div>
               </div>
 
               {/* Siavash Pazooki */}
               <div className="p-3.5 rounded-2xl border border-gray-100 bg-gray-50/60 flex items-center gap-3">
                 <div className="w-12 h-12 rounded-xl overflow-hidden border border-indigo-200 shrink-0 bg-white">
-                  <img src="/team/siavash-pazooki.jpg" alt="Siavash Pazooki" className="w-full h-full object-cover object-top" />
+                  <img src="/team/siavash-pazooki.jpg" alt={localizeText("Siavash Pazooki", currentLanguage)} className="w-full h-full object-cover object-top" />
                 </div>
                 <div className="min-w-0">
-                  <h5 className="text-xs font-bold text-gray-900">{isRTL ? 'سیاوش پازوکی' : 'Siavash Pazooki'}</h5>
-                  <p className="text-[10px] font-mono text-indigo-600 font-bold">{isRTL ? 'طراح ارشد کانسپت و سوپروایزر CGI' : 'Senior Designer & CGI Lead'}</p>
-                  <p className="text-[10px] text-gray-500 font-mono truncate">siavashpazookiart@gmail.com</p>
+                  <h5 className="text-xs font-bold text-gray-900">{localizeText("Siavash Pazooki", currentLanguage)}</h5>
+                  <p className="text-[10px] font-mono text-indigo-600 font-bold">{localizeText("Senior Designer & CGI Lead", currentLanguage)}</p>
+                  <p className="text-[10px] text-gray-500 font-mono truncate">{localizeText("siavashpazookiart@gmail.com", currentLanguage)}</p>
                 </div>
               </div>
             </div>
@@ -109,7 +110,7 @@ export const AboutStudioModal: React.FC<AboutStudioModalProps> = ({
               <Mail className="w-4 h-4 text-blue-600 shrink-0" />
               <div className="text-xs">
                 <span className="text-gray-400 block text-[10px]">{t.aboutStudio.emailLabel}</span>
-                <span className="font-mono font-semibold text-gray-800">info@bimco.es</span>
+                <span className="font-mono font-semibold text-gray-800">{localizeText("info@bimco.es", currentLanguage)}</span>
               </div>
             </div>
 
@@ -125,7 +126,7 @@ export const AboutStudioModal: React.FC<AboutStudioModalProps> = ({
               <MapPin className="w-4 h-4 text-rose-500 shrink-0" />
               <div className="text-xs">
                 <span className="text-gray-400 block text-[10px]">{t.aboutStudio.addressLabel}</span>
-                <span className="font-semibold text-gray-800">Barcelona, Spain (Sant Cugat del Vallès) &amp; International Delivery</span>
+                <span className="font-semibold text-gray-800">{localizeText("Barcelona, Spain (Sant Cugat del Vallès) &amp; International Delivery", currentLanguage)}</span>
               </div>
             </div>
           </div>

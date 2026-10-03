@@ -1,4 +1,6 @@
+import { localizeText, localizeContent } from './localizeText';
 import { CategoryBuilding, Project, ResumeProfile } from '../types';
+import projectStatuses from './projectStatuses.json';
 import { LanguageCode, TRANSLATIONS } from './i18n';
 import { RESUME_DATA } from '../data/initialData';
 
@@ -7,13 +9,13 @@ import { RESUME_DATA } from '../data/initialData';
 // -----------------------------------------------------------------------------
 
 interface ProjectTranslation {
-  title: Record<LanguageCode, string>;
-  concept: Record<LanguageCode, string>;
-  features: Record<LanguageCode, string[]>;
-  location: Record<LanguageCode, string>;
-  area: Record<LanguageCode, string>;
-  role?: Record<LanguageCode, string>;
-  client?: Record<LanguageCode, string>;
+  title: Partial<Record<LanguageCode, string>>;
+  concept: Partial<Record<LanguageCode, string>>;
+  features: Partial<Record<LanguageCode, string[]>>;
+  location: Partial<Record<LanguageCode, string>>;
+  area: Partial<Record<LanguageCode, string>>;
+  role?: Partial<Record<LanguageCode, string>>;
+  client?: Partial<Record<LanguageCode, string>>;
 }
 
 export const PROJECT_TRANSLATIONS: Record<string, ProjectTranslation> = {
@@ -2048,7 +2050,7 @@ export const PROJECT_TRANSLATIONS: Record<string, ProjectTranslation> = {
 },
 };
 
-export const STATUS_TRANSLATIONS: Record<string, Record<LanguageCode, string>> = {
+export const STATUS_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, string>>> = {
   'ساخته شده': {
     fa: 'ساخته شده',
     en: 'Completed',
@@ -2087,7 +2089,7 @@ export const STATUS_TRANSLATIONS: Record<string, Record<LanguageCode, string>> =
   }
 };
 
-export const TYPOLOGY_TRANSLATIONS: Record<string, Record<LanguageCode, string>> = {
+export const TYPOLOGY_TRANSLATIONS: Record<string, Partial<Record<LanguageCode, string>>> = {
   'Residential': {
     fa: 'مسکونی و ویلایی',
     en: 'Residential',
@@ -2136,11 +2138,13 @@ export const TYPOLOGY_TRANSLATIONS: Record<string, Record<LanguageCode, string>>
 };
 
 export function getLocalizedStatus(status: string, lang: LanguageCode): string {
-  return STATUS_TRANSLATIONS[status]?.[lang] || status;
+  if (lang === 'fa') return status;
+  const source = (projectStatuses as Record<string, string>)[status];
+  return STATUS_TRANSLATIONS[status]?.[lang] || localizeText(source || STATUS_TRANSLATIONS[status]?.en || status, lang);
 }
 
 export function getLocalizedTypology(typology: string, lang: LanguageCode): string {
-  return TYPOLOGY_TRANSLATIONS[typology]?.[lang] || typology;
+  return TYPOLOGY_TRANSLATIONS[typology]?.[lang] || localizeText(TYPOLOGY_TRANSLATIONS[typology]?.en || typology, lang);
 }
 
 // -----------------------------------------------------------------------------
@@ -2158,21 +2162,19 @@ export function getLocalizedProject(project: Project, lang: LanguageCode): Proje
   }
 
   const isFa = lang === 'fa';
-  const localizedTitle = isFa ? project.title : (trans.title[lang] || project.englishTitle || project.title);
-  const secondaryTitle = isFa 
-    ? (project.englishTitle || trans.title.en || '') 
-    : (lang !== 'en' ? (trans.title.en || project.englishTitle || '') : '');
+  const localizedTitle = isFa ? project.title : (trans.title[lang] || localizeText(trans.title.en || project.englishTitle || project.title, lang));
+
 
   return {
     ...project,
     title: localizedTitle,
-    englishTitle: secondaryTitle,
-    concept: isFa ? project.concept : (trans.concept[lang] || project.concept),
-    features: isFa ? project.features : (trans.features[lang] || project.features),
-    location: isFa ? project.location : (trans.location[lang] || project.location),
-    area: isFa ? project.area : (trans.area[lang] || project.area),
-    role: trans.role?.[lang] || project.role,
-    client: trans.client?.[lang] || project.client,
+    englishTitle: '',
+    concept: isFa ? project.concept : (trans.concept[lang] || localizeText(trans.concept.en || project.concept, lang)),
+    features: isFa ? project.features : (trans.features[lang] || localizeContent(trans.features.en || project.features, lang)),
+    location: isFa ? project.location : (trans.location[lang] || localizeText(trans.location.en || project.location, lang)),
+    area: isFa ? project.area : (trans.area[lang] || localizeText(trans.area.en || project.area, lang)),
+    role: trans.role?.[lang] || localizeText(trans.role?.en || project.role || '', lang),
+    client: trans.client?.[lang] || localizeText(trans.client?.en || project.client || '', lang),
     status: getLocalizedStatus(project.status, lang) as any,
     typology: getLocalizedTypology(project.typology, lang) as any,
   };
@@ -2186,7 +2188,7 @@ export function getLocalizedCategory(category: CategoryBuilding, lang: LanguageC
   return {
     ...category,
     title: localizedTitle,
-    englishTitle: lang === 'fa' ? category.englishTitle : (zoneInfo?.badge || category.englishTitle || ''),
+    englishTitle: '',
     description: localizedDesc,
     projects: category.projects.map(p => getLocalizedProject(p, lang))
   };
@@ -2201,6 +2203,7 @@ export function getLocalizedCategories(categories: CategoryBuilding[], lang: Lan
 // -----------------------------------------------------------------------------
 
 export function getLocalizedResume(lang: LanguageCode): ResumeProfile {
+  if (['zh', 'ru', 'pt', 'nl'].includes(lang)) return localizeContent(getLocalizedResume('en'), lang);
   if (lang === 'fa') {
     return RESUME_DATA;
   }

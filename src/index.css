@@ -121,3 +121,12 @@ video::-webkit-media-controls-enclosure {
   opacity: 0 !important;
 }
 
+
+/* Dynamic browser chrome and safe touch targets on phones/tablets. */
+.scene-viewport { height: 100vh; height: 100dvh; }
+.language-options { max-height: min(18rem, calc(100dvh - 9rem)); overscroll-behavior: contain; }
+@media (max-width: 767px), (pointer: coarse) {
+  header button, .mobile-toolbar button { min-width: 44px; min-height: 44px; flex-shrink: 0; }
+  .mobile-toolbar { max-width: calc(100vw - max(0.75rem, env(safe-area-inset-left)) - max(0.75rem, env(safe-area-inset-right))); }
+  .language-options button { min-height: 44px; }
+}

@@ -1,3 +1,4 @@
+import { localizeText, localizeContent } from '../utils/localizeText';
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { PageFlip } from 'page-flip';
 import { 
@@ -490,10 +491,10 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
 
   const isRTL = currentLanguage === 'fa';
   const currentConfig = PORTFOLIO_VOLUMES[activeVolume];
-  const volLocalized = currentConfig.translations[langKey] || currentConfig.translations.en;
+  const volLocalized = localizeContent(currentConfig.translations[langKey] || currentConfig.translations.en, currentLanguage);
 
   // Localized UI Labels
-  const ui = useMemo(() => {
+  const baseUi = useMemo(() => {
     switch (langKey) {
       case 'fa':
         return {
@@ -605,6 +606,7 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
         };
     }
   }, [langKey]);
+  const ui = localizeContent(baseUi, currentLanguage);
 
   // List of all 32 page image URLs for active volume with cache-buster
   const CACHE_KEY = useMemo(() => `v20260926_hd_${Date.now().toString(36)}`, []);
@@ -888,20 +890,19 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
             onClose();
           }}
           className="flex items-center gap-2 sm:gap-3 cursor-pointer group p-1 -m-1 rounded-xl hover:bg-white/5 active:scale-95 transition-all text-left"
-          title={langKey === 'fa' ? 'بازگشت به صفحه اول سایت' : 'Return to Home'}
+          title={localizeText('Return to Home', currentLanguage)}
         >
           <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center p-1 group-hover:border-amber-400 group-hover:bg-amber-500/20 transition-all shrink-0">
-            <img src="/logo.png" alt="BIMCO Logo" className="w-full h-full object-contain" />
+            <img src="/logo.png" alt={localizeText("BIMCO Logo", currentLanguage)} className="w-full h-full object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-white text-xs sm:text-sm tracking-wider font-mono group-hover:text-amber-300 transition-colors">BIMCO</span>
               <span className="text-[10px] text-amber-400 font-semibold px-1.5 py-0.5 rounded bg-amber-400/10 border border-amber-400/20 group-hover:bg-amber-400 group-hover:text-black transition-all">
-                BARCELONA
-              </span>
+                {localizeText("BARCELONA", currentLanguage)}</span>
               <span className="sm:hidden text-[9px] text-amber-200 bg-amber-500/20 border border-amber-500/30 px-1.5 py-0.5 rounded flex items-center gap-1 font-sans">
                 <Home className="w-2.5 h-2.5 text-amber-400" />
-                <span>{langKey === 'fa' ? 'صفحه اول' : 'Home'}</span>
+                <span>{localizeText('Home', currentLanguage)}</span>
               </span>
             </div>
             <div className="text-[10px] text-slate-400 hidden md:block">
@@ -914,7 +915,7 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
         <div className="flex items-center gap-1 sm:gap-2 bg-white/5 p-1 rounded-xl border border-white/10">
           {(['villas', 'apartments', 'urban'] as PortfolioVolumeKey[]).map((volKey) => {
             const v = PORTFOLIO_VOLUMES[volKey];
-            const vLoc = v.translations[langKey] || v.translations.en;
+            const vLoc = localizeContent(v.translations[langKey] || v.translations.en, currentLanguage);
             const isActive = activeVolume === volKey;
             return (
               <button
@@ -1089,7 +1090,7 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
               ? 'bg-white/5 text-slate-600 opacity-20 cursor-not-allowed' 
               : 'bg-slate-900/90 hover:bg-amber-600 text-white border border-white/20 hover:scale-105 hover:border-amber-400'
           }`}
-          title="Previous Page (Left Arrow)"
+          title={localizeText("Previous Page (Left Arrow)", currentLanguage)}
         >
           <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
@@ -1129,7 +1130,7 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
               ? 'bg-white/5 text-slate-600 opacity-20 cursor-not-allowed' 
               : 'bg-slate-900/90 hover:bg-amber-600 text-white border border-white/20 hover:scale-105 hover:border-amber-400'
           }`}
-          title="Next Page (Right Arrow)"
+          title={localizeText("Next Page (Right Arrow)", currentLanguage)}
         >
           <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>

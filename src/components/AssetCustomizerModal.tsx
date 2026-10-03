@@ -1,3 +1,4 @@
+import { localizeText } from '../utils/localizeText';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -189,15 +190,14 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
                       <p className="text-xs font-mono text-gray-400">{currentCat.englishTitle}</p>
                     </div>
                     <span className="font-mono text-xs font-bold px-2.5 py-1 bg-blue-100 text-blue-700 rounded-lg">
-                      POS: {currentCat.position.x}% , {currentCat.position.y}%
+                      {localizeText("POS:", currentLanguage)}{currentCat.position.x}% , {currentCat.position.y}%
                     </span>
                   </div>
 
                   {/* Image URL Input */}
                   <div>
                     <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                      آدرس عکس یا برش ساختمان (Building Image / Cutout URL):
-                    </label>
+                      {localizeText("آدرس عکس یا برش ساختمان (Building Image / Cutout URL):", currentLanguage)}</label>
                     <input
                       type="text"
                       value={currentCat.buildingImage || ''}
@@ -211,8 +211,7 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
                   <div>
                     <label className="block text-xs font-bold text-gray-700 mb-1.5 flex items-center gap-1.5">
                       <Box className="w-3.5 h-3.5 text-blue-600" />
-                      آدرس فایل مدل سه‌بعدی GLB (اختیاری):
-                    </label>
+                      {localizeText("آدرس فایل مدل سه‌بعدی GLB (اختیاری):", currentLanguage)}</label>
                     <input
                       type="text"
                       value={currentCat.glbModelUrl || ''}
@@ -226,7 +225,7 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
                   <div className="space-y-4 pt-2 border-t border-gray-200">
                     <div>
                       <div className="flex justify-between text-xs font-semibold mb-1">
-                        <span>موقعیت افقی در شهرک (X Axis):</span>
+                        <span>{localizeText("موقعیت افقی در شهرک (X Axis):", currentLanguage)}</span>
                         <span className="font-mono text-blue-600">{currentCat.position.x}%</span>
                       </div>
                       <input
@@ -241,7 +240,7 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
 
                     <div>
                       <div className="flex justify-between text-xs font-semibold mb-1">
-                        <span>موقعیت عمودی در شهرک (Y Axis):</span>
+                        <span>{localizeText("موقعیت عمودی در شهرک (Y Axis):", currentLanguage)}</span>
                         <span className="font-mono text-blue-600">{currentCat.position.y}%</span>
                       </div>
                       <input
@@ -262,8 +261,7 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
               <div className="space-y-6 max-w-2xl mx-auto py-2">
                 <div>
                   <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                    آدرس عکس پس‌زمینه کلی شهرک / رندر ماکت (Masterplan Background Image):
-                  </label>
+                    {localizeText("آدرس عکس پس‌زمینه کلی شهرک / رندر ماکت (Masterplan Background Image):", currentLanguage)}</label>
                   <input
                     type="text"
                     value={settings.backgroundImageUrl}
@@ -280,7 +278,7 @@ export const AssetCustomizerModal: React.FC<AssetCustomizerModalProps> = ({
                 <div className="relative h-56 rounded-3xl overflow-hidden border border-gray-200 shadow-sm">
                   <img
                     src={settings.backgroundImageUrl}
-                    alt="Background Preview"
+                    alt={localizeText("Background Preview", currentLanguage)}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-black/20 flex items-center justify-center">

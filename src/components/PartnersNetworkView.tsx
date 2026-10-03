@@ -1,3 +1,4 @@
+import { localizeText } from '../utils/localizeText';
 import React, { useState, useEffect } from 'react';
 import { 
   ArrowLeft, 
@@ -201,28 +202,20 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
 
   const faqs = [
     {
-      q: isRTL ? 'نحوه هماهنگی و تخصیص پروژه‌ها به چه صورت است؟' : 'How are projects assigned and coordinated?',
-      a: isRTL 
-        ? 'تمامی پروژه‌ها بر اساس استانداردهای بین‌المللی ISO 19650 و مستقیماً روی سرورهای ابری اشتراکی (مانند Autodesk Construction Cloud) مدیریت می‌شوند. شرح خدمات، ددلاین‌ها و چک‌لیست‌های تحویل پیش از شروع کاملاً شفاف مشخص می‌گردد.'
-        : 'Projects are executed under strict ISO 19650 standards via cloud common data environments (Autodesk Construction Cloud / ACC). Scope of work, milestone deliverables, and model health checklists are defined upfront.'
+      q: localizeText("How are projects assigned and coordinated?", currentLanguage),
+      a: localizeText("Projects are executed under strict ISO 19650 standards via cloud common data environments (Autodesk Construction Cloud / ACC). Scope of work, milestone deliverables, and model health checklists are defined upfront.", currentLanguage)
     },
     {
-      q: isRTL ? 'پرداخت حق‌الزحمه‌ها چگونه انجام می‌شود؟' : 'How are payments processed?',
-      a: isRTL
-        ? 'حق‌الزحمه‌ها بر اساس مایل‌استون‌های مصوب و به صورت ارزی (یورو، پوند یا دلار) و از طریق ترانسفر بین‌المللی، Wise، پی‌پال یا سایر مسیرهای توافق‌شده بدون هیچ‌گونه تاخیر تسویه می‌گردد.'
-        : 'Compensation is milestone-based or hourly in EUR (€), GBP (£), or USD ($) via international bank transfer, Wise, or PayPal immediately upon quality QA approval.'
+      q: localizeText("How are payments processed?", currentLanguage),
+      a: localizeText("Compensation is milestone-based or hourly in EUR (€), GBP (£), or USD ($) via international bank transfer, Wise, or PayPal immediately upon quality QA approval.", currentLanguage)
     },
     {
-      q: isRTL ? 'اگر در حال حاضر وقت آزاد نداشته باشم، ثبت نام چه فایده‌ای دارد؟' : 'If I am currently busy, should I still register?',
-      a: isRTL
-        ? 'بله، حتماً! با ثبت مشخصات، رزومه و سطح تسلط نرم‌افزاری شما در بانک استعدادهای ما ثبت شده و به محض باز شدن پروژه‌های متناسب با زمان و تخصص شما، مستقیماً برای هماهنگی با شما تماس گرفته می‌شود.'
-        : 'Yes, absolutely! By submitting your profile, you are entered into our primary talent database. When project surges or specialized requirements matching your discipline arise, you will be contacted directly.'
+      q: localizeText("If I am currently busy, should I still register?", currentLanguage),
+      a: localizeText("Yes, absolutely! By submitting your profile, you are entered into our primary talent database. When project surges or specialized requirements matching your discipline arise, you will be contacted directly.", currentLanguage)
     },
     {
-      q: isRTL ? 'چه نرم‌افزارها و تخصص‌هایی در اولویت هستند؟' : 'Which disciplines and software are in highest demand?',
-      a: isRTL
-        ? 'مدل‌سازی معماری و فاز ۲ در رویت (LOD 300-350)، هماهنگی تاسیسات MEP، تشخیص و رفع تداخلات با ناویزورکس، و طراحی پارامتریک در گرس‌هاپر بیشترین تقاضا را دارند.'
-        : 'Revit architectural production (LOD 300–400), MEP spatial coordination, Navisworks clash resolution, and Grasshopper parametric scripting have consistent project demand.'
+      q: localizeText("Which disciplines and software are in highest demand?", currentLanguage),
+      a: localizeText("Revit architectural production (LOD 300–400), MEP spatial coordination, Navisworks clash resolution, and Grasshopper parametric scripting have consistent project demand.", currentLanguage)
     }
   ];
 
@@ -236,11 +229,11 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
             <span className="font-bold text-gray-900 tracking-wider">BIMCO</span>
             <span>/</span>
             <span className="text-blue-600 font-semibold">
-              {isRTL ? 'شبکه همکاران و استعدادهای معماری و BIM' : 'Partner & Talent Network'}
+              {localizeText("Partner & Talent Network", currentLanguage)}
             </span>
             <span className="hidden sm:inline">/</span>
             <span className="hidden sm:inline text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-              {isRTL ? 'همکاری پروژه‌ای و دورکاری' : 'Open Collaboration & Remote Delivery'}
+              {localizeText("Open Collaboration & Remote Delivery", currentLanguage)}
             </span>
           </div>
 
@@ -249,7 +242,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white text-gray-700 hover:text-black hover:bg-gray-100 shadow-sm border border-gray-200 text-xs font-bold transition-all cursor-pointer"
           >
             <ArrowLeft className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
-            <span>{isRTL ? 'بازگشت به صفحه اصلی' : 'Return to Portfolio'}</span>
+            <span>{localizeText("Return to Portfolio", currentLanguage)}</span>
           </button>
         </div>
 
@@ -271,7 +264,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
               }`}
             >
               <Users className="w-4 h-4" />
-              <span>{isRTL ? 'همکاری و جذب استعدادها' : 'Talent & Partner Network'}</span>
+              <span>{localizeText("Talent & Partner Network", currentLanguage)}</span>
             </button>
 
             <button
@@ -289,18 +282,17 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
               }`}
             >
               <Code className={`w-4 h-4 ${activeTab === 'rnd' ? 'text-white' : 'text-blue-600'}`} />
-              <span>{isRTL ? 'واحد R&D و نوآوری دیجیتال (پلاگین‌ها)' : 'Computational R&D & Plugins'}</span>
+              <span>{localizeText("Computational R&D & Plugins", currentLanguage)}</span>
               <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${
                 activeTab === 'rnd' ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-700'
               }`}>
-                {RND_POSTS.length} Labs
-              </span>
+                {RND_POSTS.length} {localizeText("Labs", currentLanguage)}</span>
             </button>
           </div>
 
           <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-gray-500 pr-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>{isRTL ? 'پروژه‌ها و ابزارهای فعال ۲۰۲۶' : 'Active 2026 Pipeline & Tools'}</span>
+            <span>{localizeText("Active 2026 Pipeline & Tools", currentLanguage)}</span>
           </div>
         </div>
 
@@ -311,35 +303,33 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
           <div className="relative z-10 max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs font-mono font-bold">
               <Users className="w-3.5 h-3.5 text-blue-400" />
-              <span>{isRTL ? 'دعوت به همکاری تخصصی' : 'GLOBAL ARCHITECTURAL & BIM NETWORK'}</span>
+              <span>{localizeText("GLOBAL ARCHITECTURAL & BIM NETWORK", currentLanguage)}</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
               {isRTL ? (
-                <>به شبکه همکاران و متخصصین <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-emerald-400">BIM و معماری</span> بپیوندید</>
+                <>به شبکه همکاران و متخصصین <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-emerald-400">{localizeText("BIM و معماری", currentLanguage)}</span> بپیوندید</>
               ) : (
-                <>Join Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-emerald-400">Architectural & BIM</span> Partner Network</>
+                <>{localizeText("Join Our", currentLanguage)}<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-emerald-400">{localizeText("Architectural & BIM", currentLanguage)}</span> {localizeText("Partner Network", currentLanguage)}</>
               )}
             </h1>
 
             <p className="text-sm sm:text-base text-gray-300 leading-relaxed font-normal max-w-2xl">
-              {isRTL
-                ? 'ما همواره مشتاق همکاری با معماران خلاق، مدلرها و هماهنگ‌کننده‌های ارشد BIM، متخصصان تاسیسات MEP و آرتیست‌های سه‌بعدی برای اجرای پروژه‌های بین‌المللی در اروپا، بریتانیا و خاورمیانه هستیم. اطلاعات خود را ثبت کنید تا برای پروژه‌های جاری یا آتی مستقیماً با شما هماهنگ شویم.'
-                : 'We collaborate with talented architects, BIM coordinators, MEP specialists, computational designers, and 3D visualizers for international project deliveries across the UK, Ireland, and Europe. Register your profile to be contacted for immediate project engagements or future pipeline opportunities.'}
+              {localizeText("We collaborate with talented architects, BIM coordinators, MEP specialists, computational designers, and 3D visualizers for international project deliveries across the UK, Ireland, and Europe. Register your profile to be contacted for immediate project engagements or future pipeline opportunities.", currentLanguage)}
             </p>
 
             <div className="pt-2 flex flex-wrap items-center gap-4 text-xs font-mono text-gray-400">
               <div className="flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>ISO 19650 Standards</span>
+                <span>{localizeText("ISO 19650 Standards", currentLanguage)}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Coins className="w-4 h-4 text-amber-400" />
-                <span>Milestone Payments (€ / £ / $)</span>
+                <span>{localizeText("Milestone Payments (€ / £ / $)", currentLanguage)}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Globe className="w-4 h-4 text-blue-400" />
-                <span>100% Remote / Nearshore</span>
+                <span>{localizeText("100% Remote / Nearshore", currentLanguage)}</span>
               </div>
             </div>
           </div>
@@ -352,12 +342,10 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
               <Briefcase className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-gray-900">
-              {isRTL ? 'پروژه‌های معتبر بین‌المللی' : 'Prestige Global Projects'}
+              {localizeText("Prestige Global Projects", currentLanguage)}
             </h3>
             <p className="text-xs text-gray-600 leading-relaxed">
-              {isRTL
-                ? 'تجربه کار روی ساختمان‌های تجاری، مسکونی و درمانی در اروپا منطبق با استانداردهای نوین LOD 350-400.'
-                : 'Work on verified commercial, residential, and institutional projects adhering to modern European LOD 350–400 standards.'}
+              {localizeText("Work on verified commercial, residential, and institutional projects adhering to modern European LOD 350–400 standards.", currentLanguage)}
             </p>
           </div>
 
@@ -366,12 +354,10 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
               <Coins className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-gray-900">
-              {isRTL ? 'تسویه شفاف و به‌موقع' : 'Fair & Guaranteed Pay'}
+              {localizeText("Fair & Guaranteed Pay", currentLanguage)}
             </h3>
             <p className="text-xs text-gray-600 leading-relaxed">
-              {isRTL
-                ? 'پرداخت‌های شفاف مایل‌استونی به یورو، پوند یا دلار با قراردادهای معین و بدون معطلی پس از تحویل.'
-                : 'Clear milestone or hourly compensation in EUR, GBP, or USD with transparent agreements upon deliverable approval.'}
+              {localizeText("Clear milestone or hourly compensation in EUR, GBP, or USD with transparent agreements upon deliverable approval.", currentLanguage)}
             </p>
           </div>
 
@@ -380,12 +366,10 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
               <Globe className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-gray-900">
-              {isRTL ? 'انعطاف‌پذیری کامل دورکاری' : 'Flexible Remote Workflow'}
+              {localizeText("Flexible Remote Workflow", currentLanguage)}
             </h3>
             <p className="text-xs text-gray-600 leading-relaxed">
-              {isRTL
-                ? 'امکان همکاری به صورت فریلنس پروژه‌ای، پاره‌وقت یا تمام‌وقت از هر کجای دنیا با هماهنگی در محیط ابری.'
-                : 'Work remotely from anywhere via cloud CDEs (ACC, BIM 360) on project-based, part-time, or full-time schedules.'}
+              {localizeText("Work remotely from anywhere via cloud CDEs (ACC, BIM 360) on project-based, part-time, or full-time schedules.", currentLanguage)}
             </p>
           </div>
 
@@ -394,12 +378,10 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
               <Clock className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-gray-900">
-              {isRTL ? 'ثبت در بانک پروژه‌های آتی' : 'Continuous Pipeline'}
+              {localizeText("Continuous Pipeline", currentLanguage)}
             </h3>
             <p className="text-xs text-gray-600 leading-relaxed">
-              {isRTL
-                ? 'حتی در زمان شلوغی کاری، پروفایل شما ذخیره می‌شود تا در زمان پروژه‌های بزرگ آتی اولویت اول تماس باشید.'
-                : 'Even when fully booked, your profile remains in our primary talent pool for direct outreach during high-volume tenders.'}
+              {localizeText("Even when fully booked, your profile remains in our primary talent pool for direct outreach during high-volume tenders.", currentLanguage)}
             </p>
           </div>
         </div>
@@ -410,16 +392,14 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-mono font-bold mb-2">
                 <Users className="w-3.5 h-3.5" />
-                <span>{isRTL ? 'معرفی تیم و ساختار تخصصی' : 'LEADERSHIP & CORE SPECIALISTS'}</span>
+                <span>{localizeText("LEADERSHIP & CORE SPECIALISTS", currentLanguage)}</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
-                {isRTL ? 'تیم راهبری و شبکه همکاران کلیدی BIMCO' : 'Core Leadership & Specialist Practice'}
+                {localizeText("Core Leadership & Specialist Practice", currentLanguage)}
               </h2>
             </div>
             <p className="text-xs text-gray-500 font-mono sm:text-right max-w-sm">
-              {isRTL 
-                ? 'ترکیب تفکر خلاق معماری، برنامه‌نویسی اتوماسیون مهندسی و الگوریتم‌های سازمانی هوش مصنوعی'
-                : 'Combining architectural design rigor, engineering automation programming & AI organizational strategy.'}
+              {localizeText("Combining architectural design rigor, engineering automation programming & AI organizational strategy.", currentLanguage)}
             </p>
           </div>
 
@@ -436,26 +416,26 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                     <div className="relative w-14 h-14 rounded-2xl overflow-hidden border-2 border-blue-400/40 shadow-lg shrink-0 bg-slate-800">
                       <img 
                         src="/team/soheil-masti.png" 
-                        alt="Soheil Masti" 
+                        alt={localizeText("Soheil Masti", currentLanguage)} 
                         className="w-full h-full object-cover object-top"
                       />
                     </div>
                     <div>
                       <h3 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
-                        <span>{isRTL ? 'سهیل مستی' : 'Soheil Masti'}</span>
+                        <span>{localizeText("Soheil Masti", currentLanguage)}</span>
                       </h3>
                       <span className="inline-block text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 font-bold mt-0.5">
-                        {isRTL ? 'بیم کوردینیتور ارشد و موسس' : 'LEAD BIM COORDINATOR & FOUNDER'}
+                        {localizeText("LEAD BIM COORDINATOR & FOUNDER", currentLanguage)}
                       </span>
                       <p className="text-xs text-blue-200/80 font-mono mt-1">
-                        {isRTL ? 'معمار ارشد، موسس و استراتژیست سیستم‌های BIM و هوش مصنوعی' : 'Senior Architect, Founder & BIM/AI Systems Strategist'}
+                        {localizeText("Senior Architect, Founder & BIM/AI Systems Strategist", currentLanguage)}
                       </p>
                     </div>
                   </div>
 
                   <div className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20 flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>Barcelona &amp; Global Delivery</span>
+                    <span>{localizeText("Barcelona &amp; Global Delivery", currentLanguage)}</span>
                   </div>
                 </div>
 
@@ -464,36 +444,30 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                   <div className="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
                     <div className="text-xs font-bold text-cyan-300 flex items-center gap-1.5">
                       <Layers className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                      <span>{isRTL ? 'مدلسازی و هماهنگی پیشرفته BIM' : 'Advanced BIM Coordination (LOD 350-400)'}</span>
+                      <span>{localizeText("Advanced BIM Coordination (LOD 350-400)", currentLanguage)}</span>
                     </div>
                     <p className="text-[11px] text-gray-300 leading-relaxed">
-                      {isRTL 
-                        ? 'توسعه پکیج‌های فنی اجرایی، مدلسازی فمیلی‌های پارامتریک و ماتریس رفع تداخلات سازه و تاسیسات (Clash Detection).'
-                        : 'Full execution BIM packages, complex parametric Revit family libraries, and multi-service clash matrices.'}
+                      {localizeText("Full execution BIM packages, complex parametric Revit family libraries, and multi-service clash matrices.", currentLanguage)}
                     </p>
                   </div>
 
                   <div className="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
                     <div className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
                       <Code className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>{isRTL ? 'برنامه‌نویسی و اتوماسیون مهندسی' : 'Engineering Automation & Scripting'}</span>
+                      <span>{localizeText("Engineering Automation & Scripting", currentLanguage)}</span>
                     </div>
                     <p className="text-[11px] text-gray-300 leading-relaxed">
-                      {isRTL 
-                        ? 'توسعه اسکریپت‌های اختصاصی پایتون، سی‌شارپ و داینامو برای اتوماسیون فرآیندهای مهندسی و رفع خطای انسانی.'
-                        : 'Custom Python, C#, and Dynamo scripting for engineering process management, clash QA, and model automation.'}
+                      {localizeText("Custom Python, C#, and Dynamo scripting for engineering process management, clash QA, and model automation.", currentLanguage)}
                     </p>
                   </div>
 
                   <div className="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
                     <div className="text-xs font-bold text-indigo-300 flex items-center gap-1.5">
                       <Brain className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                      <span>{isRTL ? 'الگوریتم‌های هوش مصنوعی و ساختار سازمان' : 'AI Systems & Organizational Strategy'}</span>
+                      <span>{localizeText("AI Systems & Organizational Strategy", currentLanguage)}</span>
                     </div>
                     <p className="text-[11px] text-gray-300 leading-relaxed">
-                      {isRTL 
-                        ? 'تسلط بر معماری الگوریتم‌های AI، ساختارهای Reverse-RAG و مهندسی مجدد جریان کاری دفاتر معماری.'
-                        : 'Mastery of AI algorithmic pipelines, Reverse-RAG, and restructuring architectural practice workflows.'}
+                      {localizeText("Mastery of AI algorithmic pipelines, Reverse-RAG, and restructuring architectural practice workflows.", currentLanguage)}
                     </p>
                   </div>
                 </div>
@@ -516,14 +490,14 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
 
               {/* Direct Quick WhatsApp on Card */}
               <div className="pt-3 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 text-xs font-mono text-gray-400 relative z-10">
-                <span className="text-[11px] text-gray-400">WhatsApp: +34 610 855 434</span>
+                <span className="text-[11px] text-gray-400">{localizeText("WhatsApp: +34 610 855 434", currentLanguage)}</span>
                 <button
                   type="button"
                   onClick={() => onOpenWhatsApp?.('Hi Soheil, I would like to consult with you on architectural BIM coordination and engineering automation...')}
                   className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <PhoneCall className="w-3 h-3" />
-                  <span>{isRTL ? 'گفتگو با سهیل مستی' : 'Contact Soheil'}</span>
+                  <span>{localizeText("Contact Soheil", currentLanguage)}</span>
                 </button>
               </div>
             </div>
@@ -538,26 +512,26 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                     <div className="relative w-14 h-14 rounded-2xl overflow-hidden border-2 border-indigo-400/40 shadow-lg shrink-0 bg-slate-800">
                       <img 
                         src="/team/siavash-pazooki.jpg" 
-                        alt="Siavash Pazooki" 
+                        alt={localizeText("Siavash Pazooki", currentLanguage)} 
                         className="w-full h-full object-cover object-top"
                       />
                     </div>
                     <div>
                       <h3 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
-                        <span>{isRTL ? 'سیاوش پازوکی' : 'Siavash Pazooki'}</span>
+                        <span>{localizeText("Siavash Pazooki", currentLanguage)}</span>
                       </h3>
                       <span className="inline-block text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 font-bold mt-0.5">
-                        {isRTL ? 'طراح ارشد کانسپت و سوپروایزر CGI' : 'SENIOR DESIGNER & CGI LEAD'}
+                        {localizeText("SENIOR DESIGNER & CGI LEAD", currentLanguage)}
                       </span>
                       <p className="text-xs text-indigo-200/80 font-mono mt-1">
-                        {isRTL ? 'معمار ارشد، کارشناسی ارشد طراحی شهری و مدیر تجسم‌سازی پیشرفته' : 'Senior Architectural Designer, M.Sc. Urban Design & CGI Visualizer'}
+                        {localizeText("Senior Architectural Designer, M.Sc. Urban Design & CGI Visualizer", currentLanguage)}
                       </p>
                     </div>
                   </div>
 
                   <div className="text-[10px] font-mono text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded-full border border-purple-500/20 flex items-center gap-1.5">
                     <Sparkles className="w-3 h-3 text-purple-400" />
-                    <span>M.Sc. Urban Design</span>
+                    <span>{localizeText("M.Sc. Urban Design", currentLanguage)}</span>
                   </div>
                 </div>
 
@@ -566,36 +540,30 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                   <div className="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
                     <div className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
                       <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                      <span>{isRTL ? 'طراحی کانسپت و زیبایی‌شناسی فضایی' : 'Concept Ideation & Spatial Harmony'}</span>
+                      <span>{localizeText("Concept Ideation & Spatial Harmony", currentLanguage)}</span>
                     </div>
                     <p className="text-[11px] text-gray-300 leading-relaxed">
-                      {isRTL 
-                        ? 'ترکیب خلوص مینیمال، سازگاری فرم با بستر سایت و خلق هندسه‌های پیشرو در ویلاها، آپارتمان‌ها و مراکز تجاری.'
-                        : 'Transforming complex client briefs into elegant, functionally resolved, and contextually grounded architectural forms.'}
+                      {localizeText("Transforming complex client briefs into elegant, functionally resolved, and contextually grounded architectural forms.", currentLanguage)}
                     </p>
                   </div>
 
                   <div className="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
                     <div className="text-xs font-bold text-cyan-300 flex items-center gap-1.5">
                       <Eye className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                      <span>{isRTL ? 'رندرینگ فتورئالیستیک و انیمیشن CGI' : 'High-End Photorealistic 3D CGI'}</span>
+                      <span>{localizeText("High-End Photorealistic 3D CGI", currentLanguage)}</span>
                     </div>
                     <p className="text-[11px] text-gray-300 leading-relaxed">
-                      {isRTL 
-                        ? 'تخصص عمیق در شبیه‌سازی نور، متریال، اتمسفر اقلیمی و تولید شیت‌های فوق‌حرفه‌ای پرزنتیشن با تری‌دی‌مکس و وی‌ری.'
-                        : 'Industry-leading mastery of architectural lighting, materials, ForestPack landscaping, and cinematic presentations.'}
+                      {localizeText("Industry-leading mastery of architectural lighting, materials, ForestPack landscaping, and cinematic presentations.", currentLanguage)}
                     </p>
                   </div>
 
                   <div className="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-1">
                     <div className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
                       <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>{isRTL ? 'دیتیلینگ درودگری و نظارت کارگاهی' : 'Luxury Millwork & On-Site Detailing'}</span>
+                      <span>{localizeText("Luxury Millwork & On-Site Detailing", currentLanguage)}</span>
                     </div>
                     <p className="text-[11px] text-gray-300 leading-relaxed">
-                      {isRTL 
-                        ? 'طراحی نقشه‌های اجرایی میلی‌متری کابینت‌ها، شومینه، وال‌کلازت و نظارت بر اجرای سازه‌های بتنی و اسکلت فلزی.'
-                        : 'Production-ready millwork detailing, bespoke joinery specifications, and meticulous on-site construction oversight.'}
+                      {localizeText("Production-ready millwork detailing, bespoke joinery specifications, and meticulous on-site construction oversight.", currentLanguage)}
                     </p>
                   </div>
                 </div>
@@ -619,7 +587,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
 
               {/* Direct Actions: View CV & Instagram */}
               <div className="pt-3 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 text-xs font-mono text-gray-400 relative z-10">
-                <span className="text-[11px] text-gray-400">siavashpazookiart@gmail.com</span>
+                <span className="text-[11px] text-gray-400">{localizeText("siavashpazookiart@gmail.com", currentLanguage)}</span>
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
@@ -627,14 +595,14 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                     className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer border border-white/10"
                   >
                     <FileText className="w-3 h-3 text-indigo-400" />
-                    <span>{isRTL ? 'مشاهده مدارک و رزومه' : 'View CV Sheets'}</span>
+                    <span>{localizeText("View CV Sheets", currentLanguage)}</span>
                   </button>
                   <a
                     href="https://instagram.com/Siavash_pzk"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-1.5 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-500/30 transition-colors flex items-center justify-center"
-                    title="Instagram @Siavash_pzk"
+                    title={localizeText("Instagram @Siavash_pzk", currentLanguage)}
                   >
                     <Instagram className="w-4 h-4" />
                   </a>
@@ -650,48 +618,48 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
             {/* Discipline 1: Architectural Modeler */}
             <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-gray-900">{isRTL ? 'مدل‌سازی ارشد معماری' : 'Senior Architectural Modeler'}</span>
-                <span className="text-[10px] font-mono bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-bold">LOD 350-400</span>
+                <span className="font-bold text-gray-900">{localizeText("Senior Architectural Modeler", currentLanguage)}</span>
+                <span className="text-[10px] font-mono bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-bold">{localizeText("LOD 350-400", currentLanguage)}</span>
               </div>
               <p className="text-[11px] text-gray-500 leading-relaxed">
-                {isRTL ? 'مدل‌سازی دقیق پوسته‌های ساختمانی، کتابخانه‌های فمیلی پارامتریک و انطباق با استاندارد بریتانیا و اروپا.' : 'High-precision Revit models, complex parametric family libraries, and European tender sets.'}
+                {localizeText("High-precision Revit models, complex parametric family libraries, and European tender sets.", currentLanguage)}
               </p>
               <div className="flex flex-wrap gap-1">
                 <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Revit</span>
-                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Uniclass 2015</span>
-                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">RIBA 3-5</span>
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">{localizeText("Uniclass 2015", currentLanguage)}</span>
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">{localizeText("RIBA 3-5", currentLanguage)}</span>
               </div>
             </div>
 
             {/* Discipline 2: MEP & Clash Specialist */}
             <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-gray-900">{isRTL ? 'هماهنگی تاسیسات MEP و کلش' : 'MEP & Clash Coordinator'}</span>
-                <span className="text-[10px] font-mono bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-bold">ZERO CLASH</span>
+                <span className="font-bold text-gray-900">{localizeText("MEP & Clash Coordinator", currentLanguage)}</span>
+                <span className="text-[10px] font-mono bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-bold">{localizeText("ZERO CLASH", currentLanguage)}</span>
               </div>
               <p className="text-[11px] text-gray-500 leading-relaxed">
-                {isRTL ? 'مسیریابی هوشمند لوله‌کشی و کانال‌ها در موتورخانه‌ها و ماتریس جامع رفع تداخلات چندرشته‌ای.' : 'Multi-service spatial coordination, plant room routing, and Navisworks clash matrices.'}
+                {localizeText("Multi-service spatial coordination, plant room routing, and Navisworks clash matrices.", currentLanguage)}
               </p>
               <div className="flex flex-wrap gap-1">
-                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Navisworks</span>
-                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Solibri</span>
-                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Revit MEP</span>
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">{localizeText("Navisworks", currentLanguage)}</span>
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">{localizeText("Solibri", currentLanguage)}</span>
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">{localizeText("Revit MEP", currentLanguage)}</span>
               </div>
             </div>
 
             {/* Discipline 3: Computational & Visualizer */}
             <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-gray-900">{isRTL ? 'طراحی الگوریتمیک و رندرینگ' : 'Computational Design & VR'}</span>
-                <span className="text-[10px] font-mono bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-bold">REAL-TIME</span>
+                <span className="font-bold text-gray-900">{localizeText("Computational Design & VR", currentLanguage)}</span>
+                <span className="text-[10px] font-mono bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-bold">{localizeText("REAL-TIME", currentLanguage)}</span>
               </div>
               <p className="text-[11px] text-gray-500 leading-relaxed">
-                {isRTL ? 'طراحی نماهای پارامتریک در گرس‌هاپر و تجسم تعاملی و سینمایی در آنریل انجین ۵ و لومیون.' : 'Parametric facade generation in Grasshopper and cinematic real-time tours in Unreal Engine 5.'}
+                {localizeText("Parametric facade generation in Grasshopper and cinematic real-time tours in Unreal Engine 5.", currentLanguage)}
               </p>
               <div className="flex flex-wrap gap-1">
-                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Grasshopper</span>
-                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Unreal Engine 5</span>
-                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">Rhino 8</span>
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">{localizeText("Grasshopper", currentLanguage)}</span>
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">{localizeText("Unreal Engine 5", currentLanguage)}</span>
+                <span className="text-[9px] font-mono bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded">{localizeText("Rhino 8", currentLanguage)}</span>
               </div>
             </div>
 
@@ -710,7 +678,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                 <div className="flex items-center justify-between pb-3 px-2 border-b border-slate-800">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-bold text-white">
-                      {isRTL ? 'مدارک و رزومه رسمی مهندس سیاوش پازوکی' : 'Siavash Pazooki Official CV & Credentials'}
+                      {localizeText("Siavash Pazooki Official CV & Credentials", currentLanguage)}
                     </span>
                     <div className="flex items-center gap-1.5 ml-3">
                       <button
@@ -719,16 +687,14 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                           selectedCvSheet === '/team/siavash-cv-sheet-1.jpg' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-gray-300'
                         }`}
                       >
-                        Sheet 01 (Experience &amp; Education)
-                      </button>
+                        {localizeText("Sheet 01 (Experience &amp; Education)", currentLanguage)}</button>
                       <button
                         onClick={() => setSelectedCvSheet('/team/siavash-cv-sheet-2.jpg')}
                         className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
                           selectedCvSheet === '/team/siavash-cv-sheet-2.jpg' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-gray-300'
                         }`}
                       >
-                        Sheet 02 (Summary &amp; Competencies)
-                      </button>
+                        {localizeText("Sheet 02 (Summary &amp; Competencies)", currentLanguage)}</button>
                     </div>
                   </div>
                   <button
@@ -741,7 +707,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                 <div className="p-2 sm:p-4 flex items-center justify-center max-h-[80vh] overflow-auto">
                   <img 
                     src={selectedCvSheet} 
-                    alt="Siavash Pazooki CV" 
+                    alt={localizeText("Siavash Pazooki CV", currentLanguage)} 
                     className="w-full h-auto object-contain rounded-xl shadow-lg"
                   />
                 </div>
@@ -759,12 +725,10 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
             <div className="space-y-1 pb-4 border-b border-gray-100">
               <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
                 <UserCheck className="w-5 h-5 text-blue-600" />
-                <span>{isRTL ? 'فرم ثبت مشخصات همکاری' : 'Partner Registration Form'}</span>
+                <span>{localizeText("Partner Registration Form", currentLanguage)}</span>
               </h2>
               <p className="text-xs text-gray-500">
-                {isRTL
-                  ? 'مشخصات خود را وارد کنید. می‌توانید مستقیماً فرم را در واتساپ ارسال کنید یا در سیستم ثبت نمایید.'
-                  : 'Complete your details below. You can submit directly via WhatsApp or register into our talent database.'}
+                {localizeText("Complete your details below. You can submit directly via WhatsApp or register into our talent database.", currentLanguage)}
               </p>
             </div>
 
@@ -775,10 +739,10 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                   <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
                   <div className="flex-1">
                     <p className="text-xs font-bold text-emerald-900">
-                      {isRTL ? 'اطلاعات شما با موفقیت در بانک همکاران ثبت شد!' : 'Application Successfully Logged in Talent Database!'}
+                      {localizeText("Application Successfully Logged in Talent Database!", currentLanguage)}
                     </p>
                     <p className="text-[11px] text-emerald-700 font-mono">
-                      Ref ID: <span className="font-bold underline">{submissionId}</span>
+                      {localizeText("Ref ID:", currentLanguage)}<span className="font-bold underline">{submissionId}</span>
                     </p>
                   </div>
                 </div>
@@ -789,7 +753,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-emerald-300 text-emerald-800 text-xs font-semibold hover:bg-emerald-100 transition-colors cursor-pointer"
                   >
                     <Copy className="w-3.5 h-3.5" />
-                    <span>{copiedSummary ? (isRTL ? 'کپی شد!' : 'Copied!') : (isRTL ? 'کپی خلاصه فرم' : 'Copy Application Summary')}</span>
+                    <span>{copiedSummary ? (localizeText("Copied!", currentLanguage)) : (localizeText("Copy Application Summary", currentLanguage))}</span>
                   </button>
 
                   <a
@@ -799,7 +763,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-colors shadow-xs"
                   >
                     <Send className="w-3.5 h-3.5" />
-                    <span>{isRTL ? 'ارسال سریع به واتساپ' : 'Fast-Track on WhatsApp'}</span>
+                    <span>{localizeText("Fast-Track on WhatsApp", currentLanguage)}</span>
                   </a>
                 </div>
               </div>
@@ -810,28 +774,28 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-gray-700 flex items-center justify-between">
-                    <span>{isRTL ? 'نام و نام خانوادگی' : 'Full Name'} *</span>
+                    <span>{localizeText("Full Name", currentLanguage)} *</span>
                   </label>
                   <input
                     type="text"
                     required
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                    placeholder={isRTL ? 'مثال: علی رضایی' : 'e.g., Alex Morisson'}
+                    placeholder={localizeText("e.g., Alex Morisson", currentLanguage)}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 transition-all"
                   />
                 </div>
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-gray-700">
-                    <span>{isRTL ? 'آدرس ایمیل' : 'Email Address'} *</span>
+                    <span>{localizeText("Email Address", currentLanguage)} *</span>
                   </label>
                   <input
                     type="email"
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="architect@example.com"
+                    placeholder={localizeText("architect@example.com", currentLanguage)}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 transition-all font-mono"
                   />
                 </div>
@@ -841,8 +805,8 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-gray-700 flex items-center justify-between">
-                    <span>{isRTL ? 'شماره تماس یا واتساپ' : 'WhatsApp / Phone Number'} *</span>
-                    <span className="text-[10px] text-gray-400 font-normal">{isRTL ? 'با پیش‌شماره کشور' : 'with country code'}</span>
+                    <span>{localizeText("WhatsApp / Phone Number", currentLanguage)} *</span>
+                    <span className="text-[10px] text-gray-400 font-normal">{localizeText("with country code", currentLanguage)}</span>
                   </label>
                   <input
                     type="tel"
@@ -856,14 +820,14 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-gray-700">
-                    <span>{isRTL ? 'کشور، شهر یا منطقه زمانی' : 'Location & Timezone'} *</span>
+                    <span>{localizeText("Location & Timezone", currentLanguage)} *</span>
                   </label>
                   <input
                     type="text"
                     required
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    placeholder={isRTL ? 'مثال: تهران / بارسلون / لندن (GMT+3.5)' : 'e.g., London, Dublin, Barcelona (GMT/CET)'}
+                    placeholder={localizeText("e.g., London, Dublin, Barcelona (GMT/CET)", currentLanguage)}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 transition-all"
                   />
                 </div>
@@ -873,7 +837,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-gray-700">
-                    <span>{isRTL ? 'تخصص اصلی' : 'Primary Discipline'} *</span>
+                    <span>{localizeText("Primary Discipline", currentLanguage)} *</span>
                   </label>
                   <select
                     value={formData.discipline}
@@ -888,16 +852,16 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-gray-700">
-                    <span>{isRTL ? 'سابقه کار تخصصی' : 'Years of Experience'} *</span>
+                    <span>{localizeText("Years of Experience", currentLanguage)} *</span>
                   </label>
                   <select
                     value={formData.experienceYears}
                     onChange={(e) => setFormData({ ...formData, experienceYears: e.target.value })}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 transition-all"
                   >
-                    <option value="1-3 years">{isRTL ? '۱ تا ۳ سال (Junior / Intermediate)' : '1-3 years (Junior / Intermediate)'}</option>
-                    <option value="4-7 years">{isRTL ? '۴ تا ۷ سال (Mid-Senior Specialist)' : '4-7 years (Mid-Senior Specialist)'}</option>
-                    <option value="8+ years">{isRTL ? '۸ سال به بالا (Senior Lead / Coordinator)' : '8+ years (Senior Lead / Coordinator)'}</option>
+                    <option value="1-3 years">{localizeText("1-3 years (Junior / Intermediate)", currentLanguage)}</option>
+                    <option value="4-7 years">{localizeText("4-7 years (Mid-Senior Specialist)", currentLanguage)}</option>
+                    <option value="8+ years">{localizeText("8+ years (Senior Lead / Coordinator)", currentLanguage)}</option>
                   </select>
                 </div>
               </div>
@@ -905,7 +869,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
               {/* Row 4: Multi-select Software Stack */}
               <div className="space-y-2">
                 <label className="text-xs font-bold text-gray-700 flex items-center justify-between">
-                  <span>{isRTL ? 'نرم‌افزارهای مسلط (انتخاب موارد)' : 'Software Stack Proficiency'} *</span>
+                  <span>{localizeText("Software Stack Proficiency", currentLanguage)} *</span>
                   <span className="text-[10px] text-gray-400">{formData.softwareStack.length} {isRTL ? 'مورد انتخاب شده' : 'selected'}</span>
                 </label>
                 <div className="flex flex-wrap gap-1.5">
@@ -934,7 +898,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-gray-700 flex items-center justify-between">
-                    <span>{isRTL ? 'لینک نمونه‌کار، لینکدین یا گوگل‌درایو' : 'Portfolio / LinkedIn / Drive Link'} *</span>
+                    <span>{localizeText("Portfolio / LinkedIn / Drive Link", currentLanguage)} *</span>
                   </label>
                   <input
                     type="url"
@@ -948,17 +912,17 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-gray-700">
-                    <span>{isRTL ? 'نوع تمایل به همکاری' : 'Availability & Collaboration Type'} *</span>
+                    <span>{localizeText("Availability & Collaboration Type", currentLanguage)} *</span>
                   </label>
                   <select
                     value={formData.collaborationType}
                     onChange={(e) => setFormData({ ...formData, collaborationType: e.target.value })}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 transition-all"
                   >
-                    <option value="Immediate Project Freelance">{isRTL ? 'پروژه‌ای فوری (آماده شروع)' : 'Immediate Project Freelance'}</option>
-                    <option value="Part-time (10-20h/week)">{isRTL ? 'پاره‌وقت (۱۰ تا ۲۰ ساعت در هفته)' : 'Part-time (10-20h/week)'}</option>
-                    <option value="Full-time Remote Contract">{isRTL ? 'تمام‌وقت دورکاری (قراردادی)' : 'Full-time Remote Contract'}</option>
-                    <option value="Future Project Pool">{isRTL ? 'همکاری در پروژه‌های آینده (ثبت در دیتابیس)' : 'Future Project Pool (Database Only)'}</option>
+                    <option value="Immediate Project Freelance">{localizeText("Immediate Project Freelance", currentLanguage)}</option>
+                    <option value="Part-time (10-20h/week)">{localizeText("Part-time (10-20h/week)", currentLanguage)}</option>
+                    <option value="Full-time Remote Contract">{localizeText("Full-time Remote Contract", currentLanguage)}</option>
+                    <option value="Future Project Pool">{localizeText("Future Project Pool (Database Only)", currentLanguage)}</option>
                   </select>
                 </div>
               </div>
@@ -966,13 +930,13 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
               {/* Row 6: Notes / Self-introduction */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-gray-700">
-                  <span>{isRTL ? 'توضیحات کوتاه یا معرفی توانمندی‌ها (اختیاری)' : 'Brief Introduction / Key Projects (Optional)'}</span>
+                  <span>{localizeText("Brief Introduction / Key Projects (Optional)", currentLanguage)}</span>
                 </label>
                 <textarea
                   rows={3}
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  placeholder={isRTL ? 'پروژه‌های شاخص، سطح تسلط به استانداردهای بین‌المللی یا هر نکته تکمیلی...' : 'Highlight key project typologies, ISO 19650 familiarity, or availability notes...'}
+                  placeholder={localizeText("Highlight key project typologies, ISO 19650 familiarity, or availability notes...", currentLanguage)}
                   className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 transition-all"
                 />
               </div>
@@ -986,7 +950,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                   className="w-full sm:flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md hover:shadow-lg active:scale-98 transition-all cursor-pointer"
                 >
                   <Send className="w-4 h-4" />
-                  <span>{isRTL ? 'ارسال مستقیم فرم در واتساپ' : 'Send Application via WhatsApp'}</span>
+                  <span>{localizeText("Send Application via WhatsApp", currentLanguage)}</span>
                 </button>
 
                 {/* Save to Talent Database */}
@@ -995,12 +959,12 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                   className="w-full sm:flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-2xl bg-gray-900 hover:bg-black text-white text-xs font-bold shadow-sm hover:shadow-md active:scale-98 transition-all cursor-pointer border border-gray-800"
                 >
                   <CheckCircle className="w-4 h-4 text-blue-400" />
-                  <span>{isRTL ? 'ثبت در بانک اطلاعاتی استودیو' : 'Save in Studio Talent Registry'}</span>
+                  <span>{localizeText("Save in Studio Talent Registry", currentLanguage)}</span>
                 </button>
               </div>
 
               <p className="text-[11px] text-gray-400 text-center font-mono">
-                🔒 {isRTL ? 'اطلاعات و رزومه شما کاملاً محرمانه نزد استودیو نگهداری می‌شود.' : 'Your portfolio and personal information are strictly confidential and protected.'}
+                🔒 {localizeText("Your portfolio and personal information are strictly confidential and protected.", currentLanguage)}
               </p>
             </form>
           </div>
@@ -1016,16 +980,14 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-gray-900">
-                    {isRTL ? 'گفتگوی سریع با سهیل مستی' : 'Quick Chat with Studio Lead'}
+                    {localizeText("Quick Chat with Studio Lead", currentLanguage)}
                   </h4>
-                  <p className="text-[11px] text-emerald-800 font-mono">WhatsApp: +34 610 855 434</p>
+                  <p className="text-[11px] text-emerald-800 font-mono">{localizeText("WhatsApp: +34 610 855 434", currentLanguage)}</p>
                 </div>
               </div>
 
               <p className="text-xs text-gray-600 leading-relaxed">
-                {isRTL
-                  ? 'ترجیح می‌دهید به جای پر کردن فرم، مستقیماً رزومه یا لینک پورتفولیوی خود را در واتساپ ارسال کنید؟'
-                  : 'Prefer to skip the form and share your PDF resume or Behance link directly on WhatsApp?'}
+                {localizeText("Prefer to skip the form and share your PDF resume or Behance link directly on WhatsApp?", currentLanguage)}
               </p>
 
               <button
@@ -1039,7 +1001,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
                 }}
                 className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-colors shadow-xs cursor-pointer"
               >
-                <span>{isRTL ? 'ارسال پیام در واتساپ' : 'Open WhatsApp Chat'}</span>
+                <span>{localizeText("Open WhatsApp Chat", currentLanguage)}</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -1048,36 +1010,36 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
             <div className="bg-white rounded-3xl p-6 border border-gray-200/80 shadow-xs space-y-4">
               <h4 className="text-xs font-bold text-gray-900 font-mono tracking-wider uppercase flex items-center gap-2">
                 <Layers className="w-4 h-4 text-blue-600" />
-                <span>{isRTL ? 'تخصص‌های با اولویت بالا' : 'CURRENT HIGH-PRIORITY ROLES'}</span>
+                <span>{localizeText("CURRENT HIGH-PRIORITY ROLES", currentLanguage)}</span>
               </h4>
 
               <ul className="space-y-2.5 text-xs text-gray-700">
                 <li className="flex items-start gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0"></span>
                   <div>
-                    <span className="font-bold text-gray-900">Senior Revit Modelers</span>
-                    <p className="text-[11px] text-gray-500">LOD 300–350 Commercial & High-End Residential</p>
+                    <span className="font-bold text-gray-900">{localizeText("Senior Revit Modelers", currentLanguage)}</span>
+                    <p className="text-[11px] text-gray-500">{localizeText("LOD 300–350 Commercial & High-End Residential", currentLanguage)}</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0"></span>
                   <div>
-                    <span className="font-bold text-gray-900">BIM Clash Coordinators</span>
-                    <p className="text-[11px] text-gray-500">Navisworks Manage & Solibri Clash Matrix</p>
+                    <span className="font-bold text-gray-900">{localizeText("BIM Clash Coordinators", currentLanguage)}</span>
+                    <p className="text-[11px] text-gray-500">{localizeText("Navisworks Manage & Solibri Clash Matrix", currentLanguage)}</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-1.5 shrink-0"></span>
                   <div>
-                    <span className="font-bold text-gray-900">MEP BIM Specialists</span>
-                    <p className="text-[11px] text-gray-500">Spatial plant room & pipework routing</p>
+                    <span className="font-bold text-gray-900">{localizeText("MEP BIM Specialists", currentLanguage)}</span>
+                    <p className="text-[11px] text-gray-500">{localizeText("Spatial plant room & pipework routing", currentLanguage)}</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0"></span>
                   <div>
-                    <span className="font-bold text-gray-900">Grasshopper / Dynamo Scripting</span>
-                    <p className="text-[11px] text-gray-500">Algorithmic facade generation & data automation</p>
+                    <span className="font-bold text-gray-900">{localizeText("Grasshopper / Dynamo Scripting", currentLanguage)}</span>
+                    <p className="text-[11px] text-gray-500">{localizeText("Algorithmic facade generation & data automation", currentLanguage)}</p>
                   </div>
                 </li>
               </ul>
@@ -1087,12 +1049,10 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
             <div className="bg-gray-50 rounded-3xl p-5 border border-gray-200/80 space-y-2">
               <div className="flex items-center gap-2 text-xs font-mono font-bold text-gray-800">
                 <FolderGit2 className="w-4 h-4 text-blue-600" />
-                <span>Autodesk ACC & CDE Ready</span>
+                <span>{localizeText("Autodesk ACC & CDE Ready", currentLanguage)}</span>
               </div>
               <p className="text-[11px] text-gray-500 leading-relaxed">
-                {isRTL
-                  ? 'تمامی پروژه‌ها دارای محیط استاندارد تبادل داده (CDE) بوده و بر بسترهای ابری امن اجرا می‌شوند.'
-                  : 'All collaboration uses enterprise-grade Common Data Environments with full ISO 19650 naming conventions.'}
+                {localizeText("All collaboration uses enterprise-grade Common Data Environments with full ISO 19650 naming conventions.", currentLanguage)}
               </p>
             </div>
           </div>
@@ -1102,10 +1062,10 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200/80 shadow-clay-md space-y-6">
           <div className="space-y-1">
             <h3 className="text-lg font-black text-gray-900">
-              {isRTL ? 'پرسش‌های متداول همکاران و متخصصین' : 'Frequently Asked Questions for Partners'}
+              {localizeText("Frequently Asked Questions for Partners", currentLanguage)}
             </h3>
             <p className="text-xs text-gray-500">
-              {isRTL ? 'اطلاعات تکمیلی در مورد شیوه قرارداد، تسویه‌حساب و مدیریت پروژه‌ها' : 'Clear answers regarding workflows, payout cycles, and collaboration mechanics'}
+              {localizeText("Clear answers regarding workflows, payout cycles, and collaboration mechanics", currentLanguage)}
             </p>
           </div>
 

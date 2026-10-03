@@ -1,3 +1,4 @@
+import { localizeText } from '../utils/localizeText';
 import React, { useState, useMemo, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Html, Float, RoundedBox, ContactShadows, Environment } from '@react-three/drei';
@@ -539,12 +540,11 @@ export const DublinTechHubShowcase: React.FC<{
             </div>
             <div>
               <h1 className="text-sm font-bold text-white flex items-center gap-2">
-                <span>Dublin Tech Hub | 7-Story Enterprise Tower</span>
+                <span>{localizeText("Dublin Tech Hub | 7-Story Enterprise Tower", currentLanguage)}</span>
                 <span className="text-[10px] font-mono bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">
-                  LOD 350 / 400
-                </span>
+                  {localizeText("LOD 350 / 400", currentLanguage)}</span>
               </h1>
-              <p className="text-[11px] text-slate-400">Silicon Docks, Dublin 2 | Multidisciplinary BIM & Engineering QA/QC</p>
+              <p className="text-[11px] text-slate-400">{localizeText("Silicon Docks, Dublin 2 | Multidisciplinary BIM & Engineering QA/QC", currentLanguage)}</p>
             </div>
           </div>
         </div>
@@ -558,7 +558,7 @@ export const DublinTechHubShowcase: React.FC<{
             }`}
           >
             <Compass className="w-3.5 h-3.5" />
-            <span>3D Interactive BIM</span>
+            <span>{localizeText("3D Interactive BIM", currentLanguage)}</span>
           </button>
           <button
             onClick={() => setActiveTab('audit')}
@@ -567,7 +567,7 @@ export const DublinTechHubShowcase: React.FC<{
             }`}
           >
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Senior Lead QA/QC</span>
+            <span>{localizeText("Senior Lead QA/QC", currentLanguage)}</span>
           </button>
           <button
             onClick={() => setActiveTab('boq')}
@@ -576,7 +576,7 @@ export const DublinTechHubShowcase: React.FC<{
             }`}
           >
             <DollarSign className="w-3.5 h-3.5" />
-            <span>BOQ & Cost (€3.45M)</span>
+            <span>{localizeText("BOQ & Cost (€3.45M)", currentLanguage)}</span>
           </button>
           <button
             onClick={() => setActiveTab('pitch')}
@@ -585,7 +585,7 @@ export const DublinTechHubShowcase: React.FC<{
             }`}
           >
             <FileText className="w-3.5 h-3.5" />
-            <span>Interview Pitch Script</span>
+            <span>{localizeText("Interview Pitch Script", currentLanguage)}</span>
           </button>
         </div>
       </header>
@@ -817,14 +817,14 @@ export const DublinTechHubShowcase: React.FC<{
               <div className="absolute top-4 right-4 bg-slate-900/90 backdrop-blur border border-slate-800 p-3 rounded-2xl shadow-2xl flex flex-col gap-2 z-10 w-56">
                 <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                   <Layers className="w-3.5 h-3.5 text-sky-400" />
-                  <span>3D Discipline Layers</span>
+                  <span>{localizeText("3D Discipline Layers", currentLanguage)}</span>
                 </span>
                 
                 <div className="space-y-1.5 text-xs">
                   <label className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-800/60 cursor-pointer">
                     <span className="flex items-center gap-2">
                       <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                      <span>Architecture & Slabs</span>
+                      <span>{localizeText("Architecture & Slabs", currentLanguage)}</span>
                     </span>
                     <input 
                       type="checkbox" 
@@ -837,7 +837,7 @@ export const DublinTechHubShowcase: React.FC<{
                   <label className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-800/60 cursor-pointer">
                     <span className="flex items-center gap-2">
                       <Server className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>42U Server Racks & Trays</span>
+                      <span>{localizeText("42U Server Racks & Trays", currentLanguage)}</span>
                     </span>
                     <input 
                       type="checkbox" 
@@ -850,7 +850,7 @@ export const DublinTechHubShowcase: React.FC<{
                   <label className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-800/60 cursor-pointer">
                     <span className="flex items-center gap-2">
                       <Wind className="w-3.5 h-3.5 text-sky-400" />
-                      <span>HVAC Ducts & CRAC</span>
+                      <span>{localizeText("HVAC Ducts & CRAC", currentLanguage)}</span>
                     </span>
                     <input 
                       type="checkbox" 
@@ -863,7 +863,7 @@ export const DublinTechHubShowcase: React.FC<{
                   <label className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-800/60 cursor-pointer">
                     <span className="flex items-center gap-2">
                       <Flame className="w-3.5 h-3.5 text-rose-400" />
-                      <span>Fire Sprinklers & FM-200</span>
+                      <span>{localizeText("Fire Sprinklers & FM-200", currentLanguage)}</span>
                     </span>
                     <input 
                       type="checkbox" 
@@ -876,7 +876,7 @@ export const DublinTechHubShowcase: React.FC<{
                   <label className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-800/60 cursor-pointer">
                     <span className="flex items-center gap-2">
                       <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
-                      <span>DALI-2 500 Lux Lighting</span>
+                      <span>{localizeText("DALI-2 500 Lux Lighting", currentLanguage)}</span>
                     </span>
                     <input 
                       type="checkbox" 
@@ -889,7 +889,7 @@ export const DublinTechHubShowcase: React.FC<{
                   <label className="flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-800/60 cursor-pointer">
                     <span className="flex items-center gap-2">
                       <Video className="w-3.5 h-3.5 text-indigo-400" />
-                      <span>3D CCTV Vision Cones</span>
+                      <span>{localizeText("3D CCTV Vision Cones", currentLanguage)}</span>
                     </span>
                     <input 
                       type="checkbox" 
@@ -922,7 +922,7 @@ export const DublinTechHubShowcase: React.FC<{
                   <p className="text-[11px] text-slate-400 mb-2 leading-relaxed">{selectedElement.details}</p>
                   <div className="text-[10px] text-emerald-400 flex items-center gap-1 font-semibold">
                     <CheckCheck className="w-3.5 h-3.5" />
-                    <span>Standards: {selectedElement.standards}</span>
+                    <span>{localizeText("Standards:", currentLanguage)}{selectedElement.standards}</span>
                   </div>
                 </div>
               )}
@@ -938,12 +938,12 @@ export const DublinTechHubShowcase: React.FC<{
                 <div>
                   <h2 className="text-xl font-bold text-white flex items-center gap-2">
                     <ShieldCheck className="w-6 h-6 text-emerald-400" />
-                    <span>Lead Senior Multi-Trade Audit Engine</span>
+                    <span>{localizeText("Lead Senior Multi-Trade Audit Engine", currentLanguage)}</span>
                   </h2>
-                  <p className="text-sm text-slate-400 mt-1">Real-time BS 7671, TIA-942, and ASHRAE TC 9.9 Engineering Rule Verification</p>
+                  <p className="text-sm text-slate-400 mt-1">{localizeText("Real-time BS 7671, TIA-942, and ASHRAE TC 9.9 Engineering Rule Verification", currentLanguage)}</p>
                 </div>
                 <div className="bg-slate-900 px-4 py-2 rounded-2xl border border-slate-800 text-right">
-                  <span className="text-xs text-slate-400">Total Compliance Score</span>
+                  <span className="text-xs text-slate-400">{localizeText("Total Compliance Score", currentLanguage)}</span>
                   <div className={`text-2xl font-bold ${auditResults.score === 100 ? 'text-emerald-400' : 'text-amber-400'}`}>
                     {auditResults.score}%
                   </div>
@@ -954,8 +954,8 @@ export const DublinTechHubShowcase: React.FC<{
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 space-y-3">
                   <div className="flex justify-between text-xs">
-                    <span className="font-semibold text-slate-300">Feed Cable Length:</span>
-                    <span className="font-mono text-sky-400 font-bold">{cableLengthM} Meters</span>
+                    <span className="font-semibold text-slate-300">{localizeText("Feed Cable Length:", currentLanguage)}</span>
+                    <span className="font-mono text-sky-400 font-bold">{cableLengthM} {localizeText("Meters", currentLanguage)}</span>
                   </div>
                   <input 
                     type="range" 
@@ -966,15 +966,15 @@ export const DublinTechHubShowcase: React.FC<{
                     className="w-full accent-sky-500"
                   />
                   <div className="flex justify-between text-xs text-slate-500">
-                    <span>20m (Near DB)</span>
-                    <span>120m (Far Riser)</span>
+                    <span>{localizeText("20m (Near DB)", currentLanguage)}</span>
+                    <span>{localizeText("120m (Far Riser)", currentLanguage)}</span>
                   </div>
                 </div>
 
                 <div className="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 space-y-3">
                   <div className="flex justify-between text-xs">
-                    <span className="font-semibold text-slate-300">Conductor Cross-Section:</span>
-                    <span className="font-mono text-emerald-400 font-bold">{cableSizeMm2} mm² Cu</span>
+                    <span className="font-semibold text-slate-300">{localizeText("Conductor Cross-Section:", currentLanguage)}</span>
+                    <span className="font-mono text-emerald-400 font-bold">{cableSizeMm2} {localizeText("mm² Cu", currentLanguage)}</span>
                   </div>
                   <div className="grid grid-cols-4 gap-2">
                     {[2.5, 4.0, 6.0, 10.0].map((size) => (
@@ -987,16 +987,15 @@ export const DublinTechHubShowcase: React.FC<{
                             : 'bg-slate-800 text-slate-400 hover:text-white'
                         }`}
                       >
-                        {size}mm²
-                      </button>
+                        {size}{localizeText("mm²", currentLanguage)}</button>
                     ))}
                   </div>
                 </div>
 
                 <div className="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 space-y-3">
                   <div className="flex justify-between text-xs">
-                    <span className="font-semibold text-slate-300">42U MDF Server Racks:</span>
-                    <span className="font-mono text-sky-400 font-bold">{rackCount} Racks</span>
+                    <span className="font-semibold text-slate-300">{localizeText("42U MDF Server Racks:", currentLanguage)}</span>
+                    <span className="font-mono text-sky-400 font-bold">{rackCount} {localizeText("Racks", currentLanguage)}</span>
                   </div>
                   <input 
                     type="range" 
@@ -1010,8 +1009,8 @@ export const DublinTechHubShowcase: React.FC<{
 
                 <div className="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 space-y-3">
                   <div className="flex justify-between text-xs">
-                    <span className="font-semibold text-slate-300">Utilized U per Rack:</span>
-                    <span className="font-mono text-emerald-400 font-bold">{utilizedU} U / 42U</span>
+                    <span className="font-semibold text-slate-300">{localizeText("Utilized U per Rack:", currentLanguage)}</span>
+                    <span className="font-mono text-emerald-400 font-bold">{utilizedU} {localizeText("U / 42U", currentLanguage)}</span>
                   </div>
                   <input 
                     type="range" 
@@ -1033,7 +1032,7 @@ export const DublinTechHubShowcase: React.FC<{
                 }`}>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-white text-sm">BS 7671 Voltage Drop Compliance</span>
+                      <span className="font-bold text-white text-sm">{localizeText("BS 7671 Voltage Drop Compliance", currentLanguage)}</span>
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                         auditResults.isVoltDropPass ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
                       }`}>
@@ -1041,8 +1040,7 @@ export const DublinTechHubShowcase: React.FC<{
                       </span>
                     </div>
                     <p className="text-xs text-slate-400">
-                      Calculated Voltage Drop: <strong className="text-white">{auditResults.voltDrop} V</strong> ({auditResults.voltDropPercent}% drop over {cableLengthM}m with {cableSizeMm2}mm² Cu).
-                    </p>
+                      {localizeText("Calculated Voltage Drop:", currentLanguage)}<strong className="text-white">{auditResults.voltDrop} {localizeText("V", currentLanguage)}</strong> ({auditResults.voltDropPercent}{localizeText("% drop over", currentLanguage)}{cableLengthM}{localizeText("m with", currentLanguage)}{cableSizeMm2}{localizeText("mm² Cu).", currentLanguage)}</p>
                   </div>
                 </div>
 
@@ -1053,7 +1051,7 @@ export const DublinTechHubShowcase: React.FC<{
                 }`}>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-white text-sm">TIA-942 Data Center Expansion Headroom</span>
+                      <span className="font-bold text-white text-sm">{localizeText("TIA-942 Data Center Expansion Headroom", currentLanguage)}</span>
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                         auditResults.isRackPass ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
                       }`}>
@@ -1061,21 +1059,19 @@ export const DublinTechHubShowcase: React.FC<{
                       </span>
                     </div>
                     <p className="text-xs text-slate-400">
-                      Spare Capacity: <strong className="text-white">{auditResults.rackHeadroomPercent}%</strong> free rack U remaining across {rackCount} racks.
-                    </p>
+                      {localizeText("Spare Capacity:", currentLanguage)}<strong className="text-white">{auditResults.rackHeadroomPercent}%</strong> {localizeText("free rack U remaining across", currentLanguage)}{rackCount} {localizeText("racks.", currentLanguage)}</p>
                   </div>
                 </div>
 
                 <div className="p-4 rounded-2xl border bg-slate-900/60 border-slate-800 flex items-center justify-between">
                   <div className="space-y-1">
-                    <span className="font-bold text-white text-sm">30-Day NVR Storage & PoE Power Budget</span>
+                    <span className="font-bold text-white text-sm">{localizeText("30-Day NVR Storage & PoE Power Budget", currentLanguage)}</span>
                     <p className="text-xs text-slate-400">
-                      Storage: <strong className="text-sky-400">{auditResults.requiredStorageTB} TB RAID-6</strong> | Total PoE Load: <strong className="text-emerald-400">{auditResults.totalPoEBudgetW} Watts</strong>.
+                      {localizeText("Storage:", currentLanguage)}<strong className="text-sky-400">{auditResults.requiredStorageTB} {localizeText("TB RAID-6", currentLanguage)}</strong> {localizeText("| Total PoE Load:", currentLanguage)}<strong className="text-emerald-400">{auditResults.totalPoEBudgetW} {localizeText("Watts", currentLanguage)}</strong>.
                     </p>
                   </div>
                   <span className="text-xs font-mono bg-slate-800 text-slate-300 px-3 py-1 rounded-lg">
-                    EN 62676
-                  </span>
+                    {localizeText("EN 62676", currentLanguage)}</span>
                 </div>
               </div>
             </div>
@@ -1090,12 +1086,12 @@ export const DublinTechHubShowcase: React.FC<{
                 <div>
                   <h2 className="text-xl font-bold text-white flex items-center gap-2">
                     <DollarSign className="w-6 h-6 text-emerald-400" />
-                    <span>Bill of Quantities (BOQ) - Dublin Tech Hub Fit-Out</span>
+                    <span>{localizeText("Bill of Quantities (BOQ) - Dublin Tech Hub Fit-Out", currentLanguage)}</span>
                   </h2>
-                  <p className="text-sm text-slate-400 mt-1">LOD 350 Multi-Discipline Commercial Valuation (€ EUR)</p>
+                  <p className="text-sm text-slate-400 mt-1">{localizeText("LOD 350 Multi-Discipline Commercial Valuation (€ EUR)", currentLanguage)}</p>
                 </div>
                 <div className="bg-emerald-950/40 border border-emerald-500/40 px-4 py-2 rounded-2xl">
-                  <span className="text-xs text-emerald-300">Total Fit-Out Value</span>
+                  <span className="text-xs text-emerald-300">{localizeText("Total Fit-Out Value", currentLanguage)}</span>
                   <div className="text-2xl font-bold text-emerald-400">€3,458,400</div>
                 </div>
               </div>
@@ -1104,65 +1100,65 @@ export const DublinTechHubShowcase: React.FC<{
                 <table className="w-full text-left text-xs">
                   <thead className="bg-slate-950 text-slate-400 font-mono border-b border-slate-800">
                     <tr>
-                      <th className="p-3">Discipline / Code</th>
-                      <th className="p-3">Description</th>
-                      <th className="p-3">Qty</th>
-                      <th className="p-3">Rate (€)</th>
-                      <th className="p-3 text-right">Total (€)</th>
+                      <th className="p-3">{localizeText("Discipline / Code", currentLanguage)}</th>
+                      <th className="p-3">{localizeText("Description", currentLanguage)}</th>
+                      <th className="p-3">{localizeText("Qty", currentLanguage)}</th>
+                      <th className="p-3">{localizeText("Rate (€)", currentLanguage)}</th>
+                      <th className="p-3 text-right">{localizeText("Total (€)", currentLanguage)}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800 text-slate-300">
                     <tr>
-                      <td className="p-3 font-mono text-sky-400">ELV-01</td>
-                      <td className="p-3">42U Heavy-Duty Server Racks (MDF) + Dual Commando Power</td>
-                      <td className="p-3">4 Nos</td>
+                      <td className="p-3 font-mono text-sky-400">{localizeText("ELV-01", currentLanguage)}</td>
+                      <td className="p-3">{localizeText("42U Heavy-Duty Server Racks (MDF) + Dual Commando Power", currentLanguage)}</td>
+                      <td className="p-3">{localizeText("4 Nos", currentLanguage)}</td>
                       <td className="p-3">€4,800</td>
                       <td className="p-3 text-right font-mono font-bold text-white">€19,200</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-mono text-sky-400">ELV-02</td>
-                      <td className="p-3">4MP IP CCTV Matrix + 3D FOV Configuration + 30-Day NVR</td>
-                      <td className="p-3">9 Nos</td>
+                      <td className="p-3 font-mono text-sky-400">{localizeText("ELV-02", currentLanguage)}</td>
+                      <td className="p-3">{localizeText("4MP IP CCTV Matrix + 3D FOV Configuration + 30-Day NVR", currentLanguage)}</td>
+                      <td className="p-3">{localizeText("9 Nos", currentLanguage)}</td>
                       <td className="p-3">€1,450</td>
                       <td className="p-3 text-right font-mono font-bold text-white">€13,050</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-mono text-sky-400">MEP-01</td>
-                      <td className="p-3">InRow 18kW Precision Direct Expansion CRAC Air Conditioning</td>
-                      <td className="p-3">2 Nos</td>
+                      <td className="p-3 font-mono text-sky-400">{localizeText("MEP-01", currentLanguage)}</td>
+                      <td className="p-3">{localizeText("InRow 18kW Precision Direct Expansion CRAC Air Conditioning", currentLanguage)}</td>
+                      <td className="p-3">{localizeText("2 Nos", currentLanguage)}</td>
                       <td className="p-3">€16,500</td>
                       <td className="p-3 text-right font-mono font-bold text-white">€33,000</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-mono text-sky-400">MEP-02</td>
-                      <td className="p-3">Galvanized Supply/Return Ductwork + VAV Boxes & Diffusers</td>
-                      <td className="p-3">480 m²</td>
+                      <td className="p-3 font-mono text-sky-400">{localizeText("MEP-02", currentLanguage)}</td>
+                      <td className="p-3">{localizeText("Galvanized Supply/Return Ductwork + VAV Boxes & Diffusers", currentLanguage)}</td>
+                      <td className="p-3">{localizeText("480 m²", currentLanguage)}</td>
                       <td className="p-3">€125</td>
                       <td className="p-3 text-right font-mono font-bold text-white">€60,000</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-mono text-sky-400">FIR-01</td>
-                      <td className="p-3">FM-200 / Novec 1230 Total Flooding Clean Agent Suppression</td>
-                      <td className="p-3">1 Set</td>
+                      <td className="p-3 font-mono text-sky-400">{localizeText("FIR-01", currentLanguage)}</td>
+                      <td className="p-3">{localizeText("FM-200 / Novec 1230 Total Flooding Clean Agent Suppression", currentLanguage)}</td>
+                      <td className="p-3">{localizeText("1 Set", currentLanguage)}</td>
                       <td className="p-3">€28,500</td>
                       <td className="p-3 text-right font-mono font-bold text-white">€28,500</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-mono text-sky-400">ARC-01</td>
-                      <td className="p-3">Agile Dual-Monitor Workstations + Mesh Chairs + Power Spines</td>
-                      <td className="p-3">40 Pods</td>
+                      <td className="p-3 font-mono text-sky-400">{localizeText("ARC-01", currentLanguage)}</td>
+                      <td className="p-3">{localizeText("Agile Dual-Monitor Workstations + Mesh Chairs + Power Spines", currentLanguage)}</td>
+                      <td className="p-3">{localizeText("40 Pods", currentLanguage)}</td>
                       <td className="p-3">€1,850</td>
                       <td className="p-3 text-right font-mono font-bold text-white">€74,000</td>
                     </tr>
                     <tr>
-                      <td className="p-3 font-mono text-sky-400">ARC-02</td>
-                      <td className="p-3">Executive Boardroom 16-Seat Walnut Suite + 85" 4K Video Conf</td>
-                      <td className="p-3">1 Suite</td>
+                      <td className="p-3 font-mono text-sky-400">{localizeText("ARC-02", currentLanguage)}</td>
+                      <td className="p-3">{localizeText("Executive Boardroom 16-Seat Walnut Suite + 85\" 4K Video Conf", currentLanguage)}</td>
+                      <td className="p-3">{localizeText("1 Suite", currentLanguage)}</td>
                       <td className="p-3">€32,000</td>
                       <td className="p-3 text-right font-mono font-bold text-white">€32,000</td>
                     </tr>
                     <tr className="bg-slate-950/80 font-bold">
-                      <td colSpan={4} className="p-3 text-right text-emerald-400">Total Direct Fit-Out Investment:</td>
+                      <td colSpan={4} className="p-3 text-right text-emerald-400">{localizeText("Total Direct Fit-Out Investment:", currentLanguage)}</td>
                       <td className="p-3 text-right font-mono text-emerald-400 text-sm">€3,458,400</td>
                     </tr>
                   </tbody>
@@ -1178,23 +1174,21 @@ export const DublinTechHubShowcase: React.FC<{
             <div className="max-w-3xl mx-auto space-y-6">
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
                 <FileText className="w-6 h-6 text-sky-400" />
-                <span>Executive Pitch Script (For Irish Senior Engineering Interviews)</span>
+                <span>{localizeText("Executive Pitch Script (For Irish Senior Engineering Interviews)", currentLanguage)}</span>
               </h2>
 
               <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
-                <h3 className="text-sm font-bold text-sky-400 uppercase tracking-wider">30-Second Elevator Pitch</h3>
+                <h3 className="text-sm font-bold text-sky-400 uppercase tracking-wider">{localizeText("30-Second Elevator Pitch", currentLanguage)}</h3>
                 <p className="text-sm text-slate-300 leading-relaxed italic bg-slate-950 p-4 rounded-xl border border-slate-800">
-                  "In traditional workflows, delivering a coordinated multi-trade LOD 350 BIM model for an enterprise tech tenant takes 3 to 4 weeks across fragmented architectural and MEP teams. 
-                  By combining deep BIM standards with our custom AI-accelerated generative automation engine, we delivered this complete 7-story commercial fit-out—including TIA-942 server room infrastructure, BS 7671 electrical audits, InRow cooling, and 0-clash spatial coordination—in <strong>under 3 business days</strong> with 100% code compliance."
-                </p>
+                  {localizeText("\"In traditional workflows, delivering a coordinated multi-trade LOD 350 BIM model for an enterprise tech tenant takes 3 to 4 weeks across fragmented architectural and MEP teams. By combining deep BIM standards with our custom AI-accelerated generative automation engine, we delivered this complete 7-story commercial fit-out—including TIA-942 server room infrastructure, BS 7671 electrical audits, InRow cooling, and 0-clash spatial coordination—in", currentLanguage)}<strong>{localizeText("under 3 business days", currentLanguage)}</strong> {localizeText("with 100% code compliance.\"", currentLanguage)}</p>
               </div>
 
               <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-3">
-                <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-wider">Key Differentiators to Highlight</h3>
+                <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-wider">{localizeText("Key Differentiators to Highlight", currentLanguage)}</h3>
                 <ul className="text-xs text-slate-300 space-y-2 list-disc list-inside">
-                  <li><strong>Zero Spatial Hard Clashes:</strong> Verified clearance matrix between HVAC ducts, perforated cable trays, and sprinkler heads under ISO 19650.</li>
-                  <li><strong>Automated BS 7671 & TIA-942 Compliance:</strong> Real-time voltage drop calculations (&lt; 3.0%) and 20% rack expansion headroom.</li>
-                  <li><strong>LOD 350 Detail:</strong> Explicit modeling of server blade LEDs, InRow cooling units, DALI-2 troffers, and 3D CCTV vision cones.</li>
+                  <li><strong>{localizeText("Zero Spatial Hard Clashes:", currentLanguage)}</strong> {localizeText("Verified clearance matrix between HVAC ducts, perforated cable trays, and sprinkler heads under ISO 19650.", currentLanguage)}</li>
+                  <li><strong>{localizeText("Automated BS 7671 & TIA-942 Compliance:", currentLanguage)}</strong> {localizeText("Real-time voltage drop calculations (&lt; 3.0%) and 20% rack expansion headroom.", currentLanguage)}</li>
+                  <li><strong>{localizeText("LOD 350 Detail:", currentLanguage)}</strong> {localizeText("Explicit modeling of server blade LEDs, InRow cooling units, DALI-2 troffers, and 3D CCTV vision cones.", currentLanguage)}</li>
                 </ul>
               </div>
             </div>

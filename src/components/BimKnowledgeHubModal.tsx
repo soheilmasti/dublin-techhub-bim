@@ -1,3 +1,4 @@
+import { localizeText, localizeContent } from '../utils/localizeText';
 import React, { useState, useMemo } from 'react';
 import { 
   X, 
@@ -207,16 +208,13 @@ export const BimKnowledgeHubModal: React.FC<BimKnowledgeHubModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base sm:text-lg font-black text-slate-900">
-                  {isRTL ? 'مرکز دانش تخصصی و پرسش‌های BIMCO' : 'BIMCO Architectural Knowledge & Answer Hub'}
+                  {localizeText("BIMCO Architectural Knowledge & Answer Hub", currentLanguage)}
                 </h3>
                 <span className="hidden sm:inline text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
-                  GOOGLE #1 AUTHORITY
-                </span>
+                  {localizeText("GOOGLE #1 AUTHORITY", currentLanguage)}</span>
               </div>
               <p className="text-xs text-slate-500">
-                {isRTL 
-                  ? 'پاسخ‌های مستند، شفاف و کامل به تمامی سوالات کارفرمایان و مدیران بیم درباره نرخ‌ها، استانداردها و امنیت'
-                  : 'Exhaustive, verifiable answers on rates, ISO 19650 protocols, CDE security, and pilot engagements.'}
+                {localizeText("Exhaustive, verifiable answers on rates, ISO 19650 protocols, CDE security, and pilot engagements.", currentLanguage)}
               </p>
             </div>
           </div>
@@ -224,7 +222,7 @@ export const BimKnowledgeHubModal: React.FC<BimKnowledgeHubModalProps> = ({
           <button
             onClick={() => { sound.playClick(); onClose(); }}
             className="p-2 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-200/60 transition-colors cursor-pointer"
-            title="Close modal"
+            title={localizeText("Close modal", currentLanguage)}
           >
             <X className="w-5 h-5" />
           </button>
@@ -233,20 +231,20 @@ export const BimKnowledgeHubModal: React.FC<BimKnowledgeHubModalProps> = ({
         {/* Live Search & Filter Bar */}
         <div className="p-4 sm:p-6 border-b border-slate-100 space-y-3 bg-white">
           <div className="relative">
-            <Search className={`w-4 h-4 text-slate-400 absolute top-1/2 -translate-y-1/2 ${isRTL ? 'right-3.5' : 'left-3.5'}`} />
+            <Search className={`w-4 h-4 text-slate-400 absolute top-1/2 -translate-y-1/2 ${localizeText("left-3.5", currentLanguage)}`} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={isRTL ? 'جستجوی سوال (مثلاً: قیمت، استاندارد ISO، کلش، نمونه آزمایشی، کپی‌رایت...)' : 'Search questions (e.g., pricing, LOD 350, ISO 19650, clash detection, NDA, pilot...)'}
+              placeholder={localizeText("Search questions (e.g., pricing, LOD 350, ISO 19650, clash detection, NDA, pilot...)", currentLanguage)}
               className={`w-full py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-slate-900 transition-all ${
-                isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'
+                localizeText("pl-10 pr-4", currentLanguage)
               }`}
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className={`absolute top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-700 ${isRTL ? 'left-3.5' : 'right-3.5'}`}
+                className={`absolute top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-700 ${localizeText("right-3.5", currentLanguage)}`}
               >
                 ✕
               </button>
@@ -271,7 +269,7 @@ export const BimKnowledgeHubModal: React.FC<BimKnowledgeHubModalProps> = ({
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
                 }`}
               >
-                {isRTL ? cat.labelFa : cat.labelEn}
+                {isRTL ? cat.labelFa : localizeContent(cat.labelEn, currentLanguage)}
               </button>
             ))}
           </div>
@@ -282,9 +280,9 @@ export const BimKnowledgeHubModal: React.FC<BimKnowledgeHubModalProps> = ({
           {filteredFaqs.length === 0 ? (
             <div className="text-center py-12 text-slate-400 space-y-2">
               <HelpCircle className="w-8 h-8 mx-auto text-slate-300" />
-              <p className="text-sm font-semibold">{isRTL ? 'سوالی مطابق با جستجوی شما پیدا نشد.' : 'No questions match your search query.'}</p>
+              <p className="text-sm font-semibold">{localizeText("No questions match your search query.", currentLanguage)}</p>
               <p className="text-xs text-slate-500">
-                {isRTL ? 'می‌توانید مستقیماً در واتساپ سوال خود را بپرسید.' : 'Feel free to chat with us directly on WhatsApp for immediate answers.'}
+                {localizeText("Feel free to chat with us directly on WhatsApp for immediate answers.", currentLanguage)}
               </p>
             </div>
           ) : (
@@ -308,7 +306,7 @@ export const BimKnowledgeHubModal: React.FC<BimKnowledgeHubModalProps> = ({
                         ))}
                       </div>
                       <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug">
-                        {isRTL ? faq.qFa : faq.qEn}
+                        {isRTL ? faq.qFa : localizeContent(faq.qEn, currentLanguage)}
                       </h4>
                     </div>
                     <ChevronDown className={`w-4 h-4 text-slate-400 mt-1 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-blue-600' : ''}`} />
@@ -317,7 +315,7 @@ export const BimKnowledgeHubModal: React.FC<BimKnowledgeHubModalProps> = ({
                   {isOpen && (
                     <div className="px-4 pb-4 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed space-y-3 animate-in fade-in duration-200">
                       <p className="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200/60 font-normal">
-                        {isRTL ? faq.aFa : faq.aEn}
+                        {isRTL ? faq.aFa : localizeContent(faq.aEn, currentLanguage)}
                       </p>
                     </div>
                   )}
@@ -331,7 +329,7 @@ export const BimKnowledgeHubModal: React.FC<BimKnowledgeHubModalProps> = ({
         <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50/80 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2 text-slate-600">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>{isRTL ? 'پاسخ داده‌شده منطبق با استاندارد بین‌المللی ISO 19650' : 'Verified against ISO 19650 & UK BIM Framework standards.'}</span>
+            <span>{localizeText("Verified against ISO 19650 & UK BIM Framework standards.", currentLanguage)}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -344,7 +342,7 @@ export const BimKnowledgeHubModal: React.FC<BimKnowledgeHubModalProps> = ({
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-colors shadow-xs cursor-pointer"
             >
               <PhoneCall className="w-3.5 h-3.5" />
-              <span>{isRTL ? 'پرسش اختصاصی در واتساپ' : 'Ask Directly on WhatsApp'}</span>
+              <span>{localizeText("Ask Directly on WhatsApp", currentLanguage)}</span>
             </button>
           </div>
         </div>

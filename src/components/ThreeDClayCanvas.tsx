@@ -1,11 +1,10 @@
 import React, { useRef, useState, useEffect, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import {
-  OrbitControls,
-  Environment
+  Environment, SoftShadows, ContactShadows
 } from '@react-three/drei';
 import * as THREE from 'three';
-import type { OrbitControls as OrbitControlsType } from 'three-stdlib';
+import { SmoothCameraControls } from './SmoothCameraControls';
 import { CategoryBuilding } from '../types';
 import { sound } from '../utils/audio';
 import { TacomaNeighborhoodModel } from './TacomaNeighborhoodModel';
@@ -13,31 +12,30 @@ import { LanguageCode, TRANSLATIONS } from '../utils/i18n';
 
 // Dynamic Tone Mapping Exposure and Environment Intensity calibration
 const SceneExposure: React.FC<{ mode: 'day' | 'sunset' | 'night' | 'wireframe' }> = ({ mode }) => {
-  const { gl, scene } = useThree();
+  const { gl } = useThree();
   useEffect(() => {
     gl.toneMapping = THREE.ACESFilmicToneMapping;
     // Master Studio Exposure: Balanced key-to-fill ratios, preventing clipped white highlights and lifting shadow details
-    gl.toneMappingExposure = mode === 'sunset' ? 1.02 : mode === 'night' ? 0.98 : 1.06;
+    gl.toneMappingExposure = mode === 'sunset' ? 0.95 : mode === 'night' ? 0.95 : 0.8;
     gl.shadowMap.enabled = true;
-    gl.shadowMap.type = THREE.PCFSoftShadowMap;
+    gl.shadowMap.type = THREE.PCFShadowMap;
 
-    // Subtly balance HDR environment reflections so materials receive natural studio GI bounce
-    if ('environmentIntensity' in scene) {
-      (scene as any).environmentIntensity = mode === 'night' ? 0.18 : mode === 'sunset' ? 0.42 : 0.55;
-    }
-  }, [mode, gl, scene]);
+    // Geometry and key lights are static within a mood: cache the shadow pass.
+    gl.shadowMap.autoUpdate = false;
+    gl.shadowMap.needsUpdate = true;
+  }, [mode, gl]);
   return null;
 };
 
 // Dynamic Responsive FOV Updater for mobile/tablet/desktop screens
 const ResponsiveCameraUpdater: React.FC<{ fov: number }> = ({ fov }) => {
   const { camera } = useThree();
-  useEffect(() => {
-    if (camera instanceof THREE.PerspectiveCamera) {
-      camera.fov = fov;
+  useFrame((_, delta) => {
+    if (camera instanceof THREE.PerspectiveCamera && Math.abs(camera.fov - fov) > 0.001) {
+      camera.fov = THREE.MathUtils.lerp(camera.fov, fov, 1 - Math.exp(-8 * Math.min(delta, 0.05)));
       camera.updateProjectionMatrix();
     }
-  }, [camera, fov]);
+  });
   return null;
 };
 
@@ -81,103 +79,13 @@ const ZONE_CAMERA_TARGETS: Record<string, { target: [number, number, number]; po
 };
 
 // Wide, comfortable panoramic overview of the entire Tacoma neighborhood & masterplan (Rotated 90 deg counter-clockwise & centered)
-const OVERVIEW_CAMERA = {
-  target: [0, 2.0, 3.5] as [number, number, number],
-  position: [32, 24, -24] as [number, number, number]
-};
-
-// Smooth Camera Flight Controller (Free Orbit by default, flies ONLY on click, yields immediately on user mouse interaction)
-const CameraController: React.FC<{
-  targetFocus: { target: [number, number, number]; position: [number, number, number] } | null;
-  autoRotate: boolean;
-  onUserInteraction?: () => void;
-}> = ({ targetFocus, autoRotate, onUserInteraction }) => {
-  const controlsRef = useRef<OrbitControlsType>(null);
-  const isFlying = useRef<boolean>(false);
-  const flightProgress = useRef<number>(1);
-  const startPos = useRef(new THREE.Vector3());
-  const startTarget = useRef(new THREE.Vector3());
-  const targetVec = useRef(new THREE.Vector3());
-  const posVec = useRef(new THREE.Vector3());
-
-  // Trigger flight ONLY when targetFocus is explicitly updated by a click
-  useEffect(() => {
-    if (targetFocus && controlsRef.current) {
-      const controls = controlsRef.current;
-      startPos.current.copy(controls.object.position);
-      startTarget.current.copy(controls.target);
-      targetVec.current.set(...targetFocus.target);
-      posVec.current.set(...targetFocus.position);
-      flightProgress.current = 0;
-      isFlying.current = true;
-    }
-  }, [targetFocus]);
-
-  // Immediately yield camera control to user if they touch/drag/scroll with mouse
-  useEffect(() => {
-    const controls = controlsRef.current;
-    if (!controls) return;
-
-    const handleUserStart = () => {
-      // User began interacting with mouse/touch -> stop flight and pause auto-rotation immediately!
-      isFlying.current = false;
-      onUserInteraction?.();
-    };
-
-    controls.addEventListener('start', handleUserStart);
-    return () => {
-      controls.removeEventListener('start', handleUserStart);
-    };
-  }, [onUserInteraction]);
-
-  useFrame(({ camera }, delta) => {
-    const controls = controlsRef.current;
-    if (!controls) return;
-
-    // Smooth deterministic cubic ease-out camera flight
-    if (isFlying.current) {
-      flightProgress.current = Math.min(1, flightProgress.current + delta * 1.35);
-      const p = flightProgress.current;
-      // Cubic ease-out: fast start, soft landing
-      const ease = 1 - Math.pow(1 - p, 3);
-
-      camera.position.lerpVectors(startPos.current, posVec.current, ease);
-      controls.target.lerpVectors(startTarget.current, targetVec.current, ease);
-      controls.update();
-
-      if (p >= 1) {
-        isFlying.current = false;
-        camera.position.copy(posVec.current);
-        controls.target.copy(targetVec.current);
-        controls.update();
-      }
-    } else {
-      controls.update();
-    }
-  });
-
-  return (
-    <OrbitControls
-      ref={controlsRef}
-      enablePan={true}
-      enableZoom={true}
-      enableRotate={true}
-      rotateSpeed={0.49}
-      zoomSpeed={1.0}
-      enableDamping={true}
-      dampingFactor={0.06}
-      screenSpacePanning={true}
-      autoRotate={autoRotate}
-      autoRotateSpeed={0.56}
-      maxPolarAngle={Math.PI / 2.03}
-      minDistance={3}
-      maxDistance={120}
-      touches={{
-        ONE: THREE.TOUCH.ROTATE,
-        TWO: THREE.TOUCH.DOLLY_PAN
-      }}
-    />
-  );
+const getOverviewCamera = () => {
+  const aspect = typeof window === 'undefined' ? 1.5 : window.innerWidth / window.innerHeight;
+  const distanceScale = Math.max(1, 0.9 / aspect);
+  return {
+    target: [0, 2, 0] as [number, number, number],
+    position: [40 * distanceScale, 30 * distanceScale, -30 * distanceScale] as [number, number, number]
+  };
 };
 
 export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
@@ -222,7 +130,10 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
     }
   };
 
-  const [responsiveFov, setResponsiveFov] = useState<number>(38);
+  const [initialCamera] = useState(() => ({
+    position: getOverviewCamera().position, near: 0.2, far: 240, fov: computeOverviewFov()
+  }));
+  const [responsiveFov, setResponsiveFov] = useState<number>(computeOverviewFov);
 
   useEffect(() => {
     const updateFov = () => {
@@ -248,14 +159,14 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
       setCameraFocus(ZONE_CAMERA_TARGETS[selectedCategory.id]);
     } else if (!selectedCategory) {
       // Whenever user closes project drawer or returns to 3D space, smoothly fly back to panoramic Overview!
-      setCameraFocus({ ...OVERVIEW_CAMERA });
+      setCameraFocus(getOverviewCamera());
       setResponsiveFov(computeOverviewFov());
     }
-  }, [selectedCategory]);
+  }, [selectedCategory?.id]);
 
   const handleResetCamera = () => {
     sound.playClick();
-    setCameraFocus({ ...OVERVIEW_CAMERA });
+    setCameraFocus(getOverviewCamera());
     setResponsiveFov(computeOverviewFov());
   };
 
@@ -274,16 +185,16 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
     }
   };
 
-  const isMobile = typeof navigator !== 'undefined' && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-  const shadowMapRes = isMobile ? 1024 : 4096;
+  const isMobile = typeof navigator !== 'undefined' && (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || navigator.maxTouchPoints > 1);
+  const shadowMapRes = isMobile ? 1024 : 2048;
 
   return (
-    <div className="relative w-full h-[100dvh] h-screen bg-[#0f141c] overflow-hidden select-none touch-none">
+    <div className="relative w-full scene-viewport bg-[#0f141c] overflow-hidden select-none touch-none">
       {/* 3D WebGL Canvas with PBR Tone Mapping & Wide Overview Camera */}
       <Canvas
         shadows
-        dpr={isMobile ? [1, 1.5] : [1, 2]}
-        camera={{ position: [32, 24, -24], near: 1.0, far: 180, fov: 38 }}
+        dpr={isMobile ? [1, 1.25] : [1, 1.5]}
+        camera={initialCamera}
         gl={{
           antialias: true,
           toneMapping: THREE.ACESFilmicToneMapping,
@@ -296,100 +207,48 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
           <SceneExposure mode={lightingMode} />
           <ResponsiveCameraUpdater fov={responsiveFov} />
 
-          {/* Clean Studio Horizon Background (Architectural Studio Stage) */}
-          <color attach="background" args={[lightingMode === 'night' ? '#090d14' : lightingMode === 'sunset' ? '#161320' : '#14171d']} />
-
-          {/* Hemisphere Ambient Sky Bounce (Calibrated for crisp architectural relief without washing out shadow faces) */}
-          <hemisphereLight 
-            intensity={lightingMode === 'night' ? 0.22 : lightingMode === 'sunset' ? 0.32 : 0.35} 
-            color={lightingMode === 'sunset' ? '#fed7aa' : lightingMode === 'night' ? '#38bdf8' : '#f8fafc'} 
-            groundColor={lightingMode === 'night' ? '#090d14' : lightingMode === 'sunset' ? '#1c1520' : '#1a1d24'} 
+          {/* Broad studio softbox, neutral bounce, and softly readable recesses. */}
+          <SoftShadows size={65} samples={isMobile ? 8 : 16} focus={0} />
+          <color attach="background" args={[lightingMode === 'night' ? '#373b43' : lightingMode === 'sunset' ? '#c5b9ab' : '#d7d2c9']} />
+          <hemisphereLight
+            intensity={lightingMode === 'night' ? 0.3 : 0.35}
+            color={lightingMode === 'night' ? '#cbd5e1' : '#fff8ee'}
+            groundColor={lightingMode === 'night' ? '#737680' : '#b7aea2'}
           />
-
-          {/* Lighting based on mood */}
-          {lightingMode === 'day' && (
-            <>
-              {/* Soft luminous ambient fill - lifts shadow faces so all windows, facades and reveals remain readable */}
-              <ambientLight intensity={0.42} color="#f8fafc" />
-              {/* Dominant crisp architectural sun (angled at 45 deg, balanced intensity so white volumes don't blow out) */}
-              <directionalLight
-                position={[-28, 42, 24]}
-                intensity={1.35}
-                color="#fffbf2"
-                castShadow
-                shadow-mapSize-width={shadowMapRes}
-                shadow-mapSize-height={shadowMapRes}
-                shadow-camera-left={-38}
-                shadow-camera-right={38}
-                shadow-camera-top={38}
-                shadow-camera-bottom={-38}
-                shadow-camera-near={1}
-                shadow-camera-far={120}
-                shadow-bias={-0.00004}
-                shadow-normalBias={0.012}
-              />
-              {/* Gentle opposite sky bounce fill so shadow faces show crisp details without washing out */}
-              <directionalLight position={[24, 18, -16]} intensity={0.32} color="#94a3b8" />
-            </>
-          )}
-
-          {lightingMode === 'sunset' && (
-            <>
-              {/* Luminous twilight ambient fill */}
-              <ambientLight intensity={0.36} color="#cbd5e1" />
-              {/* Warm golden hour sun casting dramatic, long shadows across roofs and plazas */}
-              <directionalLight
-                position={[-32, 20, 16]}
-                intensity={1.45}
-                color="#fb923c"
-                castShadow
-                shadow-mapSize-width={shadowMapRes}
-                shadow-mapSize-height={shadowMapRes}
-                shadow-camera-left={-38}
-                shadow-camera-right={38}
-                shadow-camera-top={38}
-                shadow-camera-bottom={-38}
-                shadow-camera-near={1}
-                shadow-camera-far={120}
-                shadow-bias={-0.00004}
-                shadow-normalBias={0.012}
-              />
-              {/* Cool twilight sky fill bounce (complementary blue-lavender tone) */}
-              <directionalLight position={[20, 16, -14]} intensity={0.38} color="#818cf8" />
-            </>
-          )}
-
-          {lightingMode === 'night' && (
-            <>
-              {/* Clear, legible architectural nocturnal ambient sky fill - prevents buildings from disappearing into pitch black */}
-              <ambientLight intensity={0.28} color="#334155" />
-              {/* Soft, cool moonlight casting gentle, readable shadows across the masterplan */}
-              <directionalLight 
-                position={[-24, 38, 20]} 
-                intensity={0.65} 
-                color="#93c5fd" 
-                castShadow
-                shadow-mapSize-width={shadowMapRes}
-                shadow-mapSize-height={shadowMapRes}
-                shadow-camera-left={-38}
-                shadow-camera-right={38}
-                shadow-camera-top={38}
-                shadow-camera-bottom={-38}
-                shadow-camera-near={1}
-                shadow-camera-far={120}
-                shadow-bias={-0.00004}
-                shadow-normalBias={0.012}
-              />
-
-              {/* Subtle architectural focal warm light pools (intimate accent glows at key building entrances & plazas) */}
-              <pointLight position={[6.57, 5.0, 6.23]} intensity={1.5} color="#fbbf24" distance={22} decay={2} />
-              <pointLight position={[-0.87, 3.2, -1.03]} intensity={1.4} color="#fbbf24" distance={20} decay={2} />
-              <pointLight position={[-6.95, 3.2, -6.17]} intensity={1.4} color="#38bdf8" distance={20} decay={2} />
-              <pointLight position={[-6.19, 2.2, 11.89]} intensity={1.3} color="#fde047" distance={18} decay={2} />
-              <pointLight position={[2.5, 1.8, 2.5]} intensity={1.4} color="#fbbf24" distance={20} decay={2} />
-            </>
-          )}
-
+          <ambientLight intensity={0.08} color="#fff5e7" />
+          <directionalLight
+            position={lightingMode === 'sunset' ? [-26, 25, 18] : [-18, 45, 15]}
+            intensity={lightingMode === 'night' ? 0.65 : lightingMode === 'sunset' ? 1.5 : 1.8}
+            color={lightingMode === 'night' ? '#d5deef' : lightingMode === 'sunset' ? '#ffdab4' : '#fff4e2'}
+            castShadow
+            shadow-mapSize-width={shadowMapRes}
+            shadow-mapSize-height={shadowMapRes}
+            shadow-camera-left={-30}
+            shadow-camera-right={30}
+            shadow-camera-top={30}
+            shadow-camera-bottom={-30}
+            shadow-camera-near={1}
+            shadow-camera-far={120}
+            shadow-bias={-0.00012}
+            shadow-normalBias={0.035}
+          />
+          <directionalLight position={[22, 18, -20]} intensity={lightingMode === 'night' ? 0.15 : 0.28} color="#f1f0eb" />
+          <ContactShadows
+            key={lightingMode}
+            position={[0, -0.885, 0]}
+            scale={65}
+            far={16}
+            opacity={0.35}
+            blur={2.5}
+            resolution={isMobile ? 256 : 512}
+            frames={1}
+            color="#655b4d"
+          />
+          {/* Continuous studio sweep around the small model plinth. */}
+          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.9, 0]} receiveShadow>
+            <planeGeometry args={[600, 600]} />
+            <meshStandardMaterial color={lightingMode === 'night' ? '#656870' : '#aaa092'} roughness={1} metalness={0} />
+          </mesh>
 
           {/* Real SketchUp Tacoma Site Model with 5 Interactive Clickable Hotspots & Authentic Textures */}
           <TacomaNeighborhoodModel
@@ -402,7 +261,7 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
           />
 
           {/* Smooth Camera Flight & Orbit Controls (Auto-rotates by default, pauses on manual touch/click/drag) */}
-          <CameraController 
+          <SmoothCameraControls
             targetFocus={cameraFocus} 
             autoRotate={autoRotate} 
             onUserInteraction={() => {
@@ -410,7 +269,10 @@ export const ThreeDClayCanvas: React.FC<ThreeDClayCanvasProps> = ({
               setLocalAutoRotate(false);
             }} 
           />
-          <Environment preset="studio" blur={0.8} />
+          <Environment
+            preset="studio"
+            environmentIntensity={lightingMode === 'night' ? 0.18 : lightingMode === 'sunset' ? 0.22 : 0.25}
+          />
         </Suspense>
       </Canvas>
     </div>

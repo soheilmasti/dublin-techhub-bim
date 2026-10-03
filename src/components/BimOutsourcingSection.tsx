@@ -1,3 +1,4 @@
+import { localizeText } from '../utils/localizeText';
 import React, { useState } from 'react';
 import { 
   Building2, 
@@ -79,7 +80,7 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
             BIMCO
           </button>
           <span>/</span>
-          <span className="text-slate-900 font-semibold">Strategic BIM Production &amp; Nearshore Delivery</span>
+          <span className="text-slate-900 font-semibold">{localizeText("Strategic BIM Production &amp; Nearshore Delivery", language)}</span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -88,7 +89,7 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
             className="hidden sm:flex items-center gap-1.5 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
           >
             <FolderSync className="w-3.5 h-3.5" />
-            <span>Client Order Portal</span>
+            <span>{localizeText("Client Order Portal", language)}</span>
           </button>
 
           <button
@@ -96,7 +97,7 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
             className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-black bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-xs hover:shadow-sm transition-all cursor-pointer"
           >
             <X className="w-3.5 h-3.5" />
-            <span>Close</span>
+            <span>{localizeText("Close", language)}</span>
           </button>
         </div>
       </div>
@@ -105,25 +106,22 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
       <section className="text-center max-w-4xl mx-auto mb-16">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold tracking-wide uppercase mb-6 shadow-xs">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Strategic BIM Production // Scalable Architecture Delivery</span>
+          <span>{localizeText("Strategic BIM Production // Scalable Architecture Delivery", language)}</span>
         </div>
 
         <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-tight mb-6">
           {isRTL ? (
             <>
-              مدل‌سازی تخصصی، <span className="text-blue-600 underline decoration-blue-200 decoration-wavy decoration-2">امن و مقرون‌به‌صرفه BIM</span> برای استودیوهای معماری
+              مدل‌سازی تخصصی، <span className="text-blue-600 underline decoration-blue-200 decoration-wavy decoration-2">{localizeText("امن و مقرون‌به‌صرفه BIM", language)}</span> برای استودیوهای معماری
             </>
           ) : (
             <>
-              Scalable, Secure &amp; <span className="text-blue-600 underline decoration-blue-200 decoration-wavy decoration-2">Cost-Effective</span> Architectural BIM Delivery.
-            </>
+              {localizeText("Scalable, Secure &amp;", language)}<span className="text-blue-600 underline decoration-blue-200 decoration-wavy decoration-2">{localizeText("Cost-Effective", language)}</span> {localizeText("Architectural BIM Delivery.", language)}</>
           )}
         </h1>
 
         <p className="text-base sm:text-xl text-slate-600 leading-relaxed max-w-3xl mx-auto mb-8">
-          {isRTL 
-            ? 'تولید ساختاریافته مدل‌های رویت، هماهنگی بدون کلش چندرشته‌ای و نقشه‌های اجرایی با بالاترین استانداردهای امنیتی، تحت انطباق کامل با پروتکل‌های ISO 19650 و ارتباط مستقیم ابری.'
-            : 'We provide dedicated Revit modeling, LOD 200–500 clash coordination, and comprehensive technical drawing packages—strictly compliant with ISO 19650 standards, European data privacy, and Autodesk Cloud protocols.'}
+          {localizeText("We provide dedicated Revit modeling, LOD 200–500 clash coordination, and comprehensive technical drawing packages—strictly compliant with ISO 19650 standards, European data privacy, and Autodesk Cloud protocols.", language)}
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-3.5">
@@ -132,7 +130,7 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
             className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer"
           >
             <MessageCircle className="w-4 h-4" />
-            <span>{isRTL ? 'درخواست پروژه آزمایشی رایگان در واتساپ' : 'Request Free Pilot on WhatsApp'}</span>
+            <span>{localizeText("Request Free Pilot on WhatsApp", language)}</span>
           </button>
         </div>
       </section>
@@ -158,15 +156,13 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
         <div className="max-w-3xl mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold mb-3">
             <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-            <span>{isRTL ? 'ارزیابی جامع روش‌های تولید BIM' : 'Strategic Delivery Evaluation // Risk, Security & Cost'}</span>
+            <span>{localizeText("Strategic Delivery Evaluation // Risk, Security & Cost", language)}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white mb-2">
-            {isRTL ? 'مقایسه راهکارهای مدل‌سازی: امنیت داده‌ها، بهره‌وری و صرفه اقتصادی' : 'Comparing Architectural BIM Delivery Methods'}
+            {localizeText("Comparing Architectural BIM Delivery Methods", language)}
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-            {isRTL 
-              ? 'چرا همکاری استراتژیک با استودیو نزدیک‌ساحل (Nearshore) امن‌ترین و اقتصادی‌ترین راهکار برای دفاتر معماری پیشرو است:'
-              : 'Why a dedicated nearshore partnership provides the optimal balance of enterprise IP security, ISO 19650 quality, and 50% operational cost savings compared to traditional domestic hiring or unregulated freelancers:'}
+            {localizeText("Why a dedicated nearshore partnership provides the optimal balance of enterprise IP security, ISO 19650 quality, and 50% operational cost savings compared to traditional domestic hiring or unregulated freelancers:", language)}
           </p>
         </div>
 
@@ -175,68 +171,68 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
           <div className="bg-slate-800/80 rounded-2xl p-6 border border-slate-700/80 flex flex-col justify-between">
             <div>
               <div className="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-1">
-                {isRTL ? 'روش اول: استخدام درون‌سازمانی' : 'Method 01: In-House Domestic'}
+                {localizeText("Method 01: In-House Domestic", language)}
               </div>
               <h3 className="text-base font-bold text-white mb-4">
-                {isRTL ? 'استخدام پرسنل ثابت محلی' : 'Traditional In-House Hiring'}
+                {localizeText("Traditional In-House Hiring", language)}
               </h3>
               <ul className="space-y-3 text-xs text-slate-300">
                 <li className="flex items-start gap-2">
                   <span className="text-red-400 font-bold shrink-0">✕</span>
-                  <span>{isRTL ? 'هزینه سرسام‌آور حقوق ثابت و بیمه کارفرما' : 'High fixed payroll, employer NI taxes & pension liabilities'}</span>
+                  <span>{localizeText("High fixed payroll, employer NI taxes & pension liabilities", language)}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-400 font-bold shrink-0">✕</span>
-                  <span>{isRTL ? 'ریسک اتلاف هزینه در فواصل بین فازهای پروژه' : 'Expensive downtime payroll between design milestones'}</span>
+                  <span>{localizeText("Expensive downtime payroll between design milestones", language)}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-400 font-bold shrink-0">✕</span>
-                  <span>{isRTL ? 'هزینه استخدام ۱۵٪ تا ۲۰٪ کارگزاری‌ها' : '15%–20% recruitment fees per hire'}</span>
+                  <span>{localizeText("15%–20% recruitment fees per hire", language)}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-emerald-400 font-bold shrink-0">✓</span>
-                  <span>{isRTL ? 'امنیت فیزیکی درون‌دفتر' : 'On-premises physical presence'}</span>
+                  <span>{localizeText("On-premises physical presence", language)}</span>
                 </li>
               </ul>
             </div>
             <div className="mt-6 pt-4 border-t border-slate-700 text-[11px] font-mono text-slate-400">
-              {isRTL ? 'هزینه سالانه: ۷۰,۰۰۰ تا ۸۰,۰۰۰ یورو' : 'Annual Cost: £68k–£78k / seat'}
+              {localizeText("Annual Cost: £68k–£78k / seat", language)}
             </div>
           </div>
 
           {/* Option 2: Far-Shore Freelancers (High Risk) */}
           <div className="bg-slate-800/80 rounded-2xl p-6 border border-red-500/30 flex flex-col justify-between relative">
             <div className="absolute top-4 right-4 text-[10px] font-mono font-bold bg-red-500/20 text-red-300 border border-red-500/40 px-2 py-0.5 rounded">
-              {isRTL ? 'ریسک بالا' : 'High Risk'}
+              {localizeText("High Risk", language)}
             </div>
             <div>
               <div className="text-xs font-bold font-mono text-slate-400 uppercase tracking-wider mb-1">
-                {isRTL ? 'روش دوم: فریلنسرهای متفرقه' : 'Method 02: Unregulated Far-Shore'}
+                {localizeText("Method 02: Unregulated Far-Shore", language)}
               </div>
               <h3 className="text-base font-bold text-white mb-4">
-                {isRTL ? 'سایت‌های فریلنسری یا برون‌مرزی دور' : 'Unregulated Freelancer Portals'}
+                {localizeText("Unregulated Freelancer Portals", language)}
               </h3>
               <ul className="space-y-3 text-xs text-slate-300">
                 <li className="flex items-start gap-2">
                   <span className="text-red-400 font-bold shrink-0">✕</span>
-                  <span>{isRTL ? 'خطر سرقت یا درز مالکیت معنوی و نقشه‌ها' : 'Severe IP, data leak & client confidentiality vulnerabilities'}</span>
+                  <span>{localizeText("Severe IP, data leak & client confidentiality vulnerabilities", language)}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-400 font-bold shrink-0">✕</span>
-                  <span>{isRTL ? 'عدم تسلط بر استانداردهای دقیق ISO 19650' : 'Inconsistent Revit family standards & lack of ISO 19650'}</span>
+                  <span>{localizeText("Inconsistent Revit family standards & lack of ISO 19650", language)}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-400 font-bold shrink-0">✕</span>
-                  <span>{isRTL ? 'اختلاف ساعت زیاد (۶ تا ۱۰ ساعت تاخیر)' : '6–10 hour timezone gap causing coordination bottlenecks'}</span>
+                  <span>{localizeText("6–10 hour timezone gap causing coordination bottlenecks", language)}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-emerald-400 font-bold shrink-0">✓</span>
-                  <span>{isRTL ? 'هزینه ارزان اما پرریسک' : 'Low nominal price, but high rework cost'}</span>
+                  <span>{localizeText("Low nominal price, but high rework cost", language)}</span>
                 </li>
               </ul>
             </div>
             <div className="mt-6 pt-4 border-t border-slate-700 text-[11px] font-mono text-red-400">
-              {isRTL ? 'ریسک بالا: اتلاف زمان و آسیب به اعتبار' : 'Hidden Cost: Rework & liability exposure'}
+              {localizeText("Hidden Cost: Rework & liability exposure", language)}
             </div>
           </div>
 
@@ -244,41 +240,41 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
           <div className="bg-gradient-to-b from-blue-600 to-indigo-700 rounded-2xl p-6 shadow-lg border border-blue-400/50 flex flex-col justify-between relative overflow-hidden">
             <div className="absolute top-4 right-4 text-[10px] font-mono font-bold bg-white/20 text-white border border-white/30 px-2 py-0.5 rounded flex items-center gap-1">
               <Sparkles className="w-3 h-3 text-emerald-300" />
-              <span>{isRTL ? 'انتخاب امن و بهینه' : 'Safe & Optimal'}</span>
+              <span>{localizeText("Safe & Optimal", language)}</span>
             </div>
             <div>
               <div className="text-xs font-bold font-mono text-blue-200 uppercase tracking-wider mb-1">
-                {isRTL ? 'روش سوم: همکاری استراتژیک' : 'Method 03: BIMCO Nearshore'}
+                {localizeText("Method 03: BIMCO Nearshore", language)}
               </div>
               <h3 className="text-base font-bold text-white mb-4">
-                {isRTL ? 'استودیو اختصاصی BIMCO' : 'BIMCO Dedicated Studio'}
+                {localizeText("BIMCO Dedicated Studio", language)}
               </h3>
               <ul className="space-y-3 text-xs text-white">
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0 mt-0.5" />
-                  <span>{isRTL ? 'امنیت تضمین‌شده در فضای ابری ACC تحت NDA' : '100% IP security: Direct Autodesk Construction Cloud live sync & NDAs'}</span>
+                  <span>{localizeText("100% IP security: Direct Autodesk Construction Cloud live sync & NDAs", language)}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0 mt-0.5" />
-                  <span>{isRTL ? 'انطباق قطعی با استانداردهای ISO 19650 و مقررات ساختمانی' : 'Strict ISO 19650-1/2, RIAI & UK BIM Framework compliance'}</span>
+                  <span>{localizeText("Strict ISO 19650-1/2, RIAI & UK BIM Framework compliance", language)}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0 mt-0.5" />
-                  <span>{isRTL ? 'ساعت کاری همزمان با اروپا (CET / GMT)' : 'Real-time European timezone alignment & daily Teams / Slack sync'}</span>
+                  <span>{localizeText("Real-time European timezone alignment & daily Teams / Slack sync", language)}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0 mt-0.5" />
-                  <span>{isRTL ? '۵۰٪ صرفه‌جویی و ارتقای چشمگیر حاشیه سود استودیو' : 'Up to 50% net savings: Zero recruitment or employer tax liabilities'}</span>
+                  <span>{localizeText("Up to 50% net savings: Zero recruitment or employer tax liabilities", language)}</span>
                 </li>
               </ul>
             </div>
             <div className="mt-6 pt-4 border-t border-blue-400/40 text-[11px] font-mono text-emerald-200 font-bold flex items-center justify-between">
-              <span>{isRTL ? 'صرفه‌جویی خالص: تا ۵۰٪' : 'Cost Savings: Up to 50%'}</span>
+              <span>{localizeText("Cost Savings: Up to 50%", language)}</span>
               <button 
                 onClick={() => onOpenWhatsApp('Hello Soheil, I read your delivery method comparison and would like to discuss a pilot project...')}
                 className="hover:underline cursor-pointer text-white font-bold"
               >
-                {isRTL ? 'شروع پروژه آزمایشی →' : 'Start Free Pilot →'}
+                {localizeText("Start Free Pilot →", language)}
               </button>
             </div>
           </div>
@@ -291,15 +287,13 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
           <div>
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md mb-2">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>{isRTL ? 'مزایای همکاری و ارزش استودیو' : 'Key Practice Advantages // Studio Efficiency'}</span>
+              <span>{localizeText("Key Practice Advantages // Studio Efficiency", language)}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
-              {isRTL ? 'چرا همکاری با ما؟' : 'Why Partner With Us?'}
+              {localizeText("Why Partner With Us?", language)}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              {isRTL 
-                ? 'چگونه دفاتر معماری با تیم نزدیک‌ساحل (Nearshore) ما، ظرفیت مدل‌سازی خود را با بالاترین استانداردهای بین‌المللی ارتقا می‌دهند.'
-                : 'How your practice scales Revit production and eliminates recruitment overhead with zero compromise on precision.'}
+              {localizeText("How your practice scales Revit production and eliminates recruitment overhead with zero compromise on precision.", language)}
             </p>
           </div>
 
@@ -310,16 +304,14 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
                 selectedCurrency === 'GBP' ? 'bg-white shadow-xs text-slate-900' : 'text-slate-500 hover:text-slate-900'
               }`}
             >
-              Pound Sterling (£ GBP)
-            </button>
+              {localizeText("Pound Sterling (£ GBP)", language)}</button>
             <button
               onClick={() => setSelectedCurrency('EUR')}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 selectedCurrency === 'EUR' ? 'bg-white shadow-xs text-slate-900' : 'text-slate-500 hover:text-slate-900'
               }`}
             >
-              Euro (€ EUR)
-            </button>
+              {localizeText("Euro (€ EUR)", language)}</button>
           </div>
         </div>
 
@@ -327,7 +319,7 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
         <div className="mb-10 bg-slate-50 p-6 rounded-2xl border border-slate-200/70">
           <div className="flex items-center justify-between mb-3">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              {isRTL ? 'تعداد مدل‌سازان اختصاصی رویت مورد نیاز:' : 'Required Dedicated Revit Modelers / Technicians:'}
+              {localizeText("Required Dedicated Revit Modelers / Technicians:", language)}
             </label>
             <span className="text-lg font-black text-blue-600 bg-white px-4 py-1 rounded-xl border border-slate-200 shadow-xs">
               {teamSize} {teamSize === 1 ? 'Modeler (FTE)' : 'Modelers (FTE)'}
@@ -343,10 +335,10 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
             className="w-full h-3 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
           />
           <div className="flex justify-between text-[11px] text-slate-400 font-mono mt-2">
-            <span>1 Modeler</span>
-            <span>3 Modelers</span>
-            <span>5 Modelers</span>
-            <span>10 Modelers</span>
+            <span>{localizeText("1 Modeler", language)}</span>
+            <span>{localizeText("3 Modelers", language)}</span>
+            <span>{localizeText("5 Modelers", language)}</span>
+            <span>{localizeText("10 Modelers", language)}</span>
           </div>
         </div>
 
@@ -355,25 +347,20 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
           {/* Traditional In-House Column */}
           <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-              {isRTL ? 'استخدام سنتی در انگلستان و اروپا' : 'Traditional In-House Hiring'}
+              {localizeText("Traditional In-House Hiring", language)}
             </span>
             <div className="text-3xl font-black text-slate-900 mt-2">{formattedInHouse} <span className="text-xs font-medium text-slate-500">/ year</span></div>
             <ul className="mt-6 space-y-3 text-xs text-slate-600">
               <li className="flex items-center gap-2 text-slate-700">
-                <span className="text-red-500 font-bold">✕</span> High base salary (£48k-£60k / €55k-€72k)
-              </li>
+                <span className="text-red-500 font-bold">✕</span> {localizeText("High base salary (£48k-£60k / €55k-€72k)", language)}</li>
               <li className="flex items-center gap-2 text-slate-700">
-                <span className="text-red-500 font-bold">✕</span> 13%-15% Employer NI / PRSI taxes
-              </li>
+                <span className="text-red-500 font-bold">✕</span> {localizeText("13%-15% Employer NI / PRSI taxes", language)}</li>
               <li className="flex items-center gap-2 text-slate-700">
-                <span className="text-red-500 font-bold">✕</span> Autodesk AEC license (~£3.5k/yr)
-              </li>
+                <span className="text-red-500 font-bold">✕</span> {localizeText("Autodesk AEC license (~£3.5k/yr)", language)}</li>
               <li className="flex items-center gap-2 text-slate-700">
-                <span className="text-red-500 font-bold">✕</span> Costly downtime between project phases
-              </li>
+                <span className="text-red-500 font-bold">✕</span> {localizeText("Costly downtime between project phases", language)}</li>
               <li className="flex items-center gap-2 text-slate-700">
-                <span className="text-red-500 font-bold">✕</span> 15%-20% Recruitment agency fees
-              </li>
+                <span className="text-red-500 font-bold">✕</span> {localizeText("15%-20% Recruitment agency fees", language)}</li>
             </ul>
           </div>
 
@@ -381,25 +368,20 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
           <div className="bg-blue-600 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
             <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-blue-500/40 rounded-full blur-2xl" />
             <span className="text-xs font-bold uppercase tracking-wider text-blue-200">
-              {isRTL ? 'چرا همکاری با ما (استودیو BIMCO)' : 'Why Partner With BIMCO'}
+              {localizeText("Why Partner With BIMCO", language)}
             </span>
             <div className="text-3xl font-black text-white mt-2">{formattedBimco} <span className="text-xs font-medium text-blue-200">/ year</span></div>
             <ul className="mt-6 space-y-3 text-xs text-blue-50">
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" /> Zero recruitment or placement fees
-              </li>
+                <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" /> {localizeText("Zero recruitment or placement fees", language)}</li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" /> Zero employer NI, pension or payroll taxes
-              </li>
+                <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" /> {localizeText("Zero employer NI, pension or payroll taxes", language)}</li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" /> Hardware &amp; Autodesk licenses included
-              </li>
+                <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" /> {localizeText("Hardware &amp; Autodesk licenses included", language)}</li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" /> Instant scale up/down per project demand
-              </li>
+                <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" /> {localizeText("Instant scale up/down per project demand", language)}</li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" /> European timezone (GMT / CET) alignment
-              </li>
+                <CheckCircle2 className="w-4 h-4 text-emerald-300 shrink-0" /> {localizeText("European timezone (GMT / CET) alignment", language)}</li>
             </ul>
           </div>
 
@@ -407,12 +389,11 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
           <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-2xl flex flex-col justify-between">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-700">
-                {isRTL ? 'ارزش افزوده و صرفه‌جویی سالانه استودیو' : 'Net Studio Value & Annual Efficiency'}
+                {localizeText("Net Studio Value & Annual Efficiency", language)}
               </span>
               <div className="text-4xl font-black text-emerald-700 mt-2">{formattedSavings}</div>
               <p className="text-xs text-emerald-800 mt-2 leading-relaxed">
-                Direct annual savings for {teamSize} {teamSize === 1 ? 'modeler' : 'modelers'}. Reinvest into design innovation, client pitch capacity, and partner equity.
-              </p>
+                {localizeText("Direct annual savings for", language)}{teamSize} {teamSize === 1 ? 'modeler' : 'modelers'}{localizeText(". Reinvest into design innovation, client pitch capacity, and partner equity.", language)}</p>
             </div>
 
             <div className="pt-6">
@@ -421,7 +402,7 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
                 className="w-full inline-flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs py-3 px-4 rounded-xl transition-colors cursor-pointer shadow-xs"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>{isRTL ? 'گفتگو درباره آغاز همکاری در واتساپ' : 'Discuss Studio Partnership on WhatsApp'}</span>
+                <span>{localizeText("Discuss Studio Partnership on WhatsApp", language)}</span>
               </button>
             </div>
           </div>
@@ -432,11 +413,9 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
       <section className="mb-20">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-            Our Core Architectural BIM Services
-          </h2>
+            {localizeText("Our Core Architectural BIM Services", language)}</h2>
           <p className="text-xs sm:text-sm text-slate-600 mt-2">
-            Tailored specifically for architectural studios, conservation architects, and multi-disciplinary consultancies.
-          </p>
+            {localizeText("Tailored specifically for architectural studios, conservation architects, and multi-disciplinary consultancies.", language)}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -504,20 +483,18 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
       <section className="bg-slate-900 text-white rounded-3xl p-8 sm:p-12 mb-20 relative overflow-hidden shadow-xl">
         <div className="max-w-2xl relative z-10">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold mb-4">
-            <span>Featured Case Study // Ireland</span>
+            <span>{localizeText("Featured Case Study // Ireland", language)}</span>
           </div>
           <h2 className="text-2xl sm:text-4xl font-black tracking-tight mb-4">
-            Dublin TechHub BIM (LOD 350/400)
-          </h2>
+            {localizeText("Dublin TechHub BIM (LOD 350/400)", language)}</h2>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6">
-            A comprehensive commercial and technology facility modeling demonstration in Dublin, showcasing multi-story structural concrete frames, full MEP routing, acoustic ceilings, and clash-free coordination under ISO 19650 standards.
-          </p>
+            {localizeText("A comprehensive commercial and technology facility modeling demonstration in Dublin, showcasing multi-story structural concrete frames, full MEP routing, acoustic ceilings, and clash-free coordination under ISO 19650 standards.", language)}</p>
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={onNavigateToDublinBim}
               className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-6 py-3.5 rounded-xl transition-all shadow-md cursor-pointer"
             >
-              <span>Launch Interactive 3D BIM Model</span>
+              <span>{localizeText("Launch Interactive 3D BIM Model", language)}</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </button>
 
@@ -526,7 +503,7 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
               className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs px-5 py-3.5 rounded-xl transition-all border border-white/20 cursor-pointer"
             >
               <FolderSync className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Track Dublin Order in Client Portal</span>
+              <span>{localizeText("Track Dublin Order in Client Portal", language)}</span>
             </button>
           </div>
         </div>
@@ -537,11 +514,10 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full mb-2">
             <HelpCircle className="w-3.5 h-3.5" />
-            <span>Frequently Asked Questions</span>
+            <span>{localizeText("Frequently Asked Questions", language)}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
-            Everything You Need to Know About Outsourcing BIM
-          </h2>
+            {localizeText("Everything You Need to Know About Outsourcing BIM", language)}</h2>
         </div>
 
         <div className="space-y-4">
@@ -588,25 +564,23 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
       {/* Bottom CTA Banner */}
       <section className="bg-gradient-to-r from-blue-700 to-indigo-800 text-white rounded-3xl p-8 sm:p-12 text-center shadow-lg">
         <h2 className="text-2xl sm:text-4xl font-black mb-3">
-          Ready to Scale Your Architecture Practice?
-        </h2>
+          {localizeText("Ready to Scale Your Architecture Practice?", language)}</h2>
         <p className="text-xs sm:text-sm text-blue-100 max-w-xl mx-auto mb-6">
-          Send us your project brief, Revit model, or CAD sketches for a complimentary review and transparent cost estimate.
-        </p>
+          {localizeText("Send us your project brief, Revit model, or CAD sketches for a complimentary review and transparent cost estimate.", language)}</p>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={() => onOpenWhatsApp('Hello Soheil, I would like to schedule a 15-minute discovery call regarding nearshore BIM outsourcing for our practice...')}
             className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-7 py-3.5 rounded-xl shadow-md transition-all cursor-pointer"
           >
             <MessageCircle className="w-4 h-4" />
-            <span>Chat with Lead BIM Architect (Soheil Masti)</span>
+            <span>{localizeText("Chat with Lead BIM Architect (Soheil Masti)", language)}</span>
           </button>
           <a
             href="mailto:soheil.masti@gmail.com?subject=BIM%20Inquiry"
             className="inline-flex items-center gap-2 bg-white text-blue-800 hover:bg-slate-100 font-bold text-xs px-6 py-3.5 rounded-xl shadow-md transition-all cursor-pointer"
           >
             <Mail className="w-4 h-4" />
-            <span>Send Email Brief</span>
+            <span>{localizeText("Send Email Brief", language)}</span>
           </a>
         </div>
       </section>
@@ -616,17 +590,17 @@ export const BimOutsourcingSection: React.FC<BimOutsourcingSectionProps> = ({
         <div className="mt-8 p-6 rounded-2xl bg-white border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left shadow-xs">
           <div>
             <h4 className="text-sm font-bold text-slate-900">
-              {isRTL ? 'معمار، مدلر BIM یا متخصص تاسیسات هستید؟' : 'Are you an Architect, BIM Modeler or MEP Specialist?'}
+              {localizeText("Are you an Architect, BIM Modeler or MEP Specialist?", language)}
             </h4>
             <p className="text-xs text-slate-500">
-              {isRTL ? 'به شبکه همکاران و استعدادهای بین‌المللی ما برای پروژه‌های جاری و آتی بپیوندید.' : 'Join our global talent pool for European project contracts and flexible remote collaborations.'}
+              {localizeText("Join our global talent pool for European project contracts and flexible remote collaborations.", language)}
             </p>
           </div>
           <button
             onClick={() => { sound.playClick(); onNavigateToPartners(); }}
             className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold transition-all cursor-pointer shrink-0 shadow-xs"
           >
-            {isRTL ? 'ثبت فرم همکاران و رزومه' : 'Join Partner Network'}
+            {localizeText("Join Partner Network", language)}
           </button>
         </div>
       )}

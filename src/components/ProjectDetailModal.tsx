@@ -1,3 +1,4 @@
+import { localizeText } from '../utils/localizeText';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -130,7 +131,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                     }`}
                   >
                     <LayoutGrid className="w-3.5 h-3.5" />
-                    <span>{t.individualRendersGrid || (isRTL ? 'عکس‌ها و رندرها به صورت جدا جدا' : 'Project Renders & Photos')}</span>
+                    <span>{t.individualRendersGrid || (localizeText("Project Renders & Photos", currentLanguage))}</span>
                     <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-white/20 ml-1">
                       {currentGallery.length}
                     </span>
@@ -145,12 +146,12 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                     }`}
                   >
                     <Maximize2 className="w-3.5 h-3.5" />
-                    <span>{t.spotlightView || (isRTL ? 'پرزنتیشن تکی' : 'Spotlight View')}</span>
+                    <span>{t.spotlightView || (localizeText("Spotlight View", currentLanguage))}</span>
                   </button>
                 </div>
 
                 <span className="text-[11px] font-mono text-gray-400 font-medium">
-                  {currentGallery.length} {isRTL ? 'عکس و رندر اختصاصی' : 'Architectural Renders'}
+                  {currentGallery.length} {localizeText("Architectural Renders", currentLanguage)}
                 </span>
               </div>
 
@@ -174,17 +175,17 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                           <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                             <span className="px-3 py-1.5 rounded-xl bg-blue-600/90 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg backdrop-blur-xs">
                               <ZoomIn className="w-3.5 h-3.5" />
-                              <span>{t.zoomImage || (isRTL ? 'بزرگنمایی تصویر' : 'Zoom Image')}</span>
+                              <span>{t.zoomImage || (localizeText("Zoom Image", currentLanguage))}</span>
                             </span>
                           </div>
                         </div>
 
                         <div className="p-2.5 px-3 bg-slate-950/80 flex items-center justify-between text-xs border-t border-slate-800/60">
                           <span className="font-mono text-[11px] font-bold text-blue-300">
-                            {isRTL ? `تصویر ${String(idx + 1).padStart(2, '0')}` : `Image ${String(idx + 1).padStart(2, '0')}`}
+                            {isRTL ? `تصویر ${String(idx + 1).padStart(2, '0')}` : `${localizeText('Image', currentLanguage)} ${String(idx + 1).padStart(2, '0')}`}
                           </span>
                           <span className="text-[10px] font-mono text-gray-500">
-                            {isRTL ? `از ${currentGallery.length}` : `of ${currentGallery.length}`}
+                            {isRTL ? `از ${currentGallery.length}` : `${localizeText('of', currentLanguage)} ${currentGallery.length}`}
                           </span>
                         </div>
                       </div>
@@ -299,7 +300,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                     </div>
                     {project.bimSpecs.lodLevel && (
                       <p className="text-[11px] text-blue-800 font-mono">
-                        Level of Development: <strong>{project.bimSpecs.lodLevel}</strong>
+                        {localizeText("Level of Development:", currentLanguage)}<strong>{project.bimSpecs.lodLevel}</strong>
                       </p>
                     )}
                     {project.bimSpecs.softwareUsed && (
@@ -368,7 +369,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
             <div className="flex items-center justify-between pb-3 px-2 text-white z-20">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-xl bg-blue-600 text-white">
-                  {isRTL ? `شیت ${zoomIndex + 1} از ${currentGallery.length}` : `SHEET ${zoomIndex + 1} OF ${currentGallery.length}`}
+                  {isRTL ? `شیت ${zoomIndex + 1} از ${currentGallery.length}` : `${localizeText('SHEET', currentLanguage)} ${zoomIndex + 1} ${localizeText('of', currentLanguage)} ${currentGallery.length}`}
                 </span>
                 <span className="text-xs text-gray-300 font-bold hidden sm:inline">
                   {project.title}
@@ -382,7 +383,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                   className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all flex items-center gap-1.5 border border-white/10"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  <span>{isRTL ? 'دانلود تصویر' : 'Download'}</span>
+                  <span>{localizeText("Download", currentLanguage)}</span>
                 </a>
                 <button
                   onClick={() => setZoomIndex(null)}
@@ -408,7 +409,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                     setZoomIndex(prev => (prev !== null && prev > 0 ? prev - 1 : currentGallery.length - 1));
                   }}
                   className="absolute left-2 sm:left-4 z-30 p-2.5 sm:p-3 rounded-full bg-black/70 hover:bg-blue-600 text-white border border-white/20 shadow-xl transition-all cursor-pointer hover:scale-105"
-                  title={t.previousSheet || (isRTL ? 'شیت قبلی' : 'Previous Sheet')}
+                  title={t.previousSheet || (localizeText("Previous Sheet", currentLanguage))}
                 >
                   <ChevronLeft className="w-6 h-6" />
                 </button>
@@ -429,7 +430,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                     setZoomIndex(prev => (prev !== null && prev < currentGallery.length - 1 ? prev + 1 : 0));
                   }}
                   className="absolute right-2 sm:right-4 z-30 p-2.5 sm:p-3 rounded-full bg-black/70 hover:bg-blue-600 text-white border border-white/20 shadow-xl transition-all cursor-pointer hover:scale-105"
-                  title={t.nextSheet || (isRTL ? 'شیت بعدی' : 'Next Sheet')}
+                  title={t.nextSheet || (localizeText("Next Sheet", currentLanguage))}
                 >
                   <ChevronRight className="w-6 h-6" />
                 </button>
@@ -438,7 +439,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
 
             {/* Bottom Hints for Gestures */}
             <div className="pt-2 text-center text-[11px] text-gray-400 font-mono flex items-center justify-center gap-3">
-              <span>{t.swipeNavigationHint || (isRTL ? 'روی گوشی به چپ یا راست بکشید (Swipe) • کلیدهای جهت‌نما در کیبورد' : 'Swipe left/right on touch devices • Arrow keys on keyboard')}</span>
+              <span>{t.swipeNavigationHint || (localizeText("Swipe left/right on touch devices • Arrow keys on keyboard", currentLanguage))}</span>
             </div>
           </div>
         )}

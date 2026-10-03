@@ -1,3 +1,4 @@
+import { localizeText } from '../utils/localizeText';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -86,7 +87,7 @@ export const MaquetteIsometricCanvas: React.FC<MaquetteIsometricCanvasProps> = (
             {useCustomBg && settings.backgroundImageUrl ? (
               <img
                 src={settings.backgroundImageUrl}
-                alt="Architectural Masterplan"
+                alt={localizeText("Architectural Masterplan", currentLanguage)}
                 className="w-full h-full object-cover filter contrast-[1.05] brightness-[1.02]"
               />
             ) : (
@@ -314,7 +315,7 @@ export const MaquetteIsometricCanvas: React.FC<MaquetteIsometricCanvasProps> = (
                         >
                           <div className="flex items-center justify-between gap-2 mb-1.5 border-b border-gray-100 pb-1.5">
                             <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-black text-white">
-                              ZONE {cat.categoryNumber}
+                              {localizeText("ZONE", currentLanguage)}{cat.categoryNumber}
                             </span>
                             <span className="text-[11px] font-bold text-blue-600">
                               {cat.projects.length} {t.projectsCount}
@@ -340,7 +341,7 @@ export const MaquetteIsometricCanvas: React.FC<MaquetteIsometricCanvasProps> = (
                             ))}
                             <div className="flex-1 text-left">
                               <span className="text-[10px] font-bold text-blue-600 flex items-center gap-0.5 justify-end">
-                                {isRTL ? 'مشاهده لیست' : 'View Projects'} <ChevronLeft className={`w-3.5 h-3.5 ${isRTL ? '' : 'rotate-180'}`} />
+                                {localizeText("View Projects", currentLanguage)} <ChevronLeft className={`w-3.5 h-3.5 ${isRTL ? '' : 'rotate-180'}`} />
                               </span>
                             </div>
                           </div>
@@ -358,21 +359,21 @@ export const MaquetteIsometricCanvas: React.FC<MaquetteIsometricCanvasProps> = (
             <button
               onClick={handleZoomIn}
               className="p-2 rounded-xl text-gray-700 hover:text-black hover:bg-gray-100 transition-colors"
-              title={isRTL ? 'بزرگنمایی' : 'Zoom In'}
+              title={localizeText("Zoom In", currentLanguage)}
             >
               <ZoomIn className="w-4 h-4" />
             </button>
             <button
               onClick={handleZoomOut}
               className="p-2 rounded-xl text-gray-700 hover:text-black hover:bg-gray-100 transition-colors"
-              title={isRTL ? 'کوچک‌نمایی' : 'Zoom Out'}
+              title={localizeText("Zoom Out", currentLanguage)}
             >
               <ZoomOut className="w-4 h-4" />
             </button>
             <button
               onClick={handleResetZoom}
               className="p-2 rounded-xl text-gray-700 hover:text-black hover:bg-gray-100 transition-colors"
-              title={isRTL ? 'بازنشانی اندازه' : 'Reset View'}
+              title={localizeText("Reset View", currentLanguage)}
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
@@ -386,9 +387,9 @@ export const MaquetteIsometricCanvas: React.FC<MaquetteIsometricCanvasProps> = (
                   ? 'bg-blue-600 text-white shadow-xs' 
                   : 'text-gray-700 hover:text-black hover:bg-gray-100'
               }`}
-              title={isRTL ? 'سوییچ به تصویر پس‌زمینه رندر دلخواه شما' : 'Switch Custom Background'}
+              title={localizeText("Switch Custom Background", currentLanguage)}
             >
-              {useCustomBg ? (isRTL ? 'پس‌زمینه عکس سفارشی' : 'Custom BG') : (isRTL ? 'ماکت رندر سفید' : 'Clay White')}
+              {useCustomBg ? (localizeText("Custom BG", currentLanguage)) : (localizeText("Clay White", currentLanguage))}
             </button>
           </div>
 

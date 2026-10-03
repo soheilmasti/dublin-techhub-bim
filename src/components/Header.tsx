@@ -1,3 +1,4 @@
+import { localizeText } from '../utils/localizeText';
 import React, { useState } from 'react';
 import { 
   Home,
@@ -66,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <header className="fixed top-[max(0.75rem,env(safe-area-inset-top))] sm:top-5 left-1/2 -translate-x-1/2 z-40 w-max max-w-[96vw] pointer-events-none">
+      <header className="fixed top-[max(0.75rem,env(safe-area-inset-top))] sm:top-[max(1.25rem,env(safe-area-inset-top))] left-1/2 -translate-x-1/2 z-40 w-max max-w-[96vw] pointer-events-none">
         <div className="pointer-events-auto glass-panel bg-white/95 backdrop-blur-xl border border-white/90 shadow-clay-md rounded-2xl px-2 sm:px-3.5 py-1 sm:py-1.5 flex items-center gap-1.5 sm:gap-2.5">
           {/* Studio Branding (Click = Return to 3D Home) */}
           <div 
@@ -193,7 +194,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={toggleSound}
               className="p-1.5 rounded-xl text-gray-600 hover:text-black hover:bg-gray-100/80 transition-colors cursor-pointer"
-              title={settings.soundEnabled ? 'Mute' : 'Unmute'}
+              title={localizeText(settings.soundEnabled ? 'Mute' : 'Unmute', currentLanguage)}
             >
               {settings.soundEnabled ? <Volume2 className="w-4 h-4 text-blue-600" /> : <VolumeX className="w-4 h-4 text-gray-400" />}
             </button>
@@ -205,7 +206,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
               className="lg:hidden p-1.5 rounded-xl text-gray-800 hover:text-black hover:bg-gray-100/80 transition-all cursor-pointer"
-              aria-label="Toggle Navigation Menu"
+              aria-label={localizeText("Toggle Navigation Menu", currentLanguage)}
             >
               {isMobileMenuOpen ? <X className="w-4 h-4 text-red-500" /> : <Menu className="w-4 h-4 text-blue-600" />}
             </button>
@@ -249,7 +250,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <Home className="w-4 h-4" />
                 <span>{t.home3d}</span>
               </div>
-              <span className="text-[10px] opacity-75 font-mono">HOME</span>
+              <span className="text-[10px] opacity-75 font-mono">{localizeText("HOME", currentLanguage)}</span>
             </button>
 
 
@@ -282,7 +283,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <UserCheck className="w-4 h-4 text-indigo-500" />
                 <span>{t.resume}</span>
               </div>
-              <span className="text-[10px] opacity-75 font-mono">CV</span>
+              <span className="text-[10px] opacity-75 font-mono">{localizeText("CV", currentLanguage)}</span>
             </button>
 
             <button
@@ -298,8 +299,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>{t.bimOutsourcing || 'BIM Outsourcing & Delivery'}</span>
               </div>
               <span className="text-[10px] font-mono bg-emerald-500 text-white px-2 py-0.5 rounded-full font-bold">
-                50% OFF
-              </span>
+                {localizeText("50% OFF", currentLanguage)}</span>
             </button>
 
             <button
@@ -315,8 +315,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>{t.clientPortal || 'Client Portal & Tracker'}</span>
               </div>
               <span className="text-[10px] font-mono bg-indigo-600 text-white px-2 py-0.5 rounded-full font-bold">
-                LIVE
-              </span>
+                {localizeText("LIVE", currentLanguage)}</span>
             </button>
 
             <button
@@ -332,8 +331,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>{t.partners || 'Partners & Talent Network'}</span>
               </div>
               <span className="text-[10px] font-mono bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-bold">
-                JOIN
-              </span>
+                {localizeText("JOIN", currentLanguage)}</span>
             </button>
 
             {onOpenKnowledgeHub && (
@@ -350,8 +348,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <span>{t.faqTooltip || (currentLanguage === 'fa' ? 'مرکز دانش و پرسش‌ها (FAQ & Q&A)' : 'BIM Knowledge & FAQ Hub')}</span>
                 </div>
                 <span className="text-[10px] font-mono bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full font-bold">
-                  12 Q&A
-                </span>
+                  {localizeText("12 Q&A", currentLanguage)}</span>
               </button>
             )}
 
@@ -369,8 +366,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <span>{t.portfolioFlipbook || (currentLanguage === 'fa' ? 'دفترچه تعاملی پورتفولیو BIMCO (ورق‌خور)' : 'BIMCO Portfolio Flipbook (3D)')}</span>
                 </div>
                 <span className="text-[10px] font-mono bg-amber-600 text-white px-2 py-0.5 rounded-full font-bold">
-                  3D PDF
-                </span>
+                  {localizeText("3D PDF", currentLanguage)}</span>
               </button>
             )}
 
@@ -389,7 +385,7 @@ export const Header: React.FC<HeaderProps> = ({
                 className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-2xl bg-emerald-600 text-white text-xs font-bold shadow-md active:scale-95 transition-transform cursor-pointer"
               >
                 <PhoneCall className="w-3.5 h-3.5" />
-                <span>WhatsApp (+34 610 855 434)</span>
+                <span>{localizeText("WhatsApp (+34 610 855 434)", currentLanguage)}</span>
               </button>
 
               <button

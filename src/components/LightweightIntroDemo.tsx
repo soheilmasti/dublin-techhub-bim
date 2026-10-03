@@ -1,3 +1,4 @@
+import { localizeText } from '../utils/localizeText';
 import React from 'react';
 import { 
   Box, 
@@ -46,11 +47,11 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
           <div className="flex items-center gap-2">
             <span className="font-bold text-neutral-900 tracking-wider">BIMCO</span>
             <span>//</span>
-            <span>{isRTL ? 'استودیو معماری و تولید BIM' : 'ARCHITECTURAL PRACTICE & BIM DELIVERY'}</span>
+            <span>{localizeText("ARCHITECTURAL PRACTICE & BIM DELIVERY", currentLanguage)}</span>
           </div>
           <div className="flex items-center gap-2 text-[11px]">
             <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-            <span className="hidden sm:inline text-neutral-600 font-sans">{isRTL ? 'محیط سه‌بعدی آماده' : '3D Engine Ready'}</span>
+            <span className="hidden sm:inline text-neutral-600 font-sans">{localizeText("3D Engine Ready", currentLanguage)}</span>
           </div>
         </div>
 
@@ -61,13 +62,11 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
           </h1>
           
           <p className="text-base sm:text-xl font-medium text-neutral-700 tracking-tight">
-            {isRTL ? 'استودیو معماری معاصر و تولید استراتژیک BIM' : 'Contemporary Architecture & Strategic BIM Practice'}
+            {localizeText("Contemporary Architecture & Strategic BIM Practice", currentLanguage)}
           </p>
 
           <p className="text-xs sm:text-sm text-neutral-500 font-mono max-w-xl mx-auto leading-relaxed">
-            {isRTL 
-              ? 'تولید دقیق رویت (LOD 200–500) • هماهنگی کامل بدون کلش • انطباق با استاندارد بین‌المللی ISO 19650'
-              : 'Precision Revit Modeling • Multi-Discipline Clash Elimination • ISO 19650 CDE Workflow'}
+            {localizeText("Precision Revit Modeling • Multi-Discipline Clash Elimination • ISO 19650 CDE Workflow", currentLanguage)}
           </p>
 
           {/* Central Enter 3D Canvas CTA */}
@@ -77,7 +76,7 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
               className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-2xl bg-neutral-950 hover:bg-neutral-800 text-white font-bold text-sm shadow-md hover:shadow-lg active:scale-98 transition-all cursor-pointer group"
             >
               <Box className="w-4 h-4 text-neutral-400 group-hover:rotate-12 transition-transform" />
-              <span>{isRTL ? 'ورود به ماکت سه‌بعدی تعاملی' : 'Enter Interactive 3D Canvas'}</span>
+              <span>{localizeText("Enter Interactive 3D Canvas", currentLanguage)}</span>
               <ArrowRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
             </button>
           </div>
@@ -86,20 +85,20 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
         {/* Enterprise Trust & Verification Matrix */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="bg-white p-3.5 rounded-xl border border-neutral-200/70 text-center">
-            <p className="text-[10px] font-mono font-bold text-blue-600 uppercase">ISO 19650-1/2</p>
-            <p className="text-xs font-semibold text-neutral-800 mt-0.5">{isRTL ? 'استاندارد بین‌المللی CDE' : 'Full CDE Compliance'}</p>
+            <p className="text-[10px] font-mono font-bold text-blue-600 uppercase">{localizeText("ISO 19650-1/2", currentLanguage)}</p>
+            <p className="text-xs font-semibold text-neutral-800 mt-0.5">{localizeText("Full CDE Compliance", currentLanguage)}</p>
           </div>
           <div className="bg-white p-3.5 rounded-xl border border-neutral-200/70 text-center">
-            <p className="text-[10px] font-mono font-bold text-indigo-600 uppercase">ACC / BIM 360</p>
-            <p className="text-xs font-semibold text-neutral-800 mt-0.5">{isRTL ? 'اشتراک زنده در کلاود' : 'Live Cloud Worksharing'}</p>
+            <p className="text-[10px] font-mono font-bold text-indigo-600 uppercase">{localizeText("ACC / BIM 360", currentLanguage)}</p>
+            <p className="text-xs font-semibold text-neutral-800 mt-0.5">{localizeText("Live Cloud Worksharing", currentLanguage)}</p>
           </div>
           <div className="bg-white p-3.5 rounded-xl border border-neutral-200/70 text-center">
-            <p className="text-[10px] font-mono font-bold text-emerald-600 uppercase">100% IP & NDA</p>
-            <p className="text-xs font-semibold text-neutral-800 mt-0.5">{isRTL ? 'مالکیت کامل کارفرما' : 'Guaranteed Copyright'}</p>
+            <p className="text-[10px] font-mono font-bold text-emerald-600 uppercase">{localizeText("100% IP & NDA", currentLanguage)}</p>
+            <p className="text-xs font-semibold text-neutral-800 mt-0.5">{localizeText("Guaranteed Copyright", currentLanguage)}</p>
           </div>
           <div className="bg-white p-3.5 rounded-xl border border-neutral-200/70 text-center">
-            <p className="text-[10px] font-mono font-bold text-amber-600 uppercase">48-72h SLA</p>
-            <p className="text-xs font-semibold text-neutral-800 mt-0.5">{isRTL ? 'تحویل سریع هر طبقه' : 'Rapid Floor Delivery'}</p>
+            <p className="text-[10px] font-mono font-bold text-amber-600 uppercase">{localizeText("48-72h SLA", currentLanguage)}</p>
+            <p className="text-xs font-semibold text-neutral-800 mt-0.5">{localizeText("Rapid Floor Delivery", currentLanguage)}</p>
           </div>
         </div>
 
@@ -112,17 +111,16 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
           >
             <div className="space-y-2">
               <div className="text-[11px] font-mono font-bold text-neutral-400 group-hover:text-neutral-900 transition-colors">
-                01 // 3D
-              </div>
+                {localizeText("01 // 3D", currentLanguage)}</div>
               <h3 className="font-bold text-sm text-neutral-900">
-                {isRTL ? 'ماکت ۳D تعاملی' : 'Interactive Maquette'}
+                {localizeText("Interactive Maquette", currentLanguage)}
               </h3>
               <p className="text-xs text-neutral-500 leading-relaxed">
-                {isRTL ? 'چرخش ۳۶۰ درجه و پرواز روی مدل‌های ساختمانی.' : '360° orbit, real-time lighting & interactive zone inspection.'}
+                {localizeText("360° orbit, real-time lighting & interactive zone inspection.", currentLanguage)}
               </p>
             </div>
             <div className="pt-4 flex items-center justify-between text-xs font-bold text-neutral-900">
-              <span>{isRTL ? 'مشاهده ماکت' : 'Launch 3D'}</span>
+              <span>{localizeText("Launch 3D", currentLanguage)}</span>
               <ChevronRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
             </div>
           </div>
@@ -134,17 +132,16 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
           >
             <div className="space-y-2">
               <div className="text-[11px] font-mono font-bold text-neutral-400 group-hover:text-neutral-900 transition-colors">
-                02 // ARCHIVE
-              </div>
+                {localizeText("02 // ARCHIVE", currentLanguage)}</div>
               <h3 className="font-bold text-sm text-neutral-900">
-                {isRTL ? 'آرشیو ۱۹ پروژه' : 'Works Archive (19)'}
+                {localizeText("Works Archive (19)", currentLanguage)}
               </h3>
               <p className="text-xs text-neutral-500 leading-relaxed">
-                {isRTL ? 'نقشه‌ها، مدارک فنی، رندرها و جزییات معماری.' : 'Curated collection of architectural and technical drawings.'}
+                {localizeText("Curated collection of architectural and technical drawings.", currentLanguage)}
               </p>
             </div>
             <div className="pt-4 flex items-center justify-between text-xs font-bold text-neutral-900">
-              <span>{isRTL ? 'مشاهده آرشیو' : 'Browse Works'}</span>
+              <span>{localizeText("Browse Works", currentLanguage)}</span>
               <ChevronRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
             </div>
           </div>
@@ -156,17 +153,16 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
           >
             <div className="space-y-2">
               <div className="text-[11px] font-mono font-bold text-neutral-400 group-hover:text-neutral-900 transition-colors">
-                03 // DELIVERY
-              </div>
+                {localizeText("03 // DELIVERY", currentLanguage)}</div>
               <h3 className="font-bold text-sm text-neutral-900">
-                {isRTL ? 'برون‌سپاری استراتژیک' : 'Strategic BIM Delivery'}
+                {localizeText("Strategic BIM Delivery", currentLanguage)}
               </h3>
               <p className="text-xs text-neutral-500 leading-relaxed">
-                {isRTL ? 'انطباق با ISO 19650 و تا ۵۰٪ صرفه‌جویی در هزینه استودیو.' : 'Cloud CDE workflow, ISO 19650 and up to 50% net studio savings.'}
+                {localizeText("Cloud CDE workflow, ISO 19650 and up to 50% net studio savings.", currentLanguage)}
               </p>
             </div>
             <div className="pt-4 flex items-center justify-between text-xs font-bold text-neutral-900">
-              <span>{isRTL ? 'چرا همکاری' : 'Explore Model'}</span>
+              <span>{localizeText("Explore Model", currentLanguage)}</span>
               <ChevronRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
             </div>
           </div>
@@ -178,17 +174,16 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
           >
             <div className="space-y-2">
               <div className="text-[11px] font-mono font-bold text-neutral-400 group-hover:text-neutral-900 transition-colors">
-                04 // TRACKER
-              </div>
+                {localizeText("04 // TRACKER", currentLanguage)}</div>
               <h3 className="font-bold text-sm text-neutral-900">
-                {isRTL ? 'پورتال سفارشات کلاینت' : 'Client Live Tracker'}
+                {localizeText("Client Live Tracker", currentLanguage)}
               </h3>
               <p className="text-xs text-neutral-500 leading-relaxed">
-                {isRTL ? 'رهگیری زنده درصد پیشرفت، حل کلش‌ها و گزارش هفتگی.' : 'Milestone progress, clash resolution reports & cloud CDE sync.'}
+                {localizeText("Milestone progress, clash resolution reports & cloud CDE sync.", currentLanguage)}
               </p>
             </div>
             <div className="pt-4 flex items-center justify-between text-xs font-bold text-neutral-900">
-              <span>{isRTL ? 'ورود به پورتال' : 'Track Order'}</span>
+              <span>{localizeText("Track Order", currentLanguage)}</span>
               <ChevronRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
             </div>
           </div>
@@ -208,20 +203,18 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
               </div>
               <div>
                 <h4 className="text-sm font-bold text-neutral-900 flex items-center gap-2">
-                  <span>{isRTL ? 'تیم و شبکه همکاران BIMCO' : 'BIMCO Team & Talent Network'}</span>
+                  <span>{localizeText("BIMCO Team & Talent Network", currentLanguage)}</span>
                   <span className="text-[10px] bg-neutral-100 text-neutral-700 px-2 py-0.5 rounded-full font-mono font-bold">
-                    {isRTL ? 'تیم و فرم' : 'Team'}
+                    {localizeText("Team", currentLanguage)}
                   </span>
                 </h4>
                 <p className="text-xs text-neutral-500 mt-1">
-                  {isRTL 
-                    ? 'سهیل مستی (BIM Lead و الگوریتم‌های هوش مصنوعی) + تخصص‌های هماهنگی رویت و فرم همکاری.' 
-                    : 'Meet Soheil Masti (Lead Coordinator & AI Architecture) and join our specialist delivery network.'}
+                  {localizeText("Meet Soheil Masti (Lead Coordinator & AI Architecture) and join our specialist delivery network.", currentLanguage)}
                 </p>
               </div>
             </div>
             <div className="pt-4 flex items-center justify-between text-xs font-bold text-neutral-900">
-              <span>{isRTL ? 'مشاهده تیم و همکاران' : 'Meet Team & Partners'}</span>
+              <span>{localizeText("Meet Team & Partners", currentLanguage)}</span>
               <ChevronRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
             </div>
           </div>
@@ -240,20 +233,17 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
               </div>
               <div>
                 <h4 className="text-sm font-bold text-neutral-900 flex items-center gap-2">
-                  <span>{isRTL ? 'مرکز دانش و پاسخ به سوالات کلیدی' : 'BIM Knowledge & FAQ Hub'}</span>
+                  <span>{localizeText("BIM Knowledge & FAQ Hub", currentLanguage)}</span>
                   <span className="text-[10px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full font-mono font-bold">
-                    12 Q&A
-                  </span>
+                    {localizeText("12 Q&A", currentLanguage)}</span>
                 </h4>
                 <p className="text-xs text-neutral-600 mt-1">
-                  {isRTL 
-                    ? 'پاسخ مستقیم به هزینه‌ها، سرعت تحویل (۴۸ تا ۷۲ ساعت)، استانداردهای LOD و امنیت ۱۰۰٪ قراردادها.' 
-                    : 'Direct answers on UK/EU rates, turnaround times, ISO 19650 CDE and bilateral NDAs.'}
+                  {localizeText("Direct answers on UK/EU rates, turnaround times, ISO 19650 CDE and bilateral NDAs.", currentLanguage)}
                 </p>
               </div>
             </div>
             <div className="pt-4 flex items-center justify-between text-xs font-bold text-amber-900">
-              <span>{isRTL ? 'مطالعه پرسش و پاسخ‌های متداول' : 'Browse All 12 Answers'}</span>
+              <span>{localizeText("Browse All 12 Answers", currentLanguage)}</span>
               <ChevronRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
             </div>
           </div>
@@ -263,7 +253,7 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
         {/* Minimalist Footer Bar */}
         <div className="pt-4 border-t border-neutral-200/80 flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-neutral-500">
           <div>
-            <span>BIMCO ARCHITECTURAL STUDIO // BARCELONA</span>
+            <span>{localizeText("BIMCO ARCHITECTURAL STUDIO // BARCELONA", currentLanguage)}</span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -272,7 +262,7 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-sans font-bold transition-colors cursor-pointer"
             >
               <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
-              <span>WhatsApp: +34 610 855 434</span>
+              <span>{localizeText("WhatsApp: +34 610 855 434", currentLanguage)}</span>
             </button>
           </div>
         </div>

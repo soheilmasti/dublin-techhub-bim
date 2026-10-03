@@ -1,3 +1,4 @@
+import { localizeText } from './localizeText';
 import { useEffect } from 'react';
 import { LanguageCode } from './i18n';
 
@@ -8,7 +9,7 @@ interface SEOProps {
   selectedCategoryName?: string;
 }
 
-const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; dublin: string; resume: string; projects: string; clientPortal: string; partners: string; rnd: string }> = {
+const SEO_TITLES: Partial<Record<LanguageCode, { default: string; outsourcing: string; dublin: string; resume: string; projects: string; clientPortal: string; partners: string; rnd: string }>> = {
   en: {
     default: 'BIMCO | BIM Coordination & Engineering Drawings in Barcelona',
     outsourcing: 'BIM Outsourcing for Architecture Studios | Save up to 50% | UK & Ireland',
@@ -81,7 +82,7 @@ const SEO_TITLES: Record<LanguageCode, { default: string; outsourcing: string; d
   }
 };
 
-const SEO_DESCRIPTIONS: Record<LanguageCode, string> = {
+const SEO_DESCRIPTIONS: Partial<Record<LanguageCode, string>> = {
   en: 'Professional BIM Coordination, architectural, and industrial engineering drawing services based in Barcelona. Delivering high-end European standard solutions across the EU, UK, and Ireland.',
   es: 'Servicios profesionales de Coordinación BIM y planos de ingeniería arquitectónica e industrial en Barcelona y Europa. Soluciones de alta precisión bajo norma ISO 19650.',
   ca: 'Serveis professionals de Coordinació BIM i plànols d’enginyeria arquitectònica i industrial a Barcelona i Europa. Solucions d’alta precisió sota la norma ISO 19650.',
@@ -92,7 +93,7 @@ const SEO_DESCRIPTIONS: Record<LanguageCode, string> = {
 };
 
 export const updateMetaTags = ({ view, language, selectedProjectName, selectedCategoryName }: SEOProps) => {
-  const langTitles = SEO_TITLES[language] || SEO_TITLES.en;
+  const langTitles = SEO_TITLES[language] || SEO_TITLES.en!;
   let title = langTitles.default;
 
   if (selectedProjectName) {
@@ -116,11 +117,11 @@ export const updateMetaTags = ({ view, language, selectedProjectName, selectedCa
   }
 
   // Set document title
-  document.title = title;
+  document.title = localizeText(title, language);
 
   // Set meta description
   const metaDesc = document.querySelector('meta[name="description"]');
-  const description = SEO_DESCRIPTIONS[language] || SEO_DESCRIPTIONS.en;
+  const description = localizeText(SEO_DESCRIPTIONS[language] || SEO_DESCRIPTIONS.en!, language);
   if (metaDesc) {
     metaDesc.setAttribute('content', description);
   }

@@ -1,3 +1,4 @@
+import { localizeText } from '../utils/localizeText';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Smartphone, RotateCcw, X, Check } from 'lucide-react';
@@ -91,12 +92,10 @@ export const DeviceOrientationPrompt: React.FC<DeviceOrientationPromptProps> = (
           {/* Prompt Content */}
           <div className="flex-1 min-w-0 pr-1">
             <h4 className="text-xs font-black text-white flex items-center gap-1.5 tracking-tight">
-              <span>{isRTL ? 'لطفاً صفحه را بچرخانید (حالت افقی / Landscape) 🔄' : 'Please Rotate Device to Landscape 🔄'}</span>
+              <span>{localizeText("Please Rotate Device to Landscape 🔄", currentLanguage)}</span>
             </h4>
             <p className="text-[11px] text-slate-300 mt-1 leading-snug">
-              {isRTL 
-                ? 'ویدیو، ماکت سه‌بعدی و شیت‌های معماری برای تماشا در حالت عریض افقی بهینه شده‌اند.' 
-                : 'Architectural drawings, 3D model, and video are optimized for widescreen landscape view.'}
+              {localizeText("Architectural drawings, 3D model, and video are optimized for widescreen landscape view.", currentLanguage)}
             </p>
           </div>
 
@@ -105,14 +104,14 @@ export const DeviceOrientationPrompt: React.FC<DeviceOrientationPromptProps> = (
             <button
               onClick={handleDismiss}
               className="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap"
-              title={isRTL ? 'ادامه در حالت عمودی' : 'Continue in portrait'}
+              title={localizeText("Continue in portrait", currentLanguage)}
             >
-              <span>{isRTL ? 'ادامه' : 'OK'}</span>
+              <span>{localizeText("OK", currentLanguage)}</span>
             </button>
             <button
               onClick={handleDismiss}
               className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-              title={isRTL ? 'بستن' : 'Close'}
+              title={localizeText("Close", currentLanguage)}
             >
               <X className="w-4 h-4" />
             </button>

@@ -1,7 +1,9 @@
+import additionalLocales from './additionalLocales.json';
+import { localizeContent } from './localizeText';
 // Multi-Language i18n Engine & Geolocation IP Detection
 // Supported Languages: Catalan (ca), Persian (fa), Spanish (es), English (en), French (fr), German (de), Italian (it)
 
-export type LanguageCode = 'ca' | 'fa' | 'es' | 'en' | 'fr' | 'de' | 'it';
+export type LanguageCode = 'ca' | 'fa' | 'es' | 'en' | 'fr' | 'de' | 'it' | 'zh' | 'ru' | 'pt' | 'nl';
 
 export interface LanguageInfo {
   code: LanguageCode;
@@ -18,6 +20,10 @@ export const LANGUAGES: LanguageInfo[] = [
   { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸', dir: 'ltr' },
   { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷', dir: 'ltr' },
   { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪', dir: 'ltr' },
+  { code: 'zh', name: 'Chinese', nativeName: '简体中文', flag: '🇨🇳', dir: 'ltr' },
+  { code: 'ru', name: 'Russian', nativeName: 'Русский', flag: '🇷🇺', dir: 'ltr' },
+  { code: 'pt', name: 'Portuguese', nativeName: 'Português', flag: '🇵🇹', dir: 'ltr' },
+  { code: 'nl', name: 'Dutch', nativeName: 'Nederlands', flag: '🇳🇱', dir: 'ltr' },
   { code: 'it', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹', dir: 'ltr' },
 ];
 
@@ -163,7 +169,8 @@ export interface TranslationDict {
   };
 }
 
-export const TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
+const BASE_TRANSLATIONS: Record<LanguageCode, TranslationDict> = {
+  ...additionalLocales,
   ca: {
     home3d: 'Portafoli de Projectes',
     planIsometric: 'Plànol Isomètric',
@@ -1288,7 +1295,17 @@ export function saveLanguagePreference(code: LanguageCode) {
  * Synchronous initial language resolution from Cookie or localStorage
  * Ensures immediate load without waiting for async network IP checks
  */
+export const TRANSLATIONS = Object.fromEntries(
+  Object.entries(BASE_TRANSLATIONS).map(([language, dictionary]) => [language, localizeContent(dictionary, language as LanguageCode)])
+) as Record<LanguageCode, TranslationDict>;
+
+export function isLanguageCode(value: string | null | undefined): value is LanguageCode {
+  return LANGUAGES.some(language => language.code === value);
+}
+
 export function getInitialLanguage(): LanguageCode {
+  const urlLang = new URLSearchParams(window.location.search).get('lang');
+  if (isLanguageCode(urlLang)) return urlLang;
   const cookieLang = getCookie('preferred_language') as LanguageCode | null;
   if (cookieLang && (cookieLang in TRANSLATIONS)) {
     return cookieLang;
@@ -1313,10 +1330,11 @@ export function getInitialLanguage(): LanguageCode {
  * 4. Browser Navigator Locale
  */
 export async function detectVisitorLanguage(): Promise<LanguageCode> {
-  // 1. Check Cookie first!
+  
+
+// 1. Check Cookie first!
   const cookieLang = getCookie('preferred_language') as LanguageCode | null;
   if (cookieLang && (cookieLang in TRANSLATIONS)) {
-    saveLanguagePreference(cookieLang);
     return cookieLang;
   }
 
@@ -1324,7 +1342,6 @@ export async function detectVisitorLanguage(): Promise<LanguageCode> {
   try {
     const saved = localStorage.getItem('preferred_language') as LanguageCode | null;
     if (saved && (saved in TRANSLATIONS)) {
-      saveLanguagePreference(saved);
       return saved;
     }
   } catch (e) {
@@ -1353,43 +1370,39 @@ export async function detectVisitorLanguage(): Promise<LanguageCode> {
           (region === 'CT' || regionName.includes('catal') || cityName.includes('barcelona') || cityName.includes('girona') || cityName.includes('tarragona') || cityName.includes('lleida'));
 
         if (isCatalonia) {
-          saveLanguagePreference('ca');
           return 'ca';
         }
 
         // Persian for Iran
         if (country === 'IR' || country === 'AF') {
-          saveLanguagePreference('fa');
           return 'fa';
         }
 
         // Spanish for Spain (outside Catalonia) & Latin America
         const spanishCountries = ['ES', 'MX', 'AR', 'CO', 'CL', 'PE', 'VE', 'EC', 'GT', 'CU', 'BO', 'DO', 'HN', 'PY', 'SV', 'NI', 'CR', 'PA', 'UY'];
         if (spanishCountries.includes(country)) {
-          saveLanguagePreference('es');
           return 'es';
         }
 
         // French for France, Belgium, etc.
         if (country === 'FR' || country === 'MC') {
-          saveLanguagePreference('fr');
           return 'fr';
         }
 
         // German for Germany, Austria, Switzerland
         if (country === 'DE' || country === 'AT' || (country === 'CH' && !regionName.includes('genev'))) {
-          saveLanguagePreference('de');
           return 'de';
         }
 
         // Italian for Italy
         if (country === 'IT' || country === 'SM' || country === 'VA') {
-          saveLanguagePreference('it');
           return 'it';
         }
 
+        const newMarkets: Record<string, LanguageCode> = { CN: 'zh', RU: 'ru', PT: 'pt', BR: 'pt', NL: 'nl' };
+        if (newMarkets[country]) return newMarkets[country];
+
         // Default to English for all other countries in the world
-        saveLanguagePreference('en');
         return 'en';
       }
     }
@@ -1407,7 +1420,9 @@ export async function detectVisitorLanguage(): Promise<LanguageCode> {
   else if (browserLang.startsWith('fr')) fallback = 'fr';
   else if (browserLang.startsWith('de')) fallback = 'de';
   else if (browserLang.startsWith('it')) fallback = 'it';
-
-  saveLanguagePreference(fallback);
+  else if (browserLang.startsWith('zh')) fallback = 'zh';
+  else if (browserLang.startsWith('ru')) fallback = 'ru';
+  else if (browserLang.startsWith('pt')) fallback = 'pt';
+  else if (browserLang.startsWith('nl')) fallback = 'nl';
   return fallback;
 }

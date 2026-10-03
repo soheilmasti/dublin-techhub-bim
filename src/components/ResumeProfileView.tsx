@@ -1,3 +1,4 @@
+import { localizeText } from '../utils/localizeText';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -56,15 +57,14 @@ export const ResumeProfileView: React.FC<ResumeProfileViewProps> = ({
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
             {/* Avatar Profile Initials / Badge */}
             <div className="w-24 h-24 rounded-3xl bg-black text-white flex flex-col items-center justify-center shadow-clay-lg shrink-0 border-2 border-white">
-              <span className="font-mono text-2xl font-black tracking-tighter">SM</span>
-              <span className="text-[9px] font-mono tracking-widest text-gray-400 mt-1">ARCHITECT</span>
+              <span className="font-mono text-2xl font-black tracking-tighter">{localizeText("SM", currentLanguage)}</span>
+              <span className="text-[9px] font-mono tracking-widest text-gray-400 mt-1">{localizeText("ARCHITECT", currentLanguage)}</span>
             </div>
 
             <div>
               <div className="flex flex-wrap items-center gap-2 mb-1.5">
                 <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                  GAAM STUDIO // BARCELONA & TEHRAN
-                </span>
+                  {localizeText("GAAM STUDIO // BARCELONA & TEHRAN", currentLanguage)}</span>
                 <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                   {t.resumeView.experienceBadge}
                 </span>
@@ -98,7 +98,7 @@ export const ResumeProfileView: React.FC<ResumeProfileViewProps> = ({
               className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#0077b5] text-white text-xs font-bold hover:bg-[#005f93] transition-colors"
             >
               <Linkedin className="w-4 h-4" />
-              <span>LinkedIn Profile</span>
+              <span>{localizeText("LinkedIn Profile", currentLanguage)}</span>
             </a>
             <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-gray-100 text-gray-800 text-xs font-mono font-bold">
               <Phone className="w-4 h-4 text-emerald-600" />

@@ -1,3 +1,4 @@
+import { localizeText } from '../utils/localizeText';
 import React, { useState, useRef, useEffect } from 'react';
 import { Globe, Check } from 'lucide-react';
 import { LANGUAGES, LanguageCode } from '../utils/i18n';
@@ -52,7 +53,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         className={`glass-panel px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-2xl shadow-clay-sm flex items-center gap-1.5 text-xs font-bold text-gray-800 hover:text-black hover:bg-white transition-all border border-white/90 cursor-pointer ${
           isOpen ? 'ring-2 ring-blue-500/50 bg-white' : ''
         }`}
-        title="Canviar idioma / Change language / تغییر زبان"
+        title={localizeText("Canviar idioma / Change language / تغییر زبان", currentLanguage)}
       >
         <Globe className="w-3.5 h-3.5 text-blue-600 animate-pulse-subtle" />
         <span className="text-sm leading-none">{activeLang.flag}</span>
@@ -70,11 +71,11 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           dir="ltr"
         >
           <div className="px-3 py-1.5 text-[10px] font-mono font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 flex items-center justify-between">
-            <span>Select Language</span>
-            <span>7 Idiomes</span>
+            <span>{localizeText("Select Language", currentLanguage)}</span>
+            <span>{LANGUAGES.length}</span>
           </div>
 
-          <div className="max-h-72 overflow-y-auto py-1 space-y-0.5">
+          <div className="language-options max-h-72 overflow-y-auto py-1 space-y-0.5">
             {LANGUAGES.map((lang) => {
               const isSelected = lang.code === currentLanguage;
               return (

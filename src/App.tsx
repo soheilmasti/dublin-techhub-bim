@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Header } from './components/Header';
 import { ThreeDClayCanvas } from './components/ThreeDClayCanvas';
 import { MasterIndexView } from './components/MasterIndexView';
@@ -20,7 +20,7 @@ import { BimcoPortfolioFlipbookModal } from './components/BimcoPortfolioFlipbook
 import { INITIAL_CATEGORIES, INITIAL_SETTINGS } from './data/initialData';
 import { CategoryBuilding, Project, SiteSettings } from './types';
 import { sound } from './utils/audio';
-import { LanguageCode, detectVisitorLanguage, saveLanguagePreference, getInitialLanguage, TRANSLATIONS } from './utils/i18n';
+import { LanguageCode, isLanguageCode, detectVisitorLanguage, saveLanguagePreference, getInitialLanguage, TRANSLATIONS } from './utils/i18n';
 import { getLocalizedCategories, getLocalizedCategory, getLocalizedProject } from './utils/localizedData';
 import { useSEO } from './utils/seo';
 
@@ -68,6 +68,7 @@ export const App: React.FC = () => {
   };
 
   // 7-Language State with Smart IP Detection & Persistent Cookie
+  const languageChoiceVersion = useRef(0);
   const [language, setLanguage] = useState<LanguageCode>(getInitialLanguage);
   const [partnerTab, setPartnerTab] = useState<'talent' | 'rnd'>('talent');
 
@@ -95,11 +96,12 @@ export const App: React.FC = () => {
         setPartnerTab('rnd');
       }
 
-      if (langParam && ['en', 'es', 'ca', 'de', 'fr', 'it', 'fa'].includes(langParam)) {
+      if (isLanguageCode(langParam)) {
         setLanguage(langParam as LanguageCode);
       } else {
+        const requestVersion = languageChoiceVersion.current;
         detectVisitorLanguage().then((detected) => {
-          setLanguage(detected);
+          if (requestVersion === languageChoiceVersion.current) setLanguage(detected);
         });
       }
 
@@ -144,6 +146,10 @@ export const App: React.FC = () => {
   }, [language]);
 
   const handleLanguageChange = (newLang: LanguageCode) => {
+    languageChoiceVersion.current++;
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', newLang);
+    window.history.replaceState(null, '', url);
     saveLanguagePreference(newLang);
     setLanguage(newLang);
   };

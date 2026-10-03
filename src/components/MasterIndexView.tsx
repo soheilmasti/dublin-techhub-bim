@@ -1,3 +1,4 @@
+import { localizeText } from '../utils/localizeText';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -132,7 +133,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
             {t.archive.title}
           </h2>
           <p className="text-xs font-mono text-gray-500 mt-1 font-semibold">
-            {t.archive.subtitle} // {filteredProjects.length} {t.projectsCount.toUpperCase()} • {individualSheets.length} {isRTL ? 'شیت اختصاصی' : 'SHEETS'}
+            {t.archive.subtitle} // {filteredProjects.length} {t.projectsCount.toUpperCase()} • {individualSheets.length} {localizeText("SHEETS", currentLanguage)}
           </p>
         </div>
 
@@ -145,7 +146,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
-            <span>{t.projectsArchive || (isRTL ? 'پروژه‌ها' : 'Projects')} ({filteredProjects.length})</span>
+            <span>{t.projectsArchive || (localizeText("Projects", currentLanguage))} ({filteredProjects.length})</span>
           </button>
 
           <button
@@ -155,7 +156,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
             }`}
           >
             <LayoutGrid className="w-3.5 h-3.5" />
-            <span>{t.individualRendersGrid || (isRTL ? 'عکس‌ها و رندرها (جدا جدا)' : 'Individual Renders Grid')} ({individualSheets.length})</span>
+            <span>{t.individualRendersGrid || (localizeText("Individual Renders Grid", currentLanguage))} ({individualSheets.length})</span>
           </button>
         </div>
       </div>
@@ -164,13 +165,13 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-8">
         {/* Search Box */}
         <div className="relative w-full sm:w-auto">
-          <Search className={`w-4 h-4 text-gray-400 absolute ${isRTL ? 'right-3.5' : 'left-3.5'} top-1/2 -translate-y-1/2`} />
+          <Search className={`w-4 h-4 text-gray-400 absolute ${localizeText("left-3.5", currentLanguage)} top-1/2 -translate-y-1/2`} />
           <input
             type="text"
             placeholder={t.archive.searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className={`glass-panel ${isRTL ? 'pr-9 pl-4' : 'pl-9 pr-4'} py-2 rounded-2xl text-xs text-gray-800 placeholder-gray-400 border border-white/90 focus:outline-none focus:ring-2 focus:ring-black/20 w-full sm:w-64 shadow-clay-sm`}
+            className={`glass-panel ${localizeText("pl-9 pr-4", currentLanguage)} py-2 rounded-2xl text-xs text-gray-800 placeholder-gray-400 border border-white/90 focus:outline-none focus:ring-2 focus:ring-black/20 w-full sm:w-64 shadow-clay-sm`}
           />
         </div>
 
@@ -230,15 +231,15 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
                     alt={project.title}
                     className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
-                  <div className={`absolute top-3.5 ${isRTL ? 'left-3.5' : 'right-3.5'} flex items-center gap-1.5`}>
+                  <div className={`absolute top-3.5 ${localizeText("right-3.5", currentLanguage)} flex items-center gap-1.5`}>
                     <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full glass-panel shadow-sm text-gray-900">
                       {project.status}
                     </span>
                     <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-600 text-white shadow-sm">
-                      {project.gallery?.length || 1} {isRTL ? 'شیت' : 'Sheets'}
+                      {project.gallery?.length || 1} {localizeText("Sheets", currentLanguage)}
                     </span>
                   </div>
-                  <div className={`absolute bottom-3.5 ${isRTL ? 'right-3.5' : 'left-3.5'} opacity-0 group-hover:opacity-100 transition-opacity`}>
+                  <div className={`absolute bottom-3.5 ${localizeText("left-3.5", currentLanguage)} opacity-0 group-hover:opacity-100 transition-opacity`}>
                     <span className="glass-panel px-3 py-1.5 rounded-xl text-xs font-bold text-black flex items-center gap-1 shadow-sm">
                       {t.viewProject} <ArrowUpRight className="w-3.5 h-3.5" />
                     </span>
@@ -322,7 +323,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <span className="px-3 py-1.5 rounded-xl bg-blue-600/90 text-white text-xs font-bold flex items-center gap-1 shadow-md">
                     <ZoomIn className="w-3.5 h-3.5" />
-                    <span>{t.zoomImage || (isRTL ? 'بزرگنمایی' : 'Zoom')}</span>
+                    <span>{t.zoomImage || (localizeText("Zoom", currentLanguage))}</span>
                   </span>
                 </div>
               </div>
@@ -357,7 +358,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
           <div className="flex items-center justify-between pb-3 px-2 text-white z-20">
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-xl bg-blue-600 text-white">
-                {isRTL ? `شیت ${currentZoomSheet.sheetIndex} از ${currentZoomSheet.totalSheets}` : `SHEET ${currentZoomSheet.sheetIndex} OF ${currentZoomSheet.totalSheets}`}
+                {isRTL ? `شیت ${currentZoomSheet.sheetIndex} از ${currentZoomSheet.totalSheets}` : `${localizeText('SHEET', currentLanguage)} ${currentZoomSheet.sheetIndex} ${localizeText('of', currentLanguage)} ${currentZoomSheet.totalSheets}`}
               </span>
               <span className="text-xs text-gray-300 font-bold hidden sm:inline">
                 {currentZoomSheet.projectTitle}
@@ -374,7 +375,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
                 className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all flex items-center gap-1.5 border border-white/10"
               >
                 <Download className="w-3.5 h-3.5" />
-                <span>{isRTL ? 'دانلود تصویر' : 'Download'}</span>
+                <span>{localizeText("Download", currentLanguage)}</span>
               </a>
               <button
                 onClick={() => setZoomSheetIndex(null)}
@@ -399,7 +400,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
                   setZoomSheetIndex(prev => (prev !== null && prev > 0 ? prev - 1 : individualSheets.length - 1));
                 }}
                 className="absolute left-2 sm:left-4 z-30 p-2.5 sm:p-3 rounded-full bg-black/70 hover:bg-blue-600 text-white border border-white/20 shadow-xl transition-all cursor-pointer hover:scale-105"
-                title={isRTL ? 'شیت بعدی' : 'Previous Sheet'}
+                title={localizeText("Previous Sheet", currentLanguage)}
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
@@ -407,7 +408,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
 
             <img 
               src={currentZoomSheet.url} 
-              alt="Enlarged Sheet" 
+              alt={localizeText("Enlarged Sheet", currentLanguage)} 
               className="max-h-[82vh] max-w-full object-contain rounded-2xl shadow-2xl border border-white/10 pointer-events-none sm:pointer-events-auto"
             />
 
@@ -419,7 +420,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
                   setZoomSheetIndex(prev => (prev !== null && prev < individualSheets.length - 1 ? prev + 1 : 0));
                 }}
                 className="absolute right-2 sm:right-4 z-30 p-2.5 sm:p-3 rounded-full bg-black/70 hover:bg-blue-600 text-white border border-white/20 shadow-xl transition-all cursor-pointer hover:scale-105"
-                title={isRTL ? 'شیت قبلی' : 'Next Sheet'}
+                title={localizeText("Next Sheet", currentLanguage)}
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
@@ -428,7 +429,7 @@ export const MasterIndexView: React.FC<MasterIndexViewProps> = ({
 
           {/* Bottom Gestures Hint */}
           <div className="pt-2 text-center text-[11px] text-gray-400 font-mono flex items-center justify-center gap-3">
-            <span>{isRTL ? 'برای جابجایی روی گوشی به چپ یا راست بکشید (Swipe) • کلیدهای جهت‌نما در کیبورد' : 'Swipe left/right on touch devices • Arrow keys on keyboard'}</span>
+            <span>{localizeText("Swipe left/right on touch devices • Arrow keys on keyboard", currentLanguage)}</span>
           </div>
         </div>
       )}

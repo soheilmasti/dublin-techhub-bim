@@ -1,3 +1,4 @@
+import { localizeText } from '../utils/localizeText';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -87,14 +88,12 @@ export const ContactWhatsAppModal: React.FC<ContactWhatsAppModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-xl font-black text-slate-900">
-                  Direct WhatsApp &amp; Studio Inquiries
-                </h3>
+                  {localizeText("Direct WhatsApp &amp; Studio Inquiries", currentLanguage)}</h3>
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Online</span>
+                <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">{localizeText("Online", currentLanguage)}</span>
               </div>
               <p className="text-xs text-slate-500">
-                Direct channel to Lead BIM Architect (Soheil Masti) // Barcelona Hub
-              </p>
+                {localizeText("Direct channel to Lead BIM Architect (Soheil Masti) // Barcelona Hub", currentLanguage)}</p>
             </div>
           </div>
 
@@ -102,29 +101,25 @@ export const ContactWhatsAppModal: React.FC<ContactWhatsAppModalProps> = ({
           <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 mb-6 flex flex-wrap items-center justify-between gap-4 text-xs">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs">
-                SM
-              </div>
+                {localizeText("SM", currentLanguage)}</div>
               <div>
-                <span className="font-bold text-slate-900 block">Soheil Masti</span>
-                <span className="text-[11px] text-slate-500">Senior Architect &amp; Lead BIM Specialist</span>
+                <span className="font-bold text-slate-900 block">{localizeText("Soheil Masti", currentLanguage)}</span>
+                <span className="text-[11px] text-slate-500">{localizeText("Senior Architect &amp; Lead BIM Specialist", currentLanguage)}</span>
               </div>
             </div>
 
             <div className="flex items-center gap-4 text-slate-600 font-medium text-[11px]">
               <span className="flex items-center gap-1">
-                <MapPin className="w-3 h-3 text-blue-600" /> Barcelona, Spain
-              </span>
+                <MapPin className="w-3 h-3 text-blue-600" /> {localizeText("Barcelona, Spain", currentLanguage)}</span>
               <span className="flex items-center gap-1">
-                <Clock className="w-3 h-3 text-emerald-600" /> GMT / CET Hours
-              </span>
+                <Clock className="w-3 h-3 text-emerald-600" /> {localizeText("GMT / CET Hours", currentLanguage)}</span>
             </div>
           </div>
 
           {/* Quick Pre-filled Action Cards */}
           <div className="mb-6">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
-              Select an Inquiry Template (Opens WhatsApp Instantly):
-            </span>
+              {localizeText("Select an Inquiry Template (Opens WhatsApp Instantly):", currentLanguage)}</span>
             <div className="space-y-2.5">
               {QUICK_TEMPLATES.map((tmpl, idx) => (
                 <button
@@ -151,21 +146,20 @@ export const ContactWhatsAppModal: React.FC<ContactWhatsAppModalProps> = ({
           {/* Custom Message Input */}
           <div className="pt-4 border-t border-slate-100">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">
-              Or Send a Custom Message via WhatsApp:
-            </span>
+              {localizeText("Or Send a Custom Message via WhatsApp:", currentLanguage)}</span>
             <div className="flex gap-2">
               <input
                 type="text"
                 value={customMessage}
                 onChange={(e) => setCustomMessage(e.target.value)}
-                placeholder="Type your project questions or requirements..."
+                placeholder={localizeText("Type your project questions or requirements...", currentLanguage)}
                 className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-hidden focus:ring-2 focus:ring-emerald-500 bg-slate-50/50"
               />
               <button
                 onClick={() => handleSend(customMessage || 'Hello Soheil, I would like to inquire about your architectural BIM services.')}
                 className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer shrink-0"
               >
-                <span>Send</span>
+                <span>{localizeText("Send", currentLanguage)}</span>
                 <Send className="w-3 h-3" />
               </button>
             </div>
@@ -179,7 +173,7 @@ export const ContactWhatsAppModal: React.FC<ContactWhatsAppModalProps> = ({
                 className="hover:text-blue-600 flex items-center gap-1.5 font-medium transition-colors"
               >
                 <Mail className="w-3.5 h-3.5 text-blue-500" />
-                <span>soheil.masti@gmail.com</span>
+                <span>{localizeText("soheil.masti@gmail.com", currentLanguage)}</span>
               </a>
               <span className="flex items-center gap-1.5 font-mono">
                 <Phone className="w-3.5 h-3.5 text-emerald-500" />
@@ -189,7 +183,7 @@ export const ContactWhatsAppModal: React.FC<ContactWhatsAppModalProps> = ({
 
             <div className="flex items-center gap-1.5 text-slate-400 text-[11px]">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Standard NDA &amp; ISO 19650 Protocols</span>
+              <span>{localizeText("Standard NDA &amp; ISO 19650 Protocols", currentLanguage)}</span>
             </div>
           </div>
 
