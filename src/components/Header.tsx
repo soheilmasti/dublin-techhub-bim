@@ -75,17 +75,8 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-1.5 sm:gap-2 px-1.5 sm:px-2 py-1 rounded-xl cursor-pointer hover:bg-gray-100/70 transition-all group shrink-0"
             title={t.returnToHome}
           >
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-black text-white flex items-center justify-center font-mono font-bold text-xs group-hover:bg-blue-600 transition-colors shrink-0">
-              <Home className="w-3.5 h-3.5" />
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-xs sm:text-sm font-black tracking-wider text-black font-sans">
-                {t.studioName.split('//')[0].trim()}
-              </span>
-              <span className="hidden sm:inline text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-blue-100 text-blue-700">
-                3D
-              </span>
-            </div>
+            <img src="/brand/logo-symbol-petrol.svg" alt="" className="w-8 h-8 sm:w-9 sm:h-9 object-contain shrink-0" />
+            <img src="/brand/logo-wordmark.svg" alt="BIMCO — BIM DESIGN" className="w-20 sm:w-24 h-7 object-contain" />
           </div>
 
           {/* Desktop Navigation Links (All Sections In Top Toolbar) */}

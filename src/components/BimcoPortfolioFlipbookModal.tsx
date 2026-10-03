@@ -893,7 +893,7 @@ export const BimcoPortfolioFlipbookModal: React.FC<BimcoPortfolioFlipbookModalPr
           title={localizeText('Return to Home', currentLanguage)}
         >
           <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center p-1 group-hover:border-amber-400 group-hover:bg-amber-500/20 transition-all shrink-0">
-            <img src="/logo.png" alt={localizeText("BIMCO Logo", currentLanguage)} className="w-full h-full object-contain" />
+            <img src="/brand/logo-symbol-white.svg" alt={localizeText("BIMCO Logo", currentLanguage)} className="w-full h-full object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-2">

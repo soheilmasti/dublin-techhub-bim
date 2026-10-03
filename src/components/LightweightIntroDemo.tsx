@@ -45,7 +45,7 @@ export const LightweightIntroDemo: React.FC<LightweightIntroDemoProps> = ({
         {/* Top Minimal Studio Metadata Bar */}
         <div className="flex items-center justify-between pb-4 border-b border-neutral-200/80 text-xs font-mono text-neutral-500">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-neutral-900 tracking-wider">BIMCO</span>
+            <img src="/brand/logo-symbol-petrol.svg" alt="" className="w-7 h-7 object-contain" /><img src="/brand/logo-wordmark.svg" alt="BIMCO — BIM DESIGN" className="w-20 h-6 object-contain" />
             <span>//</span>
             <span>{localizeText("ARCHITECTURAL PRACTICE & BIM DELIVERY", currentLanguage)}</span>
           </div>

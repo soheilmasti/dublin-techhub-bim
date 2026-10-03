@@ -226,7 +226,7 @@ export const PartnersNetworkView: React.FC<PartnersNetworkViewProps> = ({
         {/* Top Breadcrumb & Return to Maquette */}
         <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-gray-200/80">
           <div className="flex items-center gap-2 text-xs font-mono text-gray-500">
-            <span className="font-bold text-gray-900 tracking-wider">BIMCO</span>
+            <img src="/brand/logo-symbol-petrol.svg" alt="" className="w-7 h-7 object-contain" /><img src="/brand/logo-wordmark.svg" alt="BIMCO — BIM DESIGN" className="w-20 h-6 object-contain" />
             <span>/</span>
             <span className="text-blue-600 font-semibold">
               {localizeText("Partner & Talent Network", currentLanguage)}
