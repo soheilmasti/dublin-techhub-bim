@@ -78,7 +78,7 @@ export const BottomToolbar: React.FC<BottomToolbarProps> = ({
                   title={t.dayMode}
                 >
                   <Sun className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                  <span className="hidden md:inline">{t.dayMode.split(' ')[0]}</span>
+                  <span className="hidden md:inline">{t.dayMode}</span>
                 </button>
 
                 <button
@@ -91,7 +91,7 @@ export const BottomToolbar: React.FC<BottomToolbarProps> = ({
                   title={t.sunsetMode}
                 >
                   <Sunset className="w-3.5 h-3.5 text-orange-400 shrink-0" />
-                  <span className="hidden md:inline">{t.sunsetMode.split(' ')[0]}</span>
+                  <span className="hidden md:inline">{t.sunsetMode}</span>
                 </button>
 
                 <button
@@ -104,7 +104,7 @@ export const BottomToolbar: React.FC<BottomToolbarProps> = ({
                   title={t.nightMode}
                 >
                   <Moon className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                  <span className="hidden md:inline">{t.nightMode.split(' ')[0]}</span>
+                  <span className="hidden md:inline">{t.nightMode}</span>
                 </button>
               </div>
             )}
